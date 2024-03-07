@@ -11,6 +11,7 @@ const postSchema = new mongoose.Schema(
     content: {
       type: String,
       required: true,
+      maxlenght: 280,
     },
     category: {
       type: mongoose.Schema.Types.ObjectId,
