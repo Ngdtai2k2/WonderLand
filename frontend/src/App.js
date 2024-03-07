@@ -1,24 +1,69 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
+import BlockedRoute from './routes/blockedRoute';
+import Home from './pages/home';
+import Login from './pages/login';
+import NavigationBar from './components/NavigationBar';
+import Profile from './pages/profile';
+import Register from './pages/register';
+import Settings from './pages/settings';
+import NotFound from './components/NotFound';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route
+          path="/"
+          exact
+          element={
+            <>
+              <NavigationBar />
+              <Home />
+            </>
+          }
+        />
+        <Route
+          path="/profile/:id"
+          exact
+          element={
+            <>
+              <NavigationBar />
+              <Profile />
+            </>
+          }
+        />
+        <Route
+          path="/settings"
+          exact
+          element={
+            <BlockedRoute>
+              <NavigationBar />
+              <Settings />
+            </BlockedRoute>
+          }
+        />
+        <Route
+          path="/login"
+          exact
+          element={
+            <BlockedRoute blocked="true">
+              <Login />
+            </BlockedRoute>
+          }
+        />
+        <Route
+          path="/register"
+          exact
+          element={
+            <BlockedRoute blocked="true">
+              <Register />
+            </BlockedRoute>
+          }
+        />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Router>
   );
 }
 
