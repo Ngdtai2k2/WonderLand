@@ -4,6 +4,12 @@ const dotenv = require("dotenv");
 const express = require("express");
 const mongoose = require("mongoose");
 
+const authRoute = require("./routes/auth");
+const userRoute = require("./routes/user");
+const categoryRoute = require("./routes/category");
+const postRoute = require("./routes/post");
+const mediaRoute = require("./routes/media");
+
 const app = express();
 dotenv.config();
 
@@ -19,6 +25,13 @@ mongoose
 app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
+
+app.use("/v1/auth", authRoute);
+app.use("/v1/user", userRoute);
+app.use("/v1/category", categoryRoute);
+app.use("/v1/post", postRoute);
+app.use("/v1/media", mediaRoute);
+
 
 app.listen(8000, () => {
   console.log(">>> Server running on port 8000!");
