@@ -6,6 +6,7 @@ import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
+import FileUploadRoundedIcon from '@mui/icons-material/FileUploadRounded';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -98,6 +99,11 @@ export default function NavigationBar() {
           <IconButton aria-label="search">
             <NotificationsRoundedIcon />
           </IconButton>
+          <Tooltip title="Created post">
+            <IconButton onClick={() => handelNavigate('/create/post')}>
+              <FileUploadRoundedIcon />
+            </IconButton>
+          </Tooltip>
           <Tooltip title="Open menu">
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, m: 1 }}>
               <Avatar
