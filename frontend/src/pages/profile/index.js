@@ -1,17 +1,18 @@
-import { useParams } from 'react-router-dom';
-import Avatar from '@mui/material/Avatar';
-import axios from 'axios';
-import Box from '@mui/material/Box';
-import moment from 'moment';
-import Paper from '@mui/material/Paper';
-import React, { useEffect, useState } from 'react';
-import Tab from '@mui/material/Tab';
-import TabContext from '@mui/lab/TabContext';
-import Tabs from '@mui/material/Tabs';
-import Typography from '@mui/material/Typography';
+import { useParams } from "react-router-dom";
+import Avatar from "@mui/material/Avatar";
+import axios from "axios";
+import Box from "@mui/material/Box";
+import moment from "moment";
+import Paper from "@mui/material/Paper";
+import React, { useEffect, useState } from "react";
+import Tab from "@mui/material/Tab";
+import TabContext from "@mui/lab/TabContext";
+import Tabs from "@mui/material/Tabs";
+import Typography from "@mui/material/Typography";
 
-import CustomBox from '../../components/CustomBox';
-import NotFound from '../../components/NotFound';
+import CustomBox from "../../components/CustomBox";
+import NotFound from "../../components/NotFound";
+import LoadingCircularIndeterminate from "../../components/Loading";
 
 export default function Profile() {
   const { id } = useParams();
@@ -26,14 +27,14 @@ export default function Profile() {
   useEffect(() => {
     const getUserProfile = async () => {
       try {
+        setLoading(true);
         const response = await axios.get(`/v1/user/${id}`);
         setData(response.data);
       } catch (error) {
         if (error.response && error.response.status === 404) {
-          console.error('User not found:', error);
           setData(null);
         } else {
-          console.error('Error fetching data:', error);
+          console.error("Error fetching data:", error);
         }
       } finally {
         setLoading(false);
@@ -45,21 +46,19 @@ export default function Profile() {
 
   const user = data?.user;
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!data || user === null) {
+  if (!user && loading) {
     return <NotFound />;
   }
 
-  return (
+  return loading ? (
+    <LoadingCircularIndeterminate />
+  ) : (
     <CustomBox>
       <Paper variant="outlined" sx={{ p: 2 }}>
         <Box display="flex" alignItems="center" marginY={1}>
           <Avatar
-            src={user?.avatar}
-            alt={'Avatar of' + user?.fullname}
+            src={user?.media?.url}
+            alt={"Avatar of" + user?.fullname}
             sx={{ width: 60, height: 60 }}
           />
           <Box marginLeft={1}>
@@ -79,7 +78,7 @@ export default function Profile() {
         </Box>
         <Typography variant="h6">{user?.about}</Typography>
         <TabContext value={tabIndex}>
-          <Box sx={{ width: '100%', marginY: 2 }}>
+          <Box sx={{ width: "100%", marginY: 2 }}>
             <Tabs
               value={tabIndex}
               onChange={handleChangeTab}
@@ -87,10 +86,10 @@ export default function Profile() {
               scrollButtons="auto"
               allowScrollButtonsMobile
             >
-              <Tab sx={{ fontSize: '14px' }} label="Reactions" />
-              <Tab sx={{ fontSize: '14px' }} label="Posts" />
-              <Tab sx={{ fontSize: '14px' }} label="Comments" />
-              <Tab sx={{ fontSize: '14px' }} label="Saved" />
+              <Tab sx={{ fontSize: "14px" }} label="Reactions" />
+              <Tab sx={{ fontSize: "14px" }} label="Posts" />
+              <Tab sx={{ fontSize: "14px" }} label="Comments" />
+              <Tab sx={{ fontSize: "14px" }} label="Saved" />
             </Tabs>
           </Box>
           <Box>
