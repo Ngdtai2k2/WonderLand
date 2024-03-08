@@ -1,11 +1,12 @@
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { Avatar, Button } from '@mui/material';
 import { DateField } from '@mui/x-date-pickers/DateField';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import Avatar from "@mui/material/Avatar";
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import dayjs from 'dayjs';
 import MenuItem from '@mui/material/MenuItem';
@@ -15,9 +16,9 @@ import Typography from '@mui/material/Typography';
 
 import { createAxios } from '../../createInstance';
 import { loginSuccess } from '../../redux/slice/userSlice';
-import { updateUser } from '../../redux/apiRequest/userApi';
-import { VisuallyHiddenInput } from './styles';
 import { ShortenContent } from '../../helpers/shortenContent';
+import { updateUser } from '../../redux/apiRequest/userApi';
+import { VisuallyHiddenInput } from '../styles';
 
 export default function Profile() {
   const [filename, setFilename] = useState('');
@@ -66,8 +67,10 @@ export default function Profile() {
       formData.append('about', values.about);
       formData.append('gender', values.gender);
       formData.append('hometown', values.hometown);
-      formData.append('birthday', values.birthday);
-      formData.append('image', values.image);
+      formData.append('file', values.image);
+      if (formik.values.birthday !== null){
+        formData.append("birthday", values.birthday);
+      }
 
       await updateUser(accessToken, dispatch, user?._id, axiosJWT, formData);
     },
@@ -88,7 +91,7 @@ export default function Profile() {
           <Box display="flex" alignItems="center" gap={2} marginBottom={2}>
             <Avatar
               alt={'Avatar of ' + user?.fullname}
-              src={image ? image : user?.media.url}
+              src={image ? image : user?.media?.url}
               sx={{ width: 80, height: 80 }}
             />
             <Box display="flex" flexDirection="column">
@@ -130,7 +133,7 @@ export default function Profile() {
             fullWidth
             id="fullname"
             label="Full Name"
-            type="fullname"
+            type="text"
             size="small"
             value={formik.values.fullname}
             onChange={formik.handleChange}
@@ -153,7 +156,7 @@ export default function Profile() {
             fullWidth
             id="phone"
             label="Phone"
-            type="phone"
+            type="text"
             size="small"
             value={formik.values.phone}
             onChange={formik.handleChange}
@@ -168,7 +171,7 @@ export default function Profile() {
             rows={4}
             id="about"
             label="About"
-            type="about"
+            type="text"
             value={formik.values.about}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
