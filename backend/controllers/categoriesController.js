@@ -55,17 +55,18 @@ const categoriesController = {
           res,
           category.media
         );
-
-        await Categories.findOneAndUpdate(
-          { _id: id },
-          {
-            name: name,
-            description: description,
-            media: mediaResponse._id,
-          },
-          { new: true }
-        );
-        res.status(200).json({ message: "Updated category successfully!" });
+        if (mediaResponse) {
+          await Categories.findOneAndUpdate(
+            { _id: id },
+            {
+              name: name,
+              description: description,
+              media: mediaResponse._id,
+            },
+            { new: true }
+          );
+          res.status(200).json({ message: "Updated category successfully!" });
+        }
       }
       res.status(404).json({ message: "Category not found!" });
     } catch (error) {
