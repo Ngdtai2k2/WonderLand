@@ -13,7 +13,7 @@ router.delete(
 router.put(
   "/:id",
   verifyMiddleware.verifyTokenAndUserAuthorization,
-  storage.single("image"),
+  storage.single("file"),
   userController.updateUserById
 );
 

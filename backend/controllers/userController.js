@@ -1,7 +1,8 @@
 const User = require("../models/User");
 const mongoose = require("mongoose");
-const uploadMediaController = require("./uploadMediaController");
 
+const uploadMediaController = require("./uploadMediaController");
+const mediaController = require("./mediaController");
 const createOptions = require("./createOptions");
 
 const userController = {
@@ -33,9 +34,9 @@ const userController = {
       if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
         return res.status(404).json({ message: "User not found!" });
       }
-      const user = await User.findById(req.params.id).select(
-        "-password -isAdmin"
-      );
+      const user = await User.findById(req.params.id)
+        .select("-password -isAdmin")
+        .populate("media");
       if (!user) {
         return res.status(404).json({ message: "User not found!" });
       }
@@ -44,32 +45,45 @@ const userController = {
       return res.status(500).json({ error: error.message });
     }
   },
+
   updateUserById: async (req, res) => {
     try {
+      const user = await User.findById(req.params.id).populate("media");
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found!" });
+      }
+
       if (req.file) {
+        const media = user?.media;
+        if (media) {
+          if (
+            !(await mediaController.deleteMedia(req, res, media._id)) ||
+            !(await uploadMediaController.deleteFile(media.cloudinary_id))
+          ) {
+            return res
+              .status(400)
+              .json({ message: "An error occurred, please try again later!" });
+          }
+        }
+
         const data = await uploadMediaController.uploadImage(req, res);
         if (data === null) {
           return res.status(400).json({ message: "Image not uploaded!" });
         }
-        const userUpdate = await User.findByIdAndUpdate(
-          req.params.id,
-          { $set: { ...req.body, media: data._id } },
-          { new: true }
-        ).populate('media');;
-        return res
-          .status(200)
-          .json({ user: userUpdate, message: "Successful update!" });
-      } else {
-        const userUpdate = await User.findByIdAndUpdate(
-          req.params.id,
-          req.body,
-          { new: true }
-        ).populate('media');;
 
-        return res
-          .status(200)
-          .json({ user: userUpdate, message: "Successful update!" });
+        user.media = data._id;
       }
+
+      const userUpdate = await User.findByIdAndUpdate(
+        req.params.id,
+        req.file ? { $set: { ...req.body, media: user.media } } : req.body,
+        { new: true }
+      ).select("-password -isAdmin").populate("media");
+
+      return res
+        .status(200)
+        .json({ user: userUpdate, message: "Successful update profile!" });
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
