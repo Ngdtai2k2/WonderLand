@@ -4,11 +4,12 @@ const Category = require("../models/Categories");
 const mediaController = require("../controllers/mediaController");
 const Post = require("../models/Post");
 const createOptions = require("./createOptions");
+const uploadMediaController = require("./uploadMediaController");
 
 const postController = {
   createPost: async (req, res) => {
     try {
-      const { author, content, category, media, type } = req.body;
+      const { author, content, category } = req.body;
 
       if (!mongoose.Types.ObjectId.isValid(category)) {
         return res.status(400).json({ message: "Invalid category ID!" });
@@ -18,25 +19,34 @@ const postController = {
         return res.status(400).json({ message: "Invalid author ID!" });
       }
 
+      if (!author) {
+        return res.status(400).json({ message: "Please provide an author!" });
+      }
+
       const categoryData = await Category.findById(category);
       if (!categoryData) {
         return res.status(404).json({ message: "Category not found!" });
       }
 
-      if (!author) {
-        return res.status(400).json({ message: "Please provide an author!" });
+      let data;
+      if (req.file && req.file.mimetype.startsWith("image/")) {
+        data = await uploadMediaController.uploadImage(req, res);
+        if (data === null) {
+          return res.status(400).json({ message: "Upload image failed!" });
+        }
+      } else {
+        data = await uploadMediaController.uploadVideo(req, res);
+        if (data === null) {
+          return res.status(400).json({ message: "Upload video failed!" });
+        }
       }
-
-      const mediaResponse = media
-        ? await mediaController.createMedia(media, res)
-        : null;
 
       const newPost = new Post({
         author: author,
         content: content || null,
         category: categoryData._id,
-        media: mediaResponse ? mediaResponse._id : null,
-        type: type,
+        media: data ? data._id : null,
+        type: req.file && req.file.mimetype.startsWith("image/") ? 0 : 1,
       });
 
       const post = await newPost.save();

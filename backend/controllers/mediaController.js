@@ -39,10 +39,9 @@ const mediaController = {
   deleteMedia: async (req, res, media) => {
     try {
       await Media.findByIdAndDelete(media);
-
       return true;
     } catch (error) {
-      console.error(error);
+      return false;
     }
   },
 };
