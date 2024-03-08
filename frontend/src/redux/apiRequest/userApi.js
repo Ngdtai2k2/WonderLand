@@ -23,7 +23,6 @@ export const updateUser = async (
       headers: { token: `Bearer ${accessToken}` },
       'Content-Type': 'multipart/form-data',
     });
-    console.log(userData);
     dispatch(updateUserSuccess(res.data.user));
     toast.success(res.data.message, toastTheme);
   } catch (err) {
