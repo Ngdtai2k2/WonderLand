@@ -5,3 +5,5 @@ export const toastTheme = {
   theme: 'colored',
   transition: Flip,
 };
+
+export const BaseApi = "https://wonderland-891s.onrender.com";

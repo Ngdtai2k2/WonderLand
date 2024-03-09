@@ -24,6 +24,7 @@ import { FlexCenterBox } from './styles';
 import { toastTheme } from '../../constants/constant';
 import { VisuallyHiddenInput } from '../styles';
 import LoadingCircularIndeterminate from '../../components/Loading';
+import { BaseApi } from '../../constants/constant';
 
 export default function PostTab() {
   const [category, setCategory] = useState(null);
@@ -42,7 +43,7 @@ export default function PostTab() {
   useEffect(() => {
     const getCategory = async () => {
       try {
-        const response = await axios.get('/v1/category');
+        const response = await axios.get(BaseApi + '/v1/category');
         setCategory(response.data.result.docs);
         setLoading(false);
       } catch (error) {

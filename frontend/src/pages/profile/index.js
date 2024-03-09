@@ -14,6 +14,7 @@ import TabContext from '@mui/lab/TabContext';
 import CustomBox from '../../components/CustomBox';
 import NotFound from '../../components/NotFound';
 import LoadingCircularIndeterminate from '../../components/Loading';
+import { BaseApi } from '../../constants/constant';
 
 export default function Profile() {
   const { id } = useParams();
@@ -29,7 +30,7 @@ export default function Profile() {
     const getUserProfile = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`/v1/user/${id}`);
+        const response = await axios.get(`${BaseApi}/v1/user/${id}`);
         setData(response.data);
       } catch (error) {
         if (error.response && error.response.status === 404) {

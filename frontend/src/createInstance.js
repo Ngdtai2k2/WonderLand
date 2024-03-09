@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
+import { BaseApi } from './constants/constant';
 
 const refreshToken = async (id) => {
   try {
-    const res = await axios.post('/v1/auth/refresh/' + id, {
+    const res = await axios.post(BaseApi + '/v1/auth/refresh/' + id, {
       withCredentials: true,
     });
     return res.data;

@@ -8,7 +8,7 @@ import {
 } from '../slice/userSlice';
 
 import { toast } from 'react-toastify';
-import { toastTheme } from '../../constants/constant';
+import { toastTheme, BaseApi } from '../../constants/constant';
 
 export const updateUser = async (
   accessToken,
@@ -19,7 +19,7 @@ export const updateUser = async (
 ) => {
   dispatch(updateUserStart());
   try {
-    const res = await axiosJWT.put('/v1/user/' + id, userData, {
+    const res = await axiosJWT.put(BaseApi + '/v1/user/' + id, userData, {
       headers: { token: `Bearer ${accessToken}` },
       'Content-Type': 'multipart/form-data',
     });
@@ -40,7 +40,7 @@ export const deleteUser = async (
 ) => {
   dispatch(deleteUserStart());
   try {
-    const res = await axiosJWT.delete('/v1/user/' + id, {
+    const res = await axiosJWT.delete(BaseApi + '/v1/user/' + id, {
       headers: { token: `Bearer ${accessToken}` },
     });
     dispatch(deleteUserSuccess(res.data.user));
