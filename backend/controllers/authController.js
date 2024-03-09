@@ -104,7 +104,7 @@ const authController = {
 
     if (!refreshToken) {
       const dataToken = await RefreshToken.findOne({user: req.params.id});
-      refreshToken = dataToken.token;
+      refreshToken = dataToken?.token;
     }
     if (!refreshToken) {
       return res.status(401).json({ message: "You're not authenticated!" });
@@ -161,7 +161,7 @@ const authController = {
 
     if (!refreshToken) {
       const dataToken = await RefreshToken.findOne({user: req.params.id});
-      refreshToken = dataToken.token;
+      refreshToken = dataToken?.token;
     }
     if (!refreshToken) {
       return res.status(400).json({ message: "Not found refresh token!" });
