@@ -9,8 +9,10 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import dayjs from 'dayjs';
+import LoadingButton from '@mui/lab/LoadingButton';
 import MenuItem from '@mui/material/MenuItem';
 import React, { useState } from 'react';
+import SaveRoundedIcon from '@mui/icons-material/SaveRounded';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
@@ -23,6 +25,7 @@ import { VisuallyHiddenInput } from '../styles';
 export default function Profile() {
   const [filename, setFilename] = useState('');
   const [image, setImage] = useState();
+  const [fetching, setFetching] = useState();
 
   const dispatch = useDispatch();
 
@@ -61,6 +64,7 @@ export default function Profile() {
 
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      setFetching(true);
       const formData = new FormData();
       formData.append('fullname', values.fullname);
       formData.append('phone', values.phone);
@@ -73,6 +77,7 @@ export default function Profile() {
       }
 
       await updateUser(accessToken, dispatch, user?._id, axiosJWT, formData);
+      setFetching(false);
     },
   });
 
@@ -209,14 +214,19 @@ export default function Profile() {
             helperText={formik.touched.hometown && formik.errors.hometown}
           />
         </Box>
-        <Button
+        <LoadingButton
+          loading={fetching ? fetching : false}
+          loadingPosition="start"
+          variant="outlined"
           type="submit"
-          variant="contained"
-          sx={{ marginTop: 2 }}
+          startIcon={<SaveRoundedIcon/>}
           disabled={!formik.dirty || formik.isSubmitting || !formik.isValid}
+          sx={{
+            marginTop: 2,
+          }}
         >
-          Save
-        </Button>
+          Post
+        </LoadingButton>
       </Box>
     </LocalizationProvider>
   );
