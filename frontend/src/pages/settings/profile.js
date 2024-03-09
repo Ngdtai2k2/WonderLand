@@ -4,7 +4,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import Avatar from "@mui/material/Avatar";
+import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
@@ -68,8 +68,8 @@ export default function Profile() {
       formData.append('gender', values.gender);
       formData.append('hometown', values.hometown);
       formData.append('file', values.image);
-      if (formik.values.birthday !== null){
-        formData.append("birthday", values.birthday);
+      if (formik.values.birthday !== null) {
+        formData.append('birthday', values.birthday);
       }
 
       await updateUser(accessToken, dispatch, user?._id, axiosJWT, formData);
