@@ -105,9 +105,9 @@ const authController = {
     if (!refreshToken) {
       const dataToken = await RefreshToken.findOne({user: req.params.id});
       refreshToken = dataToken?.token;
-    }
-    if (!refreshToken) {
-      return res.status(401).json({ message: "You're not authenticated!" });
+      if (!refreshToken) {
+        return res.status(401).json({ message: "You're not authenticated!" });
+      }
     }
 
     try {
@@ -145,7 +145,7 @@ const authController = {
             sameSite: "strict",
           });
 
-          res.status(200).json({
+          return res.status(200).json({
             accessToken: newAccessToken,
             refreshToken: newRefreshToken,
           });
@@ -157,17 +157,9 @@ const authController = {
   },
 
   logoutUser: async (req, res) => {
-    let refreshToken = req.cookies.refreshToken;
-
-    if (!refreshToken) {
-      const dataToken = await RefreshToken.findOne({user: req.params.id});
-      refreshToken = dataToken?.token;
-    }
-    if (!refreshToken) {
-      return res.status(400).json({ message: "Not found refresh token!" });
-    }
     try {
-      await RefreshToken.deleteOne({ token: refreshToken });
+      const { id } = req.body;
+      await RefreshToken.deleteOne({ user: id });
       res.clearCookie("refreshToken");
 
       return res.status(200).json({ message: "Successfully logged out!" });
@@ -200,9 +192,9 @@ const authController = {
       user.password = hashedPassword;
       const updatedUser = await user.save();
 
-      res.status(200).json({ user: updatedUser, message: "Changed password!" });
+      return res.status(200).json({ user: updatedUser, message: "Changed password!" });
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      return res.status(500).json({ error: error.message });
     }
   },
 };
