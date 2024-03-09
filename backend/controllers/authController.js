@@ -125,7 +125,6 @@ const authController = {
           if (err) {
             return res.status(401).json({ message: "Invalid refresh token!" });
           }
-          await RefreshToken.deleteOne({ token: refreshToken });
 
           const newAccessToken =
             authController.generateAccessToken(decodedToken);
@@ -133,8 +132,8 @@ const authController = {
             authController.generateRefreshToken(decodedToken);
 
           await RefreshToken.updateOne(
-            { token: newRefreshToken },
-            { user: decodedToken._id }
+            { user: decodedToken._id },
+            { token: newRefreshToken }
           );
 
           res.cookie("refreshToken", newRefreshToken, {
