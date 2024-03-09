@@ -1,23 +1,25 @@
-import { useColorScheme } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@emotion/react';
+
+import { useColorScheme } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
-import FileUploadRoundedIcon from '@mui/icons-material/FileUploadRounded';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
-import React, { useState } from 'react';
-import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import Switch from '@mui/material/Switch';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
+
+import MenuIcon from '@mui/icons-material/Menu';
+import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
+import FileUploadRoundedIcon from '@mui/icons-material/FileUploadRounded';
+import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
 
 import { createAxios } from '../../createInstance';
 import { logOut } from '../../redux/apiRequest/authApi';

@@ -1,14 +1,15 @@
-import { useParams } from 'react-router-dom';
-import Avatar from '@mui/material/Avatar';
-import axios from 'axios';
-import Box from '@mui/material/Box';
-import moment from 'moment';
-import Paper from '@mui/material/Paper';
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import moment from 'moment';
+
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
 import Tab from '@mui/material/Tab';
-import TabContext from '@mui/lab/TabContext';
 import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
+import TabContext from '@mui/lab/TabContext';
 
 import CustomBox from '../../components/CustomBox';
 import NotFound from '../../components/NotFound';

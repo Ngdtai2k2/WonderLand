@@ -1,21 +1,24 @@
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import BlockRoundedIcon from '@mui/icons-material/BlockRounded';
-import Box from '@mui/material/Box';
-import DriveFileRenameOutlineRoundedIcon from '@mui/icons-material/DriveFileRenameOutlineRounded';
-import Paper from '@mui/material/Paper';
-import React, { useState } from 'react';
-import SecurityRoundedIcon from '@mui/icons-material/SecurityRounded';
-import TabContext from '@mui/lab/TabContext';
-import Tabs from '@mui/material/Tabs';
-import VpnKeyRoundedIcon from '@mui/icons-material/VpnKeyRounded';
-
-import { ButtonTab, TypographyButtonTab } from './styles';
-import CustomBox from '../../components/CustomBox';
-import Account from './account';
 import { useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import React, { useState } from 'react';
+import TabContext from '@mui/lab/TabContext';
+import Tabs from '@mui/material/Tabs';
+
+import DriveFileRenameOutlineRoundedIcon from '@mui/icons-material/DriveFileRenameOutlineRounded';
+import SecurityRoundedIcon from '@mui/icons-material/SecurityRounded';
+import VpnKeyRoundedIcon from '@mui/icons-material/VpnKeyRounded';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import BlockRoundedIcon from '@mui/icons-material/BlockRounded';
+
 import ChangePassword from './changePassword';
+import CustomBox from '../../components/CustomBox';
+import Account from './account';
 import Profile from './profile';
+
+import { ButtonTab, TypographyButtonTab } from './styles';
 
 export default function Settings() {
   const [tabIndex, setTabIndex] = useState(0);

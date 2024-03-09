@@ -1,10 +1,10 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import BlockedRoute from './routes/blockedRoute';
-import Home from './pages/home';
-import Login from './pages/login';
 import NavigationBar from './components/NavigationBar';
 import NotFound from './components/NotFound';
+import Home from './pages/home';
+import Login from './pages/login';
 import Profile from './pages/profile';
 import Register from './pages/register';
 import Settings from './pages/settings';
