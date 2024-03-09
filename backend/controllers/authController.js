@@ -100,7 +100,12 @@ const authController = {
   },
 
   requestRefreshToken: async (req, res) => {
-    const refreshToken = req.cookies.refreshToken;
+    let refreshToken = req.cookies.refreshToken;
+
+    if (!refreshToken) {
+      const dataToken = await RefreshToken.findOne({user: req.params.id});
+      refreshToken = dataToken.token;
+    }
     if (!refreshToken) {
       return res.status(401).json({ message: "You're not authenticated!" });
     }
@@ -152,9 +157,14 @@ const authController = {
   },
 
   logoutUser: async (req, res) => {
-    const refreshToken = req.cookies.refreshToken;
+    let refreshToken = req.cookies.refreshToken;
+
     if (!refreshToken) {
-      return res.status(400).json({ message: "No refresh token found!" });
+      const dataToken = await RefreshToken.findOne({user: req.params.id});
+      refreshToken = dataToken.token;
+    }
+    if (!refreshToken) {
+      return res.status(400).json({ message: "Not found refresh token!" });
     }
     try {
       await RefreshToken.deleteOne({ token: refreshToken });
