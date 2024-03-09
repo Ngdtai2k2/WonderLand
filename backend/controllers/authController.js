@@ -132,11 +132,10 @@ const authController = {
           const newRefreshToken =
             authController.generateRefreshToken(decodedToken);
 
-          const newRefreshTokenDoc = new RefreshToken({
-            token: newRefreshToken,
-            user: decodedToken._id,
-          });
-          await newRefreshTokenDoc.save();
+          await RefreshToken.updateOne(
+            { token: newRefreshToken },
+            { user: decodedToken._id }
+          );
 
           res.cookie("refreshToken", newRefreshToken, {
             httpOnly: true,
