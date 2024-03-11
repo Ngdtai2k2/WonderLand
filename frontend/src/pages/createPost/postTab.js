@@ -81,10 +81,14 @@ export default function PostTab() {
           formData.append(key, value);
         });
 
-        const response = await axiosJWT.post(BaseApi + '/v1/post/create', formData, {
-          headers: { token: `Bearer ${accessToken}` },
-          'Content-Type': 'multipart/form-data',
-        });
+        const response = await axiosJWT.post(
+          BaseApi + '/v1/post/create',
+          formData,
+          {
+            headers: { token: `Bearer ${accessToken}` },
+            'Content-Type': 'multipart/form-data',
+          },
+        );
         toast.success(response.data.message, toastTheme);
         navigate('/');
       } catch (error) {

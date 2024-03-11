@@ -45,10 +45,14 @@ export const registerUser = async (user, dispatch, navigate) => {
 export const logOut = async (dispatch, id, navigate, accessToken, axiosJWT) => {
   dispatch(logOutStart());
   try {
-    await axiosJWT.post(BaseApi + '/v1/auth/logout', {id}, {
-      headers: { token: `Bearer ${accessToken}` },
-      'Content-Type': 'multipart/form-data',
-    });
+    await axiosJWT.post(
+      BaseApi + '/v1/auth/logout',
+      { id },
+      {
+        headers: { token: `Bearer ${accessToken}` },
+        'Content-Type': 'multipart/form-data',
+      },
+    );
     dispatch(logOutSuccess());
     toast.success('Logged out successfully!', toastTheme);
     navigate('/');
@@ -66,9 +70,13 @@ export const changePassword = async (
 ) => {
   dispatch(changePasswordStart());
   try {
-    const res = await axiosJWT.put(BaseApi + '/v1/auth/password/' + id, userData, {
-      headers: { token: `Bearer ${accessToken}` },
-    });
+    const res = await axiosJWT.put(
+      BaseApi + '/v1/auth/password/' + id,
+      userData,
+      {
+        headers: { token: `Bearer ${accessToken}` },
+      },
+    );
     dispatch(changePasswordSuccess());
     toast.success(res.data.message, toastTheme);
   } catch (err) {
