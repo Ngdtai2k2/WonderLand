@@ -64,21 +64,16 @@ export default function Profile() {
       birthday: user?.birthday ? dayjs(user?.birthday) : null,
       image: '',
     },
-
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setFetching(true);
       const formData = new FormData();
-      formData.append('fullname', values.fullname);
-      formData.append('phone', values.phone);
-      formData.append('about', values.about);
-      formData.append('gender', values.gender);
-      formData.append('hometown', values.hometown);
+      Object.entries(values).forEach(([key, value]) => {
+        if (value !== null && key !== 'image') {
+          formData.append(key, value);
+        }
+      });
       formData.append('file', values.image);
-      if (formik.values.birthday !== null) {
-        formData.append('birthday', values.birthday);
-      }
-
       await updateUser(accessToken, dispatch, user?._id, axiosJWT, formData);
       setFetching(false);
     },
@@ -222,7 +217,7 @@ export default function Profile() {
           loadingPosition="start"
           variant="outlined"
           type="submit"
-          startIcon={<SaveRoundedIcon/>}
+          startIcon={<SaveRoundedIcon />}
           disabled={!formik.dirty || formik.isSubmitting || !formik.isValid}
           sx={{
             marginTop: 2,
