@@ -23,10 +23,10 @@ mongoose
 
 const corsOptions = {
   origin: process.env.CORS_ORIGIN,
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
-app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
 
