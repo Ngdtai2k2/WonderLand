@@ -21,10 +21,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 import { createAxios } from '../../createInstance';
 import { FlexCenterBox } from './styles';
-import { toastTheme } from '../../constants/constant';
 import { VisuallyHiddenInput } from '../styles';
 import LoadingCircularIndeterminate from '../../components/Loading';
-import { BaseApi } from '../../constants/constant';
+import { BaseApi, toastTheme } from '../../constants/constant';
 
 export default function PostTab() {
   const [category, setCategory] = useState(null);
@@ -55,9 +54,9 @@ export default function PostTab() {
 
   const validationSchema = Yup.object({
     category: Yup.string().required('Category is required'),
-    content: Yup.string()
-      .required('Content is required')
-      .max(280, 'Content must be under 280 characters'),
+    title: Yup.string()
+      .required('Title is required')
+      .max(280, 'Title must be under 280 characters'),
     file: Yup.mixed().test('fileType', 'File not supported!', (value) => {
       if (!value) return true;
       const imageTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
@@ -70,7 +69,7 @@ export default function PostTab() {
   });
 
   const formik = useFormik({
-    initialValues: { category: '', content: '', file: '' },
+    initialValues: { category: '', title: '', file: '' },
     validationSchema,
     onSubmit: async (values) => {
       try {
@@ -150,18 +149,16 @@ export default function PostTab() {
           ))}
       </TextField>
       <TextField
-        multiline
-        rows={3}
         margin="normal"
         required
-        id="content"
-        label="Content"
+        id="title"
+        label="Title"
         type="text"
-        value={formik.values.content}
+        value={formik.values.title}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
-        error={formik.touched.content && Boolean(formik.errors.content)}
-        helperText={formik.touched.content && formik.errors.content}
+        error={formik.touched.title && Boolean(formik.errors.title)}
+        helperText={formik.touched.title && formik.errors.title}
       />
       <Paper variant="outlined" sx={{ p: 2, marginY: 1 }}>
         <Box display="flex" flexDirection="column" width="100%" maxHeight={500}>
