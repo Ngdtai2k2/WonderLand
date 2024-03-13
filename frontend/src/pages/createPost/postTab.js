@@ -42,7 +42,7 @@ export default function PostTab() {
   useEffect(() => {
     const getCategory = async () => {
       try {
-        const response = await axios.get(BaseApi + '/v1/category');
+        const response = await axios.get(BaseApi + '/category');
         setCategory(response.data.result.docs);
         setLoading(false);
       } catch (error) {
