@@ -8,9 +8,14 @@ const postSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    content: {
+    title: {
       type: String,
       required: true,
+      maxLength: 280,
+    },
+    content: {
+      type: String,
+      maxLength: 1500,
     },
     category: {
       type: mongoose.Schema.Types.ObjectId,
