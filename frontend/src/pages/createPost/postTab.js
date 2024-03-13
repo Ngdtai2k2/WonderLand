@@ -57,7 +57,7 @@ export default function PostTab() {
     title: Yup.string()
       .required('Title is required')
       .max(280, 'Title must be under 280 characters'),
-    file: Yup.mixed().test('fileType', 'File not supported!', (value) => {
+    file: Yup.mixed().required('File is required!').test('fileType', 'File not supported!', (value) => {
       if (!value) return true;
       const imageTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
       const videoTypes = ['video/mp4', 'video/mkv'];
@@ -76,6 +76,7 @@ export default function PostTab() {
         setFetching(true);
         const formData = new FormData();
         formData.append('author', user?._id);
+        formData.append('type', 0);
         Object.entries(values).forEach(([key, value]) => {
           formData.append(key, value);
         });
