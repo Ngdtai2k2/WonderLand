@@ -21,7 +21,7 @@ import { toastTheme, BaseApi } from '../../constants/constant';
 export const loginUser = async (user, dispatch, navigate) => {
   dispatch(loginStart());
   try {
-    const res = await axios.post(BaseApi + '/v1/auth/login', user);
+    const res = await axios.post(BaseApi + '/auth/login', user);
     dispatch(loginSuccess(res.data));
     toast.success(res.data.message, toastTheme);
     navigate('/');
@@ -34,7 +34,7 @@ export const loginUser = async (user, dispatch, navigate) => {
 export const registerUser = async (user, dispatch, navigate) => {
   dispatch(registerStart());
   try {
-    await axios.post(BaseApi + '/v1/auth/register', user);
+    await axios.post(BaseApi + '/auth/register', user);
     dispatch(registerSuccess());
     navigate('/login');
   } catch (err) {
@@ -46,7 +46,7 @@ export const logOut = async (dispatch, id, navigate, accessToken, axiosJWT) => {
   dispatch(logOutStart());
   try {
     await axiosJWT.post(
-      BaseApi + '/v1/auth/logout',
+      BaseApi + '/auth/logout',
       { id },
       {
         headers: { token: `Bearer ${accessToken}` },
@@ -71,7 +71,7 @@ export const changePassword = async (
   dispatch(changePasswordStart());
   try {
     const res = await axiosJWT.put(
-      BaseApi + '/v1/auth/password/' + id,
+      BaseApi + '/auth/password/' + id,
       userData,
       {
         headers: { token: `Bearer ${accessToken}` },

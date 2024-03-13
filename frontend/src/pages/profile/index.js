@@ -30,7 +30,7 @@ export default function Profile() {
     const getUserProfile = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${BaseApi}/v1/user/${id}`);
+        const response = await axios.get(`${BaseApi}/user/${id}`);
         setData(response.data);
       } catch (error) {
         if (error.response && error.response.status === 404) {

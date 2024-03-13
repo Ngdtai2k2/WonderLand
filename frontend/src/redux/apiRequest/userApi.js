@@ -19,7 +19,7 @@ export const updateUser = async (
 ) => {
   dispatch(updateUserStart());
   try {
-    const res = await axiosJWT.put(BaseApi + '/v1/user/' + id, userData, {
+    const res = await axiosJWT.put(BaseApi + '/user/' + id, userData, {
       headers: { token: `Bearer ${accessToken}` },
       'Content-Type': 'multipart/form-data',
     });
@@ -40,7 +40,7 @@ export const deleteUser = async (
 ) => {
   dispatch(deleteUserStart());
   try {
-    const res = await axiosJWT.delete(BaseApi + '/v1/user/' + id, {
+    const res = await axiosJWT.delete(BaseApi + '/user/' + id, {
       headers: { token: `Bearer ${accessToken}` },
     });
     dispatch(deleteUserSuccess(res.data.user));

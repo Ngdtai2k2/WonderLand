@@ -6,4 +6,4 @@ export const toastTheme = {
   transition: Flip,
 };
 
-export const BaseApi = "https://wonderland-891s.onrender.com";
+export const BaseApi = 'https://wonderland-891s.onrender.com/api/v1';
