@@ -1,30 +1,30 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import axios from "axios";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import axios from 'axios';
 
-import Avatar from "@mui/material/Avatar";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
-import LoadingButton from "@mui/lab/LoadingButton";
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
+import LoadingButton from '@mui/lab/LoadingButton';
 
-import CreateRoundedIcon from "@mui/icons-material/CreateRounded";
+import CreateRoundedIcon from '@mui/icons-material/CreateRounded';
 
-import { createAxios } from "../../createInstance";
-import { BaseApi, toastTheme } from "../../constants/constant";
-import LoadingCircularIndeterminate from "../../components/Loading";
-import { FlexCenterBox } from "./styles";
+import { createAxios } from '../../createInstance';
+import { BaseApi, toastTheme } from '../../constants/constant';
+import LoadingCircularIndeterminate from '../../components/Loading';
+import { FlexCenterBox } from './styles';
 
 export default function AskTab() {
   const [category, setCategory] = useState(null);
   const [loading, setLoading] = useState(true);
   const [fetching, setFetching] = useState();
-  
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -35,7 +35,7 @@ export default function AskTab() {
   useEffect(() => {
     const getCategory = async () => {
       try {
-        const response = await axios.get(BaseApi + "/category");
+        const response = await axios.get(BaseApi + '/category');
         setCategory(response.data.result.docs);
         setLoading(false);
       } catch (error) {
@@ -46,15 +46,15 @@ export default function AskTab() {
   }, []);
 
   const validationSchema = Yup.object({
-    category: Yup.string().required("Category is required!"),
+    category: Yup.string().required('Category is required!'),
     title: Yup.string()
-      .required("Title is required!")
-      .max(280, "Title must be under 280 characters!"),
-    content: Yup.string().max(1500, "Content must be under 1500 characters!"),
+      .required('Title is required!')
+      .max(280, 'Title must be under 280 characters!'),
+    content: Yup.string().max(1500, 'Content must be under 1500 characters!'),
   });
 
   const formik = useFormik({
-    initialValues: { category: "", title: "", content: "" },
+    initialValues: { category: '', title: '', content: '' },
     validationSchema,
     onSubmit: async (values) => {
       try {
@@ -62,7 +62,7 @@ export default function AskTab() {
         const askData = {
           ...values,
           author: user?._id,
-          type: 1
+          type: 1,
         };
 
         const response = await axiosJWT.post(
@@ -70,10 +70,10 @@ export default function AskTab() {
           askData,
           {
             headers: { token: `Bearer ${accessToken}` },
-          }
+          },
         );
         toast.success(response.data.message, toastTheme);
-        navigate("/");
+        navigate('/');
       } catch (error) {
         toast.error(error.message, toastTheme);
       } finally {
@@ -162,8 +162,8 @@ export default function AskTab() {
           disabled={!formik.dirty || formik.isSubmitting || !formik.isValid}
           sx={{
             width: {
-              xs: "30%",
-              md: "20%",
+              xs: '30%',
+              md: '20%',
             },
           }}
         >
