@@ -18,7 +18,7 @@ import CustomBox from '../../components/CustomBox';
 import Account from './account';
 import Profile from './profile';
 
-import { ButtonTab, TypographyButtonTab } from './styles';
+import { ButtonTab, TypographyButtonTab } from '../styles';
 
 export default function Settings() {
   const [tabIndex, setTabIndex] = useState(0);
