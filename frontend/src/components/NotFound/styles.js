@@ -13,7 +13,7 @@ export const ImageStyle = styled('img')(({ theme }) => ({
   height: '100%',
 }));
 
-export const DivStyle = styled('div')(()=> ({
+export const DivStyle = styled('div')(() => ({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
