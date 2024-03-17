@@ -83,17 +83,29 @@ const postController = {
 
       result.docs = await Promise.all(
         result.docs.map(async (post) => {
-          post = await Post.populate(post, {
-            path: "media",
-            select: "url type description",
-          });
-          return await Post.populate(post, {
-            path: "author",
-            select: "fullname avatar",
-          });
+          return (post = await Post.populate(post, [
+            {
+              path: "author",
+              select: "id fullname",
+              populate: {
+                path: "media",
+                model: "Media",
+                select: "url",
+              },
+            },
+            { path: "media", select: "url type" },
+            {
+              path: "category",
+              select: "name",
+              populate: {
+                path: "media",
+                model: "Media",
+                select: "url",
+              },
+            },
+          ]));
         })
       );
-
       res.status(200).json({ result });
     } catch (error) {
       return res.status(500).json({ error: error.message });
