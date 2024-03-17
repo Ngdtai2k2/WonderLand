@@ -38,12 +38,12 @@ export default function RenderPost({ apiLink }) {
         {data?.map((post) => (
           <PostCard
             key={post._id}
-            avatar={post.author.media.url}
-            fullname={post.author.fullname}
-            title={post.title}
-            content={post.content}
-            media={post.media}
-            createdAt={post.createdAt}
+            avatar={post?.author?.media?.url}
+            fullname={post?.author?.fullname}
+            title={post?.title}
+            content={post?.content}
+            media={post?.media}
+            createdAt={post?.createdAt}
             xs="100%"
             md="50%"
           />
