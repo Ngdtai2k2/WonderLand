@@ -112,6 +112,41 @@ const postController = {
     }
   },
 
+  getAllAskPost: async (req, res) => {
+    try {
+      const options = createOptions(req);
+      let result = await Post.paginate({ type: 1 }, options);
+
+      result.docs = await Promise.all(
+        result.docs.map(async (post) => {
+          return (post = await Post.populate(post, [
+            {
+              path: "author",
+              select: "id fullname",
+              populate: {
+                path: "media",
+                model: "Media",
+                select: "url",
+              },
+            },
+            {
+              path: "category",
+              select: "name",
+              populate: {
+                path: "media",
+                model: "Media",
+                select: "url",
+              },
+            },
+          ]));
+        })
+      );
+      res.status(200).json({ result });
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  },
+  
   getAllPostByUserId: async (req, res) => {
     try {
       const id = req.params.id;

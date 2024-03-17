@@ -5,6 +5,7 @@ const postController = require("../controllers/postController");
 const storage = require("../configs/multer");
 
 router.get("/", postController.getAllPost);
+router.get("/ask", postController.getAllAskPost);
 router.get("/:id", postController.getPostWithMediaById);
 router.post(
   "/create",
