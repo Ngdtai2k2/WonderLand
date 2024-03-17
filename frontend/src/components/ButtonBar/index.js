@@ -27,7 +27,13 @@ export default function ButtonBar() {
 
   return (
     <CustomBox>
-      <Box display="flex" justifyContent="center" alignItems="center" gap={0.5} flexWrap='wrap'>
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        gap={0.5}
+        flexWrap="wrap"
+      >
         <Link
           href="/"
           style={{ textDecoration: 'none' }}

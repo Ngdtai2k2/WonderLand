@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 const fetchData = (apiLink, setItems, items, setHasMore, page) => {
   axios.get(`${apiLink}?_page=${page.current}&_limit=10`).then((res) => {

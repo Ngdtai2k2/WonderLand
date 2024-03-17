@@ -1,17 +1,17 @@
-import React, { useEffect, useRef, useState } from "react";
-import ButtonBar from "../ButtonBar";
-import InfiniteScroll from "react-infinite-scroll-component";
+import React, { useEffect, useRef, useState } from 'react';
+import ButtonBar from '../ButtonBar';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 
-import SentimentVeryDissatisfiedRoundedIcon from "@mui/icons-material/SentimentVeryDissatisfiedRounded";
+import SentimentVeryDissatisfiedRoundedIcon from '@mui/icons-material/SentimentVeryDissatisfiedRounded';
 
-import PostCard from "../PostCard";
-import LoadingCircularIndeterminate from "../Loading";
-import { fetchData, refresh } from "../../utils/apiGetPost";
+import PostCard from '../PostCard';
+import LoadingCircularIndeterminate from '../Loading';
+import { fetchData, refresh } from '../../utils/apiGetPost';
 
-export default function RenderPost({apiLink}) {
+export default function RenderPost({ apiLink }) {
   const [data, setData] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const page = useRef(1);
