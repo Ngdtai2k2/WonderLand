@@ -57,15 +57,22 @@ export default function PostTab() {
     title: Yup.string()
       .required('Title is required')
       .max(280, 'Title must be under 280 characters'),
-    file: Yup.mixed().required('File is required!').test('fileType', 'File not supported!', (value) => {
-      if (!value) return true;
-      const imageTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
-      const videoTypes = ['video/mp4', 'video/mkv'];
-      return (
-        value &&
-        (imageTypes.includes(value.type) || videoTypes.includes(value.type))
-      );
-    }),
+    file: Yup.mixed()
+      .required('File is required!')
+      .test('fileType', 'File not supported!', (value) => {
+        if (!value) return true;
+        const imageTypes = [
+          'image/jpeg',
+          'image/png',
+          'image/jpg',
+          'image/gif',
+        ];
+        const videoTypes = ['video/mp4', 'video/mkv'];
+        return (
+          value &&
+          (imageTypes.includes(value.type) || videoTypes.includes(value.type))
+        );
+      }),
   });
 
   const formik = useFormik({
