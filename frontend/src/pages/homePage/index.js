@@ -14,7 +14,6 @@ import LoadingCircularIndeterminate from "../../components/Loading";
 
 const fetchData = (setItems, items, setHasMore, page) => {
   axios.get(`${BaseApi}/post?_page=${page.current}&_limit=10`).then((res) => {
-    console.log(res.data.result.docs);
     if (res.data.result.docs.length === 0) {
       setItems([...items]);
       setHasMore(false);
@@ -44,54 +43,53 @@ export default function HomePage() {
   return (
     <>
       <ButtonBar />
+      <Box
+        display="flex"
+        justifyContent="center"
+        flexDirection="column"
+        alignItems="center"
+        gap={2}
+        margin={{
+          xs: 1.5,
+          md: 3,
+        }}
+      >
+        {data?.map((post) => (
+          <PostCard
+            key={post._id}
+            avatar={post.author.media.url}
+            fullname={post.author.fullname}
+            title={post.title}
+            content={post.content}
+            media={post.media}
+            createdAt={post.createdAt}
+            xs="100%"
+            md="50%"
+          />
+        ))}
+        {!hasMore && (
+          <Typography
+            variant="body1"
+            textAlign="center"
+            display="flex"
+            alignItems="center"
+            flexDirection="column"
+          >
+            <SentimentVeryDissatisfiedRoundedIcon />
+            No more posts!
+          </Typography>
+        )}
+      </Box>
       <InfiniteScroll
         dataLength={data.length}
         next={() => {
           fetchData(setData, data, setHasMore, page);
         }}
         hasMore={hasMore}
-        loader={<LoadingCircularIndeterminate/>}
+        loader={<LoadingCircularIndeterminate />}
         refreshFunction={() => refresh(setData, setHasMore, page)}
         pullDownToRefresh
-      >
-        <Box
-          display="flex"
-          justifyContent="center"
-          flexDirection="column"
-          alignItems="center"
-          gap={2}
-          margin={{
-            xs: 1.5,
-            md: 3,
-          }}
-        >
-          {data?.map((post) => (
-            <PostCard
-              key={post._id}
-              avatar={post.author.media.url}
-              fullname={post.author.fullname}
-              title={post.title}
-              content={post.content}
-              media={post.media}
-              createdAt={post.createdAt}
-              xs="100%"
-              md="50%"
-            />
-          ))}
-          {!hasMore && (
-            <Typography
-              variant="body1"
-              textAlign="center"
-              display="flex"
-              alignItems="center"
-              flexDirection="column"
-            >
-              <SentimentVeryDissatisfiedRoundedIcon />
-              No more posts!
-            </Typography>
-          )}
-        </Box>
-      </InfiniteScroll>
+      ></InfiniteScroll>
     </>
   );
 }
