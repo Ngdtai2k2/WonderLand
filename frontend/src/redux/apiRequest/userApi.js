@@ -26,6 +26,7 @@ export const updateUser = async (
     dispatch(updateUserSuccess(res.data.user));
     toast.success(res.data.message, toastTheme);
   } catch (err) {
+    console.log(err);
     dispatch(updateUserFailed());
     toast.error(err.response.data.message, toastTheme);
   }

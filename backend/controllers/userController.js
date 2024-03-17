@@ -54,6 +54,13 @@ const userController = {
         return res.status(404).json({ message: "User not found!" });
       }
 
+      if (req.body.email && req.body.email !== user.email) {
+        const existingUser = await User.findOne({ email: req.body.email });
+        if (existingUser) {
+          return res.status(400).json({ message: "Email already exists!" });
+        }
+      }
+
       if (req.file) {
         const media = user?.media;
         if (media) {
@@ -85,7 +92,7 @@ const userController = {
         .status(200)
         .json({ user: userUpdate, message: "Successful update profile!" });
     } catch (error) {
-      return res.status(500).json({ error: error.message });
+      return res.status(500).json({ message: "Something went wrong!" });
     }
   },
 };
