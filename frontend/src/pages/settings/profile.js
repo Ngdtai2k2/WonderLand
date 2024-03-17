@@ -21,7 +21,7 @@ import SaveRoundedIcon from '@mui/icons-material/SaveRounded';
 
 import { createAxios } from '../../createInstance';
 import { loginSuccess } from '../../redux/slice/userSlice';
-import { ShortenContent } from '../../helpers/shortenContent';
+import { ShortenContent } from '../../util/shortenContent';
 import { updateUser } from '../../redux/apiRequest/userApi';
 import { VisuallyHiddenInput } from '../styles';
 
