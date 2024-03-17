@@ -1,11 +1,10 @@
-import React from 'react';
-import ButtonBar from '../../components/ButtonBar';
+import React from "react";
+
+import RenderPost from "../../components/RenderPost";
+import { BaseApi } from "../../constants/constant";
 
 export default function AskPage() {
   return (
-    <>
-      <ButtonBar />
-      <div>AskPage</div>
-    </>
+      <RenderPost apiLink={`${BaseApi}/post/ask`}/>
   );
 }
