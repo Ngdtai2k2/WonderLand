@@ -102,7 +102,7 @@ export default function PostCard({
         }
       />
       <CardContent sx={{ paddingX: 1, paddingY: 0 }}>
-        <Typography variant="h6">{title}</Typography>
+        <Typography variant="body1" fontWeight={550}>{title}</Typography>
         <Typography variant="body2">{content}</Typography>
       </CardContent>
       {media ? (
