@@ -15,6 +15,7 @@ import Switch from '@mui/material/Switch';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
 
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
@@ -92,8 +93,15 @@ export default function NavigationBar() {
               <DrawerList />
             </Box>
           </Drawer>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Wonder Land
+          <Typography
+            variant="body1"
+            fontWeight={700}
+            component="div"
+            sx={{ flexGrow: 1 }}
+          >
+            <Link href="/" underline="none" variant="inherit">
+              Wonder Land
+            </Link>
           </Typography>
           <IconButton aria-label="search">
             <SearchRoundedIcon />
