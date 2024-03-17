@@ -1,13 +1,15 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
-import BlockedRoute from './routes/blockedRoute';
-import NotFound from './components/NotFound';
 import Home from './pages/home';
 import Login from './pages/login';
 import Profile from './pages/profile';
 import Register from './pages/register';
 import Settings from './pages/settings';
 import CreatePost from './pages/createPost';
+
+import NotFound from './components/NotFound';
+
+import BlockedRoute from './routes/blockedRoute';
 import LayoutWithNavbar from './routes/layoutWithNavbar';
 
 function App() {
