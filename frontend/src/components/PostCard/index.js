@@ -72,6 +72,7 @@ export default function PostCard({
   return (
     <Card
       sx={{
+        border: '1px solid rgba(0,0,0,0.12)',
         boxShadow: 'none',
         width: {
           xs: xs,
