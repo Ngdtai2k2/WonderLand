@@ -1,26 +1,40 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import axios from 'axios';
 import moment from 'moment';
+
+import { useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
 import TabContext from '@mui/lab/TabContext';
+import Divider from '@mui/material/Divider';
+
+import AddReactionRoundedIcon from '@mui/icons-material/AddReactionRounded';
+import PostAddRoundedIcon from '@mui/icons-material/PostAddRounded';
+import CommentRoundedIcon from '@mui/icons-material/CommentRounded';
+import StarsRoundedIcon from '@mui/icons-material/StarsRounded';
 
 import CustomBox from '../../components/CustomBox';
 import NotFound from '../../components/NotFound';
 import LoadingCircularIndeterminate from '../../components/Loading';
-import { BaseApi } from '../../constants/constant';
+import PostTab from './postTab';
+import { BaseApi, toastTheme } from '../../constants/constant';
+import { ButtonTab, TypographyButtonTab } from '../styles';
 
 export default function Profile() {
   const { id } = useParams();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [tabIndex, setTabIndex] = useState(0);
+
+  const theme = useTheme();
+  const isSmOrBelow = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleChangeTab = (event, newValue) => {
     setTabIndex(newValue);
@@ -35,8 +49,9 @@ export default function Profile() {
       } catch (error) {
         if (error.response && error.response.status === 404) {
           setData(null);
+          toast.error('Cannot find data!', toastTheme);
         } else {
-          console.error('Error fetching data:', error);
+          toast.error('Something went wrong!', toastTheme);
         }
       } finally {
         setLoading(false);
@@ -48,7 +63,7 @@ export default function Profile() {
 
   const user = data?.user;
 
-  if (!user && loading) {
+  if (!user && !loading) {
     return <NotFound />;
   }
 
@@ -56,7 +71,15 @@ export default function Profile() {
     <LoadingCircularIndeterminate />
   ) : (
     <CustomBox>
-      <Paper variant="outlined" sx={{ p: 2 }}>
+      <Paper
+        variant="outlined"
+        sx={{
+          p: {
+            xs: 1,
+            md: 2,
+          },
+        }}
+      >
         <Box display="flex" alignItems="center" marginY={1}>
           <Avatar
             src={user?.media?.url}
@@ -79,26 +102,63 @@ export default function Profile() {
           </Box>
         </Box>
         <Typography variant="h6">{user?.about}</Typography>
+        <Divider sx={{ marginY: 2 }} />
         <TabContext value={tabIndex}>
-          <Box sx={{ width: '100%', marginY: 2 }}>
+          <Box
+            sx={{ marginY: 2, ...(isSmOrBelow ? null : { display: 'flex' }) }}
+          >
             <Tabs
               value={tabIndex}
               onChange={handleChangeTab}
-              variant="scrollable"
-              scrollButtons="auto"
-              allowScrollButtonsMobile
+              variant={isSmOrBelow ? 'scrollable' : 'standard'}
+              orientation={isSmOrBelow ? 'horizontal' : 'vertical'}
+              sx={{ display: 'flex', alignItems: 'center' }}
             >
-              <Tab sx={{ fontSize: '14px' }} label="Reactions" />
-              <Tab sx={{ fontSize: '14px' }} label="Posts" />
-              <Tab sx={{ fontSize: '14px' }} label="Comments" />
-              <Tab sx={{ fontSize: '14px' }} label="Saved" />
+              <ButtonTab
+                label={
+                  <TypographyButtonTab gap={1}>
+                    <AddReactionRoundedIcon />
+                    Reactions
+                  </TypographyButtonTab>
+                }
+              />
+              <ButtonTab
+                label={
+                  <TypographyButtonTab gap={1}>
+                    <PostAddRoundedIcon />
+                    Posts
+                  </TypographyButtonTab>
+                }
+              />
+              <ButtonTab
+                label={
+                  <TypographyButtonTab gap={1}>
+                    <CommentRoundedIcon />
+                    Comments
+                  </TypographyButtonTab>
+                }
+              />
+              <ButtonTab
+                label={
+                  <TypographyButtonTab gap={1}>
+                    <StarsRoundedIcon />
+                    Saved
+                  </TypographyButtonTab>
+                }
+              />
             </Tabs>
-          </Box>
-          <Box>
-            {tabIndex === 0 && <div>Tab1</div>}
-            {tabIndex === 1 && <div>Tab2</div>}
-            {tabIndex === 2 && <div>Tab3</div>}
-            {tabIndex === 3 && <div>Tab4</div>}
+            <Box
+              sx={{
+                ...(isSmOrBelow
+                  ? { marginTop: 3, width: '100%' }
+                  : { marginLeft: 3, width: '77%' }),
+              }}
+            >
+              {tabIndex === 0 && <div>Tab1</div>}
+              {tabIndex === 1 && <PostTab />}
+              {tabIndex === 2 && <div>Tab3</div>}
+              {tabIndex === 3 && <div>Tab4</div>}
+            </Box>
           </Box>
         </TabContext>
       </Paper>
