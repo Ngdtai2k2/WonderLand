@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import BlockedRoute from './routes/blockedRoute';
-import NavigationBar from './components/NavigationBar';
 import NotFound from './components/NotFound';
 import Home from './pages/home';
 import Login from './pages/login';
@@ -9,17 +8,18 @@ import Profile from './pages/profile';
 import Register from './pages/register';
 import Settings from './pages/settings';
 import CreatePost from './pages/createPost';
+import LayoutWithNavbar from './routes/layoutWithNavbar';
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" exact element={<><NavigationBar /><Home /></>}/>
-        <Route path="/profile/:id" exact element={<><NavigationBar /><Profile /></>}/>
-        <Route path="/settings" exact element={<BlockedRoute><NavigationBar /><Settings /></BlockedRoute>}/>
-        <Route path="/login" exact element={<BlockedRoute blocked="true"><Login /></BlockedRoute>}/>
-        <Route path="/register" exact element={<BlockedRoute blocked="true"><Register /></BlockedRoute>}/>
-        <Route path="/create/post" exact element={<BlockedRoute><NavigationBar /><CreatePost /></BlockedRoute>}/>
+        <Route path="/" element={<LayoutWithNavbar><Home /></LayoutWithNavbar>} />
+        <Route path="/profile/:id" element={<LayoutWithNavbar><Profile /></LayoutWithNavbar>} />
+        <Route path="/settings" element={<BlockedRoute><LayoutWithNavbar><Settings /></LayoutWithNavbar></BlockedRoute>} />
+        <Route path="/login" element={<BlockedRoute blocked="true"><Login /></BlockedRoute>} />
+        <Route path="/register" element={<BlockedRoute blocked="true"><Register /></BlockedRoute>} />
+        <Route path="/create/post" element={<BlockedRoute><LayoutWithNavbar><CreatePost /></LayoutWithNavbar></BlockedRoute>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
