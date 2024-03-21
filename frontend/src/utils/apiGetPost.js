@@ -7,7 +7,7 @@ const fetchData = (apiLink, setItems, items, setHasMore, page) => {
       setHasMore(false);
     } else {
       setItems([...items, ...res.data.result.docs]);
-      setHasMore(res.data.result.docs.length === 10);
+      setHasMore(res.data.result.docs.length === 3);
       page.current = page.current + 1;
     }
   });
