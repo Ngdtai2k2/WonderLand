@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const fetchData = (apiLink, setItems, items, setHasMore, page) => {
-  axios.get(`${apiLink}?_page=${page.current}&_limit=5`).then((res) => {
+  axios.get(`${apiLink}?_page=${page.current}&_limit=3`).then((res) => {
     if (res.data.result.docs.length === 0) {
       setItems([...items]);
       setHasMore(false);
