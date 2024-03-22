@@ -1,14 +1,17 @@
 import * as React from 'react';
-
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 
-export default function LoadingCircularIndeterminate() {
+export default function LoadingCircularIndeterminate({ size }) {
   return (
     <Box
-      sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
     >
-      <CircularProgress />
+      <CircularProgress size={size ? size : 40} />
     </Box>
   );
 }
