@@ -3,11 +3,11 @@ const mongoose = require("mongoose");
 const commentSchema = new mongoose.Schema(
   {
     postId: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Post",
     },
     author: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
     content: {
