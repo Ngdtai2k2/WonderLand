@@ -56,13 +56,15 @@ export default function PostTab() {
     >
       {data?.docs?.map((post) => (
         <PostCard
-          key={post._id}
-          avatar={post.category.media.url}
-          fullname={post.category.name}
-          title={post.title}
-          content={post.content}
-          media={post.media}
-          createdAt={post.createdAt}
+          key={post?._id}
+          id={post?._id}
+          avatar={post?.category?.media?.url}
+          authorId={post?.author?._id }
+          fullname={post?.category?.name}
+          title={post?.title}
+          content={post?.content}
+          media={post?.media}
+          createdAt={post?.createdAt}
           xs="100%"
           md="70%"
         />
