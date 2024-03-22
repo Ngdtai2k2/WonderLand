@@ -56,6 +56,7 @@ export const logOut = async (dispatch, id, navigate, accessToken, axiosJWT) => {
     dispatch(logOutSuccess());
     toast.success('Logged out successfully!', toastTheme);
     navigate('/');
+    window.location.reload();
   } catch (err) {
     dispatch(logOutFailed());
   }
