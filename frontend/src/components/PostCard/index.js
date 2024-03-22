@@ -1,28 +1,41 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 import moment from 'moment';
 import { ControlBar, Player } from 'video-react';
+import { useNavigate } from 'react-router-dom';
 
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
 
 import CommentIcon from '@mui/icons-material/Comment';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ShareIcon from '@mui/icons-material/Share';
-import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
+import ThumbDownRoundedIcon from '@mui/icons-material/ThumbDownRounded';
+import ThumbDownOffAltRoundedIcon from '@mui/icons-material/ThumbDownOffAltRounded';
+import { IntersectionObserverOptions } from '../../constants/constant';
 
+import LoadingCircularIndeterminate from '../Loading';
+import HandleReaction from '../../utils/handleReaction';
+import { convertNumber } from '../../utils/helperFunction';
+import { createAxios } from '../../createInstance';
+
+import { BoxStyled, CardActionsStyled, CardStyled } from './styles';
 import 'video-react/dist/video-react.css';
-import { BoxStyled, CardActionsStyled } from './styles';
 
 export default function PostCard({
+  id,
   avatar,
+  authorId,
   fullname,
   title,
   content,
@@ -36,17 +49,28 @@ export default function PostCard({
 }) {
   const [isIntersecting, setIsIntersecting] = useState(false);
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const user = useSelector((state) => state.auth.login?.currentUser);
+  const accessToken = user?.accessToken;
+  let axiosJWT = createAxios(user, dispatch);
+
+  const {
+    countReaction,
+    isLiked,
+    isDisliked,
+    loading,
+    handleLikeClick,
+    handleDislikeClick,
+  } = HandleReaction(id, user, accessToken, navigate, axios, axiosJWT);
+
   useEffect(() => {
-    const options = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.85,
-    };
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         setIsIntersecting(entry.isIntersecting);
       });
-    }, options);
+    }, IntersectionObserverOptions);
 
     const target = document.querySelector('.video-react-video');
     if (target) {
@@ -70,10 +94,8 @@ export default function PostCard({
   }, [isIntersecting]);
 
   return (
-    <Card
+    <CardStyled
       sx={{
-        border: '1px solid rgba(0,0,0,0.12)',
-        boxShadow: 'none',
         width: {
           xs: xs,
           sm: sm,
@@ -84,16 +106,30 @@ export default function PostCard({
       }}
     >
       <CardHeader
-        avatar={<Avatar src={avatar} alt={fullname} />}
+        avatar={
+          <Link
+            href={`/profile/${authorId}`}
+            underline="none"
+            variant="inherit"
+          >
+            <Avatar variant="rounded" src={avatar} alt={fullname} />
+          </Link>
+        }
         action={
           <IconButton aria-label="settings">
             <MoreVertIcon />
           </IconButton>
         }
         title={
-          <Typography variant="body2" fontWeight={600}>
-            {fullname}
-          </Typography>
+          <Link
+            href={`/profile/${authorId}`}
+            underline="none"
+            variant="inherit"
+          >
+            <Typography variant="body2" fontWeight={600}>
+              {fullname}
+            </Typography>
+          </Link>
         }
         subheader={
           <Typography variant="caption">
@@ -102,7 +138,9 @@ export default function PostCard({
         }
       />
       <CardContent sx={{ paddingX: 1, paddingY: 0 }}>
-        <Typography variant="body1" fontWeight={550}>{title}</Typography>
+        <Typography variant="body1" fontWeight={550}>
+          {title}
+        </Typography>
         <Typography variant="body2">{content}</Typography>
       </CardContent>
       {media ? (
@@ -121,28 +159,45 @@ export default function PostCard({
       ) : null}
       <CardActionsStyled disableSpacing>
         <BoxStyled gap={1}>
-          <IconButton aria-label="like">
-            <ThumbUpOffAltIcon />
+          <IconButton aria-label="like" onClick={handleLikeClick} size="small">
+            {isLiked ? <ThumbUpIcon color="info" /> : <ThumbUpOffAltIcon />}
           </IconButton>
-          <Typography variant="subtitle1" fontWeight={500}>
-            14k
-          </Typography>
-          <IconButton aria-label="dislike">
-            <ThumbDownOffAltIcon />
+          {loading ? (
+            <LoadingCircularIndeterminate size={10} />
+          ) : (
+            <Typography
+              variant="subtitle1"
+              fontWeight={400}
+              width="100%"
+              textAlign="center"
+            >
+              {convertNumber(countReaction)}
+            </Typography>
+          )}
+          <IconButton
+            aria-label="dislike"
+            onClick={handleDislikeClick}
+            size="small"
+          >
+            {isDisliked ? (
+              <ThumbDownRoundedIcon color="error" />
+            ) : (
+              <ThumbDownOffAltRoundedIcon />
+            )}
           </IconButton>
         </BoxStyled>
         <Button size="small" aria-label="comments" startIcon={<CommentIcon />}>
           123k
         </Button>
         <BoxStyled>
-          <IconButton aria-label="save">
+          <IconButton aria-label="save" size="small">
             <TurnedInNotIcon />
           </IconButton>
-          <IconButton aria-label="share">
+          <IconButton aria-label="share" size="small">
             <ShareIcon />
           </IconButton>
         </BoxStyled>
       </CardActionsStyled>
-    </Card>
+    </CardStyled>
   );
 }
