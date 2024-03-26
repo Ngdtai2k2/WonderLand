@@ -18,7 +18,7 @@ export default function Register() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useEffect (() => {
+  useEffect(() => {
     document.title = 'Register a new account';
   }, []);
 

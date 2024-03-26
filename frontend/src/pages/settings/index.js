@@ -30,7 +30,8 @@ export default function Settings() {
   const theme = useTheme();
   const isSmOrBelow = useMediaQuery(theme.breakpoints.down('sm'));
   const user = useSelector((state) => state.auth.login?.currentUser);
-  useEffect (() => {
+  
+  useEffect(() => {
     document.title = `${user?.fullname}'s settings`;
   }, [user]);
 

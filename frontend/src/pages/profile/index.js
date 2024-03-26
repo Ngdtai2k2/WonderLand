@@ -62,7 +62,7 @@ export default function Profile() {
     getUserProfile();
   }, [id]);
 
-  useEffect (() => {
+  useEffect(() => {
     document.title = `${data?.user?.fullname}'s profile`;
   }, [data]);
 

@@ -59,7 +59,7 @@ export default function PostTab() {
           key={post?._id}
           id={post?._id}
           avatar={post?.category?.media?.url}
-          authorId={post?.author?._id }
+          authorId={post?.author?._id}
           fullname={post?.category?.name}
           title={post?.title}
           content={post?.content}

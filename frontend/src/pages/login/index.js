@@ -20,7 +20,7 @@ export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useEffect (() => {
+  useEffect(() => {
     document.title = 'Login';
   }, []);
 
