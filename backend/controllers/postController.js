@@ -195,6 +195,21 @@ const postController = {
       return res.status(500).json({ error: error.message });
     }
   },
+
+  getAllPostUserReacted: async (req, res) => {
+    try {
+      const id = req.params.id;
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ message: "Invalid user ID!" });
+      }
+      const user = await User.findById(id);
+      if (!user) return res.status(400).json({ message: "User not found!" });
+      
+
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  }
 };
 
 module.exports = postController;
