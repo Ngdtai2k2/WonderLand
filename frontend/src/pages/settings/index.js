@@ -3,7 +3,7 @@ import { useTheme } from '@mui/material/styles';
 
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TabContext from '@mui/lab/TabContext';
 import Tabs from '@mui/material/Tabs';
 
@@ -19,6 +19,7 @@ import Account from './account';
 import Profile from './profile';
 
 import { ButtonTab, TypographyButtonTab } from '../styles';
+import { useSelector } from 'react-redux';
 
 export default function Settings() {
   const [tabIndex, setTabIndex] = useState(0);
@@ -28,6 +29,11 @@ export default function Settings() {
   };
   const theme = useTheme();
   const isSmOrBelow = useMediaQuery(theme.breakpoints.down('sm'));
+  const user = useSelector((state) => state.auth.login?.currentUser);
+  useEffect (() => {
+    document.title = `${user?.fullname}'s settings`;
+  }, [user]);
+
   return (
     <CustomBox>
       <Paper

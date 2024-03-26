@@ -26,6 +26,7 @@ import LoadingCircularIndeterminate from '../../components/Loading';
 import PostTab from './postTab';
 import { BaseApi, toastTheme } from '../../constants/constant';
 import { ButtonTab, TypographyButtonTab } from '../styles';
+import ReactionTab from './reactionTab';
 
 export default function Profile() {
   const { id } = useParams();
@@ -60,6 +61,10 @@ export default function Profile() {
 
     getUserProfile();
   }, [id]);
+
+  useEffect (() => {
+    document.title = `${data?.user?.fullname}'s profile`;
+  }, [data]);
 
   const user = data?.user;
 
@@ -154,7 +159,7 @@ export default function Profile() {
                   : { marginLeft: 3, width: '77%' }),
               }}
             >
-              {tabIndex === 0 && <div>Tab1</div>}
+              {tabIndex === 0 && <ReactionTab />}
               {tabIndex === 1 && <PostTab />}
               {tabIndex === 2 && <div>Tab3</div>}
               {tabIndex === 3 && <div>Tab4</div>}

@@ -32,6 +32,10 @@ export default function AskTab() {
   const accessToken = user?.accessToken;
   let axiosJWT = createAxios(user, dispatch);
 
+  useEffect (() => {
+    document.title = 'Create a new post';
+  }, []);
+
   useEffect(() => {
     const getCategory = async () => {
       try {

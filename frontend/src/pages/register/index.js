@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
@@ -17,6 +17,11 @@ import { registerUser } from '../../redux/apiRequest/authApi';
 export default function Register() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect (() => {
+    document.title = 'Register a new account';
+  }, []);
+
   const validationSchema = Yup.object({
     email: Yup.string()
       .email('Invalid email address!')

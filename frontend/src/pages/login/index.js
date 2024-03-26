@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
@@ -19,6 +19,11 @@ import { loginUser } from '../../redux/apiRequest/authApi';
 export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect (() => {
+    document.title = 'Login';
+  }, []);
+
   const validationSchema = Yup.object({
     email: Yup.string()
       .email('Invalid email address!')
