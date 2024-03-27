@@ -42,12 +42,12 @@ export const registerUser = async (user, dispatch, navigate) => {
   }
 };
 
-export const logOut = async (dispatch, id, navigate, accessToken, axiosJWT) => {
+export const logOut = async (dispatch, id, device, navigate, accessToken, axiosJWT) => {
   dispatch(logOutStart());
   try {
     await axiosJWT.post(
       BaseApi + '/auth/logout',
-      { id },
+      { id, device },
       {
         headers: { token: `Bearer ${accessToken}` },
         'Content-Type': 'multipart/form-data',

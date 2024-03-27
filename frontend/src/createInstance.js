@@ -2,9 +2,9 @@ import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { BaseApi } from './constants/constant';
 
-const refreshToken = async (id) => {
+const refreshToken = async (id, device) => {
   try {
-    const res = await axios.post(BaseApi + '/auth/refresh/' + id, {
+    const res = await axios.post(BaseApi + '/auth/refresh/' + id + '/' + device, {
       withCredentials: true,
     });
     return res.data;
@@ -20,7 +20,7 @@ export const createAxios = (user, dispatch, stateSuccess) => {
       let date = new Date();
       const decodedToken = jwtDecode(user?.accessToken);
       if (decodedToken.exp < date.getTime() / 1000) {
-        const data = await refreshToken(user._id);
+        const data = await refreshToken(user?._id, user?.device);
         const refreshUser = {
           ...user,
           accessToken: data.accessToken,

@@ -40,6 +40,7 @@ export default function NavigationBar() {
   const user = useSelector((state) => state.auth.login?.currentUser);
   const accessToken = user?.accessToken;
   const id = user?._id;
+  const device = user?.device;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -60,7 +61,7 @@ export default function NavigationBar() {
 
   const handleLogout = () => {
     handleCloseUserMenu();
-    logOut(dispatch, id, navigate, accessToken, axiosJWT);
+    logOut(dispatch, id, device, navigate, accessToken, axiosJWT);
   };
 
   const handelNavigate = (path) => {

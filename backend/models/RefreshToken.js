@@ -11,6 +11,10 @@ const refreshSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    device: {
+      type: String,
+      required: true,
+    }
   },
   {
     timestamps: true,

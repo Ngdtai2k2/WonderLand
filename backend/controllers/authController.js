@@ -5,6 +5,7 @@ const RefreshToken = require("../models/RefreshToken");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+const uuid = require("uuid");
 dotenv.config();
 
 const authController = {
@@ -56,7 +57,7 @@ const authController = {
     try {
       const user = await User.findOne({
         email: req.body.email,
-      }).populate('media');;
+      }).populate('media');
 
       if (!user) {
         return res.status(404).json({ message: "Email not found!" });
@@ -74,10 +75,12 @@ const authController = {
       if (user && validPassword) {
         const accessToken = authController.generateAccessToken(user);
         const refreshToken = authController.generateRefreshToken(user);
+        const device = uuid.v4();
 
         const newRefreshToken = new RefreshToken({
           token: refreshToken,
           user: user._id,
+          device: device
         });
         await newRefreshToken.save();
 
@@ -88,7 +91,7 @@ const authController = {
           sameSite: "strict",
         });
         const { password, ...others } = user._doc;
-        let responseData = { ...others, accessToken, message: "Login success!" };
+        let responseData = { ...others, accessToken, device, message: "Login success!" };
         if (user.media) {
           responseData.media = user.media;
         }
@@ -103,7 +106,7 @@ const authController = {
     let refreshToken = req.cookies.refreshToken;
 
     if (!refreshToken) {
-      const dataToken = await RefreshToken.findOne({user: req.params.id});
+      const dataToken = await RefreshToken.findOne({user: req.params.id, device: req.params.device});
       refreshToken = dataToken?.token;
       if (!refreshToken) {
         return res.status(401).json({ message: "You're not authenticated!" });
@@ -156,8 +159,8 @@ const authController = {
 
   logoutUser: async (req, res) => {
     try {
-      const { id } = req.body;
-      await RefreshToken.deleteOne({ user: id });
+      const { id, device } = req.body;
+      await RefreshToken.deleteOne({ user: id, device: device });
       res.clearCookie("refreshToken");
 
       return res.status(200).json({ message: "Successfully logged out!" });
