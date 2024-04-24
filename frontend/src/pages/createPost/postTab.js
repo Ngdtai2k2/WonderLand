@@ -46,7 +46,7 @@ export default function PostTab() {
         setCategory(response.data.result.docs);
         setLoading(false);
       } catch (error) {
-        toast.error(error.message, toastTheme);
+        toast.error(error.response.data.message, toastTheme);
       }
     };
     getCategory();

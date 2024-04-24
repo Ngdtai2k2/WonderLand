@@ -13,7 +13,7 @@ const userController = {
 
       return res.status(200).json({ users });
     } catch (error) {
-      return res.status(500).json({ error: error.message });
+      return res.status(500).json({ message: "An error occurred please try again later!" });
     }
   },
 
@@ -25,7 +25,7 @@ const userController = {
       }
       return res.status(200).json({ message: "User deleted successfully!" });
     } catch (error) {
-      return res.status(500).json({ error: error.message });
+      return res.status(500).json({ message: "An error occurred please try again later!" });
     }
   },
 
@@ -42,7 +42,7 @@ const userController = {
       }
       return res.status(200).json({ user });
     } catch (error) {
-      return res.status(500).json({ error: error.message });
+      return res.status(500).json({ message: "An error occurred please try again later!" });
     }
   },
 

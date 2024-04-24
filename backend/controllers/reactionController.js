@@ -52,7 +52,7 @@ const reactionController = {
 
       return res.status(200).json({ reactionType });
     } catch (error) {
-      return res.status(500).json({ error: error.message });
+      return res.status(500).json({ message: "An error occurred please try again later!" });
     }
   },
 
@@ -74,7 +74,7 @@ const reactionController = {
         .status(200)
         .json({ message: "Reaction deleted successfully!" });
     } catch (error) {
-      return res.status(500).json({ error: error.message });
+      return res.status(500).json({ message: "An error occurred please try again later!" });
     }
   },
 
@@ -120,7 +120,7 @@ const reactionController = {
       await newReaction.save();
       return res.status(201).json({ message: "Reaction saved!" });
     } catch (error) {
-      return res.status(500).json({ error: error.message });
+      return res.status(500).json({ message: "An error occurred please try again later!" });
     }
   },
 

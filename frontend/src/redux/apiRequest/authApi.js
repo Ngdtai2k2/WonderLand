@@ -39,6 +39,7 @@ export const registerUser = async (user, dispatch, navigate) => {
     navigate('/login');
   } catch (err) {
     dispatch(registerFailed());
+    toast.error(err.response.data.message, toastTheme);
   }
 };
 
@@ -66,6 +67,7 @@ export const logOut = async (
     window.location.reload();
   } catch (err) {
     dispatch(logOutFailed());
+    toast.error(err.response.data.message, toastTheme);
   }
 };
 
