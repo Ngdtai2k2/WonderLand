@@ -1,11 +1,17 @@
 const bcrypt = require("bcrypt");
-const mongoose = require("mongoose");
 
-const RefreshToken = require("../models/RefreshToken");
-const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const uuid = require("uuid");
+const nodemailer = require("nodemailer");
+const crypto = require("crypto");
+
+const RefreshToken = require("../models/RefreshToken");
+const User = require("../models/User");
+const ResetPassword = require("../models/ResetPassword");
+
+const createMailOptions = require("../configs/mailOptions");
+
 dotenv.config();
 
 const authController = {
@@ -57,7 +63,7 @@ const authController = {
     try {
       const user = await User.findOne({
         email: req.body.email,
-      }).populate('media');
+      }).populate("media");
 
       if (!user) {
         return res.status(404).json({ message: "Email not found!" });
@@ -80,7 +86,7 @@ const authController = {
         const newRefreshToken = new RefreshToken({
           token: refreshToken,
           user: user._id,
-          device: device
+          device: device,
         });
         await newRefreshToken.save();
 
@@ -91,7 +97,12 @@ const authController = {
           sameSite: "strict",
         });
         const { password, ...others } = user._doc;
-        let responseData = { ...others, accessToken, device, message: "Login success!" };
+        let responseData = {
+          ...others,
+          accessToken,
+          device,
+          message: "Login success!",
+        };
         if (user.media) {
           responseData.media = user.media;
         }
@@ -106,7 +117,10 @@ const authController = {
     let refreshToken = req.cookies.refreshToken;
 
     if (!refreshToken) {
-      const dataToken = await RefreshToken.findOne({user: req.params.id, device: req.params.device});
+      const dataToken = await RefreshToken.findOne({
+        user: req.params.id,
+        device: req.params.device,
+      });
       refreshToken = dataToken?.token;
       if (!refreshToken) {
         return res.status(401).json({ message: "You're not authenticated!" });
@@ -171,9 +185,6 @@ const authController = {
 
   changePassword: async (req, res) => {
     try {
-      if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-        return res.status(404).json({ message: "User not found!" });
-      }
       const user = await User.findById(req.params.id);
       if (!user) {
         return res.status(404).json({ message: "User not found!" });
@@ -193,7 +204,91 @@ const authController = {
       user.password = hashedPassword;
       const updatedUser = await user.save();
 
-      return res.status(200).json({ user: updatedUser, message: "Changed password!" });
+      return res
+        .status(200)
+        .json({ user: updatedUser, message: "Changed password!" });
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  },
+
+  requestResetPassword: async (req, res) => {
+    try {
+      const { email } = req.body;
+      const user = await User.findOne({ email });
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found!" });
+      }
+
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.MAIL_USERNAME,
+          pass: process.env.MAIL_PASSWORD,
+        },
+      });
+
+      const token = crypto.randomBytes(3).toString("hex");
+      const tokenExpiry = Date.now() + 5 * 60 * 1000;
+
+      let resetPassword = await ResetPassword.findOne({ user: user._id });
+
+      if (resetPassword) {
+        resetPassword.token = token;
+        resetPassword.exp = tokenExpiry.toString();
+      } else {
+        resetPassword = new ResetPassword({
+          user: user._id,
+          token: token,
+          exp: tokenExpiry.toString(),
+        });
+      }
+      await resetPassword.save();
+
+      const mailOptions = createMailOptions(email, token);
+      await transporter.sendMail(mailOptions);
+
+      return res.status(200).json({
+        message: "The confirmation code has been sent, please check the email",
+      });
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  },
+  
+  resetPassword: async (req, res) => {
+    try {
+      const { email, token, newPassword } = req.body;
+      const user = await User.findOne({ email });
+
+      if (!user) return res.status(404).json({ message: "User not found!" });
+      if (!token)
+        return res.status(404).json({ message: "Please provide tokens!" });
+      if (!newPassword)
+        return res
+          .status(404)
+          .json({ message: "Please provide new password!" });
+
+      const resetPassword = await ResetPassword.findOne({ user: user._id });
+
+      if (
+        !resetPassword ||
+        resetPassword.token !== token ||
+        Date.now() > parseInt(resetPassword.exp)
+      )
+        return res.status(400).json({ message: "Invalid or expired token!" });
+
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+      user.password = hashedPassword;
+      await user.save();
+      await ResetPassword.deleteOne({ user: user._id });
+
+      return res
+        .status(200)
+        .json({ message: "Reset password was successful!" });
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }

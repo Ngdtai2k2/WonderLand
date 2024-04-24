@@ -11,5 +11,7 @@ router.put(
   verifyMiddleware.verifyTokenAndUserAuthorization,
   authController.changePassword
 );
+router.post("/forgot-password", authController.requestResetPassword);
+router.post("/reset-password", authController.resetPassword);
 
 module.exports = router;
