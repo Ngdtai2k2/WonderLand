@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const Category = require("../models/Categories");
 const User = require("../models/User");
 const Post = require("../models/Post");
-const createOptions = require("./createOptions");
+const optionsPaginate = require("../configs/optionsPaginate");
 const uploadMediaController = require("./uploadMediaController");
 
 const postController = {
@@ -78,7 +78,7 @@ const postController = {
 
   getAllPost: async (req, res) => {
     try {
-      const options = createOptions(req);
+      const options = optionsPaginate(req);
       let result = await Post.paginate({ type: 0 }, options);
 
       result.docs = await Promise.all(
@@ -114,7 +114,7 @@ const postController = {
 
   getAllAskPost: async (req, res) => {
     try {
-      const options = createOptions(req);
+      const options = optionsPaginate(req);
       let result = await Post.paginate({ type: 1 }, options);
 
       result.docs = await Promise.all(
@@ -156,7 +156,7 @@ const postController = {
       const user = await User.findById(id);
       if (!user) return res.status(400).json({ message: "User not found!" });
 
-      const options = createOptions(req);
+      const options = optionsPaginate(req);
       const { docs, ...paginationData } = await Post.paginate(
         { author: id },
         options
