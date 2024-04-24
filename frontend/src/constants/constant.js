@@ -12,4 +12,4 @@ export const IntersectionObserverOptions = {
   threshold: 0.85,
 };
 
-export const BaseApi = 'http://localhost:8000/api/v1';
+export const BaseApi = process.env.REACT_APP_BASE_URL;
