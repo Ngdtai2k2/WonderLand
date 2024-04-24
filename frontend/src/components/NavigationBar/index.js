@@ -26,10 +26,13 @@ import { createAxios } from '../../createInstance';
 import { logOut } from '../../redux/apiRequest/authApi';
 import { logOutSuccess } from '../../redux/slice/userSlice';
 import DrawerList from '../../components/DrawerList';
+import ModalAuth from '../../pages/modalAuth';
 
 export default function NavigationBar() {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [openDrawer, setOpenDrawer] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+
   const { mode, setMode } = useColorScheme();
 
   const theme = useTheme();
@@ -67,6 +70,12 @@ export default function NavigationBar() {
   const handelNavigate = (path) => {
     navigate(path);
   };
+
+  const handleOpenModal = () => {
+    setOpenModal(true);
+    handleCloseUserMenu();
+  };
+  const handleCloseModal = () => setOpenModal(false);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -140,10 +149,12 @@ export default function NavigationBar() {
             onClose={handleCloseUserMenu}
           >
             {user ? null : (
-              <MenuItem onClick={() => handelNavigate('/login')}>
-                Signup or Login
-              </MenuItem>
+              <MenuItem onClick={handleOpenModal}>Signup or Login</MenuItem>
             )}
+            <ModalAuth
+              openModal={openModal}
+              handleCloseModal={handleCloseModal}
+            />
             <MenuItem onClick={() => handelNavigate('/profile/' + user?._id)}>
               Profile
             </MenuItem>

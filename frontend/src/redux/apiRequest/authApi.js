@@ -42,7 +42,14 @@ export const registerUser = async (user, dispatch, navigate) => {
   }
 };
 
-export const logOut = async (dispatch, id, device, navigate, accessToken, axiosJWT) => {
+export const logOut = async (
+  dispatch,
+  id,
+  device,
+  navigate,
+  accessToken,
+  axiosJWT,
+) => {
   dispatch(logOutStart());
   try {
     await axiosJWT.post(

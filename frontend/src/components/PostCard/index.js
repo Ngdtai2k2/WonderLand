@@ -150,7 +150,7 @@ export default function PostCard({
             component="img"
             image={media.url}
             alt={'Post image of ' + fullname}
-            lazy={true}
+            lazy="true"
           />
         ) : (
           <Player autoPlay muted playsInline src={media.url}>
