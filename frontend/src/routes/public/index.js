@@ -9,9 +9,9 @@ import TrendingPage from '../../pages/trendingPage';
 
 export const publicRoutes = [
   { path: '', element: <HomePage /> },
-  { path: '/profile/:id', element: <Profile /> },
-  { path: '/settings', element: <Settings /> },
-  { path: '/create/post', element: <CreatePost /> },
+  { path: '/profile/:id', element: <Profile />, auth: true },
+  { path: '/settings', element: <Settings />, auth: true },
+  { path: '/create/post', element: <CreatePost />, auth: true },
   { path: '/top', element: <TrendingPage /> },
   { path: '/trend', element: <TrendingPage /> },
   { path: '/fresh', element: <FreshPage /> },
