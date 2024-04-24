@@ -64,7 +64,6 @@ const reactionController = {
       const query = isComment
         ? { author: author, commentId: commentId, type: type }
         : { author: author, postId: postId, type: type };
-      console.log(req.body);
       const result = await Reaction.findOneAndDelete(query);
 
       if (!result) {
@@ -124,6 +123,10 @@ const reactionController = {
       return res.status(500).json({ error: error.message });
     }
   },
+
+  // getPostUserReaction: async(req, res) {
+
+  // }
 };
 
 module.exports = reactionController;

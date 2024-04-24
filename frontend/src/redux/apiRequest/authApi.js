@@ -24,7 +24,7 @@ export const loginUser = async (user, dispatch, navigate) => {
     const res = await axios.post(BaseApi + '/auth/login', user);
     dispatch(loginSuccess(res.data));
     toast.success(res.data.message, toastTheme);
-    // navigate('/');
+    window.location.reload();
   } catch (err) {
     dispatch(loginFailed(err.response.data));
     toast.error(err.response.data.message, toastTheme);
