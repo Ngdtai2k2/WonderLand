@@ -3,12 +3,12 @@ const mongoose = require("mongoose");
 
 const uploadMediaController = require("./uploadMediaController");
 const mediaController = require("./mediaController");
-const createOptions = require("./createOptions");
+const optionsPaginate = require("../configs/optionsPaginate");
 
 const userController = {
   getAllUsers: async (req, res) => {
     try {
-      const options = createOptions(req, "-password -isAdmin");
+      const options = optionsPaginate(req, "-password -isAdmin");
       const users = await User.paginate({}, options);
 
       return res.status(200).json({ users });

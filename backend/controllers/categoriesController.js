@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const mediaController = require("./mediaController");
 const Categories = require("../models/Categories");
-const createOptions = require("./createOptions");
+const optionsPaginate = require("../configs/optionsPaginate");
 
 const categoriesController = {
   createCategory: async (req, res) => {
@@ -25,7 +25,7 @@ const categoriesController = {
 
   getAllCategories: async (req, res) => {
     try {
-      const options = createOptions(req);
+      const options = optionsPaginate(req);
       let result = await Categories.paginate({}, options);
       result.docs = await Promise.all(
         result.docs.map(async (category) => {

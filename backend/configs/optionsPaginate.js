@@ -1,4 +1,4 @@
-function createOptions(req, additionalSelects = "") {
+function optionsPaginate(req, additionalSelects = "") {
   const {
     _page = 1,
     _limit = 10,
@@ -17,4 +17,4 @@ function createOptions(req, additionalSelects = "") {
   };
 }
 
-module.exports = createOptions;
+module.exports = optionsPaginate;
