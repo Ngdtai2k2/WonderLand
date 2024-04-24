@@ -2,7 +2,6 @@ import React from 'react';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -16,7 +15,6 @@ import { loginUser } from '../../../redux/apiRequest/authApi';
 
 export default function Login({ setTabIndex }) {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const validationSchema = Yup.object({
     email: Yup.string()
@@ -36,7 +34,7 @@ export default function Login({ setTabIndex }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      await loginUser(values, dispatch, navigate);
+      await loginUser(values, dispatch);
     },
   });
 

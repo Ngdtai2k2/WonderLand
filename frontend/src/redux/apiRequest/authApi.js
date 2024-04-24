@@ -18,7 +18,7 @@ import {
 import { toast } from 'react-toastify';
 import { toastTheme, BaseApi } from '../../constants/constant';
 
-export const loginUser = async (user, dispatch, navigate) => {
+export const loginUser = async (user, dispatch) => {
   dispatch(loginStart());
   try {
     const res = await axios.post(BaseApi + '/auth/login', user);
