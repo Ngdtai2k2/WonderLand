@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
@@ -14,7 +14,16 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import { loginUser } from '../../../redux/apiRequest/authApi';
 
 export default function Login({ setTabIndex }) {
+  const [rememberMe, setRememberMe] = useState(false);
+
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const rememberMeValue = localStorage.getItem('remenber_me') === 'true';
+    setRememberMe(rememberMeValue);
+  }, []);
+
+  const initialEmail = localStorage.getItem('saved_email');
 
   const validationSchema = Yup.object({
     email: Yup.string()
@@ -29,11 +38,19 @@ export default function Login({ setTabIndex }) {
 
   const formik = useFormik({
     initialValues: {
-      email: '',
+      email: initialEmail || '',
       password: '',
     },
+
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      if (rememberMe) {
+        localStorage.setItem('remenber_me', 'true');
+        localStorage.setItem('saved_email', values.email);
+      } else {
+        localStorage.removeItem('remenber_me');
+        localStorage.removeItem('saved_email');
+      }
       await loginUser(values, dispatch);
     },
   });
@@ -79,7 +96,14 @@ export default function Login({ setTabIndex }) {
         helperText={formik.touched.password && formik.errors.password}
       />
       <FormControlLabel
-        control={<Checkbox value="remember" color="primary" />}
+        control={
+          <Checkbox
+            checked={rememberMe}
+            onChange={(e) => setRememberMe(e.target.checked)}
+            value="remember"
+            color="primary"
+          />
+        }
         label="Remember me"
       />
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
@@ -103,7 +127,7 @@ export default function Login({ setTabIndex }) {
             }}
             variant="body2"
           >
-            {"Don't have an account? Sign Up"}
+            Don't have an account? Sign Up
           </Link>
         </Grid>
       </Grid>
