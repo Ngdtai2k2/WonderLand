@@ -11,6 +11,8 @@ import UndoRoundedIcon from '@mui/icons-material/UndoRounded';
 import Login from './login';
 import Register from './register';
 import ForgetPassword from './forgetPassword';
+import ResetPassword from './resetPassword';
+
 import { BoxStyle, LeftAlignLink } from './styles';
 
 export default function ModalAuth({ openModal, handleCloseModal }) {
@@ -46,6 +48,8 @@ export default function ModalAuth({ openModal, handleCloseModal }) {
           >
             <Tab sx={{ fontSize: '16px' }} label="Login" />
             <Tab sx={{ fontSize: '16px' }} label="Sign Up" />
+            <Tab sx={{ display: 'none' }} />
+            <Tab sx={{ display: 'none' }} />
           </Tabs>
           <LeftAlignLink href="/">
             <Typography
@@ -61,6 +65,7 @@ export default function ModalAuth({ openModal, handleCloseModal }) {
           {tabIndex === 0 && <Login setTabIndex={setTabIndex} />}
           {tabIndex === 1 && <Register setTabIndex={setTabIndex} />}
           {tabIndex === 2 && <ForgetPassword setTabIndex={setTabIndex} />}
+          {tabIndex === 3 && <ResetPassword setTabIndex={setTabIndex} />}
         </TabContext>
       </BoxStyle>
     </Modal>

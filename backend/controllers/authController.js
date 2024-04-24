@@ -218,7 +218,7 @@ const authController = {
       const user = await User.findOne({ email });
 
       if (!user) {
-        return res.status(404).json({ message: "User not found!" });
+        return res.status(404).json({ message: "Email not registered!" });
       }
 
       const transporter = nodemailer.createTransport({
@@ -262,7 +262,7 @@ const authController = {
       const { email, token, newPassword } = req.body;
       const user = await User.findOne({ email });
 
-      if (!user) return res.status(404).json({ message: "User not found!" });
+      if (!user) return res.status(404).json({ message: "Email not registered!" });
       if (!token)
         return res.status(404).json({ message: "Please provide tokens!" });
       if (!newPassword)
