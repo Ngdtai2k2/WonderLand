@@ -109,7 +109,15 @@ export default function NavigationBar() {
             component="div"
             sx={{ flexGrow: 1 }}
           >
-            <Link href="/" underline="none" variant="inherit">
+            <Link
+              href="/"
+              underline="none"
+              variant="inherit"
+              fontSize={{
+                xs: '16px',
+                md: '20px',
+              }}
+            >
               Wonder Land
             </Link>
           </Typography>

@@ -1,24 +1,17 @@
 import React, { useState } from 'react';
 
-import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import Modal from '@mui/material/Modal';
+import Typography from '@mui/material/Typography';
+
+import UndoRoundedIcon from '@mui/icons-material/UndoRounded';
 
 import Login from './login';
 import Register from './register';
 import ForgetPassword from './forgetPassword';
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  bgcolor: 'background.paper',
-  boxShadow: 24,
-  p: 1,
-};
+import { BoxStyle, LeftAlignLink } from './styles';
 
 export default function ModalAuth({ openModal, handleCloseModal }) {
   const [tabIndex, setTabIndex] = useState(0);
@@ -34,8 +27,8 @@ export default function ModalAuth({ openModal, handleCloseModal }) {
       aria-labelledby="modal auth"
       aria-describedby="login and signup"
     >
-      <Box
-        sx={style}
+      <BoxStyle
+        bgcolor="background.paper"
         width={{
           xs: '95%',
           md: '45%',
@@ -54,11 +47,22 @@ export default function ModalAuth({ openModal, handleCloseModal }) {
             <Tab sx={{ fontSize: '16px' }} label="Login" />
             <Tab sx={{ fontSize: '16px' }} label="Sign Up" />
           </Tabs>
+          <LeftAlignLink href="/">
+            <Typography
+              variant="caption"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <UndoRoundedIcon sx={{ fontSize: '15px', marginRight: 0.3 }} />
+              Back to home
+            </Typography>
+          </LeftAlignLink>
           {tabIndex === 0 && <Login setTabIndex={setTabIndex} />}
           {tabIndex === 1 && <Register setTabIndex={setTabIndex} />}
           {tabIndex === 2 && <ForgetPassword setTabIndex={setTabIndex} />}
         </TabContext>
-      </Box>
+      </BoxStyle>
     </Modal>
   );
 }
