@@ -35,6 +35,8 @@ import { convertNumber } from '../../utils/helperFunction';
 export default function PostCard({ post, sm, xs, md, lg, xl }) {
   const [isIntersecting, setIsIntersecting] = useState(false);
   const [totalReaction, setTotalReaction] = useState(0);
+  const [isLiked, setIsLiked] = useState(false);
+  const [isDisliked, setIsDisliked] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -42,19 +44,10 @@ export default function PostCard({ post, sm, xs, md, lg, xl }) {
   const accessToken = user?.accessToken;
   let axiosJWT = createAxios(user, dispatch);
 
-  const [isLiked, setIsLiked] = useState(false);
-  const [isDisliked, setIsDisliked] = useState(false);
-
   useEffect(() => {
-    if (post.hasReacted === true) {
-      setIsLiked(true);
-    } else if (post.hasReacted === false) {
-      setIsDisliked(true);
-    } else {
-      setIsLiked(false);
-      setIsDisliked(false);
-    }
-  }, [post.hasReacted]);
+    setIsLiked(post?.hasReacted === true);
+    setIsDisliked(post?.hasReacted === false);
+  }, [post?.hasReacted]);
 
   useEffect(() => {
     setTotalReaction(post?.totalReaction);
