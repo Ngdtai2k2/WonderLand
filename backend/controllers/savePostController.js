@@ -41,7 +41,7 @@ const savePostController = {
     return true;
   },
 
-  getSavedPost: async (req, res) => {
+  getSavePostByUser: async (req, res) => {
     try {
       const { userId } = req.body;
       if (!userId) {

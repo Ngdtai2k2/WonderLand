@@ -20,7 +20,7 @@ export default function RenderPostInTab({ apiLink }) {
   const { id } = useParams();
 
   useEffect(() => {
-    const getSavedPost = async () => {
+    const getSavePostByUser = async () => {
       try {
         setLoading(true);
         const response = await axios.post(
@@ -41,7 +41,7 @@ export default function RenderPostInTab({ apiLink }) {
         setLoading(false);
       }
     };
-    getSavedPost();
+    getSavePostByUser();
   }, [apiLink, id, page]);
 
   const handleChangePage = (event, value) => {
