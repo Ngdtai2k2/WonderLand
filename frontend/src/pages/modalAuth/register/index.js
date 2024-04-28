@@ -15,7 +15,6 @@ import { useToastTheme } from '../../../constants/constant';
 
 export default function Register({ setTabIndex }) {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const toastTheme = useToastTheme();
 
   const validationSchema = Yup.object({
@@ -39,7 +38,8 @@ export default function Register({ setTabIndex }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      await registerUser(values, dispatch, navigate, toastTheme);
+      await registerUser(values, dispatch, toastTheme);
+      setTabIndex(0);
     },
   });
 

@@ -53,7 +53,7 @@ const authController = {
       });
 
       const user = await newUser.save();
-      res.status(201).json(user);
+      res.status(201).json({ message: 'Successful account registration!', user: user});
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

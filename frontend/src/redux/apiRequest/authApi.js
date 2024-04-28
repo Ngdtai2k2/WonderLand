@@ -31,12 +31,12 @@ export const loginUser = async (user, dispatch, toastTheme) => {
   }
 };
 
-export const registerUser = async (user, dispatch, navigate, toastTheme) => {
+export const registerUser = async (user, dispatch, toastTheme) => {
   dispatch(registerStart());
   try {
-    await axios.post(BaseApi + '/auth/register', user);
+    const res = await axios.post(BaseApi + '/auth/register', user);
+    toast.success(res.data.message, toastTheme);
     dispatch(registerSuccess());
-    navigate('/login');
   } catch (err) {
     dispatch(registerFailed());
     toast.error(err.response.data.message, toastTheme);
