@@ -14,12 +14,6 @@ const postController = {
     try {
       const { author, content, category, title, type } = req.body;
 
-      if (!mongoose.Types.ObjectId.isValid(category))
-        return res.status(400).json({ message: "Invalid category ID!" });
-
-      if (!mongoose.Types.ObjectId.isValid(author))
-        return res.status(400).json({ message: "Invalid author ID!" });
-
       if (!author)
         return res.status(400).json({ message: "Please provide an author!" });
 

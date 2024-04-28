@@ -18,7 +18,8 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ShareIcon from '@mui/icons-material/Share';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
+import TurnedInNotRoundedIcon from '@mui/icons-material/TurnedInNotRounded';
+import BookmarkRoundedIcon from '@mui/icons-material/BookmarkRounded';
 import ThumbDownRoundedIcon from '@mui/icons-material/ThumbDownRounded';
 import ThumbDownOffAltRoundedIcon from '@mui/icons-material/ThumbDownOffAltRounded';
 
@@ -37,6 +38,7 @@ export default function PostCard({ post, sm, xs, md, lg, xl }) {
   const [totalReaction, setTotalReaction] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
   const [isDisliked, setIsDisliked] = useState(false);
+  const [isSavePost, setIsSavePost] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -47,7 +49,8 @@ export default function PostCard({ post, sm, xs, md, lg, xl }) {
   useEffect(() => {
     setIsLiked(post?.hasReacted === true);
     setIsDisliked(post?.hasReacted === false);
-  }, [post?.hasReacted]);
+    setIsSavePost(post?.hasSavedPost === true);
+  }, [post]);
 
   useEffect(() => {
     setTotalReaction(post?.totalReaction);
@@ -92,6 +95,32 @@ export default function PostCard({ post, sm, xs, md, lg, xl }) {
       setIsLiked(newIsLiked);
       setIsDisliked(newIsDisliked);
       setTotalReaction(updatedTotalReaction);
+    } catch (error) {
+      toast.error(error.response.data.message, toastTheme);
+    }
+  };
+
+  const handleSavePost = async () => {
+    if (!user)
+      return toast.warning(
+        'You need to be signed in to perform this action!',
+        toastTheme,
+      );
+    try {
+      const response = await axiosJWT.post(
+        `${BaseApi}/save-post`,
+        {
+          id: post?._id,
+          author: user._id,
+        },
+        {
+          headers: {
+            token: `Bearer ${accessToken}`,
+          },
+        },
+      );
+      setIsSavePost(response?.data?.state);
+      toast.success(response?.data?.message, toastTheme);
     } catch (error) {
       toast.error(error.response.data.message, toastTheme);
     }
@@ -209,7 +238,7 @@ export default function PostCard({ post, sm, xs, md, lg, xl }) {
             width="100%"
             textAlign="center"
           >
-            { convertNumber(totalReaction) }
+            {convertNumber(totalReaction)}
           </Typography>
           <IconButton
             onClick={() => handleLikeClick(0, setIsDisliked)}
@@ -227,8 +256,18 @@ export default function PostCard({ post, sm, xs, md, lg, xl }) {
           123k
         </Button>
         <BoxStyled>
-          <IconButton aria-label="save" size="small">
-            <TurnedInNotIcon />
+          <IconButton
+            aria-label="save"
+            size="small"
+            onClick={() => {
+              handleSavePost();
+            }}
+          >
+            {isSavePost ? (
+              <BookmarkRoundedIcon color="warning" />
+            ) : (
+              <TurnedInNotRoundedIcon />
+            )}
           </IconButton>
           <IconButton aria-label="share" size="small">
             <ShareIcon />
