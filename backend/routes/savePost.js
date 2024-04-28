@@ -1,7 +1,8 @@
 const router = require("express").Router();
 const verifyMiddleware = require("../middleware/verifyToken");
-const savePost = require("../controllers/savePostController");
+const savePostController = require("../controllers/savePostController");
 
-router.post("/", verifyMiddleware.token, savePost.handleSavePost);
+router.post("/", verifyMiddleware.token, savePostController.handleSavePost);
+router.post("/post", savePostController.getSavedPost);
 
 module.exports = router;

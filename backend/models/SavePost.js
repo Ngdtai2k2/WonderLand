@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const mongoosePaginate = require("mongoose-paginate-v2");
 
 const savePostSchema = new mongoose.Schema(
   {
@@ -9,7 +10,8 @@ const savePostSchema = new mongoose.Schema(
     },
     postId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Post",
+      ref: "Posts",
+      required: true,
     },
   },
   {
@@ -17,4 +19,6 @@ const savePostSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("SavedPost", savePostSchema);
+savePostSchema.plugin(mongoosePaginate);
+
+module.exports = mongoose.model("SavePost", savePostSchema);

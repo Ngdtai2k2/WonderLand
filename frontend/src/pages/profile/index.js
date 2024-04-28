@@ -27,6 +27,7 @@ import PostTab from './postTab';
 import { BaseApi, toastTheme } from '../../constants/constant';
 import { ButtonTab, TypographyButtonTab } from '../styles';
 import ReactionTab from './reactionTab';
+import SavedPostTab from './savedPostTab';
 
 export default function Profile() {
   const { id } = useParams();
@@ -162,7 +163,7 @@ export default function Profile() {
               {tabIndex === 0 && <ReactionTab />}
               {tabIndex === 1 && <PostTab />}
               {tabIndex === 2 && <div>Tab3</div>}
-              {tabIndex === 3 && <div>Tab4</div>}
+              {tabIndex === 3 && <SavedPostTab />}
             </Box>
           </Box>
         </TabContext>
