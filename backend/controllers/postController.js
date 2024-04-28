@@ -80,9 +80,18 @@ const postController = {
   getAllPost: async (req, res) => {
     try {
       const { type, author } = req.body;
+      const { fresh } = req.params;
 
       const options = optionsPaginate(req);
-      let result = await Post.paginate({ type: type }, options);
+      let query = { type: type };
+
+      if (fresh) {
+        const twentyFourHoursAgo = new Date();
+        twentyFourHoursAgo.setDate(twentyFourHoursAgo.getDate() - 1);
+        query.createdAt = { $gte: twentyFourHoursAgo };
+      }
+      
+      let result = await Post.paginate(query, options);
 
       result.docs = await Promise.all(
         result.docs.map(async (post) => {
@@ -138,14 +147,8 @@ const postController = {
         docs.map(async (post) => {
           let hasReacted = null;
           let hasSavedPost = null;
-          hasReacted = await reactionController.hasReactionPost(
-            id,
-            post._id
-          );
-          hasSavedPost = await savePostController.hasSavePost(
-            id,
-            post._id
-          );
+          hasReacted = await reactionController.hasReactionPost(id, post._id);
+          hasSavedPost = await savePostController.hasSavePost(id, post._id);
           const totalReaction = await reactionController.countReactions(
             post._id,
             null
@@ -156,7 +159,10 @@ const postController = {
             hasSavedPost,
             totalReaction,
           };
-          const populatedPost = await Post.populate(updatedPost, postPopulateOptions);
+          const populatedPost = await Post.populate(
+            updatedPost,
+            postPopulateOptions
+          );
           return populatedPost;
         })
       );
