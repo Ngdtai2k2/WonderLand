@@ -9,6 +9,7 @@ const userRoute = require("./routes/user");
 const categoryRoute = require("./routes/category");
 const postRoute = require("./routes/post");
 const reactionRoute = require("./routes/reaction");
+const savePostRoute = require("./routes/savePost");
 
 const app = express();
 dotenv.config();
@@ -36,6 +37,7 @@ app.use("/api/v1/user", userRoute);
 app.use("/api/v1/category", categoryRoute);
 app.use("/api/v1/post", postRoute);
 app.use("/api/v1/reaction", reactionRoute);
+app.use("/api/v1/save-post", savePostRoute);
 
 app.listen(8000, () => {
   console.log(">>> Server running on port 8000!");
