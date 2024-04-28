@@ -1,6 +1,5 @@
 const Post = require("../models/Post");
 const Reaction = require("../models/Reaction");
-const Comments = require("../models/Comments");
 
 const reactionController = {
   handleLikePost: async (req, res) => {
@@ -48,6 +47,7 @@ const reactionController = {
         .json({ message: "An error occurred please try again later!" });
     }
   },
+
   hasReactionPost: async (author, postId) => {
       const reaction = await Reaction.findOne({
         author: author,
@@ -58,6 +58,7 @@ const reactionController = {
       }
       return reaction.type;
   },
+  
   countReactions: async (postId, commentId) => {
     try {
       const query = commentId ? { commentId } : { postId };
