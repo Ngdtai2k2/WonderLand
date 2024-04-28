@@ -1,7 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
-import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
 import Box from '@mui/material/Box';
