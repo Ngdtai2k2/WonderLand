@@ -10,7 +10,7 @@ import LoadingCircularIndeterminate from '../../components/Loading';
 import PostCard from '../../components/PostCard';
 import NoData from '../../components/NoData';
 
-import { toastTheme } from '../../constants/constant';
+import { useToastTheme } from '../../constants/constant';
 
 export default function RenderPostInTab({ apiLink }) {
   const [data, setData] = useState(null);
@@ -18,6 +18,7 @@ export default function RenderPostInTab({ apiLink }) {
   const [page, setPage] = useState(1);
 
   const { id } = useParams();
+  const toastTheme = useToastTheme();
 
   useEffect(() => {
     const getSavePostByUser = async () => {
@@ -42,6 +43,7 @@ export default function RenderPostInTab({ apiLink }) {
       }
     };
     getSavePostByUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiLink, id, page]);
 
   const handleChangePage = (event, value) => {

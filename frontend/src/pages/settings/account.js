@@ -21,12 +21,14 @@ import WarningAmberRoundedIcon from '@mui/icons-material/WarningAmberRounded';
 import { createAxios } from '../../createInstance';
 import { deleteUser, updateUser } from '../../redux/apiRequest/userApi';
 import { deleteUserSuccess, loginSuccess } from '../../redux/slice/userSlice';
+import { useToastTheme } from '../../constants/constant';
 
 export default function Account() {
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const toastTheme = useToastTheme();
 
   const user = useSelector((state) => state.auth.login?.currentUser);
   const accessToken = user?.accessToken;
@@ -46,7 +48,14 @@ export default function Account() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      await updateUser(accessToken, dispatch, user?._id, axiosJWT, values);
+      await updateUser(
+        accessToken,
+        dispatch,
+        user?._id,
+        axiosJWT,
+        values,
+        toastTheme,
+      );
     },
   });
 
@@ -68,6 +77,7 @@ export default function Account() {
       dispatch,
       user?._id,
       axiosJWTDelete,
+      toastTheme,
     );
   };
 

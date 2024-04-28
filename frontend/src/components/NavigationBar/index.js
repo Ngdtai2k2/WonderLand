@@ -27,6 +27,7 @@ import { logOut } from '../../redux/apiRequest/authApi';
 import { logOutSuccess } from '../../redux/slice/userSlice';
 import DrawerList from '../../components/DrawerList';
 import ModalAuth from '../../pages/modalAuth';
+import { useToastTheme } from '../../constants/constant';
 
 export default function NavigationBar() {
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -36,6 +37,7 @@ export default function NavigationBar() {
   const { mode, setMode } = useColorScheme();
 
   const theme = useTheme();
+  const toastTheme = useToastTheme();
   const isDarkMode = theme.palette.mode === 'dark';
   const backgroundColorAppBar = isDarkMode ? '#121212' : '#f4f4f4';
   const colorAppBar = isDarkMode ? '#f4f4f4' : '#121212';
@@ -64,7 +66,7 @@ export default function NavigationBar() {
 
   const handleLogout = () => {
     handleCloseUserMenu();
-    logOut(dispatch, id, device, navigate, accessToken, axiosJWT);
+    logOut(dispatch, id, device, navigate, accessToken, axiosJWT, toastTheme);
   };
 
   const handelNavigate = (path) => {

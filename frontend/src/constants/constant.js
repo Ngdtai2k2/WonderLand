@@ -1,9 +1,15 @@
 import { Flip } from 'react-toastify';
+import { useTheme } from '@emotion/react';
 
-export const toastTheme = {
-  autoClose: 3000,
-  theme: 'colored',
-  transition: Flip,
+export const useToastTheme = () => {
+  const theme = useTheme();
+  return {
+    autoClose: 3000,
+    theme: theme.palette.mode,
+    transition: Flip,
+    closeOnClick: true,
+    pauseOnHover: true,
+  };
 };
 
 export const IntersectionObserverOptions = {

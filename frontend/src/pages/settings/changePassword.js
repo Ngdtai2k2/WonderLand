@@ -14,9 +14,11 @@ import Button from '@mui/material/Button';
 import { changePassword } from '../../redux/apiRequest/authApi';
 import { createAxios } from '../../createInstance';
 import { loginSuccess } from '../../redux/slice/userSlice';
+import { useToastTheme } from '../../constants/constant';
 
 export default function ChangePassword() {
   const dispatch = useDispatch();
+  const toastTheme = useToastTheme();
   const user = useSelector((state) => state.auth.login?.currentUser);
   const id = user?._id;
   const accessToken = user?.accessToken;
@@ -48,7 +50,14 @@ export default function ChangePassword() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       const { confirmPassword, ...passwordData } = values;
-      await changePassword(dispatch, id, accessToken, axiosJWT, passwordData);
+      await changePassword(
+        dispatch,
+        id,
+        accessToken,
+        axiosJWT,
+        passwordData,
+        toastTheme,
+      );
     },
   });
 

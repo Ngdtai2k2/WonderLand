@@ -11,10 +11,12 @@ import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 
 import { registerUser } from '../../../redux/apiRequest/authApi';
+import { useToastTheme } from '../../../constants/constant';
 
 export default function Register({ setTabIndex }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const toastTheme = useToastTheme();
 
   const validationSchema = Yup.object({
     email: Yup.string()
@@ -37,7 +39,7 @@ export default function Register({ setTabIndex }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      await registerUser(values, dispatch, navigate);
+      await registerUser(values, dispatch, navigate, toastTheme);
     },
   });
 

@@ -7,11 +7,13 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-import { BaseApi, toastTheme } from '../../../constants/constant';
+import { BaseApi, useToastTheme } from '../../../constants/constant';
 import { toast } from 'react-toastify';
 
 export default function ForgetPassword({ setTabIndex }) {
   const [fetching, setFetching] = useState();
+
+  const toastTheme = useToastTheme();
 
   const validationSchema = Yup.object({
     email: Yup.string()

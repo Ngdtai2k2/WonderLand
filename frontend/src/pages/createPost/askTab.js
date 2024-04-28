@@ -16,7 +16,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import CreateRoundedIcon from '@mui/icons-material/CreateRounded';
 
 import { createAxios } from '../../createInstance';
-import { BaseApi, toastTheme } from '../../constants/constant';
+import { BaseApi, useToastTheme } from '../../constants/constant';
 import LoadingCircularIndeterminate from '../../components/Loading';
 import { FlexCenterBox } from './styles';
 
@@ -27,6 +27,7 @@ export default function AskTab() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const toastTheme = useToastTheme();
 
   const user = useSelector((state) => state.auth.login?.currentUser);
   const accessToken = user?.accessToken;
@@ -47,6 +48,7 @@ export default function AskTab() {
       }
     };
     getCategory();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const validationSchema = Yup.object({

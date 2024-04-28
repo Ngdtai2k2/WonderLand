@@ -12,11 +12,13 @@ import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
 import { loginUser } from '../../../redux/apiRequest/authApi';
+import { useToastTheme } from '../../../constants/constant';
 
 export default function Login({ setTabIndex }) {
   const [rememberMe, setRememberMe] = useState(false);
 
   const dispatch = useDispatch();
+  const toastTheme = useToastTheme();
 
   useEffect(() => {
     const rememberMeValue = localStorage.getItem('remenber_me') === 'true';
@@ -51,7 +53,7 @@ export default function Login({ setTabIndex }) {
         localStorage.removeItem('remenber_me');
         localStorage.removeItem('saved_email');
       }
-      await loginUser(values, dispatch);
+      await loginUser(values, dispatch, toastTheme);
     },
   });
 

@@ -23,7 +23,7 @@ import { createAxios } from '../../createInstance';
 import { FlexCenterBox } from './styles';
 import { VisuallyHiddenInput } from '../styles';
 import LoadingCircularIndeterminate from '../../components/Loading';
-import { BaseApi, toastTheme } from '../../constants/constant';
+import { BaseApi, useToastTheme } from '../../constants/constant';
 
 export default function PostTab() {
   const [category, setCategory] = useState(null);
@@ -34,6 +34,7 @@ export default function PostTab() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const toastTheme = useToastTheme();
 
   const user = useSelector((state) => state.auth.login?.currentUser);
   const accessToken = user?.accessToken;
@@ -50,6 +51,7 @@ export default function PostTab() {
       }
     };
     getCategory();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const validationSchema = Yup.object({

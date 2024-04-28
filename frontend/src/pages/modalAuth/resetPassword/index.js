@@ -10,11 +10,12 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import KeyRoundedIcon from '@mui/icons-material/KeyRounded';
 
-import { BaseApi, toastTheme } from '../../../constants/constant';
+import { BaseApi, useToastTheme } from '../../../constants/constant';
 
 export default function ResetPassword({ setTabIndex }) {
   const [fetching, setFetching] = useState();
 
+  const toastTheme = useToastTheme();
   const email = localStorage.getItem('email_reset_password');
 
   const validationSchema = Yup.object({

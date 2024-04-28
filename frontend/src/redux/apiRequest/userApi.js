@@ -8,7 +8,7 @@ import {
 } from '../slice/userSlice';
 
 import { toast } from 'react-toastify';
-import { toastTheme, BaseApi } from '../../constants/constant';
+import { BaseApi } from '../../constants/constant';
 
 export const updateUser = async (
   accessToken,
@@ -16,6 +16,7 @@ export const updateUser = async (
   id,
   axiosJWT,
   userData,
+  toastTheme,
 ) => {
   dispatch(updateUserStart());
   try {
@@ -38,6 +39,7 @@ export const deleteUser = async (
   dispatch,
   id,
   axiosJWT,
+  toastTheme,
 ) => {
   dispatch(deleteUserStart());
   try {

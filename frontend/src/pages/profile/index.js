@@ -24,7 +24,7 @@ import CustomBox from '../../components/CustomBox';
 import NotFound from '../../components/NotFound';
 import LoadingCircularIndeterminate from '../../components/Loading';
 import PostTab from './postTab';
-import { BaseApi, toastTheme } from '../../constants/constant';
+import { BaseApi, useToastTheme } from '../../constants/constant';
 import { ButtonTab, TypographyButtonTab } from '../styles';
 import ReactionTab from './reactionTab';
 import SavedPostTab from './savedPostTab';
@@ -36,6 +36,7 @@ export default function Profile() {
   const [tabIndex, setTabIndex] = useState(0);
 
   const theme = useTheme();
+  const toastTheme = useToastTheme();
   const isSmOrBelow = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleChangeTab = (event, newValue) => {
@@ -61,6 +62,7 @@ export default function Profile() {
     };
 
     getUserProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   useEffect(() => {

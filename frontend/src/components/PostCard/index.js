@@ -27,7 +27,7 @@ import { createAxios } from '../../createInstance';
 import {
   BaseApi,
   IntersectionObserverOptions,
-  toastTheme,
+  useToastTheme,
 } from '../../constants/constant';
 import { BoxStyled, CardActionsStyled, CardStyled } from './styles';
 import 'video-react/dist/video-react.css';
@@ -41,6 +41,7 @@ export default function PostCard({ post, sm, xs, md, lg, xl }) {
   const [isSavePost, setIsSavePost] = useState(false);
 
   const dispatch = useDispatch();
+  const toastTheme = useToastTheme();
 
   const user = useSelector((state) => state.auth.login?.currentUser);
   const accessToken = user?.accessToken;

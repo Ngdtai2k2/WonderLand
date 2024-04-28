@@ -16,9 +16,9 @@ import {
 } from '../slice/userSlice';
 
 import { toast } from 'react-toastify';
-import { toastTheme, BaseApi } from '../../constants/constant';
+import { BaseApi } from '../../constants/constant';
 
-export const loginUser = async (user, dispatch) => {
+export const loginUser = async (user, dispatch, toastTheme) => {
   dispatch(loginStart());
   try {
     const res = await axios.post(BaseApi + '/auth/login', user);
@@ -31,7 +31,7 @@ export const loginUser = async (user, dispatch) => {
   }
 };
 
-export const registerUser = async (user, dispatch, navigate) => {
+export const registerUser = async (user, dispatch, navigate, toastTheme) => {
   dispatch(registerStart());
   try {
     await axios.post(BaseApi + '/auth/register', user);
@@ -50,6 +50,7 @@ export const logOut = async (
   navigate,
   accessToken,
   axiosJWT,
+  toastTheme,
 ) => {
   dispatch(logOutStart());
   try {
@@ -77,6 +78,7 @@ export const changePassword = async (
   accessToken,
   axiosJWT,
   userData,
+  toastTheme,
 ) => {
   dispatch(changePasswordStart());
   try {
