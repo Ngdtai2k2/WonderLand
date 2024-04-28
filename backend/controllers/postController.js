@@ -80,17 +80,18 @@ const postController = {
   getAllPost: async (req, res) => {
     try {
       const { type, author } = req.body;
-      const { fresh } = req.params;
+      const { typeQuery } = req.params;
 
       const options = optionsPaginate(req);
       let query = { type: type };
 
-      if (fresh) {
-        const twentyFourHoursAgo = new Date();
-        twentyFourHoursAgo.setDate(twentyFourHoursAgo.getDate() - 1);
+      const twentyFourHoursAgo = new Date();
+      twentyFourHoursAgo.setDate(twentyFourHoursAgo.getDate() - 1);
+
+      if (typeQuery == 2) {
         query.createdAt = { $gte: twentyFourHoursAgo };
       }
-      
+
       let result = await Post.paginate(query, options);
 
       result.docs = await Promise.all(

@@ -1,14 +1,12 @@
 import React, { useEffect } from 'react';
-import ButtonBar from '../../components/ButtonBar';
+
+import RenderPost from '../../components/RenderPost';
+import { BaseApi } from '../../constants/constant';
 
 export default function FreshPage() {
   useEffect(() => {
     document.title = 'New and fresh posts';
   }, []);
-  return (
-    <>
-      <ButtonBar />
-      <div>Fresh</div>
-    </>
-  );
+
+  return <RenderPost apiLink={`${BaseApi}/post/2`} type={0} />;
 }
