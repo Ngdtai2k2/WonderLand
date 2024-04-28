@@ -7,6 +7,6 @@ export default function FreshPage() {
   useEffect(() => {
     document.title = 'New and fresh posts';
   }, []);
-
+  // with 2 - query fresh posts
   return <RenderPost apiLink={`${BaseApi}/post/2`} type={0} />;
 }

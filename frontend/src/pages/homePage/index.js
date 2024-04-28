@@ -7,5 +7,6 @@ export default function HomePage() {
   useEffect(() => {
     document.title = 'WonderLand';
   }, []);
-  return <RenderPost apiLink={`${BaseApi}/post`} type={0} />;
+  // with 4 - query normal
+  return <RenderPost apiLink={`${BaseApi}/post/4`} type={0} />;
 }

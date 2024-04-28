@@ -7,5 +7,6 @@ export default function AskPage() {
   useEffect(() => {
     document.title = 'Ask - WonderLand';
   });
-  return <RenderPost apiLink={`${BaseApi}/post`} type={1} />;
+  // with 3 - query ask posts
+  return <RenderPost apiLink={`${BaseApi}/post/3`} type={1} />;
 }
