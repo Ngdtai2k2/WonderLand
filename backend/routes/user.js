@@ -17,6 +17,6 @@ router.put(
   storage.single("file"),
   userController.updateUserById
 );
-router.get("/:id/post", postController.getAllPostByUserId);
+router.post("/post", postController.getAllPostByUserId);
 
 module.exports = router;

@@ -124,7 +124,7 @@ const postController = {
 
   getAllPostByUserId: async (req, res) => {
     try {
-      const id = req.params.id;
+      const id = req.body.userId;
 
       const user = await User.findById(id);
       if (!user) return res.status(400).json({ message: "User not found!" });
