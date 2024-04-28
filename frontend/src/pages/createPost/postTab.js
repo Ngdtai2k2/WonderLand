@@ -91,7 +91,7 @@ export default function PostTab() {
         });
 
         const response = await axiosJWT.post(
-          BaseApi + '/post/create',
+          `${BaseApi}/post/create`,
           formData,
           {
             headers: { token: `Bearer ${accessToken}` },
