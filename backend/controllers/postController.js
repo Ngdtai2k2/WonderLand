@@ -10,7 +10,7 @@ const savePostController = require("./savePostController");
 const postPopulateOptions = require("../configs/constants");
 
 const postController = {
-  createPost: async (req, res) => {
+  create: async (req, res) => {
     try {
       const { author, content, category, title, type } = req.body;
 
