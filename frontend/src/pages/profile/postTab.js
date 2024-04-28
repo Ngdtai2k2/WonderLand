@@ -46,7 +46,7 @@ export default function PostTab() {
 
   return loading ? (
     <LoadingCircularIndeterminate />
-  ) : data?.docs.length > 0 ? (
+  ) : data?.docs?.length > 0 ? (
     <Box
       display="flex"
       flexDirection="column"
@@ -55,7 +55,7 @@ export default function PostTab() {
       gap={2}
     >
       {data?.docs?.map((post) => (
-        <PostCard post={post} xs="100%" md="70%" />
+        <PostCard key={post._id} post={post} xs="100%" md="70%" />
       ))}
       <Pagination
         count={data?.totalPages}
