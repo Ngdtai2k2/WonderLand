@@ -7,6 +7,7 @@ const optionsPaginate = require("../configs/optionsPaginate");
 const uploadMediaController = require("./uploadMediaController");
 const reactionController = require("./reactionController");
 const savePostController = require("./savePostController");
+const postPopulateOptions = require("../configs/constants");
 
 const postController = {
   createPost: async (req, res) => {
@@ -84,83 +85,39 @@ const postController = {
 
   getAllPost: async (req, res) => {
     try {
+      const { type, author } = req.body;
+
       const options = optionsPaginate(req);
-      let result = await Post.paginate({ type: 0 }, options);
+      let result = await Post.paginate({ type: type }, options);
 
       result.docs = await Promise.all(
         result.docs.map(async (post) => {
           let hasReacted = null;
           let hasSavedPost = null;
-          if (req.body?.author) {
+          if (author) {
+            const user = await User.findById(author);
+            if (!user)
+              return res.status(400).json({ message: "User not found!" });
             hasReacted = await reactionController.hasReactionPost(
-              req.body?.author,
+              author,
               post._id
             );
             hasSavedPost = await savePostController.hasSavePost(
-              req.body.author,
+              author,
               post._id
             );
           }
-          const totalReaction = await reactionController.countReactions(post._id, null);
-          const updatedPost = { ...post.toObject(), hasReacted, hasSavedPost, totalReaction };
-          return (post = await Post.populate(updatedPost, [
-            {
-              path: "author",
-              select: "id fullname",
-              populate: {
-                path: "media",
-                model: "Media",
-                select: "url",
-              },
-            },
-            { path: "media", select: "url type" },
-            {
-              path: "category",
-              select: "name",
-              populate: {
-                path: "media",
-                model: "Media",
-                select: "url",
-              },
-            },
-          ]));
-        })
-      );
-      res.status(200).json({ result });
-    } catch (error) {
-      return res
-        .status(500)
-        .json({ message: "An error occurred please try again later!" });
-    }
-  },
-
-  getAllAskPost: async (req, res) => {
-    try {
-      const options = optionsPaginate(req);
-      let result = await Post.paginate({ type: 1 }, options);
-
-      result.docs = await Promise.all(
-        result.docs.map(async (post) => {
-          return (post = await Post.populate(post, [
-            {
-              path: "author",
-              select: "id fullname",
-              populate: {
-                path: "media",
-                model: "Media",
-                select: "url",
-              },
-            },
-            {
-              path: "category",
-              select: "name",
-              populate: {
-                path: "media",
-                model: "Media",
-                select: "url",
-              },
-            },
-          ]));
+          const totalReaction = await reactionController.countReactions(
+            post._id,
+            null
+          );
+          const updatedPost = {
+            ...post.toObject(),
+            hasReacted,
+            hasSavedPost,
+            totalReaction,
+          };
+          return (post = await Post.populate(updatedPost, postPopulateOptions));
         })
       );
       res.status(200).json({ result });
@@ -174,9 +131,7 @@ const postController = {
   getAllPostByUserId: async (req, res) => {
     try {
       const id = req.params.id;
-      if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(400).json({ message: "Invalid user ID!" });
-      }
+
       const user = await User.findById(id);
       if (!user) return res.status(400).json({ message: "User not found!" });
 
@@ -187,27 +142,27 @@ const postController = {
       );
       const populatedDocs = await Promise.all(
         docs.map(async (post) => {
-          const populatedPost = await Post.populate(post, [
-            {
-              path: "author",
-              select: "id fullname",
-              populate: {
-                path: "media",
-                model: "Media",
-                select: "url",
-              },
-            },
-            { path: "media", select: "url type" },
-            {
-              path: "category",
-              select: "name",
-              populate: {
-                path: "media",
-                model: "Media",
-                select: "url",
-              },
-            },
-          ]);
+          let hasReacted = null;
+          let hasSavedPost = null;
+          hasReacted = await reactionController.hasReactionPost(
+            id,
+            post._id
+          );
+          hasSavedPost = await savePostController.hasSavePost(
+            id,
+            post._id
+          );
+          const totalReaction = await reactionController.countReactions(
+            post._id,
+            null
+          );
+          const updatedPost = {
+            ...post.toObject(),
+            hasReacted,
+            hasSavedPost,
+            totalReaction,
+          };
+          const populatedPost = await Post.populate(updatedPost, postPopulateOptions);
           return populatedPost;
         })
       );

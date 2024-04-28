@@ -7,5 +7,5 @@ export default function HomePage() {
   useEffect(() => {
     document.title = 'WonderLand';
   }, []);
-  return <RenderPost apiLink={`${BaseApi}/post`} />;
+  return <RenderPost apiLink={`${BaseApi}/post`} type={0} />;
 }

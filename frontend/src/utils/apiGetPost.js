@@ -1,9 +1,18 @@
 import axios from 'axios';
 
-const fetchData = (apiLink, setItems, items, setHasMore, page, userId) => {
+const fetchData = (
+  apiLink,
+  setItems,
+  items,
+  setHasMore,
+  page,
+  userId,
+  type,
+) => {
   axios
     .post(`${apiLink}?_page=${page.current}&_limit=3`, {
       author: userId,
+      type: type,
     })
     .then((res) => {
       if (res.data.result.docs.length === 0) {
@@ -17,9 +26,9 @@ const fetchData = (apiLink, setItems, items, setHasMore, page, userId) => {
     });
 };
 
-const refresh = (apiLink, setItems, setHasMore, page, userId) => {
+const refresh = (apiLink, setItems, setHasMore, page, userId, type) => {
   page.current = 1;
-  fetchData(apiLink, setItems, [], setHasMore, page, userId);
+  fetchData(apiLink, setItems, [], setHasMore, page, userId, type);
 };
 
 export { fetchData, refresh };

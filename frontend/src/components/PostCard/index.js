@@ -23,9 +23,14 @@ import ThumbDownRoundedIcon from '@mui/icons-material/ThumbDownRounded';
 import ThumbDownOffAltRoundedIcon from '@mui/icons-material/ThumbDownOffAltRounded';
 
 import { createAxios } from '../../createInstance';
-import { BaseApi, IntersectionObserverOptions, toastTheme } from '../../constants/constant';
+import {
+  BaseApi,
+  IntersectionObserverOptions,
+  toastTheme,
+} from '../../constants/constant';
 import { BoxStyled, CardActionsStyled, CardStyled } from './styles';
 import 'video-react/dist/video-react.css';
+import { convertNumber } from '../../utils/helperFunction';
 
 export default function PostCard({ post, sm, xs, md, lg, xl }) {
   const [isIntersecting, setIsIntersecting] = useState(false);
@@ -211,7 +216,7 @@ export default function PostCard({ post, sm, xs, md, lg, xl }) {
             width="100%"
             textAlign="center"
           >
-            {totalReaction}
+            { convertNumber(totalReaction) }
           </Typography>
           <IconButton
             onClick={() => handleLikeClick(0, setIsDisliked)}

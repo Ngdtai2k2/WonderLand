@@ -12,7 +12,7 @@ import LoadingCircularIndeterminate from '../Loading';
 import { fetchData, refresh } from '../../utils/apiGetPost';
 import { useSelector } from 'react-redux';
 
-export default function RenderPost({ apiLink }) {
+export default function RenderPost({ apiLink, type }) {
   const [data, setData] = useState([]);
   const [hasMore, setHasMore] = useState(true);
 
@@ -20,7 +20,7 @@ export default function RenderPost({ apiLink }) {
   const user = useSelector((state) => state.auth.login?.currentUser);
 
   useEffect(() => {
-    fetchData(apiLink, setData, data, setHasMore, page, user?._id);
+    fetchData(apiLink, setData, data, setHasMore, page, user?._id, type);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -58,13 +58,21 @@ export default function RenderPost({ apiLink }) {
         dataLength={data.length}
         next={() => {
           if (hasMore) {
-            fetchData(apiLink, setData, data, setHasMore, page, user?._id);
+            fetchData(
+              apiLink,
+              setData,
+              data,
+              setHasMore,
+              page,
+              user?._id,
+              type,
+            );
           }
         }}
         hasMore={hasMore}
         loader={<LoadingCircularIndeterminate />}
         refreshFunction={() =>
-          refresh(apiLink, setData, setHasMore, page, user?._id)
+          refresh(apiLink, setData, setHasMore, page, user?._id, type)
         }
         pullDownToRefresh
       ></InfiniteScroll>

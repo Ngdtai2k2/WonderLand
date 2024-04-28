@@ -55,19 +55,7 @@ export default function PostTab() {
       gap={2}
     >
       {data?.docs?.map((post) => (
-        <PostCard
-          key={post?._id}
-          id={post?._id}
-          avatar={post?.category?.media?.url}
-          authorId={post?.author?._id}
-          fullname={post?.category?.name}
-          title={post?.title}
-          content={post?.content}
-          media={post?.media}
-          createdAt={post?.createdAt}
-          xs="100%"
-          md="70%"
-        />
+        <PostCard post={post} xs="100%" md="70%" />
       ))}
       <Pagination
         count={data?.totalPages}
