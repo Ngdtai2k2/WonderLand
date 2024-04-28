@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const mongoosePaginate = require("mongoose-paginate-v2");
 
 const reactionSchema = new mongoose.Schema(
   {
@@ -24,5 +25,7 @@ const reactionSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+reactionSchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model("Reaction", reactionSchema);

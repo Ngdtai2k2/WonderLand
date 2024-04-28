@@ -3,6 +3,8 @@ const optionsPaginate = require("../configs/optionsPaginate");
 const Post = require("../models/Post");
 const SavePost = require("../models/SavePost");
 const User = require("../models/User");
+const reactionService = require("../services/reactionService");
+const savePostService = require("../services/savePostService");
 const reactionController = require("./reactionController");
 
 const savePostController = {
@@ -47,7 +49,7 @@ const savePostController = {
       if (!userId) {
         return res
           .status(404)
-          .json({ message: "Please provide your User ID!" });
+          .json({ message: "Vui lòng cung cấp ID người dùng của bạn!" });
       }
       const options = optionsPaginate(req);
 
@@ -61,14 +63,17 @@ const savePostController = {
           let hasSavedPost = null;
           const user = await User.findById(userId);
           if (!user) {
-            return res.status(404).json({ message: "User not found!" });
+            return res
+              .status(404)
+              .json({ message: "Không tìm thấy người dùng!" });
           }
-          hasReacted = await reactionController.hasReactionPost(user, postId);
-          hasSavedPost = await savePostController.hasSavePost(user, postId);
 
-          const totalReaction = await reactionController.countReactions(
+          hasReacted = await reactionService.hasReactionPost(userId, postId);
+          hasSavedPost = await savePostService.hasSavePost(userId, postId);
+          
+          const totalReaction = await reactionService.countReactions(
             postId,
-            null
+            userId
           );
           const updatedSavedPost = {
             ...postId.toObject(),
@@ -87,7 +92,7 @@ const savePostController = {
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: "Đã xảy ra lỗi, vui lòng thử lại sau!" });
     }
   },
 };

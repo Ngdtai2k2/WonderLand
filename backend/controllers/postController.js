@@ -5,9 +5,9 @@ const User = require("../models/User");
 const Post = require("../models/Post");
 const optionsPaginate = require("../configs/optionsPaginate");
 const uploadMediaController = require("./uploadMediaController");
-const reactionController = require("./reactionController");
-const savePostController = require("./savePostController");
 const postPopulateOptions = require("../configs/constants");
+const reactionService = require("../services/reactionService");
+const savePostService = require("../services/savePostService");
 
 const postController = {
   create: async (req, res) => {
@@ -102,16 +102,16 @@ const postController = {
             const user = await User.findById(author);
             if (!user)
               return res.status(400).json({ message: "User not found!" });
-            hasReacted = await reactionController.hasReactionPost(
+            hasReacted = await reactionService.hasReactionPost(
               author,
               post._id
             );
-            hasSavedPost = await savePostController.hasSavePost(
+            hasSavedPost = await savePostService.hasSavePost(
               author,
               post._id
             );
           }
-          const totalReaction = await reactionController.countReactions(
+          const totalReaction = await reactionService.countReactions(
             post._id,
             null
           );
@@ -148,9 +148,9 @@ const postController = {
         docs.map(async (post) => {
           let hasReacted = null;
           let hasSavedPost = null;
-          hasReacted = await reactionController.hasReactionPost(id, post._id);
-          hasSavedPost = await savePostController.hasSavePost(id, post._id);
-          const totalReaction = await reactionController.countReactions(
+          hasReacted = await reactionService.hasReactionPost(id, post._id);
+          hasSavedPost = await savePostService.hasSavePost(id, post._id);
+          const totalReaction = await reactionService.countReactions(
             post._id,
             null
           );
@@ -171,21 +171,6 @@ const postController = {
       res
         .status(200)
         .json({ result: { docs: populatedDocs, ...paginationData } });
-    } catch (error) {
-      return res
-        .status(500)
-        .json({ message: "An error occurred please try again later!" });
-    }
-  },
-
-  getAllPostUserReacted: async (req, res) => {
-    try {
-      const id = req.params.id;
-      if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(400).json({ message: "Invalid user ID!" });
-      }
-      const user = await User.findById(id);
-      if (!user) return res.status(400).json({ message: "User not found!" });
     } catch (error) {
       return res
         .status(500)
