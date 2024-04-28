@@ -58,7 +58,7 @@ const postController = {
     }
   },
 
-  getPostWithMediaById: async (req, res) => {
+  getPostById: async (req, res) => {
     try {
       const id = req.params.id;
       if (mongoose.Types.ObjectId.isValid(id)) {

@@ -6,7 +6,7 @@ const storage = require("../configs/multer");
 
 // type query: 0 - top, 1 - trend, 2 - fresh
 router.post("/:typeQuery", postController.getAllPost);
-router.get("/:id", postController.getPostWithMediaById);
+router.get("/:id", postController.getPostById);
 router.post(
   "/create",
   verifyMiddleware.token,
