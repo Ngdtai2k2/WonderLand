@@ -10,14 +10,17 @@ import SentimentVeryDissatisfiedRoundedIcon from '@mui/icons-material/SentimentV
 import PostCard from '../PostCard';
 import LoadingCircularIndeterminate from '../Loading';
 import { fetchData, refresh } from '../../utils/apiGetPost';
+import { useSelector } from 'react-redux';
 
 export default function RenderPost({ apiLink }) {
   const [data, setData] = useState([]);
   const [hasMore, setHasMore] = useState(true);
+
   const page = useRef(1);
+  const user = useSelector((state) => state.auth.login?.currentUser);
 
   useEffect(() => {
-    fetchData(apiLink, setData, data, setHasMore, page);
+    fetchData(apiLink, setData, data, setHasMore, page, user?._id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -36,19 +39,7 @@ export default function RenderPost({ apiLink }) {
         }}
       >
         {data?.map((post) => (
-          <PostCard
-            key={post?._id}
-            id={post?._id}
-            avatar={post?.author?.media?.url}
-            authorId={post?.author?._id}
-            fullname={post?.author?.fullname}
-            title={post?.title}
-            content={post?.content}
-            media={post?.media}
-            createdAt={post?.createdAt}
-            xs="100%"
-            md="50%"
-          />
+          <PostCard key={post?._id} post={post} xs="100%" md="50%" />
         ))}
         {!hasMore && (
           <Typography
@@ -67,12 +58,14 @@ export default function RenderPost({ apiLink }) {
         dataLength={data.length}
         next={() => {
           if (hasMore) {
-            fetchData(apiLink, setData, data, setHasMore, page);
+            fetchData(apiLink, setData, data, setHasMore, page, user?._id);
           }
         }}
         hasMore={hasMore}
         loader={<LoadingCircularIndeterminate />}
-        refreshFunction={() => refresh(apiLink, setData, setHasMore, page)}
+        refreshFunction={() =>
+          refresh(apiLink, setData, setHasMore, page, user?._id)
+        }
         pullDownToRefresh
       ></InfiniteScroll>
     </>

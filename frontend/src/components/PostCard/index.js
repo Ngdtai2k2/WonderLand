@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
 import moment from 'moment';
 import { ControlBar, Player } from 'video-react';
-import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
@@ -22,48 +21,83 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
 import ThumbDownRoundedIcon from '@mui/icons-material/ThumbDownRounded';
 import ThumbDownOffAltRoundedIcon from '@mui/icons-material/ThumbDownOffAltRounded';
-import { IntersectionObserverOptions } from '../../constants/constant';
 
-import LoadingCircularIndeterminate from '../Loading';
-import HandleReaction from '../../utils/handleReaction';
-import { convertNumber } from '../../utils/helperFunction';
 import { createAxios } from '../../createInstance';
-
+import { BaseApi, IntersectionObserverOptions, toastTheme } from '../../constants/constant';
 import { BoxStyled, CardActionsStyled, CardStyled } from './styles';
 import 'video-react/dist/video-react.css';
 
-export default function PostCard({
-  id,
-  avatar,
-  authorId,
-  fullname,
-  title,
-  content,
-  media,
-  createdAt,
-  sm,
-  xs,
-  md,
-  lg,
-  xl,
-}) {
+export default function PostCard({ post, sm, xs, md, lg, xl }) {
   const [isIntersecting, setIsIntersecting] = useState(false);
+  const [totalReaction, setTotalReaction] = useState(0);
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const user = useSelector((state) => state.auth.login?.currentUser);
   const accessToken = user?.accessToken;
   let axiosJWT = createAxios(user, dispatch);
 
-  const {
-    countReaction,
-    isLiked,
-    isDisliked,
-    loading,
-    handleLikeClick,
-    handleDislikeClick,
-  } = HandleReaction(id, user, accessToken, navigate, axios, axiosJWT);
+  const [isLiked, setIsLiked] = useState(false);
+  const [isDisliked, setIsDisliked] = useState(false);
+
+  useEffect(() => {
+    if (post.hasReacted === true) {
+      setIsLiked(true);
+    } else if (post.hasReacted === false) {
+      setIsDisliked(true);
+    } else {
+      setIsLiked(false);
+      setIsDisliked(false);
+    }
+  }, [post.hasReacted]);
+
+  useEffect(() => {
+    setTotalReaction(post?.totalReaction);
+  }, [post?.totalReaction]);
+
+  const handleLikeClick = async (type) => {
+    if (!user)
+      return toast.warning(
+        'You need to be signed in to perform this action!',
+        toastTheme,
+      );
+    try {
+      await axiosJWT.post(
+        `${BaseApi}/reaction/like`,
+        {
+          id: post?._id,
+          author: user._id,
+          type: type,
+        },
+        {
+          headers: {
+            token: `Bearer ${accessToken}`,
+          },
+        },
+      );
+
+      const newIsLiked = type === 1 ? !isLiked : false;
+      const newIsDisliked = type === 0 ? !isDisliked : false;
+      const reactionChanged =
+        isLiked !== newIsLiked || isDisliked !== newIsDisliked;
+
+      let updatedTotalReaction = totalReaction;
+      if (reactionChanged) {
+        updatedTotalReaction =
+          totalReaction +
+          (newIsLiked ? 1 : 0) -
+          (isLiked ? 1 : 0) +
+          (newIsDisliked ? 1 : 0) -
+          (isDisliked ? 1 : 0);
+      }
+
+      setIsLiked(newIsLiked);
+      setIsDisliked(newIsDisliked);
+      setTotalReaction(updatedTotalReaction);
+    } catch (error) {
+      toast.error(error.response.data.message, toastTheme);
+    }
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -108,11 +142,15 @@ export default function PostCard({
       <CardHeader
         avatar={
           <Link
-            href={`/profile/${authorId}`}
+            href={`/profile/${post?.author?._id}`}
             underline="none"
             variant="inherit"
           >
-            <Avatar variant="rounded" src={avatar} alt={fullname} />
+            <Avatar
+              variant="rounded"
+              src={post?.author?.media?.url}
+              alt={post?.author?.fullname}
+            />
           </Link>
         }
         action={
@@ -122,62 +160,62 @@ export default function PostCard({
         }
         title={
           <Link
-            href={`/profile/${authorId}`}
+            href={`/profile/${post?.author?._id}`}
             underline="none"
             variant="inherit"
           >
             <Typography variant="body2" fontWeight={600}>
-              {fullname}
+              {post?.author?.fullname}
             </Typography>
           </Link>
         }
         subheader={
           <Typography variant="caption">
-            Posted {moment(createdAt).fromNow()}
+            Posted {moment(post?.createdAt).fromNow()}
           </Typography>
         }
       />
       <CardContent sx={{ paddingX: 1, paddingY: 0 }}>
         <Typography variant="body1" fontWeight={550}>
-          {title}
+          {post?.title}
         </Typography>
-        <Typography variant="body2">{content}</Typography>
+        <Typography variant="body2">{post?.content}</Typography>
       </CardContent>
-      {media ? (
-        media?.type === 0 ? (
+      {post?.media ? (
+        post.media?.type === 0 ? (
           <CardMedia
             sx={{ border: '0', objectFit: 'contain', maxHeight: '400px' }}
             component="img"
-            image={media.url}
-            alt={'Post image of ' + fullname}
+            image={post.media?.url}
+            alt={'Post image of ' + post?.author?.fullname}
             lazy="true"
           />
         ) : (
-          <Player autoPlay muted playsInline src={media.url}>
+          <Player autoPlay muted playsInline src={post.media?.url}>
             <ControlBar autoHide={true} autoHideTime={200}></ControlBar>
           </Player>
         )
       ) : null}
       <CardActionsStyled disableSpacing>
         <BoxStyled gap={1}>
-          <IconButton aria-label="like" onClick={handleLikeClick} size="small">
+          <IconButton
+            onClick={() => handleLikeClick(1, setIsLiked)}
+            aria-label="like"
+            size="small"
+          >
             {isLiked ? <ThumbUpIcon color="info" /> : <ThumbUpOffAltIcon />}
           </IconButton>
-          {loading ? (
-            <LoadingCircularIndeterminate size={10} />
-          ) : (
-            <Typography
-              variant="subtitle1"
-              fontWeight={400}
-              width="100%"
-              textAlign="center"
-            >
-              {convertNumber(countReaction)}
-            </Typography>
-          )}
+          <Typography
+            variant="subtitle1"
+            fontWeight={400}
+            width="100%"
+            textAlign="center"
+          >
+            {totalReaction}
+          </Typography>
           <IconButton
+            onClick={() => handleLikeClick(0, setIsDisliked)}
             aria-label="dislike"
-            onClick={handleDislikeClick}
             size="small"
           >
             {isDisliked ? (

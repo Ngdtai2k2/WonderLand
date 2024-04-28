@@ -5,6 +5,8 @@ const User = require("../models/User");
 const Post = require("../models/Post");
 const optionsPaginate = require("../configs/optionsPaginate");
 const uploadMediaController = require("./uploadMediaController");
+const reactionController = require("./reactionController");
+const savePostController = require("./savePostController");
 
 const postController = {
   createPost: async (req, res) => {
@@ -55,7 +57,9 @@ const postController = {
         type == 0 ? "Created post successfully!" : "Created ask successfully!";
       return res.status(201).json({ message: successMessage, post: post });
     } catch (error) {
-      return res.status(500).json({ message: "An error occurred please try again later!" });
+      return res
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
     }
   },
 
@@ -72,7 +76,9 @@ const postController = {
       }
       return res.status(404).json({ message: "Post not found!" });
     } catch (error) {
-      return res.status(500).json({ message: "An error occurred please try again later!" });
+      return res
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
     }
   },
 
@@ -83,7 +89,21 @@ const postController = {
 
       result.docs = await Promise.all(
         result.docs.map(async (post) => {
-          return (post = await Post.populate(post, [
+          let hasReacted = null;
+          let hasSavedPost = null;
+          if (req.body?.author) {
+            hasReacted = await reactionController.hasReactionPost(
+              req.body?.author,
+              post._id
+            );
+            hasSavedPost = await savePostController.hasSavePost(
+              req.body.author,
+              post._id
+            );
+          }
+          const totalReaction = await reactionController.countReactions(post._id, null);
+          const updatedPost = { ...post.toObject(), hasReacted, hasSavedPost, totalReaction };
+          return (post = await Post.populate(updatedPost, [
             {
               path: "author",
               select: "id fullname",
@@ -108,7 +128,9 @@ const postController = {
       );
       res.status(200).json({ result });
     } catch (error) {
-      return res.status(500).json({ message: "An error occurred please try again later!" });
+      return res
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
     }
   },
 
@@ -143,10 +165,12 @@ const postController = {
       );
       res.status(200).json({ result });
     } catch (error) {
-      return res.status(500).json({ message: "An error occurred please try again later!" });
+      return res
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
     }
   },
-  
+
   getAllPostByUserId: async (req, res) => {
     try {
       const id = req.params.id;
@@ -192,7 +216,9 @@ const postController = {
         .status(200)
         .json({ result: { docs: populatedDocs, ...paginationData } });
     } catch (error) {
-      return res.status(500).json({ message: "An error occurred please try again later!" });
+      return res
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
     }
   },
 
@@ -204,12 +230,12 @@ const postController = {
       }
       const user = await User.findById(id);
       if (!user) return res.status(400).json({ message: "User not found!" });
-      
-
     } catch (error) {
-      return res.status(500).json({ message: "An error occurred please try again later!" });
+      return res
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
     }
-  }
+  },
 };
 
 module.exports = postController;
