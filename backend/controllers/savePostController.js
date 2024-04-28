@@ -4,17 +4,17 @@ const SavePost = require("../models/SavePost");
 const savePostController = {
   handleSavePost: async (req, res) => {
     try {
-      const { author, id } = req.body;
+      const { user, id } = req.body;
       const post = await Post.findById(id);
       if (!post) return res.status(404).json({ message: "Post not found!" });
       const savePost = await SavePost.findOne({
-        author,
+        user,
         postId: id,
       });
 
       if (!savePost) {
         await SavePost.create({
-          author: author,
+          user: user,
           postId: id,
         });
         return res.status(201).json({ message: "Post saved!", state: true });
@@ -25,10 +25,11 @@ const savePostController = {
       return res.status(500).json({ message: error.message });
     }
   },
-  hasSavePost: async (author, id) => {
+
+  hasSavePost: async (userId, postId) => {
     const savePost = await SavePost.findOne({
-      author: author,
-      postId: id,
+      user: userId,
+      postId: postId,
     });
     if (!savePost) {
       return false;

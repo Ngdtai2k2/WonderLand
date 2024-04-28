@@ -111,7 +111,7 @@ export default function PostCard({ post, sm, xs, md, lg, xl }) {
         `${BaseApi}/save-post`,
         {
           id: post?._id,
-          author: user._id,
+          user: user._id,
         },
         {
           headers: {
