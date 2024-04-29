@@ -1,13 +1,12 @@
-const mongoose = require("mongoose");
-
 const Category = require("../models/Categories");
 const User = require("../models/User");
 const Post = require("../models/Post");
 const optionsPaginate = require("../configs/optionsPaginate");
 const uploadMediaController = require("./uploadMediaController");
-const postPopulateOptions = require("../configs/constants");
 const reactionService = require("../services/reactionService");
 const savePostService = require("../services/savePostService");
+const commentService = require("../services/commentService");
+const { postPopulateOptions } = require("../configs/constants");
 
 const postController = {
   create: async (req, res) => {
@@ -61,19 +60,40 @@ const postController = {
   getPostById: async (req, res) => {
     try {
       const id = req.params.id;
-      if (mongoose.Types.ObjectId.isValid(id)) {
-        const post = await Post.findById(id);
-        if (!post) {
-          return res.status(404).json({ message: "Post not found!" });
-        }
-        const postWithMedia = await Post.findById(post._id).populate("media");
-        return res.status(200).json({ post: postWithMedia });
+      const { user } = req.body;
+
+      const post = await Post.findById(id);
+      if (!post) {
+        return res.status(404).json({ message: "Post not found!" });
       }
-      return res.status(404).json({ message: "Post not found!" });
+
+      let hasReacted = null;
+      let hasSavedPost = null;
+      if (user) {
+        [hasReacted, hasSavedPost] = await Promise.all([
+          reactionService.hasReactionPost(user, id),
+          savePostService.hasSavePost(user, id),
+        ]);
+      }
+
+      const [totalReaction, totalComment] = await Promise.all([
+        reactionService.countReactions(id, null),
+        commentService.count(id),
+      ]);
+
+      const postData = await post.populate(postPopulateOptions);
+      const result = {
+        ...postData.toObject(),
+        hasReacted,
+        hasSavedPost,
+        totalReaction,
+        totalComment,
+      };
+      return res.status(200).json({ result });
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: "An error occurred, please try again later!" });
     }
   },
 
@@ -83,11 +103,10 @@ const postController = {
       const { typeQuery } = req.params;
 
       const options = optionsPaginate(req);
-      let query = { type: type };
-
       const twentyFourHoursAgo = new Date();
       twentyFourHoursAgo.setDate(twentyFourHoursAgo.getDate() - 1);
 
+      const query = { type: type };
       if (typeQuery == 2) {
         query.createdAt = { $gte: twentyFourHoursAgo };
       }
@@ -102,30 +121,32 @@ const postController = {
             const user = await User.findById(author);
             if (!user)
               return res.status(400).json({ message: "User not found!" });
-            hasReacted = await reactionService.hasReactionPost(
-              author,
-              post._id
-            );
-            hasSavedPost = await savePostService.hasSavePost(
-              author,
-              post._id
-            );
+            [hasReacted, hasSavedPost] = await Promise.all([
+              reactionService.hasReactionPost(author, post._id),
+              savePostService.hasSavePost(author, post._id),
+            ]);
           }
-          const totalReaction = await reactionService.countReactions(
-            post._id,
-            null
-          );
+
+          const [totalReaction, totalComment] = await Promise.all([
+            reactionService.countReactions(post._id, null),
+            commentService.count(post._id),
+          ]);
+
           const updatedPost = {
             ...post.toObject(),
             hasReacted,
             hasSavedPost,
             totalReaction,
+            totalComment,
           };
-          return (post = await Post.populate(updatedPost, postPopulateOptions));
+
+          return await Post.populate(updatedPost, postPopulateOptions);
         })
       );
+
       res.status(200).json({ result });
     } catch (error) {
+      console.error(error.message);
       return res
         .status(500)
         .json({ message: "An error occurred please try again later!" });
@@ -144,27 +165,26 @@ const postController = {
         { author: id },
         options
       );
+
       const populatedDocs = await Promise.all(
         docs.map(async (post) => {
-          let hasReacted = null;
-          let hasSavedPost = null;
-          hasReacted = await reactionService.hasReactionPost(id, post._id);
-          hasSavedPost = await savePostService.hasSavePost(id, post._id);
-          const totalReaction = await reactionService.countReactions(
-            post._id,
-            null
-          );
+          let hasReacted = await reactionService.hasReactionPost(id, post._id);
+          let hasSavedPost = await savePostService.hasSavePost(id, post._id);
+
+          const [totalReaction, totalComment] = await Promise.all([
+            reactionService.countReactions(post._id, null),
+            commentService.count(post._id),
+          ]);
+
           const updatedPost = {
             ...post.toObject(),
             hasReacted,
             hasSavedPost,
             totalReaction,
+            totalComment,
           };
-          const populatedPost = await Post.populate(
-            updatedPost,
-            postPopulateOptions
-          );
-          return populatedPost;
+
+          return await Post.populate(updatedPost, postPopulateOptions);
         })
       );
 

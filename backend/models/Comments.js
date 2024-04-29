@@ -1,26 +1,34 @@
 const mongoose = require("mongoose");
+const mongoosePaginate = require("mongoose-paginate-v2");
 
 const commentSchema = new mongoose.Schema(
   {
     postId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Post",
+      required: true,
     },
     author: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      required: true,
     },
     content: {
       type: String,
-      required: true,
+      maxLength: 1000,
     },
     media: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Media",
-      required: true,
     },
+    parentCommentId : {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Comment",
+    }
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Comments", commentSchema);
+commentSchema.plugin(mongoosePaginate);
+
+module.exports = mongoose.model("Comment", commentSchema);

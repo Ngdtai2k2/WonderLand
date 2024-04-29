@@ -14,11 +14,11 @@ const reactionSchema = new mongoose.Schema(
     },
     postId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Posts",
+      ref: "Post",
     },
     commentId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Comments",
+      ref: "Comment",
     },
   },
   {

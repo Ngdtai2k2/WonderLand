@@ -101,7 +101,7 @@ export default function PostTab() {
         toast.success(response.data.message, toastTheme);
         navigate('/');
       } catch (error) {
-        toast.error(error.message, toastTheme);
+        toast.error(error.response.data.message, toastTheme);
       } finally {
         setFetching(false);
       }

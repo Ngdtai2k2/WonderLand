@@ -39,7 +39,13 @@ export default function RenderPost({ apiLink, type }) {
         }}
       >
         {data?.map((post) => (
-          <PostCard key={post?._id} post={post} xs="100%" md="50%" />
+          <PostCard
+            key={post?._id}
+            post={post}
+            detail={false}
+            xs="100%"
+            md="50%"
+          />
         ))}
         {!hasMore && (
           <Typography

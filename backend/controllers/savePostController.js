@@ -1,11 +1,11 @@
-const postPopulateOptions = require("../configs/constants");
+const { postPopulateOptions } = require("../configs/constants");
 const optionsPaginate = require("../configs/optionsPaginate");
 const Post = require("../models/Post");
 const SavePost = require("../models/SavePost");
 const User = require("../models/User");
+const commentService = require("../services/commentService");
 const reactionService = require("../services/reactionService");
 const savePostService = require("../services/savePostService");
-const reactionController = require("./reactionController");
 
 const savePostController = {
   handleSavePost: async (req, res) => {
@@ -49,7 +49,7 @@ const savePostController = {
       if (!userId) {
         return res
           .status(404)
-          .json({ message: "Vui lòng cung cấp ID người dùng của bạn!" });
+          .json({ message: "Please provide your user ID!" });
       }
       const options = optionsPaginate(req);
 
@@ -65,21 +65,25 @@ const savePostController = {
           if (!user) {
             return res
               .status(404)
-              .json({ message: "Không tìm thấy người dùng!" });
+              .json({ message: "User not found!" });
           }
 
-          hasReacted = await reactionService.hasReactionPost(userId, postId);
-          hasSavedPost = await savePostService.hasSavePost(userId, postId);
-          
-          const totalReaction = await reactionService.countReactions(
-            postId,
-            userId
-          );
+          [hasReacted, hasSavedPost] = await Promise.all([
+            reactionService.hasReactionPost(userId, postId),
+            savePostService.hasSavePost(userId, postId),
+          ]);
+
+          const [totalReaction, totalComment] = await Promise.all([
+            reactionService.countReactions(postId, null),
+            commentService.count(postId),
+          ]);
+
           const updatedSavedPost = {
             ...postId.toObject(),
             hasReacted,
             hasSavedPost,
             totalReaction,
+            totalComment,
           };
 
           return (savedPost = await Post.populate(
@@ -92,7 +96,7 @@ const savePostController = {
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "Đã xảy ra lỗi, vui lòng thử lại sau!" });
+        .json({ message: "An error occurred please try again later!" });
     }
   },
 };

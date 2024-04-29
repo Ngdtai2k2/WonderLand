@@ -1,8 +1,9 @@
-const postPopulateOptions = require("../configs/constants");
+const { postPopulateOptions } = require("../configs/constants");
 const optionsPaginate = require("../configs/optionsPaginate");
 const Post = require("../models/Post");
 const Reaction = require("../models/Reaction");
 const User = require("../models/User");
+const commentService = require("../services/commentService");
 const reactionService = require("../services/reactionService");
 const savePostService = require("../services/savePostService");
 
@@ -40,7 +41,7 @@ const reactionController = {
         }
       } else {
         await Reaction.create({
-          author:author,
+          author: author,
           type: type,
           postId: id,
         });
@@ -54,20 +55,23 @@ const reactionController = {
   },
 
   hasReactionPost: async (userId, postId) => {
-      const reaction = await Reaction.findOne({
-        author: userId,
-        postId: postId,
-      });
-      if (!reaction) {
-        return null;
-      }
-      return reaction.type;
+    const reaction = await Reaction.findOne({
+      author: userId,
+      postId: postId,
+    });
+    if (!reaction) {
+      return null;
+    }
+    return reaction.type;
   },
-  
+
   countReactions: async (postId, commentId) => {
     try {
       const query = commentId ? { commentId } : { postId };
-      const reactions = await Reaction.countDocuments({ ...query, type: { $in: [0, 1] } });
+      const reactions = await Reaction.countDocuments({
+        ...query,
+        type: { $in: [0, 1] },
+      });
       return reactions;
     } catch (error) {
       return null;
@@ -95,19 +99,23 @@ const reactionController = {
           const user = await User.findById(userId);
           if (!user)
             return res.status(404).json({ message: "User not found!" });
-          
-          hasReacted = await reactionService.hasReactionPost(userId, postId);
-          hasSavedPost = await savePostService.hasSavePost(userId, postId);
 
-          const totalReaction = await reactionService.countReactions(
-            postId,
-            null
-          );
+          [hasReacted, hasSavedPost] = await Promise.all([
+            reactionService.hasReactionPost(userId, postId),
+            savePostService.hasSavePost(userId, postId),
+          ]);
+
+          const [totalReaction, totalComment] = await Promise.all([
+            reactionService.countReactions(postId, null),
+            commentService.count(postId),
+          ]);
+
           const updatedSavedPost = {
             ...postId.toObject(),
             hasReacted,
             hasSavedPost,
             totalReaction,
+            totalComment,
           };
 
           return (reactionPost = await Post.populate(
@@ -118,11 +126,12 @@ const reactionController = {
       );
       return res.status(200).json({ result });
     } catch (error) {
+      console.error(error.message);
       return res
         .status(500)
         .json({ message: "An error occurred please try again later!" });
     }
-  }
+  },
 };
 
 module.exports = reactionController;

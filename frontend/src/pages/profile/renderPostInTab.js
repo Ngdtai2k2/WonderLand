@@ -61,7 +61,13 @@ export default function RenderPostInTab({ apiLink }) {
       gap={2}
     >
       {data?.docs?.map((post) => (
-        <PostCard key={post._id} post={post} xs="100%" md="65%" />
+        <PostCard
+          key={post._id}
+          post={post}
+          detail={false}
+          xs="100%"
+          md="65%"
+        />
       ))}
       <Pagination
         count={data?.totalPages}

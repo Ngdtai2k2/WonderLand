@@ -10,7 +10,7 @@ const savePostSchema = new mongoose.Schema(
     },
     postId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Posts",
+      ref: "Post",
       required: true,
     },
   },

@@ -1,39 +1,39 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import moment from 'moment';
-import { ControlBar, Player } from 'video-react';
-import { toast } from 'react-toastify';
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import moment from "moment";
+import { ControlBar, Player } from "video-react";
+import { toast } from "react-toastify";
 
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
-import Button from '@mui/material/Button';
-import CardContent from '@mui/material/CardContent';
-import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
+import Avatar from "@mui/material/Avatar";
+import IconButton from "@mui/material/IconButton";
+import Button from "@mui/material/Button";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
+import Link from "@mui/material/Link";
 
-import CommentIcon from '@mui/icons-material/Comment';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import ShareIcon from '@mui/icons-material/Share';
-import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import TurnedInNotRoundedIcon from '@mui/icons-material/TurnedInNotRounded';
-import BookmarkRoundedIcon from '@mui/icons-material/BookmarkRounded';
-import ThumbDownRoundedIcon from '@mui/icons-material/ThumbDownRounded';
-import ThumbDownOffAltRoundedIcon from '@mui/icons-material/ThumbDownOffAltRounded';
+import CommentIcon from "@mui/icons-material/Comment";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import ShareIcon from "@mui/icons-material/Share";
+import TurnedInNotRoundedIcon from "@mui/icons-material/TurnedInNotRounded";
+import BookmarkRoundedIcon from "@mui/icons-material/BookmarkRounded";
+import ThumbDownOutlinedIcon from "@mui/icons-material/ThumbDownOutlined";
+import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
+import ThumbUpRoundedIcon from "@mui/icons-material/ThumbUpRounded";
+import ThumbDownRoundedIcon from "@mui/icons-material/ThumbDownRounded";
 
-import { createAxios } from '../../createInstance';
+import { createAxios } from "../../createInstance";
 import {
   BaseApi,
   IntersectionObserverOptions,
   useToastTheme,
-} from '../../constants/constant';
-import { BoxStyled, CardActionsStyled, CardStyled } from './styles';
-import 'video-react/dist/video-react.css';
-import { convertNumber } from '../../utils/helperFunction';
+} from "../../constants/constant";
+import { convertNumber } from "../../utils/helperFunction";
+import { BoxStyled, CardActionsStyled, CardStyled } from "./styles";
+import "video-react/dist/video-react.css";
 
-export default function PostCard({ post, sm, xs, md, lg, xl }) {
+export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
   const [isIntersecting, setIsIntersecting] = useState(false);
   const [totalReaction, setTotalReaction] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
@@ -60,8 +60,8 @@ export default function PostCard({ post, sm, xs, md, lg, xl }) {
   const handleLikeClick = async (type) => {
     if (!user)
       return toast.warning(
-        'You need to be signed in to perform this action!',
-        toastTheme,
+        "You need to be signed in to perform this action!",
+        toastTheme
       );
     try {
       await axiosJWT.post(
@@ -75,7 +75,7 @@ export default function PostCard({ post, sm, xs, md, lg, xl }) {
           headers: {
             token: `Bearer ${accessToken}`,
           },
-        },
+        }
       );
 
       const newIsLiked = type === 1 ? !isLiked : false;
@@ -104,8 +104,8 @@ export default function PostCard({ post, sm, xs, md, lg, xl }) {
   const handleSavePost = async () => {
     if (!user)
       return toast.warning(
-        'You need to be signed in to perform this action!',
-        toastTheme,
+        "You need to be signed in to perform this action!",
+        toastTheme
       );
     try {
       const response = await axiosJWT.post(
@@ -118,7 +118,7 @@ export default function PostCard({ post, sm, xs, md, lg, xl }) {
           headers: {
             token: `Bearer ${accessToken}`,
           },
-        },
+        }
       );
       setIsSavePost(response?.data?.state);
       toast.success(response?.data?.message, toastTheme);
@@ -134,7 +134,7 @@ export default function PostCard({ post, sm, xs, md, lg, xl }) {
       });
     }, IntersectionObserverOptions);
 
-    const target = document.querySelector('.video-react-video');
+    const target = document.querySelector(".video-react-video");
     if (target) {
       observer.observe(target);
     }
@@ -146,7 +146,7 @@ export default function PostCard({ post, sm, xs, md, lg, xl }) {
   }, []);
 
   useEffect(() => {
-    const videoElement = document.querySelector('.video-react-video');
+    const videoElement = document.querySelector(".video-react-video");
 
     if (isIntersecting && videoElement) {
       videoElement.play();
@@ -203,21 +203,34 @@ export default function PostCard({ post, sm, xs, md, lg, xl }) {
           </Typography>
         }
       />
-      <CardContent sx={{ paddingX: 1, paddingY: 0 }}>
+      <CardContent sx={{ paddingX: 1, paddingY: 0, marginBottom: 0.5 }}>
         <Typography variant="body1" fontWeight={550}>
-          {post?.title}
+          {!detail ? (
+            <Link underline="hover" href={`/post/${post?._id}`}>
+              {post?.title}
+            </Link>
+          ) : (
+            post?.title
+          )}
         </Typography>
         <Typography variant="body2">{post?.content}</Typography>
       </CardContent>
       {post?.media ? (
         post.media?.type === 0 ? (
-          <CardMedia
-            sx={{ border: '0', objectFit: 'contain', maxHeight: '400px' }}
-            component="img"
-            image={post.media?.url}
-            alt={'Post image of ' + post?.author?.fullname}
-            lazy="true"
-          />
+          <Link underline="none" href={detail ? null : `/post/${post?._id}`}>
+            <CardMedia
+              sx={{
+                border: "0",
+                objectFit: "contain",
+                maxHeight: "400px",
+                cursor: "pointer",
+              }}
+              component="img"
+              image={post.media?.url}
+              alt={"Post image of " + post?.author?.fullname}
+              lazy="true"
+            />
+          </Link>
         ) : (
           <Player autoPlay muted playsInline src={post.media?.url}>
             <ControlBar autoHide={true} autoHideTime={200}></ControlBar>
@@ -231,7 +244,11 @@ export default function PostCard({ post, sm, xs, md, lg, xl }) {
             aria-label="like"
             size="small"
           >
-            {isLiked ? <ThumbUpIcon color="info" /> : <ThumbUpOffAltIcon />}
+            {isLiked ? (
+              <ThumbUpRoundedIcon color="info" />
+            ) : (
+              <ThumbUpOutlinedIcon />
+            )}
           </IconButton>
           <Typography
             variant="subtitle1"
@@ -249,13 +266,21 @@ export default function PostCard({ post, sm, xs, md, lg, xl }) {
             {isDisliked ? (
               <ThumbDownRoundedIcon color="error" />
             ) : (
-              <ThumbDownOffAltRoundedIcon />
+              <ThumbDownOutlinedIcon />
             )}
           </IconButton>
         </BoxStyled>
-        <Button size="small" aria-label="comments" startIcon={<CommentIcon />}>
-          123k
-        </Button>
+        {!detail && (
+          <Button
+            size="small"
+            aria-label="comments"
+            startIcon={<CommentIcon />}
+            onClick={() => window.open(`/post/${post?._id}`, '_blank')}
+          >
+            {convertNumber(post?.totalComment)}
+          </Button>
+        )}
+
         <BoxStyled>
           <IconButton
             aria-label="save"
