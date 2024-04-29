@@ -134,8 +134,8 @@ export default function ListComments({ postId, newComment }) {
               (comment) =>
                 !comment.parentCommentId &&
                 !deletedComments.includes(comment._id) && (
-                  <>
-                    <ListItem key={comment._id} sx={{ paddingX: 0, gap: 1 }}>
+                  <React.Fragment key={comment._id}>
+                    <ListItem sx={{ paddingX: 0, gap: 1 }}>
                       <Link
                         href={`/profile/u/${comment.author._id}`}
                         underline="none"
@@ -205,7 +205,11 @@ export default function ListComments({ postId, newComment }) {
                             id={`btn-menu-${comment._id}`}
                             onClick={(event) => handleClick(event, comment._id)}
                           >
-                            {fetching === comment._id ? <LoadingCircularIndeterminate size={16}/> : <MoreVertTwoToneIcon />}
+                            {fetching === comment._id ? (
+                              <LoadingCircularIndeterminate size={16} />
+                            ) : (
+                              <MoreVertTwoToneIcon />
+                            )}
                           </IconButton>
                         </Box>
                       </Box>
@@ -247,7 +251,7 @@ export default function ListComments({ postId, newComment }) {
                       </Menu>
                     </ListItem>
                     <Divider />
-                  </>
+                  </React.Fragment>
                 ),
             )
           ) : (

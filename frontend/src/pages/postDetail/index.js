@@ -88,6 +88,12 @@ export default function PostDetail() {
     onSubmit: async (values) => {
       try {
         setFetching(true);
+        if (!user) {
+          toast.warning(
+            'You need to be logged in to use this function',
+            toastTheme,
+          );
+        }
         if (!values.content && !values.file) {
           return toast.warning('Comments must contain photos or text!');
         }
@@ -221,7 +227,11 @@ export default function PostDetail() {
                       !formik.dirty || formik.isSubmitting || !formik.isValid
                     }
                   >
-                    {fetching ? <LoadingCircularIndeterminate size={16}/> : <SendRoundedIcon />}
+                    {fetching ? (
+                      <LoadingCircularIndeterminate size={16} />
+                    ) : (
+                      <SendRoundedIcon />
+                    )}
                   </IconButton>
                 </Box>
               </Box>
