@@ -170,7 +170,7 @@ export default function PostCard({ post, sm, xs, md, lg, xl }) {
       <CardHeader
         avatar={
           <Link
-            href={`/profile/${post?.author?._id}`}
+            href={`/profile/u/${post?.author?._id}`}
             underline="none"
             variant="inherit"
           >
@@ -188,7 +188,7 @@ export default function PostCard({ post, sm, xs, md, lg, xl }) {
         }
         title={
           <Link
-            href={`/profile/${post?.author?._id}`}
+            href={`/profile/u/${post?.author?._id}`}
             underline="none"
             variant="inherit"
           >

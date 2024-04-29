@@ -169,7 +169,7 @@ export default function NavigationBar() {
               ? [
                   <MenuItem
                     key="profile"
-                    onClick={() => handelNavigate('/profile/' + user?._id)}
+                    onClick={() => handelNavigate('/profile/u/' + user?._id)}
                   >
                     Profile
                   </MenuItem>,
