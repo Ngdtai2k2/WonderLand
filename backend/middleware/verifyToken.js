@@ -20,9 +20,14 @@ const verifyMiddleware = {
     });
   },
 
+  // Please provide your user ID when using api calls by passing via params or queries
   verifyTokenAndUserAuthorization: (req, res, next) => {
     verifyMiddleware.token(req, res, () => {
-      if (req.user._id == req.params.id || req.user.isAdmin) {
+      if (
+        req.user._id == req.params.id ||
+        req.user.isAdmin ||
+        req.user._id == req.query.request_user
+      ) {
         next();
       } else {
         return res.status(403).json({ message: "You're not allowed!" });
@@ -38,7 +43,7 @@ const verifyMiddleware = {
         return res.status(403).json({ message: "You're not allowed!" });
       }
     });
-  }
+  },
 };
 
 module.exports = verifyMiddleware;
