@@ -23,6 +23,15 @@ const themes = extendTheme({
       textTransform: 'capitalize',
     },
   },
+  components: {
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          wordBreak: 'break-word',
+        },
+      },
+    },
+  },
 });
 
 export default themes;
