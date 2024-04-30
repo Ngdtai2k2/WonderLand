@@ -31,6 +31,13 @@ const themes = extendTheme({
         },
       },
     },
+    MuiLink: {
+      styleOverrides: {
+        root: {
+          fontFamily: ['Raleway', 'sans-serif'].join(','),
+        },
+      },
+    },
   },
 });
 
