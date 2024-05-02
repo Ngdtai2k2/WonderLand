@@ -14,13 +14,21 @@ const reactionService = {
     return reaction.type;
   },
 
-  countReactions: async (postId, commentId) => {
+  countReactions: async (postId, commentId, replyId) => {
     try {
-      const query = commentId ? { commentId } : { postId };
+      let query = { postId };
+      if (commentId) {
+        query = { ...query, commentId };
+        if (replyId) {
+          query = { ...query, replyId };
+        }
+      }
+
       const reactions = await Reaction.countDocuments({
         ...query,
         type: { $in: [0, 1] },
       });
+
       return reactions;
     } catch (error) {
       return null;
@@ -76,7 +84,7 @@ const reactionService = {
     const reaction = await Reaction.findOne({
       author: userId,
       [targetField]: id,
-    })
+    });
     if (!reaction) {
       return null;
     }

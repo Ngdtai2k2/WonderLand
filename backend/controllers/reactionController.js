@@ -10,7 +10,7 @@ const savePostService = require("../services/savePostService");
 
 const reactionController = {
   handleLikePost: async (req, res) => {
-    reactionService.handleReaction(req, res, 'postId');
+    reactionService.handleReaction(req, res, "postId");
   },
 
   hasReactionPost: async (userId, postId) => {
@@ -45,14 +45,26 @@ const reactionController = {
           .status(404)
           .json({ message: "Please provide your User ID!" });
       }
-      const options = optionsPaginate(req);
 
-      const result = await Reaction.paginate({ author: userId }, options);
-      await Reaction.populate(result.docs, { path: "postId" });
+      // Lọc dữ liệu trước
+      const reactionPosts = await Reaction.find({ author: userId }).populate(
+        "postId"
+      );
+      const filteredPosts = reactionPosts.filter(
+        (reactionPost) => reactionPost.postId
+      );
+
+      const postIdList = filteredPosts.map((post) => post.postId);
+
+      const options = optionsPaginate(req);
+      const result = await Post.paginate(
+        { _id: { $in: postIdList } },
+        options
+      );
 
       result.docs = await Promise.all(
         result.docs.map(async (reactionPost) => {
-          const postId = reactionPost.postId;
+          const postId = reactionPost._id;
           let hasReacted = null;
           let hasSavedPost = null;
           const user = await User.findById(userId);
@@ -65,27 +77,24 @@ const reactionController = {
           ]);
 
           const [totalReaction, totalComment] = await Promise.all([
-            reactionService.countReactions(postId, null),
+            reactionService.countReactions(postId, null, null),
             commentService.count(postId),
           ]);
 
           const updatedSavedPost = {
-            ...postId.toObject(),
+            ...reactionPost.toObject(),
             hasReacted,
             hasSavedPost,
             totalReaction,
             totalComment,
           };
 
-          return (reactionPost = await Post.populate(
-            updatedSavedPost,
-            postPopulateOptions
-          ));
+          return await Post.populate(updatedSavedPost, postPopulateOptions);
         })
       );
+
       return res.status(200).json({ result });
     } catch (error) {
-      console.error(error.message);
       return res
         .status(500)
         .json({ message: "An error occurred please try again later!" });
@@ -93,8 +102,7 @@ const reactionController = {
   },
 
   handleLikeComment: async (req, res) => {
-    reactionService.handleReaction(req, res, 'commentId');
-
+    reactionService.handleReaction(req, res, "commentId");
   },
 
   handleLikeReply: async (req, res) => {
@@ -109,7 +117,7 @@ const reactionController = {
         author,
         replyId: id,
       });
-      if(reaction) {
+      if (reaction) {
         if (reaction.type == type) {
           await Reaction.findOneAndDelete(reaction._id);
           return res.status(200).json({ removed: true });
