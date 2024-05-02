@@ -65,11 +65,11 @@ export default function Profile() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  useEffect(() => {
-    document.title = `${data?.user?.fullname}'s profile`;
-  }, [data]);
-
   const user = data?.user;
+
+  useEffect(() => {
+    document.title = user && `${user?.fullname}'s profile`;
+  }, [user?.fullname, user]);
 
   if (!user && !loading) {
     return <NotFound />;
