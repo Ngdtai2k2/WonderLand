@@ -240,7 +240,7 @@ export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
       <CardActionsStyled disableSpacing>
         <BoxStyled gap={1}>
           <IconButton
-            onClick={() => handleLikeClick(1, setIsLiked)}
+            onClick={() => handleLikeClick(1)}
             aria-label="like"
             size="small"
           >
@@ -259,7 +259,7 @@ export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
             {convertNumber(totalReaction)}
           </Typography>
           <IconButton
-            onClick={() => handleLikeClick(0, setIsDisliked)}
+            onClick={() => handleLikeClick(0)}
             aria-label="dislike"
             size="small"
           >
