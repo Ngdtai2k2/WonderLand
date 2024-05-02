@@ -20,3 +20,7 @@ export function convertNumber(number) {
     return (number / 1000000).toFixed(1) + 'M';
   }
 }
+
+export function changeState(setState) {
+  setState((prev) => !prev);
+}

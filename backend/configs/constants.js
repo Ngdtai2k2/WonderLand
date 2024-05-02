@@ -36,12 +36,23 @@ const commentPopulateOptions = [
     select: "url type",
   },
   {
-    path: "parentCommentId",
-    populate: {
-      path: "media",
-      model: "Media",
-      select: "url",
-    },
+    path: "replies",
+    populate: [
+      {
+        path: "author",
+        select: "id fullname",
+        populate: {
+          path: "media",
+          model: "Media",
+          select: "url type",
+        },
+      },
+      {
+        path: "media",
+        model: "Media",
+        select: "url type",
+      },
+    ],
   },
 ];
 

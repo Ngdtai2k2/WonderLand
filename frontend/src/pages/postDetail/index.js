@@ -67,6 +67,10 @@ export default function PostDetail() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
+  useEffect(() => {
+    document.title = post ? post.title : 'Loading...';
+  });
+
   const validationSchema = Yup.object({
     content: Yup.string().max(
       1000,
@@ -255,7 +259,9 @@ export default function PostDetail() {
             </Box>
           </Box>
           {/* render comments */}
-          <ListComments postId={id} newComment={newComment} />
+          <Box marginBottom={4}>
+            <ListComments postId={id} newComment={newComment} />
+          </Box>
         </Box>
       ) : (
         <NoData />

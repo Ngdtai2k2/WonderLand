@@ -20,6 +20,10 @@ const reactionSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Comment",
     },
+    replyId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Comment.replies",
+    },
   },
   {
     timestamps: true,

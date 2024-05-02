@@ -1,5 +1,6 @@
 const { postPopulateOptions } = require("../configs/constants");
 const optionsPaginate = require("../configs/optionsPaginate");
+const Comments = require("../models/Comments");
 const Post = require("../models/Post");
 const Reaction = require("../models/Reaction");
 const User = require("../models/User");
@@ -9,49 +10,7 @@ const savePostService = require("../services/savePostService");
 
 const reactionController = {
   handleLikePost: async (req, res) => {
-    try {
-      const { id, author, type } = req.body;
-
-      const post = await Post.findById(id);
-
-      if (!post) {
-        return res.status(404).json({ message: "Post not found!" });
-      }
-
-      const reaction = await Reaction.findOne({
-        author,
-        postId: id,
-      });
-
-      if (reaction) {
-        if (reaction.type == type) {
-          await Reaction.findOneAndDelete(reaction._id);
-          return res.status(200).json({ removed: true });
-        } else {
-          await Reaction.findOneAndUpdate(
-            { _id: reaction._id },
-            {
-              type: type,
-            },
-            {
-              new: true,
-            }
-          );
-          return res.status(200).json({ message: "Reaction updated!" });
-        }
-      } else {
-        await Reaction.create({
-          author: author,
-          type: type,
-          postId: id,
-        });
-        return res.status(201).json({ message: "Reaction saved!" });
-      }
-    } catch (error) {
-      return res
-        .status(500)
-        .json({ message: "An error occurred please try again later!" });
-    }
+    reactionService.handleReaction(req, res, 'postId');
   },
 
   hasReactionPost: async (userId, postId) => {
@@ -127,6 +86,55 @@ const reactionController = {
       return res.status(200).json({ result });
     } catch (error) {
       console.error(error.message);
+      return res
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
+    }
+  },
+
+  handleLikeComment: async (req, res) => {
+    reactionService.handleReaction(req, res, 'commentId');
+
+  },
+
+  handleLikeReply: async (req, res) => {
+    try {
+      const { id, author, type } = req.body;
+
+      const reply = await Comments.findOne({ "replies._id": id });
+      if (!reply) {
+        return res.status(404).json({ message: "Reply not found!" });
+      }
+      const reaction = await Reaction.findOne({
+        author,
+        replyId: id,
+      });
+      if(reaction) {
+        if (reaction.type == type) {
+          await Reaction.findOneAndDelete(reaction._id);
+          return res.status(200).json({ removed: true });
+        } else {
+          await Reaction.findOneAndUpdate(
+            { _id: reaction._id },
+            {
+              type: type,
+            },
+            {
+              new: true,
+            }
+          );
+          return res.status(200).json({ message: "Reaction updated!" });
+        }
+      } else {
+        await Reaction.create({
+          author: author,
+          type: type,
+          replyId: id,
+        });
+        return res.status(201).json({ message: "Reaction saved!" });
+      }
+    } catch (error) {
+      console.log(error.message);
       return res
         .status(500)
         .json({ message: "An error occurred please try again later!" });

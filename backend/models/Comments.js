@@ -21,10 +21,36 @@ const commentSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Media",
     },
-    parentCommentId : {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Comment",
-    }
+    replies: [
+      {
+        author: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+          required: true,
+        },
+        commentId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Comment",
+          required: true,
+        },
+        content: { 
+          type: String,
+          maxLength: 1000,
+        },
+        media: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Media",
+        },
+        createdAt: {
+          type: Date,
+          default: new Date().getTime(),
+        },
+        updatedAt: {
+          type: Date,
+          default: new Date().getTime(),
+        },
+      }
+    ]
   },
   { timestamps: true }
 );
