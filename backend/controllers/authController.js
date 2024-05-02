@@ -41,19 +41,52 @@ const authController = {
     );
   },
 
+  checkUniqueNickname: async (req, res) => {
+    try {
+      const { nickname } = req.body;
+      const uniqueNickname = await User.findOne({ nickname: nickname });
+      
+      if (uniqueNickname) {
+        return res.json({ unique: false });
+      } else {
+        return res.json({ unique: true });
+      }
+    } catch (err) {
+      return res
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
+    }
+  },
+
   registerUser: async (req, res) => {
     try {
+      const { fullname, email, nickname, password } = req.body;
+
+      const uniqueEmail = User.findOne({ email: email });
+
+      if (uniqueEmail) {
+        return res.status(400).json({ message: "Email already exists!" });
+      }
+
+      const uniqueNickname = User.findOne({ nickname: nickname });
+      if (uniqueNickname) {
+        return res.status(400).json({ message: "Nickname already exists!" });
+      }
+
       const salt = await bcrypt.genSalt(10);
-      const hashed = await bcrypt.hash(req.body.password, salt);
+      const hashed = await bcrypt.hash(password, salt);
 
       const newUser = new User({
-        email: req.body.email,
+        email: email,
         password: hashed,
-        fullname: req.body.fullname,
+        fullname: fullname,
+        nickname: nickname,
       });
 
       const user = await newUser.save();
-      res.status(201).json({ message: 'Successful account registration!', user: user});
+      res
+        .status(201)
+        .json({ message: "Successful account registration!", user: user });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
@@ -109,7 +142,9 @@ const authController = {
         return res.status(200).json(responseData);
       }
     } catch (error) {
-      return res.status(500).json({ message: "An error occurred please try again later!" });
+      return res
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
     }
   },
 
@@ -167,7 +202,9 @@ const authController = {
         }
       );
     } catch (error) {
-      return res.status(500).json({ message: "An error occurred please try again later!" });
+      return res
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
     }
   },
 
@@ -179,7 +216,9 @@ const authController = {
 
       return res.status(200).json({ message: "Successfully logged out!" });
     } catch (error) {
-      return res.status(500).json({ message: "An error occurred please try again later!" });
+      return res
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
     }
   },
 
@@ -208,7 +247,9 @@ const authController = {
         .status(200)
         .json({ user: updatedUser, message: "Changed password!" });
     } catch (error) {
-      return res.status(500).json({ message: "An error occurred please try again later!" });
+      return res
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
     }
   },
 
@@ -253,16 +294,19 @@ const authController = {
         message: "The confirmation code has been sent, please check the email",
       });
     } catch (error) {
-      return res.status(500).json({ message: "An error occurred please try again later!" });
+      return res
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
     }
   },
-  
+
   resetPassword: async (req, res) => {
     try {
       const { email, token, newPassword } = req.body;
       const user = await User.findOne({ email });
 
-      if (!user) return res.status(404).json({ message: "Email not registered!" });
+      if (!user)
+        return res.status(404).json({ message: "Email not registered!" });
       if (!token)
         return res.status(404).json({ message: "Please provide tokens!" });
       if (!newPassword)
@@ -290,7 +334,9 @@ const authController = {
         .status(200)
         .json({ message: "Reset password was successful!" });
     } catch (error) {
-      return res.status(500).json({ message: "An error occurred please try again later!" });
+      return res
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
     }
   },
 };

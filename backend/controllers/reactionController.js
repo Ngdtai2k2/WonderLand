@@ -1,3 +1,5 @@
+const mongoose = require("mongoose");
+
 const { postPopulateOptions } = require("../configs/constants");
 const optionsPaginate = require("../configs/optionsPaginate");
 const Comments = require("../models/Comments");
@@ -39,17 +41,20 @@ const reactionController = {
 
   getPostUserReacted: async (req, res) => {
     try {
-      const { userId } = req.body;
-      if (!userId) {
-        return res
-          .status(404)
-          .json({ message: "Please provide your User ID!" });
+      const { author } = req.body;
+      if (!author) {
+        return res.status(404).json({ message: "Please provide your userId!" });
       }
+      const user = await (mongoose.Types.ObjectId.isValid(author)
+        ? User.findOne({ _id: author })
+        : User.findOne({ nickname: author }));
 
-      // Lọc dữ liệu trước
-      const reactionPosts = await Reaction.find({ author: userId }).populate(
+      if (!user) return res.status(404).json({ message: "User not found!" });
+
+      const reactionPosts = await Reaction.find({ author: user._id }).populate(
         "postId"
       );
+
       const filteredPosts = reactionPosts.filter(
         (reactionPost) => reactionPost.postId
       );
@@ -57,23 +62,17 @@ const reactionController = {
       const postIdList = filteredPosts.map((post) => post.postId);
 
       const options = optionsPaginate(req);
-      const result = await Post.paginate(
-        { _id: { $in: postIdList } },
-        options
-      );
+      const result = await Post.paginate({ _id: { $in: postIdList } }, options);
 
       result.docs = await Promise.all(
         result.docs.map(async (reactionPost) => {
           const postId = reactionPost._id;
           let hasReacted = null;
           let hasSavedPost = null;
-          const user = await User.findById(userId);
-          if (!user)
-            return res.status(404).json({ message: "User not found!" });
 
           [hasReacted, hasSavedPost] = await Promise.all([
-            reactionService.hasReactionPost(userId, postId),
-            savePostService.hasSavePost(userId, postId),
+            reactionService.hasReactionPost(user._id, postId),
+            savePostService.hasSavePost(user._id, postId),
           ]);
 
           const [totalReaction, totalComment] = await Promise.all([
@@ -95,6 +94,7 @@ const reactionController = {
 
       return res.status(200).json({ result });
     } catch (error) {
+      console.log(error.message);
       return res
         .status(500)
         .json({ message: "An error occurred please try again later!" });

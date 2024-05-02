@@ -13,5 +13,6 @@ router.put(
 );
 router.post("/forgot-password", authController.requestResetPassword);
 router.post("/reset-password", authController.resetPassword);
+router.post("/check-nickname", authController.checkUniqueNickname);
 
 module.exports = router;

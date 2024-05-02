@@ -1,6 +1,5 @@
-const User = require("../models/User");
 const mongoose = require("mongoose");
-
+const User = require("../models/User");
 const uploadMediaController = require("./uploadMediaController");
 const mediaController = require("./mediaController");
 const optionsPaginate = require("../configs/optionsPaginate");
@@ -13,7 +12,9 @@ const userController = {
 
       return res.status(200).json({ users });
     } catch (error) {
-      return res.status(500).json({ message: "An error occurred please try again later!" });
+      return res
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
     }
   },
 
@@ -25,24 +26,32 @@ const userController = {
       }
       return res.status(200).json({ message: "User deleted successfully!" });
     } catch (error) {
-      return res.status(500).json({ message: "An error occurred please try again later!" });
+      return res
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
     }
   },
 
   findUserById: async (req, res) => {
     try {
-      if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-        return res.status(404).json({ message: "User not found!" });
+      let user;
+      if (mongoose.Types.ObjectId.isValid(req.params.id)) {
+        user = await User.findOne({ _id: req.params.id })
+          .select("-password -isAdmin")
+          .populate("media");
+      } else {
+        user = await User.findOne({ nickname: req.params.id })
+          .select("-password -isAdmin")
+          .populate("media");
       }
-      const user = await User.findById(req.params.id)
-        .select("-password -isAdmin")
-        .populate("media");
       if (!user) {
-        return res.status(404).json({ message: "User not found!" });
+        return res.status(404).json({ message: "User not found" });
       }
       return res.status(200).json({ user });
     } catch (error) {
-      return res.status(500).json({ message: "An error occurred please try again later!" });
+      return res
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
     }
   },
 
@@ -86,7 +95,9 @@ const userController = {
         req.params.id,
         req.file ? { $set: { ...req.body, media: user.media } } : req.body,
         { new: true }
-      ).select("-password -isAdmin").populate("media");
+      )
+        .select("-password -isAdmin")
+        .populate("media");
 
       return res
         .status(200)

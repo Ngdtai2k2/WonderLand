@@ -6,12 +6,12 @@ const fetchData = (
   items,
   setHasMore,
   page,
-  userId,
+  user,
   type,
 ) => {
   axios
     .post(`${apiLink}?_page=${page.current}&_limit=3`, {
-      author: userId,
+      author: user,
       type: type,
     })
     .then((res) => {
@@ -26,9 +26,9 @@ const fetchData = (
     });
 };
 
-const refresh = (apiLink, setItems, setHasMore, page, userId, type) => {
+const refresh = (apiLink, setItems, setHasMore, page, user, type) => {
   page.current = 1;
-  fetchData(apiLink, setItems, [], setHasMore, page, userId, type);
+  fetchData(apiLink, setItems, [], setHasMore, page, user, type);
 };
 
 export { fetchData, refresh };

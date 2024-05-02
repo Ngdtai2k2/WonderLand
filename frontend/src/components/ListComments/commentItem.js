@@ -200,7 +200,7 @@ export default function CommentItem({
           height: isReply ? 26 : 34,
           cursor: 'pointer',
         }}
-        onClick={() => navigate(`/profile/u/${data.author._id}`)}
+        onClick={() => navigate(`/u/${data.author._id}`)}
       />
       <Box width="100%">
         <Box display="flex" flexDirection="row">
@@ -210,7 +210,7 @@ export default function CommentItem({
             display="flex"
             alignItems="flex-start"
             sx={{ cursor: 'pointer' }}
-            onClick={() => navigate(`/profile/u/${data.author._id}`)}
+            onClick={() => navigate(`/u/${data.author._id}`)}
           >
             {data.author.fullname}
           </Typography>

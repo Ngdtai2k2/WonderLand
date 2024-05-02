@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const { postPopulateOptions } = require("../configs/constants");
 const optionsPaginate = require("../configs/optionsPaginate");
 const Post = require("../models/Post");
@@ -45,15 +46,21 @@ const savePostController = {
 
   getSavePostByUser: async (req, res) => {
     try {
-      const { userId } = req.body;
-      if (!userId) {
+      const { author } = req.body;
+      if (!author) {
         return res
           .status(404)
           .json({ message: "Please provide your user ID!" });
       }
+      const user = await (mongoose.Types.ObjectId.isValid(author)
+        ? User.findOne({ _id: author })
+        : User.findOne({ nickname: author }));
+
+      if (!user) return res.status(404).json({ message: "User not found!" });
+
       const options = optionsPaginate(req);
 
-      const result = await SavePost.paginate({ user: userId }, options);
+      const result = await SavePost.paginate({ user: user._id }, options);
       await SavePost.populate(result.docs, { path: "postId" });
 
       result.docs = await Promise.all(
@@ -61,16 +68,10 @@ const savePostController = {
           const postId = savedPost.postId;
           let hasReacted = null;
           let hasSavedPost = null;
-          const user = await User.findById(userId);
-          if (!user) {
-            return res
-              .status(404)
-              .json({ message: "User not found!" });
-          }
-
+          
           [hasReacted, hasSavedPost] = await Promise.all([
-            reactionService.hasReactionPost(userId, postId),
-            savePostService.hasSavePost(userId, postId),
+            reactionService.hasReactionPost(user._id, postId),
+            savePostService.hasSavePost(user._id, postId),
           ]);
 
           const [totalReaction, totalComment] = await Promise.all([

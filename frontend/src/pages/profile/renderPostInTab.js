@@ -27,7 +27,7 @@ export default function RenderPostInTab({ apiLink }) {
         const response = await axios.post(
           `${apiLink}?_page=${page}&_limit=5&_order=desc`,
           {
-            userId: id,
+            author: id,
           },
         );
         setData(response.data.result);
