@@ -1,14 +1,6 @@
 import axios from 'axios';
 
-const fetchData = (
-  apiLink,
-  setItems,
-  items,
-  setHasMore,
-  page,
-  user,
-  type,
-) => {
+const fetchData = (apiLink, setItems, items, setHasMore, page, user, type) => {
   axios
     .post(`${apiLink}?_page=${page.current}&_limit=3`, {
       author: user,
