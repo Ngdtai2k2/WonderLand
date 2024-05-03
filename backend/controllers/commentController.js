@@ -210,7 +210,7 @@ const commentController = {
       const populatedReplies = await Comments.populate(replies, [
         {
           path: "author",
-          select: "id fullname",
+          select: "id fullname nickname",
         },
         {
           path: "media",
