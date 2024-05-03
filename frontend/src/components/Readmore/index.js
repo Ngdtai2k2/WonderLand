@@ -8,7 +8,7 @@ export default function ReadMore({ children }) {
   };
   return (
     <>
-      {isReadMore ? text.slice(0, 50) : text}
+      {isReadMore ? text.slice(0, 100) : text}
       <span
         onClick={toggleReadMore}
         style={{ cursor: 'pointer', fontStyle: 'italic' }}
