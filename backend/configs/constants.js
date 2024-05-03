@@ -5,7 +5,7 @@ const postPopulateOptions = [
     populate: {
       path: "media",
       model: "Media",
-      select: "url",
+      select: "url type",
     },
   },
   { path: "media", select: "url type" },
@@ -15,7 +15,7 @@ const postPopulateOptions = [
     populate: {
       path: "media",
       model: "Media",
-      select: "url",
+      select: "url type",
     },
   },
 ];
@@ -27,7 +27,7 @@ const commentPopulateOptions = [
     populate: {
       path: "media",
       model: "Media",
-      select: "url",
+      select: "url type",
     },
   },
   {
