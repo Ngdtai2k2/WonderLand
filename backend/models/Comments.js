@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const mongoosePaginate = require("mongoose-paginate-v2");
+const { format } = require("date-fns");
 
 const commentSchema = new mongoose.Schema(
   {
@@ -33,7 +34,7 @@ const commentSchema = new mongoose.Schema(
           ref: "Comment",
           required: true,
         },
-        content: { 
+        content: {
           type: String,
           maxLength: 1000,
         },
@@ -43,14 +44,14 @@ const commentSchema = new mongoose.Schema(
         },
         createdAt: {
           type: Date,
-          default: new Date().getTime(),
+          default: format(new Date(), "yyyy-MM-dd'T'HH:mm:ssxxx"),
         },
         updatedAt: {
           type: Date,
-          default: new Date().getTime(),
+          default: format(new Date(), "yyyy-MM-dd'T'HH:mm:ssxxx"),
         },
-      }
-    ]
+      },
+    ],
   },
   { timestamps: true }
 );
