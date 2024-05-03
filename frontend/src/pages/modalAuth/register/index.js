@@ -114,10 +114,7 @@ export default function Register({ setTabIndex }) {
         error={formik.touched.nickname && Boolean(formik.errors.nickname)}
         helperText={formik.touched.nickname && formik.errors.nickname}
       />
-      <Typography
-        variant="caption"
-        color={uniqueNickName ? '' : 'error'}
-      >
+      <Typography variant="caption" color={uniqueNickName ? '' : 'error'}>
         {process.env.REACT_APP_DOMAIN}/u/{formik.values.nickname}
       </Typography>
       <TextField

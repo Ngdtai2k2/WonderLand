@@ -14,6 +14,7 @@ import Link from '@mui/material/Link';
 import Collapse from '@mui/material/Collapse';
 import Badge from '@mui/material/Badge';
 import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
 
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
 import ArrowDropUpRoundedIcon from '@mui/icons-material/ArrowDropUpRounded';
@@ -32,6 +33,7 @@ import { useToastTheme, BaseApi } from '../../constants/constant';
 import { createAxios } from '../../createInstance';
 import { BoxAlignCenter, ButtonLink, ImageStyle } from './styles';
 import { VisuallyHiddenInput } from '../../pages/styles';
+import { renderContentReply } from '../../utils/helperFunction';
 
 export default function CommentItem({
   data,
@@ -97,7 +99,10 @@ export default function CommentItem({
         }
         const formData = new FormData();
         formData.append('author', user?._id);
-        formData.append('content', values.contentReply);
+        formData.append(
+          'content',
+          `@${data.author.nickname} ${values.contentReply}`,
+        );
         if (values[`file-${data._id}`]) {
           formData.append('fileReply', values[`file-${data._id}`]);
         }
@@ -200,7 +205,7 @@ export default function CommentItem({
           height: isReply ? 26 : 34,
           cursor: 'pointer',
         }}
-        onClick={() => navigate(`/u/${data.author._id}`)}
+        onClick={() => navigate(`/u/${data.author.nickname}`)}
       />
       <Box width="100%">
         <Box display="flex" flexDirection="row">
@@ -210,9 +215,9 @@ export default function CommentItem({
             display="flex"
             alignItems="flex-start"
             sx={{ cursor: 'pointer' }}
-            onClick={() => navigate(`/u/${data.author._id}`)}
+            onClick={() => navigate(`/u/${data.author.nickname}`)}
           >
-            {data.author.fullname}
+            {data.author.nickname}
           </Typography>
           <Typography fontSize="10px" marginLeft={0.5}>
             {moment(data?.createdAt).fromNow()}
@@ -220,7 +225,7 @@ export default function CommentItem({
         </Box>
         <Box display="flex" flexDirection="column">
           <Typography variant={isReply ? 'caption' : 'body2'}>
-            {data.content}
+            {renderContentReply(data.content)}
           </Typography>
           {data.media?.url && <ImageStyle src={data.media?.url} alt="" />}
         </Box>
@@ -317,6 +322,15 @@ export default function CommentItem({
               margin="normal"
               type="text"
               placeholder="Enter your comment..."
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Typography variant="body2">
+                      @{data.author.nickname}
+                    </Typography>
+                  </InputAdornment>
+                ),
+              }}
               value={formik.values.contentReply}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
