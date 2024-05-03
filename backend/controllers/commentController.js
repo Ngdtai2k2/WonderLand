@@ -211,6 +211,11 @@ const commentController = {
         {
           path: "author",
           select: "id fullname nickname",
+          populate: {
+            path: "media",
+            model: "Media",
+            select: "url type",
+          },
         },
         {
           path: "media",

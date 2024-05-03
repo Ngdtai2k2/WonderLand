@@ -99,10 +99,11 @@ export default function CommentItem({
         }
         const formData = new FormData();
         formData.append('author', user?._id);
-        formData.append(
-          'content',
-          `@${data.author.nickname} ${values.contentReply}`,
-        );
+        const contentData =
+          user?.nickname === data.author.nickname
+            ? values.contentReply
+            : `@${data.author.nickname} ${values.contentReply}`;
+        formData.append('content', contentData);
         if (values[`file-${data._id}`]) {
           formData.append('fileReply', values[`file-${data._id}`]);
         }
@@ -326,7 +327,9 @@ export default function CommentItem({
                 startAdornment: (
                   <InputAdornment position="start">
                     <Typography variant="body2">
-                      @{data.author.nickname}
+                      {user?.nickname === data.author.nickname
+                        ? null
+                        : `@${data.author.nickname}`}
                     </Typography>
                   </InputAdornment>
                 ),
