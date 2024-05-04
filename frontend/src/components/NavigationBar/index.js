@@ -22,14 +22,14 @@ import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import FileUploadRoundedIcon from '@mui/icons-material/FileUploadRounded';
 import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
 
-import { createAxios } from '../../createInstance';
-import { logOut } from '../../redux/apiRequest/authApi';
-import { logOutSuccess } from '../../redux/slice/userSlice';
 import DrawerList from '../../components/DrawerList';
 import ModalAuth from '../../pages/modalAuth';
 import { useToastTheme } from '../../constants/constant';
+import { createAxios } from '../../createInstance';
+import { logOut } from '../../redux/apiRequest/authApi';
+import { logOutSuccess } from '../../redux/slice/userSlice';
 
-export default function NavigationBar() {
+export default function NavigationBar({ isAdmin }) {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [openModal, setOpenModal] = useState(false);
@@ -102,7 +102,7 @@ export default function NavigationBar() {
               role="presentation"
               onClick={toggleDrawer(false)}
             >
-              <DrawerList />
+              <DrawerList isAdmin={isAdmin} />
             </Box>
           </Drawer>
           <Typography

@@ -1,19 +1,14 @@
+import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+
 import Link from '@mui/material/Link';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 
-import BarChartRoundedIcon from '@mui/icons-material/BarChartRounded';
-import TrendingUpRoundedIcon from '@mui/icons-material/TrendingUpRounded';
-import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
-import RestoreRoundedIcon from '@mui/icons-material/RestoreRounded';
-import QuestionMarkRoundedIcon from '@mui/icons-material/QuestionMarkRounded';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import CustomListItemButton from '../CustomListItemButton';
+import { adminDrawerList, publicDrawerList } from '../../constants/drawerlist';
 
-function DrawerList() {
+function DrawerList({ isAdmin }) {
   const location = useLocation();
   const navigate = useNavigate();
   const [activeLink, setActiveLink] = useState(location.pathname);
@@ -26,6 +21,9 @@ function DrawerList() {
   const setSelectedLink = (link) => {
     return link === activeLink ? true : false;
   };
+
+  const itemsToMap = isAdmin ? adminDrawerList : publicDrawerList;
+
   return (
     <List>
       <ListItem>
@@ -33,61 +31,15 @@ function DrawerList() {
           Wonder Land
         </Link>
       </ListItem>
-      <ListItem disablePadding>
-        <ListItemButton
-          selected={setSelectedLink('/')}
-          onClick={() => handleLinkClick('/')}
-        >
-          <ListItemIcon>
-            <HomeRoundedIcon />
-          </ListItemIcon>
-          <ListItemText primary={'Home'} />
-        </ListItemButton>
-      </ListItem>
-      <ListItem disablePadding>
-        <ListItemButton
-          selected={setSelectedLink('/top')}
-          onClick={() => handleLinkClick('/top')}
-        >
-          <ListItemIcon>
-            <BarChartRoundedIcon />
-          </ListItemIcon>
-          <ListItemText primary={'Top'} />
-        </ListItemButton>
-      </ListItem>
-      <ListItem disablePadding>
-        <ListItemButton
-          selected={setSelectedLink('/trend')}
-          onClick={() => handleLinkClick('/trend')}
-        >
-          <ListItemIcon>
-            <TrendingUpRoundedIcon />
-          </ListItemIcon>
-          <ListItemText primary={'Trend'} />
-        </ListItemButton>
-      </ListItem>
-      <ListItem disablePadding>
-        <ListItemButton
-          selected={setSelectedLink('/fresh')}
-          onClick={() => handleLinkClick('/fresh')}
-        >
-          <ListItemIcon>
-            <RestoreRoundedIcon />
-          </ListItemIcon>
-          <ListItemText primary={'Fresh'} />
-        </ListItemButton>
-      </ListItem>
-      <ListItem disablePadding>
-        <ListItemButton
-          selected={setSelectedLink('/ask')}
-          onClick={() => handleLinkClick('/ask')}
-        >
-          <ListItemIcon>
-            <QuestionMarkRoundedIcon />
-          </ListItemIcon>
-          <ListItemText primary={'Ask'} />
-        </ListItemButton>
-      </ListItem>
+      {itemsToMap.map((item, index) => (
+        <CustomListItemButton
+          key={index}
+          selected={setSelectedLink(item.link)}
+          onClick={() => handleLinkClick(item.link)}
+          icon={item.icon}
+          text={item.text}
+        />
+      ))}
     </List>
   );
 }
