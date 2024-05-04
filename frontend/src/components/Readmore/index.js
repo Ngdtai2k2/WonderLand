@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 export default function ReadMore({ children }) {
   const [isReadMore, setIsReadMore] = useState(children.length > 100);
-  
+
   const text = children;
   const toggleReadMore = () => {
     setIsReadMore(!isReadMore);
