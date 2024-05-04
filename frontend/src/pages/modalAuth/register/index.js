@@ -50,8 +50,8 @@ export default function Register({ setTabIndex }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      await registerUser(values, dispatch, toastTheme);
-      setTabIndex(0);
+      const res = await registerUser(values, dispatch, toastTheme);
+      setTabIndex(res ? 0 : 1);
     },
   });
 
