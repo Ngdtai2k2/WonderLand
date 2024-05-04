@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import notFoundLight from '../../assets/svg/404-light.svg';
 import notFoundDark from '../../assets/svg/404-dark.svg';
 
@@ -6,6 +6,10 @@ import { useTheme } from '@mui/material/styles';
 import { DivStyle, ImageStyle } from './styles';
 
 export default function NotFound() {
+  useEffect(() => {
+    document.title = 'Page Not Found';
+  });
+
   const theme = useTheme();
   const currentMode = theme.palette.mode;
 
