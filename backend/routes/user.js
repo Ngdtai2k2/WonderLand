@@ -5,7 +5,6 @@ const storage = require("../configs/multer");
 const postController = require("../controllers/postController");
 
 router.post("/post", postController.getAllPostByUserId);
-router.get("/", userController.getAllUsers);
 router.get("/:id", userController.findUserById);
 router.delete(
   "/:id",
@@ -18,5 +17,8 @@ router.put(
   storage.single("file"),
   userController.updateUserById
 );
+router.post("/", verifyMiddleware.tokenAndAdminAuth, userController.getAllUsers);
+router.post("/total", verifyMiddleware.tokenAndAdminAuth, userController.countUser);
+router.post("/today", verifyMiddleware.tokenAndAdminAuth, userController.getNewUser);
 
 module.exports = router;

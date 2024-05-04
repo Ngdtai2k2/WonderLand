@@ -106,6 +106,43 @@ const userController = {
       return res.status(500).json({ message: "Something went wrong!" });
     }
   },
+
+  countUser: async (req, res) => {
+    try {
+      const total = await User.countDocuments();
+      return res.status(200).json({ total });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
+    }
+  },
+  getNewUser: async (req, res) => {
+    try {
+      const options = optionsPaginate(req, "-password");
+      const today = new Date();
+      const startOfToday = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate()
+      );
+      const endOfToday = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate() + 1
+      );
+
+      const users = await User.paginate(
+        { createdAt: { $gte: startOfToday, $lt: endOfToday } },
+        options
+      );
+      return res.status(200).json({ users });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
+    }
+  },
 };
 
 module.exports = userController;

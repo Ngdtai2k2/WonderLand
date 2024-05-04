@@ -15,5 +15,9 @@ export const publicDrawerList = [
 
 export const adminDrawerList = [
   { link: '/', icon: <HomeRoundedIcon />, text: 'Home' },
-  { link: '/admin', icon: <AdminPanelSettingsRoundedIcon />, text: 'Dashboard' },
+  {
+    link: '/admin',
+    icon: <AdminPanelSettingsRoundedIcon />,
+    text: 'Dashboard',
+  },
 ];
