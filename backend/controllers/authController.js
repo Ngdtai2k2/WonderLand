@@ -62,13 +62,13 @@ const authController = {
     try {
       const { fullname, email, nickname, password } = req.body;
 
-      const uniqueEmail = User.findOne({ email: email });
+      const uniqueEmail = await User.findOne({ email: email });
 
       if (uniqueEmail) {
         return res.status(400).json({ message: "Email already exists!" });
       }
 
-      const uniqueNickname = User.findOne({ nickname: nickname });
+      const uniqueNickname = await User.findOne({ nickname: nickname });
       if (uniqueNickname) {
         return res.status(400).json({ message: "Nickname already exists!" });
       }
