@@ -4,7 +4,7 @@ const optionsPaginate = require("../configs/optionsPaginate");
 const Post = require("../models/Post");
 const SavePost = require("../models/SavePost");
 const User = require("../models/User");
-const commentService = require("../services/commentService");
+const commentService = require("../services/comment.service");
 const reactionService = require("../services/reactionService");
 const savePostService = require("../services/savePostService");
 

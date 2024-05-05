@@ -7,7 +7,7 @@ const optionsPaginate = require("../configs/optionsPaginate");
 const uploadMediaController = require("./uploadMediaController");
 const reactionService = require("../services/reactionService");
 const savePostService = require("../services/savePostService");
-const commentService = require("../services/commentService");
+const commentService = require("../services/comment.service");
 const { postPopulateOptions } = require("../configs/constants");
 
 const postController = {

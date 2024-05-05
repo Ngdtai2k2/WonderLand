@@ -6,7 +6,7 @@ const Comments = require("../models/Comments");
 const Post = require("../models/Post");
 const Reaction = require("../models/Reaction");
 const User = require("../models/User");
-const commentService = require("../services/commentService");
+const commentService = require("../services/comment.service");
 const reactionService = require("../services/reactionService");
 const savePostService = require("../services/savePostService");
 
