@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const verifyMiddleware = require("../middleware/verifyToken");
-const storage = require("../configs/multer");
+const storage = require("../configs/multer.config");
 const commentController = require("../controllers/commentController");
 
 router.post(

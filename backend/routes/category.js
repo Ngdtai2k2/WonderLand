@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const verifyMiddleware = require("../middleware/verifyToken");
 const categoriesController = require("../controllers/categoriesController");
-const storage = require("../configs/multer");
+const storage = require("../configs/multer.config");
 const verifyTokenAndAdminAuth = verifyMiddleware.tokenAndAdminAuth;
 
 router.get("/", categoriesController.getAllCategories);

@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const userController = require("../controllers/userController");
 const verifyMiddleware = require("../middleware/verifyToken");
-const storage = require("../configs/multer");
+const storage = require("../configs/multer.config");
 const postController = require("../controllers/postController");
 
 router.post("/post", postController.getAllPostByUserId);
