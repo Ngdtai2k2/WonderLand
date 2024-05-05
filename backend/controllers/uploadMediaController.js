@@ -1,4 +1,4 @@
-const cloudinary = require("../configs/cloudinary");
+const cloudinary = require("../configs/cloudinary.config");
 const mediaController = require("../controllers/mediaController");
 
 const uploadMedia = {
