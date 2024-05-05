@@ -7,7 +7,7 @@ const Post = require("../models/Post");
 const Reaction = require("../models/Reaction");
 const User = require("../models/User");
 const commentService = require("../services/comment.service");
-const reactionService = require("../services/reactionService");
+const reactionService = require("../services/reaction.service");
 const savePostService = require("../services/savePostService");
 
 const reactionController = {

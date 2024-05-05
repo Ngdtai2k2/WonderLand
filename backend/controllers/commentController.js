@@ -2,7 +2,7 @@ const { commentPopulateOptions } = require("../configs/constants");
 const optionsPaginate = require("../configs/optionsPaginate");
 const Comments = require("../models/Comments");
 const User = require("../models/User");
-const reactionService = require("../services/reactionService");
+const reactionService = require("../services/reaction.service");
 const uploadMediaController = require("./uploadMediaController");
 
 const commentController = {
