@@ -6,7 +6,7 @@ const SavePost = require("../models/SavePost");
 const User = require("../models/User");
 const commentService = require("../services/comment.service");
 const reactionService = require("../services/reaction.service");
-const savePostService = require("../services/savePostService");
+const savePostService = require("../services/savePost.service");
 
 const savePostController = {
   handleSavePost: async (req, res) => {

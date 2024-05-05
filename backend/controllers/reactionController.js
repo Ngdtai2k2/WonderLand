@@ -8,7 +8,7 @@ const Reaction = require("../models/Reaction");
 const User = require("../models/User");
 const commentService = require("../services/comment.service");
 const reactionService = require("../services/reaction.service");
-const savePostService = require("../services/savePostService");
+const savePostService = require("../services/savePost.service");
 
 const reactionController = {
   handleLikePost: async (req, res) => {
