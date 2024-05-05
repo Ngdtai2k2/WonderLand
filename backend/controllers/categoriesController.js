@@ -58,7 +58,10 @@ const categoriesController = {
     try {
       const { name, description } = req.body;
       const id = req.params.id;
-
+      
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ message: "Invalid category id!" });
+      }
       const category = await Categories.findById(id).populate("media");
       if (!category) {
         return res.status(404).json({ message: "Category not found!" });
