@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 
-const Post = require("../models/Post");
-const Categories = require("../models/Categories");
-const uploadMediaController = require("./uploadMediaController");
+const Post = require("../models/post.model");
+const Categories = require("../models/categories.model");
+const uploadMediaCloudinary = require("./uploadMediaCloudinary.controller");
 const optionsPaginate = require("../configs/optionsPaginate");
 
 const categoriesController = {
@@ -26,7 +26,7 @@ const categoriesController = {
 
       let data;
       if (req.file.mimetype.startsWith("image/"))
-        data = await uploadMediaController.uploadImage(req, res);
+        data = await uploadMediaCloudinary.uploadImage(req, res);
       else {
         return res.status(415).json({
           message: "File not supported!",
@@ -68,7 +68,7 @@ const categoriesController = {
       }
 
       if (req.file) {
-        const deleteImage = await uploadMediaController.deleteFile(
+        const deleteImage = await uploadMediaCloudinary.deleteFile(
           category.media.cloudinary_id
         );
         if (!deleteImage) {
@@ -79,7 +79,7 @@ const categoriesController = {
         let data;
 
         if (req.file.mimetype.startsWith("image/"))
-          data = await uploadMediaController.uploadImage(req, res);
+          data = await uploadMediaCloudinary.uploadImage(req, res);
         else {
           return res.status(415).json({
             message: "File not supported!",
@@ -140,7 +140,7 @@ const categoriesController = {
             .json({ message: "You can't remove this category because there are linking articles!" });
         }
 
-        const deleteImage = await uploadMediaController.deleteFile(
+        const deleteImage = await uploadMediaCloudinary.deleteFile(
           category.media.cloudinary_id
         );
         if (!deleteImage) {

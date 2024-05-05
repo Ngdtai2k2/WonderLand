@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const verifyMiddleware = require("../middleware/verifyToken");
-const reactionController = require("../controllers/reactionController");
+const reactionController = require("../controllers/reaction.controller");
 
 router.post("/like", verifyMiddleware.token, reactionController.handleLikePost);
 router.post("/post", reactionController.getPostUserReacted);

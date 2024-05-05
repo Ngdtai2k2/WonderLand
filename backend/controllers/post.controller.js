@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 
-const Category = require("../models/Categories");
-const User = require("../models/User");
-const Post = require("../models/Post");
+const Category = require("../models/categories.model");
+const User = require("../models/user.model");
+const Post = require("../models/post.model");
 const optionsPaginate = require("../configs/optionsPaginate");
-const uploadMediaController = require("./uploadMediaController");
+const uploadMediaCloudinary = require("./uploadMediaCloudinary.controller");
 const reactionService = require("../services/reaction.service");
 const savePostService = require("../services/savePost.service");
 const commentService = require("../services/comment.service");
@@ -28,8 +28,8 @@ const postController = {
       let data;
       if (req.file) {
         if (req.file.mimetype.startsWith("image/"))
-          data = await uploadMediaController.uploadImage(req, res);
-        else data = await uploadMediaController.uploadVideo(req, res);
+          data = await uploadMediaCloudinary.uploadImage(req, res);
+        else data = await uploadMediaCloudinary.uploadVideo(req, res);
 
         if (data === null)
           return res.status(400).json({

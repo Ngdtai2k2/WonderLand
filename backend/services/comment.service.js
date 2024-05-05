@@ -1,4 +1,4 @@
-const Comments = require("../models/Comments");
+const Comments = require("../models/comment.model");
 
 const commentService = {
   count: async (postId) => {

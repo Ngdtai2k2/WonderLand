@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const verifyMiddleware = require("../middleware/verifyToken");
-const categoriesController = require("../controllers/categoriesController");
+const categoriesController = require("../controllers/categories.controller");
 const storage = require("../configs/multer.config");
 const verifyTokenAndAdminAuth = verifyMiddleware.tokenAndAdminAuth;
 

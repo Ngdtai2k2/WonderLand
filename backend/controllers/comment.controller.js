@@ -1,9 +1,9 @@
 const { commentPopulateOptions } = require("../constants/constants");
 const optionsPaginate = require("../configs/optionsPaginate");
-const Comments = require("../models/Comments");
-const User = require("../models/User");
+const Comments = require("../models/comment.model");
+const User = require("../models/user.model");
 const reactionService = require("../services/reaction.service");
-const uploadMediaController = require("./uploadMediaController");
+const uploadMediaCloudinary = require("./uploadMediaCloudinary.controller");
 
 const commentController = {
   create: async (req, res) => {
@@ -18,7 +18,7 @@ const commentController = {
 
       if (req.file) {
         if (req.file.mimetype.startsWith("image/"))
-          data = await uploadMediaController.uploadImage(req, res);
+          data = await uploadMediaCloudinary.uploadImage(req, res);
 
         if (data === null)
           return res.status(400).json({ message: "Upload image failed!" });
@@ -50,7 +50,7 @@ const commentController = {
       const comments = await Comments.findById(commentId).populate("media");
       if (comments?.media) {
         if (
-          !(await uploadMediaController.deleteFile(
+          !(await uploadMediaCloudinary.deleteFile(
             comments.media.cloudinary_id
           ))
         ) {
@@ -137,7 +137,7 @@ const commentController = {
       let data;
       if (req.file) {
         if (req.file.mimetype.startsWith("image/"))
-          data = await uploadMediaController.uploadImage(req, res);
+          data = await uploadMediaCloudinary.uploadImage(req, res);
 
         if (data === null)
           return res.status(400).json({ message: "Upload image failed!" });

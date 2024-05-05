@@ -1,5 +1,5 @@
 const cloudinary = require("../configs/cloudinary.config");
-const mediaController = require("../controllers/mediaController");
+const mediaController = require("./media.controller");
 
 const uploadMedia = {
   uploadImage: async (req, res) => {

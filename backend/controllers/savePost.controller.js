@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 const { postPopulateOptions } = require("../constants/constants");
 const optionsPaginate = require("../configs/optionsPaginate");
-const Post = require("../models/Post");
-const SavePost = require("../models/SavePost");
-const User = require("../models/User");
+const Post = require("../models/post.model");
+const SavePost = require("../models/savePost.model");
+const User = require("../models/user.model");
 const commentService = require("../services/comment.service");
 const reactionService = require("../services/reaction.service");
 const savePostService = require("../services/savePost.service");

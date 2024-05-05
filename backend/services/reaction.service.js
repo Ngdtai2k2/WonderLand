@@ -1,6 +1,6 @@
-const Reaction = require("../models/Reaction");
-const Post = require("../models/Post");
-const Comment = require("../models/Comments");
+const Reaction = require("../models/reaction.model");
+const Post = require("../models/post.model");
+const Comment = require("../models/comment.model");
 
 const reactionService = {
   hasReactionPost: async (userId, postId) => {

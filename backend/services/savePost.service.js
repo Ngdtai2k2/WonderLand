@@ -1,4 +1,4 @@
-const SavePost = require("../models/SavePost");
+const SavePost = require("../models/savePost.model");
 
 const savePostService = {
   hasSavePost: async (userId, postId) => {

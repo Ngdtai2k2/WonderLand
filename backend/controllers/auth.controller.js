@@ -6,9 +6,9 @@ const uuid = require("uuid");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 
-const RefreshToken = require("../models/RefreshToken");
-const User = require("../models/User");
-const ResetPassword = require("../models/ResetPassword");
+const RefreshToken = require("../models/refreshToken.model");
+const User = require("../models/user.model");
+const ResetPassword = require("../models/resetPassword.model");
 
 const createMailOptions = require("../configs/mail.config");
 

@@ -3,17 +3,29 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const express = require("express");
 const mongoose = require("mongoose");
+const socketio = require("socket.io");
 
-const authRoute = require("./routes/auth");
-const userRoute = require("./routes/user");
-const categoryRoute = require("./routes/category");
-const postRoute = require("./routes/post");
-const reactionRoute = require("./routes/reaction");
-const savePostRoute = require("./routes/savePost");
-const commentRoute = require("./routes/comment");
+const authRoute = require("./routes/auth.route");
+const userRoute = require("./routes/user.route");
+const categoryRoute = require("./routes/category.route");
+const postRoute = require("./routes/post.route");
+const reactionRoute = require("./routes/reaction.route");
+const savePostRoute = require("./routes/savePost.route");
+const commentRoute = require("./routes/comment.route");
+const UserSocket = require("./models/userSocket.model");
+
+dotenv.config();
 
 const app = express();
-dotenv.config();
+const server = require("http").Server(app);
+const io = socketio(server, {
+  cors: {
+    origin: process.env.CORS_ORIGIN,
+    credentials: true,
+  },
+});
+
+global._io  =  io; 
 
 mongoose
   .connect(process.env.MONGOOSE_DB)
@@ -41,6 +53,27 @@ app.use("/api/v1/reaction", reactionRoute);
 app.use("/api/v1/save-post", savePostRoute);
 app.use("/api/v1/comment", commentRoute);
 
-app.listen(8000, () => {
-  console.log(">>> Server running on port 8000!");
+io.on("connection", (socket) => {
+  console.log("⚡ User connected:", socket.id);
+  const userSocket = new UserSocket({
+    user: socket.handshake.query.userId,
+    socketId: socket.id,
+  });
+  userSocket.save().then(() => {
+    console.log(">>> User socket saved to database");
+  });
+
+  socket.on("disconnect", () => {
+    console.log(">>> User disconnected:", socket.id);
+    UserSocket.findOneAndDelete({ socketId: socket.id }).then(() => {
+      console.log(">>> User socket deleted from database");
+    });
+  });
 });
+
+
+const PORT = process.env.PORT || 8000;
+server.listen(PORT, () => {
+  console.log(`>>> Server running on port ${PORT}`);
+});
+

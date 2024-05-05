@@ -1,7 +1,7 @@
 const router = require("express").Router();
 
 const verifyMiddleware = require("../middleware/verifyToken");
-const postController = require("../controllers/postController");
+const postController = require("../controllers/post.controller");
 const storage = require("../configs/multer.config");
 
 router.post("/create", verifyMiddleware.token, storage.single("file"), postController.create);

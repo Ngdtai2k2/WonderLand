@@ -1,4 +1,4 @@
-const Media = require("../models/Media");
+const Media = require("../models/media.model");
 
 const mediaController = {
   createMedia: async (req, res) => {
