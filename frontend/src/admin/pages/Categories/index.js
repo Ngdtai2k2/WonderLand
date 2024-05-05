@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import Zoom from 'react-medium-image-zoom';
 import { useTheme } from '@emotion/react';
 import axios from 'axios';
@@ -14,13 +13,13 @@ import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import DataTable from '../../components/DataTable';
 import CustomBox from '../../../components/CustomBox';
 import { BaseApi } from '../../../constants/constant';
-import { createAxios } from '../../../createInstance';
+import ModalCategoryForm from './modalCategoryForm';
 
 import 'react-medium-image-zoom/dist/styles.css';
-import ModalAdd from './modalAdd';
 
 export default function Categories() {
   const [openModal, setOpenModal] = useState(false);
+  const [openModalUpdate, setOpenModalUpdate] = useState(false);
   const [categoriesState, setCategoriesState] = useState({
     isLoading: false,
     data: [],
@@ -28,13 +27,9 @@ export default function Categories() {
     page: 1,
     pageSize: 5,
   });
+  const [selectedRowData, setSelectedRowData] = useState(null);
 
   const theme = useTheme();
-  const dispatch = useDispatch();
-
-  const user = useSelector((state) => state.auth.login?.currentUser);
-  const accessToken = user?.accessToken;
-  let axiosJWT = createAxios(user, dispatch);
 
   useEffect(() => {
     document.title = 'Categories management';
@@ -71,6 +66,11 @@ export default function Categories() {
     document.head.appendChild(style);
   }, [theme.palette.mode]);
 
+  const handleOpenModalUpdate = (rowData) => {
+    setSelectedRowData(rowData);
+    setOpenModalUpdate(true);
+  };
+
   const columns = [
     {
       field: '_id',
@@ -81,11 +81,11 @@ export default function Categories() {
       field: 'media',
       headerName: 'Avatar',
       width: 110,
-      renderCell: (values) => {
+      renderCell: (params) => {
         return (
           <Zoom>
             <Avatar
-              src={values.row.media?.url}
+              src={params.row.media?.url}
               sx={{ width: 45, height: 45, p: 0.5 }}
               variant="rounded"
             />
@@ -96,12 +96,12 @@ export default function Categories() {
     {
       field: 'name',
       headerName: 'Name',
-      width: 210,
+      width: 150,
     },
     {
       field: 'description',
       headerName: 'Description',
-      width: 210,
+      width: 250,
     },
     {
       field: 'createdAt',
@@ -109,6 +109,32 @@ export default function Categories() {
       width: 210,
       valueGetter: (values) => {
         return new Date(values).toLocaleString();
+      },
+    },
+    {
+      field: 'updatedAt',
+      headerName: 'Updated at',
+      width: 210,
+      valueGetter: (values) => {
+        return new Date(values).toLocaleString();
+      },
+    },
+    {
+      field: '',
+      headerName: 'Actions',
+      width: 120,
+      renderCell: (params) => {
+        return (
+          <>
+            <Button
+              variant="outlined"
+              color='success'
+              onClick={() => handleOpenModalUpdate(params.row)}
+            >
+              update
+            </Button>
+          </>
+        );
       },
     },
   ];
@@ -133,6 +159,7 @@ export default function Categories() {
         <Box display="flex" justifyContent="flex-end">
           <Button
             variant="contained"
+            color='success'
             sx={{ width: 'fit-content' }}
             onClick={() => setOpenModal(true)}
           >
@@ -144,7 +171,17 @@ export default function Categories() {
         Note*: After adding new data, refresh the page (f5) again to update the
         data.
       </Typography>
-      <ModalAdd openModal={openModal} handleClose={() => setOpenModal(false)} />
+      <ModalCategoryForm
+        openModal={openModal}
+        handleClose={() => setOpenModal(false)}
+        isUpdate={false}
+      />
+      <ModalCategoryForm
+        isUpdate={true}
+        openModal={openModalUpdate}
+        handleClose={() => setOpenModalUpdate(false)}
+        data={selectedRowData}
+      />
       <DataTable
         state={categoriesState}
         setState={setCategoriesState}

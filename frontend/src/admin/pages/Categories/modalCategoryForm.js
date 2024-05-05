@@ -1,36 +1,36 @@
-import React, { useState } from 'react';
-import { toast } from 'react-toastify';
-import { useDispatch, useSelector } from 'react-redux';
-import * as Yup from 'yup';
-import { useFormik } from 'formik';
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import * as Yup from "yup";
+import { useFormik } from "formik";
 
-import Modal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import Badge from '@mui/material/Badge';
-import LoadingButton from '@mui/lab/LoadingButton';
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import Badge from "@mui/material/Badge";
+import LoadingButton from "@mui/lab/LoadingButton";
 
-import { BaseApi, useToastTheme } from '../../../constants/constant';
-import { createAxios } from '../../../createInstance';
-import { ImageStyle } from './styles';
+import { BaseApi, useToastTheme } from "../../../constants/constant";
+import { createAxios } from "../../../createInstance";
+import { ImageStyle } from "./styles";
 
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  bgcolor: 'background.paper',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  bgcolor: "background.paper",
   boxShadow: 24,
   p: 2,
   width: {
-    xs: '95%',
-    md: '50%',
+    xs: "95%",
+    md: "50%",
   },
 };
 
-export default function ModalAdd({ openModal, handleClose }) {
-  const [file, setFile] = useState(null);
+export default function ModalCategoryForm({ openModal, handleClose, isUpdate, data }) {
+  const [file, setFile] = useState();
   const [fetching, setFetching] = useState();
 
   const dispatch = useDispatch();
@@ -41,49 +41,79 @@ export default function ModalAdd({ openModal, handleClose }) {
 
   let axiosJWT = createAxios(user, dispatch);
 
-  const validationSchema = Yup.object({
-    name: Yup.string().required('Please enter a name!'),
-    description: Yup.string().required('Please enter a description!'),
+  useEffect(() => {
+    if (isUpdate && data) {
+      formik.setValues({
+        name: data.name || "",
+        description: data.description || "",
+        file: "",
+      });
+      if (data.media && data.media.url) {
+        setFile(data.media.url);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isUpdate, data]);
+
+  const validateSchemaForCreate = Yup.object({
+    name: Yup.string().required("Please enter a name!"),
+    description: Yup.string().required("Please enter a description!"),
     file: Yup.mixed()
-      .required('Please upload a photo!')
-      .test('fileType', 'File not supported!', (value) => {
+      .required("Please upload a photo!")
+      .test("fileType", "File not supported!", (value) => {
         if (!value) return true;
         const imageTypes = [
-          'image/jpeg',
-          'image/png',
-          'image/jpg',
-          'image/gif',
+          "image/jpeg",
+          "image/png",
+          "image/jpg",
+          "image/gif",
         ];
         return value && imageTypes.includes(value.type);
       }),
   });
 
+  const validateSchemaForUpdate = Yup.object({
+    name: Yup.string(),
+    description: Yup.string(),
+    file: Yup.mixed().test("fileType", "File not supported!", (value) => {
+      if (!value) return true;
+      const imageTypes = ["image/jpeg", "image/png", "image/jpg", "image/gif"];
+      return value && imageTypes.includes(value.type);
+    }),
+  });
+  const validateSchema = isUpdate
+    ? validateSchemaForUpdate
+    : validateSchemaForCreate;
+
   const formik = useFormik({
     initialValues: {
-      name: '',
-      description: '',
-      file: '',
+      name: "",
+      description: "",
+      file: "",
     },
-    validationSchema,
+    validateSchema,
     onSubmit: async (values) => {
       try {
         setFetching(true);
         const formData = new FormData();
-        formData.append('name', values.name);
-        formData.append('description', values.description);
-        formData.append('file', values.file);
 
-        const response = await axiosJWT.postForm(
-          `${BaseApi}/category/create`,
-          formData,
-          {
-            headers: { token: `Bearer ${accessToken}` },
-            'Content-Type': 'multipart/form-data',
-          },
-        );
+        formData.append("name", values.name);
+        formData.append("description", values.description);
+        formData.append("file", values.file);
 
-        formik.resetForm();
-        handleClearFile();
+        const response = await (isUpdate
+          ? axiosJWT.put(`${BaseApi}/category/update/${data?._id}`, formData, {
+              headers: { token: `Bearer ${accessToken}` },
+            })
+          : axiosJWT.post(`${BaseApi}/category/create`, formData, {
+              headers: { token: `Bearer ${accessToken}` },
+            }));
+
+        if (!isUpdate) {
+          formik.resetForm();
+          handleClearFile();
+        }
+
         toast.success(response.data.message, toastTheme);
       } catch (error) {
         toast.error(error.response.data.message, toastTheme);
@@ -95,8 +125,8 @@ export default function ModalAdd({ openModal, handleClose }) {
 
   const handleClearFile = () => {
     setFile(null);
-    document.getElementById('file').value = '';
-    formik.setFieldValue('file', null);
+    document.getElementById("file").value = "";
+    formik.setFieldValue("file", null);
   };
 
   return (
@@ -108,7 +138,9 @@ export default function ModalAdd({ openModal, handleClose }) {
         sx={style}
         method="POST"
       >
-        <Typography variant="h6">Add category</Typography>
+        <Typography variant="h6">
+          {isUpdate ? "Update" : "Add"} category
+        </Typography>
         <TextField
           margin="normal"
           size="small"
@@ -145,11 +177,11 @@ export default function ModalAdd({ openModal, handleClose }) {
               type="file"
               id="file"
               name="file"
-              accept="image/*"
+              accept="image/jpeg,image/png,image/jpg,image/gif"
               onBlur={formik.handleBlur}
               onChange={(event) => {
                 const files = event.currentTarget.files[0];
-                formik.setFieldValue('file', files);
+                formik.setFieldValue("file", files);
                 URL.revokeObjectURL(files);
                 setFile(URL.createObjectURL(files));
               }}
@@ -170,7 +202,7 @@ export default function ModalAdd({ openModal, handleClose }) {
                 badgeContent="x"
                 color="error"
                 onClick={() => handleClearFile()}
-                sx={{ cursor: 'pointer' }}
+                sx={{ cursor: "pointer" }}
               >
                 <ImageStyle src={file} alt="Preview image upload" />
               </Badge>
@@ -183,7 +215,7 @@ export default function ModalAdd({ openModal, handleClose }) {
             variant="outlined"
             type="submit"
           >
-            Add
+            Save
           </LoadingButton>
         </Box>
       </Box>
