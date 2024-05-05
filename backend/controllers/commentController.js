@@ -1,4 +1,4 @@
-const { commentPopulateOptions } = require("../configs/constants");
+const { commentPopulateOptions } = require("../constants/constants");
 const optionsPaginate = require("../configs/optionsPaginate");
 const Comments = require("../models/Comments");
 const User = require("../models/User");

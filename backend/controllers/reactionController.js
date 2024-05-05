@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const { postPopulateOptions } = require("../configs/constants");
+const { postPopulateOptions } = require("../constants/constants");
 const optionsPaginate = require("../configs/optionsPaginate");
 const Comments = require("../models/Comments");
 const Post = require("../models/Post");
