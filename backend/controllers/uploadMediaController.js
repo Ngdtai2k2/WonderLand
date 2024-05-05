@@ -4,7 +4,9 @@ const mediaController = require("../controllers/mediaController");
 const uploadMedia = {
   uploadImage: async (req, res) => {
     try {
-      const data = await cloudinary.uploader.upload(req.file.path);
+      const data = await cloudinary.uploader.upload(req.file.path, {
+        resource_type: "auto",
+      });
       const { secure_url, public_id } = data;
       const newMedia = await mediaController.createMedia({
         url: secure_url,
@@ -12,7 +14,7 @@ const uploadMedia = {
         description: req.body.description,
         cloudinary_id: public_id,
       });
-      return newMedia;
+      return newMedia || null;
     } catch (error) {
       return null;
     }
@@ -30,17 +32,20 @@ const uploadMedia = {
         description: req.body.description,
         cloudinary_id: public_id,
       });
-      return newMedia;
+      return newMedia || null;
     } catch (error) {
       return null;
     }
   },
 
-  deleteFile: async (public_id) => {
+  deleteFile: async (public_id, resource_type) => {
     try {
-      await cloudinary.uploader.destroy(public_id);
+      await cloudinary.uploader.destroy(public_id, {
+        resource_type: resource_type,
+      });
       return true;
     } catch (error) {
+      console.error("Error deleting file:", error);
       return false;
     }
   },
