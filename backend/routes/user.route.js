@@ -17,8 +17,20 @@ router.put(
   storage.single("file"),
   userController.updateUserById
 );
-router.post("/", verifyMiddleware.tokenAndAdminAuth, userController.getAllUsers);
-router.post("/total", verifyMiddleware.tokenAndAdminAuth, userController.countUser);
-router.post("/today", verifyMiddleware.tokenAndAdminAuth, userController.getNewUser);
+router.post(
+  "/",
+  verifyMiddleware.tokenAndAdminAuth,
+  userController.getAllUsers
+);
+router.post(
+  "/total",
+  verifyMiddleware.tokenAndAdminAuth,
+  userController.countUser
+);
+router.post(
+  "/today",
+  verifyMiddleware.tokenAndAdminAuth,
+  userController.getNewUser
+);
 
 module.exports = router;
