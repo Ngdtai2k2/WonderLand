@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const mediaController = require("./mediaController");
+const Post = require("../models/post");
 const Categories = require("../models/Categories");
 const uploadMediaController = require("./uploadMediaController");
 const optionsPaginate = require("../configs/optionsPaginate");
@@ -58,7 +58,7 @@ const categoriesController = {
     try {
       const { name, description } = req.body;
       const id = req.params.id;
-      
+
       if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(400).json({ message: "Invalid category id!" });
       }
@@ -127,11 +127,28 @@ const categoriesController = {
     try {
       const id = req.params.id;
       if (mongoose.Types.ObjectId.isValid(id)) {
-        const category = await Categories.findById(id);
+        const category = await Categories.findById(id).populate("media");
+
         if (!category) {
           return res.status(404).json({ message: "Category not found!" });
         }
-        await mediaController.deleteMedia(req, res, category.media);
+
+        const post = await Post.find({ category: category._id });
+        if (post.length > 0) {
+          return res
+            .status(400)
+            .json({ message: "You can't remove this category because there are linking articles!" });
+        }
+
+        const deleteImage = await uploadMediaController.deleteFile(
+          category.media.cloudinary_id
+        );
+        if (!deleteImage) {
+          return res
+            .status(400)
+            .json({ message: "An error occurred, please try again later!" });
+        }
+
         await Categories.findByIdAndDelete(id);
 
         res.status(200).json({ message: "Deleted category successfully!" });
