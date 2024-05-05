@@ -1,35 +1,40 @@
-import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import { useDispatch, useSelector } from "react-redux";
-import * as Yup from "yup";
-import { useFormik } from "formik";
+import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
 
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
-import Badge from "@mui/material/Badge";
-import LoadingButton from "@mui/lab/LoadingButton";
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import Badge from '@mui/material/Badge';
+import LoadingButton from '@mui/lab/LoadingButton';
 
-import { BaseApi, useToastTheme } from "../../../constants/constant";
-import { createAxios } from "../../../createInstance";
-import { ImageStyle } from "./styles";
+import { BaseApi, useToastTheme } from '../../../constants/constant';
+import { createAxios } from '../../../createInstance';
+import { ImageStyle } from './styles';
 
 const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  bgcolor: "background.paper",
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  bgcolor: 'background.paper',
   boxShadow: 24,
   p: 2,
   width: {
-    xs: "95%",
-    md: "50%",
+    xs: '95%',
+    md: '50%',
   },
 };
 
-export default function ModalCategoryForm({ openModal, handleClose, isUpdate, data }) {
+export default function ModalCategoryForm({
+  openModal,
+  handleClose,
+  isUpdate,
+  data,
+}) {
   const [file, setFile] = useState();
   const [fetching, setFetching] = useState();
 
@@ -44,9 +49,9 @@ export default function ModalCategoryForm({ openModal, handleClose, isUpdate, da
   useEffect(() => {
     if (isUpdate && data) {
       formik.setValues({
-        name: data.name || "",
-        description: data.description || "",
-        file: "",
+        name: data.name || '',
+        description: data.description || '',
+        file: '',
       });
       if (data.media && data.media.url) {
         setFile(data.media.url);
@@ -56,17 +61,17 @@ export default function ModalCategoryForm({ openModal, handleClose, isUpdate, da
   }, [isUpdate, data]);
 
   const validateSchemaForCreate = Yup.object({
-    name: Yup.string().required("Please enter a name!"),
-    description: Yup.string().required("Please enter a description!"),
+    name: Yup.string().required('Please enter a name!'),
+    description: Yup.string().required('Please enter a description!'),
     file: Yup.mixed()
-      .required("Please upload a photo!")
-      .test("fileType", "File not supported!", (value) => {
+      .required('Please upload a photo!')
+      .test('fileType', 'File not supported!', (value) => {
         if (!value) return true;
         const imageTypes = [
-          "image/jpeg",
-          "image/png",
-          "image/jpg",
-          "image/gif",
+          'image/jpeg',
+          'image/png',
+          'image/jpg',
+          'image/gif',
         ];
         return value && imageTypes.includes(value.type);
       }),
@@ -75,9 +80,9 @@ export default function ModalCategoryForm({ openModal, handleClose, isUpdate, da
   const validateSchemaForUpdate = Yup.object({
     name: Yup.string(),
     description: Yup.string(),
-    file: Yup.mixed().test("fileType", "File not supported!", (value) => {
+    file: Yup.mixed().test('fileType', 'File not supported!', (value) => {
       if (!value) return true;
-      const imageTypes = ["image/jpeg", "image/png", "image/jpg", "image/gif"];
+      const imageTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
       return value && imageTypes.includes(value.type);
     }),
   });
@@ -87,9 +92,9 @@ export default function ModalCategoryForm({ openModal, handleClose, isUpdate, da
 
   const formik = useFormik({
     initialValues: {
-      name: "",
-      description: "",
-      file: "",
+      name: '',
+      description: '',
+      file: '',
     },
     validateSchema,
     onSubmit: async (values) => {
@@ -97,9 +102,9 @@ export default function ModalCategoryForm({ openModal, handleClose, isUpdate, da
         setFetching(true);
         const formData = new FormData();
 
-        formData.append("name", values.name);
-        formData.append("description", values.description);
-        formData.append("file", values.file);
+        formData.append('name', values.name);
+        formData.append('description', values.description);
+        formData.append('file', values.file);
 
         const response = await (isUpdate
           ? axiosJWT.put(`${BaseApi}/category/update/${data?._id}`, formData, {
@@ -125,8 +130,8 @@ export default function ModalCategoryForm({ openModal, handleClose, isUpdate, da
 
   const handleClearFile = () => {
     setFile(null);
-    document.getElementById("file").value = "";
-    formik.setFieldValue("file", null);
+    document.getElementById('file').value = '';
+    formik.setFieldValue('file', null);
   };
 
   return (
@@ -139,7 +144,7 @@ export default function ModalCategoryForm({ openModal, handleClose, isUpdate, da
         method="POST"
       >
         <Typography variant="h6">
-          {isUpdate ? "Update" : "Add"} category
+          {isUpdate ? 'Update' : 'Add'} category
         </Typography>
         <TextField
           margin="normal"
@@ -181,7 +186,7 @@ export default function ModalCategoryForm({ openModal, handleClose, isUpdate, da
               onBlur={formik.handleBlur}
               onChange={(event) => {
                 const files = event.currentTarget.files[0];
-                formik.setFieldValue("file", files);
+                formik.setFieldValue('file', files);
                 URL.revokeObjectURL(files);
                 setFile(URL.createObjectURL(files));
               }}
@@ -202,7 +207,7 @@ export default function ModalCategoryForm({ openModal, handleClose, isUpdate, da
                 badgeContent="x"
                 color="error"
                 onClick={() => handleClearFile()}
-                sx={{ cursor: "pointer" }}
+                sx={{ cursor: 'pointer' }}
               >
                 <ImageStyle src={file} alt="Preview image upload" />
               </Badge>

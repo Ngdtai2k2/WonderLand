@@ -128,7 +128,7 @@ export default function Categories() {
           <>
             <Button
               variant="outlined"
-              color='success'
+              color="success"
               onClick={() => handleOpenModalUpdate(params.row)}
             >
               update
@@ -159,7 +159,7 @@ export default function Categories() {
         <Box display="flex" justifyContent="flex-end">
           <Button
             variant="contained"
-            color='success'
+            color="success"
             sx={{ width: 'fit-content' }}
             onClick={() => setOpenModal(true)}
           >
