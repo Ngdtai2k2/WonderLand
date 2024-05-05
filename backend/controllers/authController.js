@@ -10,7 +10,7 @@ const RefreshToken = require("../models/RefreshToken");
 const User = require("../models/User");
 const ResetPassword = require("../models/ResetPassword");
 
-const createMailOptions = require("../configs/mailOptions");
+const createMailOptions = require("../configs/mail.config");
 
 dotenv.config();
 
