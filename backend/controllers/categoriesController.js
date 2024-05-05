@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const Post = require("../models/post");
+const Post = require("../models/Post");
 const Categories = require("../models/Categories");
 const uploadMediaController = require("./uploadMediaController");
 const optionsPaginate = require("../configs/optionsPaginate");
