@@ -1,7 +1,6 @@
 import { BaseApi } from '../constants/constant';
 
 const getNotificationByUserId = async (
-  setIsLoading,
   setItems,
   items,
   setHasMore,
@@ -10,7 +9,6 @@ const getNotificationByUserId = async (
   accessToken,
   axiosJWT,
 ) => {
-  setIsLoading(true);
   await axiosJWT
     .post(
       `${BaseApi}/notification/user?_page=${page.current}&_limit=7&request_user=${userId}`,
@@ -33,11 +31,9 @@ const getNotificationByUserId = async (
         page.current = page.current + 1;
       }
     });
-  setIsLoading(false);
 };
 
 const refresh = (
-  setIsLoading,
   setItems,
   setHasMore,
   page,
@@ -47,7 +43,6 @@ const refresh = (
 ) => {
   page.current = 1;
   getNotificationByUserId(
-    setIsLoading,
     setItems,
     [],
     setHasMore,
