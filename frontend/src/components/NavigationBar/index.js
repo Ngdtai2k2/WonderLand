@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@emotion/react';
@@ -7,6 +7,7 @@ import { useColorScheme } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
+import Badge from '@mui/material/Badge';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
@@ -22,17 +23,21 @@ import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import FileUploadRoundedIcon from '@mui/icons-material/FileUploadRounded';
 import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
 
+import ListNotifications from '../ListNotifications';
 import DrawerList from '../../components/DrawerList';
 import ModalAuth from '../../pages/modalAuth';
-import { useToastTheme } from '../../constants/constant';
+import { useToastTheme, BaseApi } from '../../constants/constant';
 import { createAxios } from '../../createInstance';
 import { logOut } from '../../redux/apiRequest/authApi';
 import { logOutSuccess } from '../../redux/slice/userSlice';
 
-export default function NavigationBar({ isAdmin }) {
+export default function NavigationBar({ isAdmin, state }) {
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const [anchorElNotifications, setAnchorElNotifications] = useState(null);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [totalUnreadNotifications, setTotalUnreadNotifications] = useState(0);
+  const [dataFromChild, setDataFromChild] = useState();
 
   const { mode, setMode } = useColorScheme();
 
@@ -50,7 +55,7 @@ export default function NavigationBar({ isAdmin }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  let axiosJWT = createAxios(user, dispatch, logOutSuccess);
+  let axiosJWT = user ? createAxios(user, dispatch) : undefined;
 
   const toggleDrawer = (newOpen) => () => {
     setOpenDrawer(newOpen);
@@ -66,7 +71,15 @@ export default function NavigationBar({ isAdmin }) {
 
   const handleLogout = () => {
     handleCloseUserMenu();
-    logOut(dispatch, id, device, navigate, accessToken, axiosJWT, toastTheme);
+    logOut(
+      dispatch,
+      id,
+      device,
+      navigate,
+      accessToken,
+      createAxios(user, dispatch, logOutSuccess),
+      toastTheme,
+    );
   };
 
   const handelNavigate = (path) => {
@@ -78,6 +91,33 @@ export default function NavigationBar({ isAdmin }) {
     handleCloseUserMenu();
   };
   const handleCloseModal = () => setOpenModal(false);
+
+  const countUnreadNotifications = async (userId) => {
+    try {
+      const response = await axiosJWT.post(
+        `${BaseApi}/notification/count-unread?request_user=${userId}`,
+        {
+          id: userId,
+        },
+        {
+          headers: {
+            token: `Bearer ${accessToken}`,
+          },
+        },
+      );
+      setTotalUnreadNotifications(response.data.total);
+    } catch (e) {
+      setTotalUnreadNotifications(0);
+    }
+  };
+
+  useEffect(() => {
+    if (user?._id) {
+      countUnreadNotifications(user?._id);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataFromChild, state]);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -126,9 +166,24 @@ export default function NavigationBar({ isAdmin }) {
           <IconButton aria-label="search">
             <SearchRoundedIcon />
           </IconButton>
-          <IconButton aria-label="search">
-            <NotificationsRoundedIcon />
+          <IconButton
+            aria-label="notifications"
+            onClick={(event) => setAnchorElNotifications(event.currentTarget)}
+          >
+            <Badge
+              color="error"
+              badgeContent={totalUnreadNotifications}
+              max={9}
+            >
+              <NotificationsRoundedIcon />
+            </Badge>
           </IconButton>
+          <ListNotifications
+            open={Boolean(anchorElNotifications)}
+            handleClose={() => setAnchorElNotifications(null)}
+            anchorEl={anchorElNotifications}
+            setState={setDataFromChild}
+          />
           <Tooltip title="Created post">
             <IconButton onClick={() => handelNavigate('/create/post')}>
               <FileUploadRoundedIcon />

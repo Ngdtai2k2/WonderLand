@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -18,41 +18,33 @@ import { Link } from '@mui/material';
 function App() {
   // eslint-disable-next-line no-unused-vars
   const [openModal, setOpenModal] = useState(false);
+  const [event, setEvent] = useState();
 
   const toastTheme = useToastTheme();
-
   const user = useSelector((state) => state.auth.login?.currentUser);
   const accessToken = user?.accessToken;
   const decodedToken = accessToken ? jwtDecode(accessToken) : null;
   const isAdmin = decodedToken ? decodedToken.isAdmin || false : false;
 
-  useEffect(() => {
-    const socket = initializeSocket(user?._id);
+  const socket = initializeSocket(user?._id);
 
-    if (socket.connected) {
-      socket.on('msg-action-reaction', (msg, notification) => {
-        toast.info(
-          <Link
-            underline="none"
-            href={`/post/${notification.link}`}
-            style={{ cursor: 'pointer' }}
-          >
-            {msg}
-          </Link>,
-          toastTheme,
-        );
-      });
-
-      return () => {
-        socket.off('msg-action-reaction');
-      };
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  socket.on('msg-action-reaction', (msg, notification) => {
+    setEvent(notification._id);
+    toast.info(
+      <Link
+        underline="none"
+        href={`/post/${notification.link}`}
+        style={{ cursor: 'pointer' }}
+      >
+        {msg}
+      </Link>,
+      toastTheme,
+    );
+  });
 
   return (
     <Router>
-      <NavigationBar isAdmin={isAdmin} />
+      <NavigationBar isAdmin={isAdmin} state={event} />
       <Routes>
         {adminRoutes.map(({ path, element }) => (
           <Route
