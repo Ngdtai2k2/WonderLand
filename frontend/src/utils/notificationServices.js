@@ -33,14 +33,7 @@ const getNotificationByUserId = async (
     });
 };
 
-const refresh = (
-  setItems,
-  setHasMore,
-  page,
-  userId,
-  accessToken,
-  axiosJWT,
-) => {
+const refresh = (setItems, setHasMore, page, userId, accessToken, axiosJWT) => {
   page.current = 1;
   getNotificationByUserId(
     setItems,
