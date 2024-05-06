@@ -1,10 +1,11 @@
+import React from 'react';
+import ReactDOM from 'react-dom/client';
 import { CssBaseline } from '@mui/material';
 import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/styles';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+
 import './index.css';
 import 'react-toastify/dist/ReactToastify.css';
 
