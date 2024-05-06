@@ -94,7 +94,6 @@ const reactionController = {
 
       return res.status(200).json({ result });
     } catch (error) {
-      console.log(error.message);
       return res
         .status(500)
         .json({ message: "An error occurred please try again later!" });
