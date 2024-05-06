@@ -45,7 +45,8 @@ export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
 
   const user = useSelector((state) => state.auth.login?.currentUser);
   const accessToken = user?.accessToken;
-  let axiosJWT = createAxios(user, dispatch);
+
+  let axiosJWT = user ? createAxios(user, dispatch) : undefined;
 
   useEffect(() => {
     setIsLiked(post?.hasReacted === true);

@@ -41,7 +41,8 @@ export default function PostDetail() {
   const toastTheme = useToastTheme();
   const user = useSelector((state) => state.auth.login?.currentUser);
   const accessToken = user?.accessToken;
-  let axiosJWT = createAxios(user, dispatch);
+
+  let axiosJWT = user ? createAxios(user, dispatch) : undefined;
 
   const getPostById = async (id) => {
     try {

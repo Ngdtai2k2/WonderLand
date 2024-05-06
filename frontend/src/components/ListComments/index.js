@@ -46,7 +46,8 @@ export default function ListComments({ postId, newComment }) {
 
   const user = useSelector((state) => state.auth.login?.currentUser);
   const accessToken = user?.accessToken;
-  let axiosJWT = createAxios(user, dispatch);
+
+  let axiosJWT = user ? createAxios(user, dispatch) : undefined;
 
   useEffect(() => {
     getCommentsByPostId(
