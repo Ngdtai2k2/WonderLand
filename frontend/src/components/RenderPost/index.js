@@ -44,6 +44,7 @@ export default function RenderPost({ apiLink, type }) {
             post={post}
             detail={false}
             xs="100%"
+            sm="70%"
             md="50%"
           />
         ))}
