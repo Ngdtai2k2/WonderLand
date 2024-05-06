@@ -42,8 +42,7 @@ const reactionService = {
   handleReaction: async (req, res, targetField) => {
     try {
       const { id, author, type } = req.body;
-
-      const newType = type === 1 ? true : false;
+      const newType = type === 1;
 
       const targetModel = await (targetField === "postId"
         ? Post
@@ -61,30 +60,41 @@ const reactionService = {
       }
 
       const user = await userModel.findById(targetModel.author);
-
       const typeNotification =
         targetField === "postId" ? 0 : targetField === "commentId" ? 1 : 2;
       const actionField = targetField.slice(0, targetField.indexOf("Id"));
       const action = newType ? "liked" : "disliked";
       const msg = `${user.nickname} just ${action} your ${actionField}!`;
 
+      const reaction = await Reaction.findOne({ author, [targetField]: id });
       const userSocket = await userSocketModel.find({
         user: targetModel.author,
       });
-
-      const reaction = await Reaction.findOne({ author, [targetField]: id });
 
       // if previously interacted
       if (reaction) {
         if (reaction.type === newType) {
           // remove
           await Reaction.findByIdAndDelete(reaction._id);
-          if (await notificationModel.exists({ [targetField]: id })) {
-            await notificationModel.deleteMany({ [targetField]: id });
+          await notificationModel.deleteMany({
+            [targetField]: id,
+            recipient: targetModel.author,
+          });
+
+          if (userSocket.length > 0) {
+            userSocket.forEach((socket) => {
+              global._io
+                .to(socket.socketId)
+                .emit("msg-action-removed-reaction", "remove like", reaction);
+            });
           }
           return res.status(200).json({ removed: true });
         } else {
           // update
+          await notificationModel.deleteMany({
+            [targetField]: id,
+            recipient: targetModel.author,
+          });
           await Reaction.findByIdAndUpdate(
             reaction._id,
             { type },
@@ -108,13 +118,15 @@ const reactionService = {
               });
             }
           }
-
           return res.status(200).json({ message: "Reaction updated!" });
         }
       } else {
         // if you haven't interacted before
+        await notificationModel.deleteMany({
+          [targetField]: id,
+          recipient: targetModel.author,
+        });
         await Reaction.create({ author, type, [targetField]: id });
-
         // push notification
         if (author !== targetModel.author.toString()) {
           const notification = await notificationService.createNotification(
