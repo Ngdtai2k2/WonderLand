@@ -3,9 +3,9 @@ const notificationController = require("../controllers/notification.controller")
 const verifyMiddleware = require("../middleware/verifyToken");
 
 router.post(
-  "/read-notification",
+  "/confirm-read/:id",
   verifyMiddleware.verifyTokenAndUserAuthorization,
-  notificationController.read
+  notificationController.confirmRead
 );
 router.post(
   "/count-unread",

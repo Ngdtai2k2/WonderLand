@@ -2,10 +2,10 @@ const optionsPaginate = require("../configs/optionsPaginate");
 const notificationModel = require("../models/notification.model");
 
 const notificationController = {
-  read: async (req, res) => {
+  confirmRead: async (req, res) => {
     try {
       const { id } = req.params;
-      const notification = await Notification.findById(id);
+      const notification = await notificationModel.findById(id);
       if (!notification) {
         return res.status(404).json({ message: "Notification not found!" });
       }
