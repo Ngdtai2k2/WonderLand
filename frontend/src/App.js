@@ -29,7 +29,7 @@ function App() {
   useEffect(() => {
     const socket = initializeSocket(user?._id);
 
-    if (socket) {
+    if (socket.connected) {
       socket.on('msg-action-reaction', (msg, notification) => {
         toast.info(
           <Link
