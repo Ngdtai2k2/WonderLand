@@ -1,26 +1,21 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import { jwtDecode } from 'jwt-decode';
-
-import NavigationBar from './components/NavigationBar';
 
 import { publicRoutes } from './routes/public';
 import { adminRoutes } from './routes/admin';
 
 import ModalAuth from './pages/modalAuth';
+import NavigationBar from './components/NavigationBar';
 import NotFound from './components/NotFound';
-import { useToastTheme } from './constants/constant';
 import { initializeSocket } from './initializeSocket';
-import { Link } from '@mui/material';
 
 function App() {
   // eslint-disable-next-line no-unused-vars
   const [openModal, setOpenModal] = useState(false);
   const [event, setEvent] = useState();
 
-  const toastTheme = useToastTheme();
   const user = useSelector((state) => state.auth.login?.currentUser);
   const accessToken = user?.accessToken;
   const decodedToken = accessToken ? jwtDecode(accessToken) : null;
@@ -30,16 +25,9 @@ function App() {
 
   socket.on('msg-action-reaction', (msg, notification) => {
     setEvent(notification._id);
-    toast.info(
-      <Link
-        underline="none"
-        href={`/post/${notification.link}`}
-        style={{ cursor: 'pointer' }}
-      >
-        {msg}
-      </Link>,
-      toastTheme,
-    );
+  });
+  socket.on('msg-action-removed-reaction', (msg, deleteReaction) => {
+    setEvent(deleteReaction._id);
   });
 
   return (

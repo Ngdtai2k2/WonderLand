@@ -183,6 +183,8 @@ export default function NavigationBar({ isAdmin, state }) {
             handleClose={() => setAnchorElNotifications(null)}
             anchorEl={anchorElNotifications}
             setState={setDataFromChild}
+            // When the socket event is captured, it will change the state to call the API again
+            eventState={state}
           />
           <Tooltip title="Created post">
             <IconButton onClick={() => handelNavigate('/create/post')}>

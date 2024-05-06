@@ -14,7 +14,10 @@ import IconButton from '@mui/material/IconButton';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 
 import LoadingCircularIndeterminate from '../Loading';
-import { getNotificationByUserId } from '../../utils/notificationServices';
+import {
+  getNotificationByUserId,
+  refresh,
+} from '../../utils/notificationServices';
 import { createAxios } from '../../createInstance';
 import { useToastTheme, BaseApi } from '../../constants/constant';
 import { MenuItemRounded } from './styles';
@@ -24,6 +27,7 @@ export default function ListNotifications({
   handleClose,
   anchorEl,
   setState,
+  eventState,
 }) {
   const [notifications, setNotifications] = useState([]);
   const [hasMore, setHasMore] = useState(true);
@@ -39,10 +43,10 @@ export default function ListNotifications({
   let axiosJWT = user ? createAxios(user, dispatch) : undefined;
 
   useEffect(() => {
+    page.current = 1;
     if (user) {
-      getNotificationByUserId(
+      refresh(
         setNotifications,
-        notifications,
         setHasMore,
         page,
         user?._id,
@@ -50,8 +54,9 @@ export default function ListNotifications({
         axiosJWT,
       );
     }
+    // When the socket event is captured, it will change the state to call the API again
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [eventState]);
 
   const handleConfirmReadNotification = async (notificationId) => {
     try {
