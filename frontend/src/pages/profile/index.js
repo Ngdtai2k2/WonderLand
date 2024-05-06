@@ -159,7 +159,7 @@ export default function Profile() {
               sx={{
                 ...(isSmOrBelow
                   ? { marginTop: 3, width: '100%' }
-                  : { marginLeft: 3, width: '77%' }),
+                  : { marginLeft: 3, width: '65%' }),
               }}
             >
               {tabIndex === 0 && <ReactionTab />}
