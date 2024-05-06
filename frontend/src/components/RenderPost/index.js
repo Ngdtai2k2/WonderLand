@@ -9,7 +9,7 @@ import SentimentVeryDissatisfiedRoundedIcon from '@mui/icons-material/SentimentV
 
 import PostCard from '../PostCard';
 import LoadingCircularIndeterminate from '../Loading';
-import { fetchData, refresh } from '../../utils/apiGetPost';
+import { fetchData, refresh } from '../../utils/postServices';
 import { useSelector } from 'react-redux';
 
 export default function RenderPost({ apiLink, type }) {
