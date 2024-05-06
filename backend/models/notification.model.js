@@ -8,13 +8,12 @@ const notificationSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    // type notification: 0 - post, 2 - comment
+    // type notification: 0 - post, 1 - comment, 2- reply
     type: {
       type: Number,
       required: true,
     },
-    // 0 - pending, 1 - sent
-    status: {
+    read: {
       type: Boolean,
       required: true,
     },
@@ -34,6 +33,10 @@ const notificationSchema = new mongoose.Schema(
       type: String,
       maxLength: 1000,
     },
+    link: {
+      type: String,
+      maxLength: 1000,
+    }
   },
   {
     timestamps: true,

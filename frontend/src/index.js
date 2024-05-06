@@ -8,6 +8,7 @@ import { ToastContainer } from 'react-toastify';
 
 import './index.css';
 import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.min.css';
 
 import { store, persistor } from './redux/store';
 import App from './App';

@@ -12,7 +12,7 @@ const postRoute = require("./routes/post.route");
 const reactionRoute = require("./routes/reaction.route");
 const savePostRoute = require("./routes/savePost.route");
 const commentRoute = require("./routes/comment.route");
-const UserSocket = require("./models/userSocket.model");
+const socketService = require("./services/socket.service");
 
 dotenv.config();
 
@@ -53,24 +53,9 @@ app.use("/api/v1/reaction", reactionRoute);
 app.use("/api/v1/save-post", savePostRoute);
 app.use("/api/v1/comment", commentRoute);
 
-io.on("connection", (socket) => {
-  console.log("⚡ User connected:", socket.id);
-  const userSocket = new UserSocket({
-    user: socket.handshake.query.userId,
-    socketId: socket.id,
-  });
-  userSocket.save().then(() => {
-    console.log(">>> User socket saved to database");
-  });
-
-  socket.on("disconnect", () => {
-    console.log(">>> User disconnected:", socket.id);
-    UserSocket.findOneAndDelete({ socketId: socket.id }).then(() => {
-      console.log(">>> User socket deleted from database");
-    });
-  });
+io.on('connection', (socket) => {
+  socketService.connection(socket);
 });
-
 
 const PORT = process.env.PORT || 8000;
 server.listen(PORT, () => {

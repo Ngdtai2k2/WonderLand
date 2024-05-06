@@ -1,6 +1,10 @@
 const Reaction = require("../models/reaction.model");
 const Post = require("../models/post.model");
 const Comment = require("../models/comment.model");
+const userSocketModel = require("../models/userSocket.model");
+const notificationModel = require("../models/notification.model");
+const userModel = require("../models/user.model");
+const notificationService = require("./notification.service");
 
 const reactionService = {
   hasReactionPost: async (userId, postId) => {
@@ -56,21 +60,79 @@ const reactionService = {
         });
       }
 
+      const user = await userModel.findById(targetModel.author);
+
+      const typeNotification =
+        targetField === "postId" ? 0 : targetField === "commentId" ? 1 : 2;
+      const actionField = targetField.slice(0, targetField.indexOf("Id"));
+      const action = newType ? "liked" : "disliked";
+      const msg = `${user.nickname} just ${action} your ${actionField}!`;
+
+      const userSocket = await userSocketModel.find({
+        user: targetModel.author,
+      });
+
       const reaction = await Reaction.findOne({ author, [targetField]: id });
+
+      // if previously interacted
       if (reaction) {
         if (reaction.type === newType) {
+          // remove
           await Reaction.findByIdAndDelete(reaction._id);
+          if (await notificationModel.exists({ [targetField]: id })) {
+            await notificationModel.deleteMany({ [targetField]: id });
+          }
           return res.status(200).json({ removed: true });
         } else {
+          // update
           await Reaction.findByIdAndUpdate(
             reaction._id,
             { type },
             { new: true }
           );
+          // push notification
+          if (author !== targetModel.author.toString()) {
+            const notification = await notificationService.createNotification(
+              targetModel.author,
+              typeNotification,
+              targetField,
+              id,
+              msg,
+              `${id}`
+            );
+            if (userSocket.length > 0) {
+              userSocket.forEach((socket) => {
+                global._io
+                  .to(socket.socketId)
+                  .emit("msg-action-reaction", msg, notification);
+              });
+            }
+          }
+
           return res.status(200).json({ message: "Reaction updated!" });
         }
       } else {
+        // if you haven't interacted before
         await Reaction.create({ author, type, [targetField]: id });
+
+        // push notification
+        if (author !== targetModel.author.toString()) {
+          const notification = await notificationService.createNotification(
+            targetModel.author,
+            typeNotification,
+            targetField,
+            id,
+            msg,
+            `${id}`
+          );
+          if (userSocket.length > 0) {
+            userSocket.forEach((socket) => {
+              global._io
+                .to(socket.socketId)
+                .emit("msg-action-reaction", msg, notification);
+            });
+          }
+        }
         return res.status(201).json({ message: "Reaction saved!" });
       }
     } catch (error) {
