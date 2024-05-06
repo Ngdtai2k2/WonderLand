@@ -11,7 +11,7 @@ const getNotificationByUserId = async (
 ) => {
   await axiosJWT
     .post(
-      `${BaseApi}/notification/user?_page=${page.current}&_limit=7&request_user=${userId}`,
+      `${BaseApi}/notification/user?_page=${page.current}&_limit=5&_order=desc&request_user=${userId}`,
       {
         id: userId,
       },
@@ -27,7 +27,7 @@ const getNotificationByUserId = async (
         setHasMore(false);
       } else {
         setItems([...items, ...response.data.notifications.docs]);
-        setHasMore(response.data.notifications.docs.length === 7);
+        setHasMore(response.data.notifications.docs.length === 5);
         page.current = page.current + 1;
       }
     });
