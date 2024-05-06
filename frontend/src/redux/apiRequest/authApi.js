@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 import {
   changePasswordFailed,
@@ -15,7 +16,6 @@ import {
   registerSuccess,
 } from '../slice/userSlice';
 
-import { toast } from 'react-toastify';
 import { BaseApi } from '../../constants/constant';
 
 export const loginUser = async (user, dispatch, toastTheme) => {

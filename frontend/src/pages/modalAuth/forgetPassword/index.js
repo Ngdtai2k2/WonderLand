@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import axios from 'axios';
@@ -8,7 +9,6 @@ import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 import { BaseApi, useToastTheme } from '../../../constants/constant';
-import { toast } from 'react-toastify';
 
 export default function ForgetPassword({ setTabIndex }) {
   const [fetching, setFetching] = useState();

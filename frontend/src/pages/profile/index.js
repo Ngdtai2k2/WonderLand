@@ -24,10 +24,10 @@ import CustomBox from '../../components/CustomBox';
 import NotFound from '../../components/NotFound';
 import LoadingCircularIndeterminate from '../../components/Loading';
 import PostTab from './postTab';
-import { BaseApi, useToastTheme } from '../../constants/constant';
-import { ButtonTab, TypographyButtonTab } from '../styles';
 import ReactionTab from './reactionTab';
 import SavedPostTab from './savedPostTab';
+import { BaseApi, useToastTheme } from '../../constants/constant';
+import { ButtonTab, TypographyButtonTab } from '../styles';
 
 export default function Profile() {
   const { id } = useParams();

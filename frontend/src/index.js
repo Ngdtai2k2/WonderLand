@@ -1,19 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { CssBaseline } from '@mui/material';
 import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/styles';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 
-import './index.css';
-import 'react-toastify/dist/ReactToastify.css';
-import 'react-toastify/dist/ReactToastify.min.css';
+import { CssBaseline } from '@mui/material';
 
 import { store, persistor } from './redux/store';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import themes from './themes';
+
+import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.min.css';
+import './index.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

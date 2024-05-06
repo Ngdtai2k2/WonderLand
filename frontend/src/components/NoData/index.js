@@ -1,6 +1,6 @@
 import React from 'react';
-import { useTheme } from '@mui/material/styles';
 
+import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 
 import noDataLight from '../../assets/svg/nodata-light.svg';

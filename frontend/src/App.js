@@ -6,9 +6,9 @@ import { jwtDecode } from 'jwt-decode';
 import { publicRoutes } from './routes/public';
 import { adminRoutes } from './routes/admin';
 
-import ModalAuth from './pages/modalAuth';
 import NavigationBar from './components/NavigationBar';
 import NotFound from './components/NotFound';
+import ModalAuth from './pages/modalAuth';
 import { initializeSocket } from './initializeSocket';
 
 function App() {

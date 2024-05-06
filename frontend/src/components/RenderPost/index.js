@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import ButtonBar from '../ButtonBar';
+import { useSelector } from 'react-redux';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import Box from '@mui/material/Box';
@@ -7,10 +7,10 @@ import Typography from '@mui/material/Typography';
 
 import SentimentVeryDissatisfiedRoundedIcon from '@mui/icons-material/SentimentVeryDissatisfiedRounded';
 
+import ButtonBar from '../ButtonBar';
 import PostCard from '../PostCard';
 import LoadingCircularIndeterminate from '../Loading';
 import { fetchData, refresh } from '../../utils/postServices';
-import { useSelector } from 'react-redux';
 
 export default function RenderPost({ apiLink, type }) {
   const [data, setData] = useState([]);

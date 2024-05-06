@@ -7,8 +7,8 @@ import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
 
 import AskTab from './askTab';
-import CustomBox from '../../components/CustomBox';
 import PostTab from './postTab';
+import CustomBox from '../../components/CustomBox';
 
 export default function CreatePost() {
   const [tabIndex, setTabIndex] = useState(0);

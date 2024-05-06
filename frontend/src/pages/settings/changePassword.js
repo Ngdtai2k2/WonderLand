@@ -5,11 +5,12 @@ import { useFormik } from 'formik';
 
 import Box from '@mui/material/Box';
 import InputAdornment from '@mui/material/InputAdornment';
-import KeyRoundedIcon from '@mui/icons-material/KeyRounded';
-import LockResetRoundedIcon from '@mui/icons-material/LockResetRounded';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+
+import KeyRoundedIcon from '@mui/icons-material/KeyRounded';
+import LockResetRoundedIcon from '@mui/icons-material/LockResetRounded';
 
 import { changePassword } from '../../redux/apiRequest/authApi';
 import { createAxios } from '../../createInstance';

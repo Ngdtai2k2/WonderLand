@@ -1,4 +1,5 @@
 import { Link } from '@mui/material';
+
 import ReadMore from '../components/Readmore';
 
 export function ShortenContent(content, maxLength) {

@@ -20,10 +20,10 @@ import CreateRoundedIcon from '@mui/icons-material/CreateRounded';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import { createAxios } from '../../createInstance';
-import { FlexCenterBox } from './styles';
-import { VisuallyHiddenInput } from '../styles';
 import LoadingCircularIndeterminate from '../../components/Loading';
 import { BaseApi, useToastTheme } from '../../constants/constant';
+import { FlexCenterBox } from './styles';
+import { VisuallyHiddenInput } from '../styles';
 
 export default function PostTab() {
   const [category, setCategory] = useState(null);

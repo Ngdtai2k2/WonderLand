@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
+
 import { BaseApi } from './constants/constant';
 
 const refreshToken = async (id, device) => {

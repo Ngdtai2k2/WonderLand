@@ -23,10 +23,10 @@ import CustomBox from '../../components/CustomBox';
 import LoadingCircularIndeterminate from '../../components/Loading';
 import NoData from '../../components/NoData';
 import PostCard from '../../components/PostCard';
+import ListComments from '../../components/ListComments';
 
 import { useToastTheme, BaseApi } from '../../constants/constant';
 import { createAxios } from '../../createInstance';
-import ListComments from '../../components/ListComments';
 import { VisuallyHiddenInput } from '../styles';
 
 export default function PostDetail() {

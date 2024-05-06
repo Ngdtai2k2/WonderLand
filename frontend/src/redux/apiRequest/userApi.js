@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 import {
   updateUserStart,
   updateUserSuccess,
@@ -7,7 +8,6 @@ import {
   deleteUserFailed,
 } from '../slice/userSlice';
 
-import { toast } from 'react-toastify';
 import { BaseApi } from '../../constants/constant';
 
 export const updateUser = async (

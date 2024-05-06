@@ -13,8 +13,8 @@ import VpnKeyRoundedIcon from '@mui/icons-material/VpnKeyRounded';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import BlockRoundedIcon from '@mui/icons-material/BlockRounded';
 
-import ChangePassword from './changePassword';
 import CustomBox from '../../components/CustomBox';
+import ChangePassword from './changePassword';
 import Account from './account';
 import Profile from './profile';
 
