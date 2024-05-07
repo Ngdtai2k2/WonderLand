@@ -237,7 +237,10 @@ export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
       </CardContent>
       {post?.media &&
         (post.media?.type === 0 ? (
-          <Link underline="none" href={detail && `/post/${post?._id}`}>
+          <Link
+            underline="none"
+            href={detail ? undefined : `/post/${post?._id}`}
+          >
             <CardMediaStyled
               component="img"
               image={post.media?.url}
