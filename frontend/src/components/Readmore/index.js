@@ -1,15 +1,21 @@
+import { Typography } from '@mui/material';
 import React, { useState } from 'react';
 
-export default function ReadMore({ children, maxLength }) {
+export default function ReadMore({ children, maxLength, typographyProps }) {
   const [isReadMore, setIsReadMore] = useState(children.length > maxLength);
 
   const text = children;
   const toggleReadMore = () => {
     setIsReadMore(!isReadMore);
   };
+
   return (
     <>
-      {isReadMore ? text.slice(0, maxLength) : text}
+      {isReadMore ? (
+        <Typography {...typographyProps}>{text.slice(0, maxLength)}</Typography>
+      ) : (
+        <Typography {...typographyProps}>{text}</Typography>
+      )}
       {text.length > maxLength && (
         <span
           onClick={toggleReadMore}

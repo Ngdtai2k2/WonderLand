@@ -38,10 +38,19 @@ export function renderContentReply(content) {
     return (
       <>
         {beforeUsername}
-        <Link href={`/u/${username}`} underline="hover">
+        <Link href={`/u/${username}`} underline="hover" fontSize={13.5}>
           @{username}
         </Link>
-        <ReadMore maxLength={100}>{afterUsername}</ReadMore>
+        <ReadMore
+          maxLength={100}
+          typographyProps={{
+            component: 'span',
+            variant: 'caption',
+            sx: { fontSize: 13.5 },
+          }}
+        >
+          {afterUsername}
+        </ReadMore>
       </>
     );
   }
