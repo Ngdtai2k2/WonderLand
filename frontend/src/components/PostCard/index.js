@@ -194,6 +194,7 @@ export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
               variant="rounded"
               src={post?.author?.media?.url}
               alt={post?.author?.fullname}
+              sx={{width: 48, height: 48}}
             />
           </Link>
         }
@@ -226,10 +227,10 @@ export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
           >
             <Avatar
               src={post?.category?.media?.url}
-              sx={{ width: 15, height: 15 }}
+              sx={{ width: 24, height: 24 }}
               alt={post?.category?.name}
             />
-            <Typography variant="caption" fontSize={10} width="fit-content">
+            <Typography variant="caption" fontSize={12} width="fit-content">
               {post?.category?.name}
             </Typography>
           </BoxSubHeader>
