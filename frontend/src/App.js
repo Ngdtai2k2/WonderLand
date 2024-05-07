@@ -9,7 +9,7 @@ import { adminRoutes } from './routes/admin';
 import NavigationBar from './components/NavigationBar';
 import NotFound from './components/NotFound';
 import ModalAuth from './pages/modalAuth';
-import { initializeSocket } from './initializeSocket';
+import { initializeSocket } from './sockets/initializeSocket';
 
 function App() {
   // eslint-disable-next-line no-unused-vars
