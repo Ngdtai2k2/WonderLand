@@ -201,6 +201,7 @@ export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
             variant="inherit"
             display="flex"
             gap={0.5}
+            width="fit-content"
           >
             <Typography variant="body2" fontWeight={600}>
               {post?.author?.nickname}
@@ -217,7 +218,7 @@ export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
               sx={{ width: 15, height: 15 }}
               alt={post?.category?.name}
             />
-            <Typography variant="caption" fontSize={10}>
+            <Typography variant="caption" fontSize={10} width="fit-content">
               {post?.category?.name}
             </Typography>
           </BoxSubHeader>
