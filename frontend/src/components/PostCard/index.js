@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { ControlBar, Player } from 'video-react';
@@ -9,7 +10,6 @@ import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 
@@ -30,7 +30,13 @@ import {
   useToastTheme,
 } from '../../constants/constant';
 import { convertNumber } from '../../utils/helperFunction';
-import { BoxStyled, CardActionsStyled, CardStyled } from './styles';
+import {
+  BoxStyled,
+  BoxSubHeader,
+  CardActionsStyled,
+  CardMediaStyled,
+  CardStyled,
+} from './styles';
 import 'video-react/dist/video-react.css';
 
 export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
@@ -42,6 +48,7 @@ export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
 
   const dispatch = useDispatch();
   const toastTheme = useToastTheme();
+  const navigate = useNavigate();
 
   const user = useSelector((state) => state.auth.login?.currentUser);
   const accessToken = user?.accessToken;
@@ -192,16 +199,28 @@ export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
             href={`/u/${post?.author?.nickname}`}
             underline="none"
             variant="inherit"
+            display="flex"
+            gap={0.5}
           >
             <Typography variant="body2" fontWeight={600}>
               {post?.author?.nickname}
             </Typography>
+            <Typography variant="caption" fontSize={10}>
+              {moment(post?.createdAt).fromNow()}
+            </Typography>
           </Link>
         }
         subheader={
-          <Typography variant="caption">
-            Posted {moment(post?.createdAt).fromNow()}
-          </Typography>
+          <BoxSubHeader gap={0.5} onClick={() => navigate(``)}>
+            <Avatar
+              src={post?.category?.media?.url}
+              sx={{ width: 15, height: 15 }}
+              alt={post?.category?.name}
+            />
+            <Typography variant="caption" fontSize={10}>
+              {post?.category?.name}
+            </Typography>
+          </BoxSubHeader>
         }
       />
       <CardContent sx={{ paddingX: 1, paddingY: 0, marginBottom: 0.5 }}>
@@ -216,16 +235,10 @@ export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
         </Typography>
         <Typography variant="body2">{post?.content}</Typography>
       </CardContent>
-      {post?.media ? (
-        post.media?.type === 0 ? (
-          <Link underline="none" href={detail ? null : `/post/${post?._id}`}>
-            <CardMedia
-              sx={{
-                border: '0',
-                objectFit: 'contain',
-                maxHeight: '400px',
-                cursor: 'pointer',
-              }}
+      {post?.media &&
+        (post.media?.type === 0 ? (
+          <Link underline="none" href={detail && `/post/${post?._id}`}>
+            <CardMediaStyled
               component="img"
               image={post.media?.url}
               alt={'Post image of ' + post?.author?.fullname}
@@ -236,8 +249,7 @@ export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
           <Player autoPlay muted playsInline src={post.media?.url}>
             <ControlBar autoHide={true} autoHideTime={200}></ControlBar>
           </Player>
-        )
-      ) : null}
+        ))}
       <CardActionsStyled disableSpacing>
         <BoxStyled gap={1}>
           <IconButton
@@ -286,9 +298,7 @@ export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
           <IconButton
             aria-label="save"
             size="small"
-            onClick={() => {
-              handleSavePost();
-            }}
+            onClick={() => handleSavePost()}
           >
             {isSavePost ? (
               <BookmarkRoundedIcon color="warning" />
