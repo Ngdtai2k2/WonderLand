@@ -206,7 +206,66 @@ const postController = {
         .status(200)
         .json({ result: { docs: populatedDocs, ...paginationData } });
     } catch (error) {
-      console.error(error.message);
+      return res
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
+    }
+  },
+
+  getPostByCategory: async (req, res) => {
+    try {
+      const { category } = req.params;
+      const { _isFresh } = req.query;
+
+      const categoryData = await Category.findOne({ name: category });
+      if (!categoryData)
+        return res.status(404).json({ message: "Category not found!" });
+
+      const currentDate = new Date();
+      const oneDayAgo = new Date(currentDate);
+      oneDayAgo.setDate(currentDate.getDate() - 1);
+
+      const options = optionsPaginate(req);
+      // query the posts of the day
+      const { docs, ...paginationData } = await Post.paginate(
+        { category: categoryData._id, createdAt: { $gte: oneDayAgo } },
+        { options }
+      );
+
+      const populatedDocs = await Promise.all(
+        docs.map(async (post) => {
+          let hasReacted = await reactionService.hasReactionPost(
+            post.author,
+            post._id
+          );
+          let hasSavedPost = await savePostService.hasSavePost(
+            post.author,
+            post._id
+          );
+          const [totalReaction, totalComment] = await Promise.all([
+            reactionService.countReactions(post._id, null),
+            commentService.count(post._id),
+          ]);
+          const updatedPost = {
+            ...post.toObject(),
+            hasReacted,
+            hasSavedPost,
+            totalReaction,
+            totalComment,
+          };
+          return await Post.populate(updatedPost, postPopulateOptions);
+        })
+      );
+
+      if (_isFresh === "false") {
+        // sort by total reaction
+        populatedDocs.sort((a, b) => b.totalReaction - a.totalReaction);
+      }
+
+      return res
+        .status(200)
+        .json({ result: { docs: populatedDocs, ...paginationData } });
+    } catch (error) {
       return res
         .status(500)
         .json({ message: "An error occurred please try again later!" });

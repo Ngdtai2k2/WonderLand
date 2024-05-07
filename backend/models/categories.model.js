@@ -17,6 +17,26 @@ const categoriesSchema = new mongoose.Schema(
       ref: "Media",
       required: true,
     },
+    follow: [
+      {
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+          required: true,
+        },
+        isNotification: {
+          type: Boolean,
+          default: false,
+        },
+      },
+    ],
+    like: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+      },
+    ],
   },
   {
     timestamps: true,

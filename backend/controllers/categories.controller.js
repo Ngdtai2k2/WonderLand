@@ -135,9 +135,10 @@ const categoriesController = {
 
         const post = await Post.find({ category: category._id });
         if (post.length > 0) {
-          return res
-            .status(400)
-            .json({ message: "You can't remove this category because there are linking articles!" });
+          return res.status(400).json({
+            message:
+              "You can't remove this category because there are linking articles!",
+          });
         }
 
         const deleteImage = await uploadMediaCloudinary.deleteFile(
@@ -174,6 +175,24 @@ const categoriesController = {
         })
       );
       return res.status(200).json({ result });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
+    }
+  },
+
+  getCategoryDetails: async (req, res) => {
+    try {
+      const { name } = req.body;
+      const category = await Categories.findOne({ name: name }).populate(
+        "media",
+        "url type description"
+      );
+      if (!category) {
+        return res.status(404).json({ message: "Category not found!" });
+      }
+      return res.status(200).json({ category });
     } catch (error) {
       return res
         .status(500)

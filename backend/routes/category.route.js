@@ -22,5 +22,6 @@ router.delete(
   verifyTokenAndAdminAuth,
   categoriesController.deleteCategory
 );
+router.post("/details", categoriesController.getCategoryDetails);
 
 module.exports = router;

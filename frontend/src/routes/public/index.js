@@ -1,5 +1,6 @@
 import NotFound from '../../components/NotFound';
 import AskPage from '../../pages/askPage';
+import CategoryDetail from '../../pages/categoryDetail';
 import CreatePost from '../../pages/createPost';
 import FreshPage from '../../pages/freshPage';
 import HomePage from '../../pages/homePage';
@@ -18,5 +19,6 @@ export const publicRoutes = [
   { path: '/fresh', element: <FreshPage /> },
   { path: '/ask', element: <AskPage /> },
   { path: '/post/:id', element: <PostDetail /> },
+  { path: '/category/:name', element: <CategoryDetail /> },
   { path: '*', element: <NotFound /> },
 ];
