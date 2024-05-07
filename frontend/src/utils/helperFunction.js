@@ -41,7 +41,7 @@ export function renderContentReply(content) {
         <Link href={`/u/${username}`} underline="hover">
           @{username}
         </Link>
-        <ReadMore>{afterUsername}</ReadMore>
+        <ReadMore maxLength={100}>{afterUsername}</ReadMore>
       </>
     );
   }

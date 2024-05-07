@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-export default function ReadMore({ children }) {
-  const [isReadMore, setIsReadMore] = useState(children.length > 100);
+export default function ReadMore({ children, maxLength }) {
+  const [isReadMore, setIsReadMore] = useState(children.length > maxLength);
 
   const text = children;
   const toggleReadMore = () => {
@@ -9,8 +9,8 @@ export default function ReadMore({ children }) {
   };
   return (
     <>
-      {isReadMore ? text.slice(0, 100) : text}
-      {text.length > 100 && (
+      {isReadMore ? text.slice(0, maxLength) : text}
+      {text.length > maxLength && (
         <span
           onClick={toggleReadMore}
           style={{ cursor: 'pointer', fontStyle: 'italic' }}
