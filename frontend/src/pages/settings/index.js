@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux';
 import { useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
@@ -19,18 +20,18 @@ import Account from './account';
 import Profile from './profile';
 
 import { ButtonTab, TypographyButtonTab } from '../styles';
-import { useSelector } from 'react-redux';
 
 export default function Settings() {
   const [tabIndex, setTabIndex] = useState(0);
 
-  const handleChangeTab = (event, newValue) => {
-    setTabIndex(newValue);
-  };
   const theme = useTheme();
   const isSmOrBelow = useMediaQuery(theme.breakpoints.down('sm'));
   const user = useSelector((state) => state.auth.login?.currentUser);
-
+  
+  const handleChangeTab = (event, newValue) => {
+    setTabIndex(newValue);
+  };
+  
   useEffect(() => {
     document.title = `${user?.fullname}'s settings`;
   }, [user]);
