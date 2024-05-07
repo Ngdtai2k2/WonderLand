@@ -9,7 +9,10 @@ import { adminRoutes } from './routes/admin';
 import NavigationBar from './components/NavigationBar';
 import NotFound from './components/NotFound';
 import ModalAuth from './pages/modalAuth';
-import { initializeSocket } from './sockets/initializeSocket';
+import {
+  handleSocketEvents,
+  initializeSocket,
+} from './sockets/initializeSocket';
 
 function App() {
   // eslint-disable-next-line no-unused-vars
@@ -23,12 +26,7 @@ function App() {
 
   const socket = initializeSocket(user?._id);
 
-  socket.on('msg-action-reaction', (msg, notification) => {
-    setEvent(notification._id);
-  });
-  socket.on('msg-action-removed-reaction', (msg, deleteReaction) => {
-    setEvent(deleteReaction._id);
-  });
+  handleSocketEvents(socket, setEvent);
 
   return (
     <Router>

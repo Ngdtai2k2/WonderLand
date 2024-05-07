@@ -19,3 +19,13 @@ export const initializeSocket = (userId) => {
 
   return socket;
 };
+
+export const handleSocketEvents = (socket, setEvent) => {
+  socket.on('msg-action-reaction', (msg, notification) => {
+    setEvent(notification._id);
+  });
+
+  socket.on('msg-action-removed-reaction', (msg, deleteReaction) => {
+    setEvent(deleteReaction._id);
+  });
+};
