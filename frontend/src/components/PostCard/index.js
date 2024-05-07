@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { ControlBar, Player } from 'video-react';
 import { toast } from 'react-toastify';
+import { useTheme } from '@emotion/react';
+import Zoom from 'react-medium-image-zoom';
 
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
@@ -27,6 +29,7 @@ import { createAxios } from '../../createInstance';
 import {
   BaseApi,
   IntersectionObserverOptions,
+  createElementStyleForZoom,
   useToastTheme,
 } from '../../constants/constant';
 import { convertNumber } from '../../utils/helperFunction';
@@ -47,6 +50,7 @@ export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
   const [isSavePost, setIsSavePost] = useState(false);
 
   const dispatch = useDispatch();
+  const theme = useTheme();
   const toastTheme = useToastTheme();
   const navigate = useNavigate();
 
@@ -163,6 +167,10 @@ export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
     }
   }, [isIntersecting]);
 
+  useEffect(() => {
+    createElementStyleForZoom(theme);
+  }, [theme, theme.palette.mode]);
+
   return (
     <CardStyled
       sx={{
@@ -212,7 +220,10 @@ export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
           </Link>
         }
         subheader={
-          <BoxSubHeader gap={0.5} onClick={() => navigate(``)}>
+          <BoxSubHeader
+            gap={0.5}
+            onClick={() => navigate(`/category/${post?.category?.name}`)}
+          >
             <Avatar
               src={post?.category?.media?.url}
               sx={{ width: 15, height: 15 }}
@@ -238,17 +249,25 @@ export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
       </CardContent>
       {post?.media &&
         (post.media?.type === 0 ? (
-          <Link
-            underline="none"
-            href={detail ? undefined : `/post/${post?._id}`}
-          >
-            <CardMediaStyled
-              component="img"
-              image={post.media?.url}
-              alt={'Post image of ' + post?.author?.fullname}
-              lazy="true"
-            />
-          </Link>
+          detail ? (
+            <Zoom>
+              <CardMediaStyled
+                component="img"
+                image={post.media?.url}
+                alt={'Post image of ' + post?.author?.fullname}
+                lazy="true"
+              />
+            </Zoom>
+          ) : (
+            <Link underline="none" href={`/post/${post?._id}`}>
+              <CardMediaStyled
+                component="img"
+                image={post.media?.url}
+                alt={'Post image of ' + post?.author?.fullname}
+                lazy="true"
+              />
+            </Link>
+          )
         ) : (
           <Player autoPlay muted playsInline src={post.media?.url}>
             <ControlBar autoHide={true} autoHideTime={200}></ControlBar>

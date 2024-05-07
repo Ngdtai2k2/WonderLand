@@ -12,7 +12,10 @@ import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 import DataTable from '../../components/DataTable';
 import CustomBox from '../../../components/CustomBox';
-import { BaseApi } from '../../../constants/constant';
+import {
+  BaseApi,
+  createElementStyleForZoom,
+} from '../../../constants/constant';
 import ModalCategoryForm from './modalCategoryForm';
 
 export default function Categories() {
@@ -55,14 +58,8 @@ export default function Categories() {
   }, [categoriesState.page, categoriesState.pageSize]);
 
   useEffect(() => {
-    const style = document.createElement('style');
-    style.textContent = `
-    [data-rmiz-modal-overlay="visible"] {
-      background-color: ${theme.palette.mode === 'dark' ? 'rgba(0, 0, 0, 0.9)' : 'rgba(255, 255, 255, 0.9)'};
-    }
-  `;
-    document.head.appendChild(style);
-  }, [theme.palette.mode]);
+    createElementStyleForZoom(theme);
+  }, [theme, theme.palette.mode]);
 
   const handleOpenModalUpdate = (rowData) => {
     setSelectedRowData(rowData);
