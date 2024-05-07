@@ -15,8 +15,6 @@ import CustomBox from '../../../components/CustomBox';
 import { BaseApi } from '../../../constants/constant';
 import ModalCategoryForm from './modalCategoryForm';
 
-import 'react-medium-image-zoom/dist/styles.css';
-
 export default function Categories() {
   const [openModal, setOpenModal] = useState(false);
   const [openModalUpdate, setOpenModalUpdate] = useState(false);
