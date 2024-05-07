@@ -12,7 +12,7 @@ import PostCard from '../PostCard';
 import LoadingCircularIndeterminate from '../Loading';
 import { fetchData, refresh } from '../../utils/postServices';
 
-export default function RenderPost({ apiLink, type }) {
+export default function RenderPost({ apiLink, type, isHiddenButtonBar }) {
   const [data, setData] = useState([]);
   const [hasMore, setHasMore] = useState(true);
 
@@ -26,7 +26,7 @@ export default function RenderPost({ apiLink, type }) {
 
   return (
     <>
-      <ButtonBar />
+      {!isHiddenButtonBar && <ButtonBar />}
       <Box
         display="flex"
         justifyContent="center"

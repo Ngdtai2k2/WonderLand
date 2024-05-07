@@ -8,5 +8,11 @@ export default function FreshPage() {
     document.title = 'New and fresh posts';
   }, []);
   // with 2 - query fresh posts
-  return <RenderPost apiLink={`${BaseApi}/post/2`} type={0} />;
+  return (
+    <RenderPost
+      apiLink={`${BaseApi}/post/2`}
+      type={0}
+      isHiddenButtonBar={false}
+    />
+  );
 }

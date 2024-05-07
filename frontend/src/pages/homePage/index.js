@@ -8,5 +8,11 @@ export default function HomePage() {
     document.title = 'WonderLand';
   }, []);
   // with 4 - query normal
-  return <RenderPost apiLink={`${BaseApi}/post/4`} type={0} />;
+  return (
+    <RenderPost
+      apiLink={`${BaseApi}/post/4`}
+      type={0}
+      isHiddenButtonBar={false}
+    />
+  );
 }
