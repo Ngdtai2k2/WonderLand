@@ -1,10 +1,10 @@
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import React, { useEffect, useState } from 'react';
 import TabContext from '@mui/lab/TabContext';
 import Tabs from '@mui/material/Tabs';
 
@@ -27,7 +27,7 @@ export default function Settings() {
   const theme = useTheme();
   const isSmOrBelow = useMediaQuery(theme.breakpoints.down('sm'));
   const user = useSelector((state) => state.auth.login?.currentUser);
-  
+
   const handleChangeTab = (event, newValue) => {
     setTabIndex(newValue);
   };
