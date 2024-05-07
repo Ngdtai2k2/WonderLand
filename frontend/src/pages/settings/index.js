@@ -31,9 +31,11 @@ export default function Settings() {
   const handleChangeTab = (event, newValue) => {
     setTabIndex(newValue);
   };
-  
+
   useEffect(() => {
-    document.title = `${user?.fullname}'s settings`;
+    document.title = user?.nickname
+      ? `${user.nickname}'s settings`
+      : 'Page Not Found';
   }, [user]);
 
   return (
