@@ -8,5 +8,11 @@ export default function AskPage() {
     document.title = 'Ask - WonderLand';
   });
   // with 3 - query ask posts
-  return <RenderPost apiLink={`${BaseApi}/post/3`} type={1} />;
+  return (
+    <RenderPost
+      apiLink={`${BaseApi}/post/3?_order=desc&`}
+      type={1}
+      isHiddenButtonBar={false}
+    />
+  );
 }

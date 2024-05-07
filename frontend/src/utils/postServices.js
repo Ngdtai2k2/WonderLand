@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const fetchData = (apiLink, setItems, items, setHasMore, page, user, type) => {
   axios
-    .post(`${apiLink}?_page=${page.current}&_limit=3`, {
+    .post(`${apiLink}_page=${page.current}&_limit=5`, {
       author: user,
       type: type,
     })
@@ -12,7 +12,7 @@ const fetchData = (apiLink, setItems, items, setHasMore, page, user, type) => {
         setHasMore(false);
       } else {
         setItems([...items, ...res.data.result.docs]);
-        setHasMore(res.data.result.docs.length === 3);
+        setHasMore(res.data.result.docs.length === 5);
         page.current = page.current + 1;
       }
     });

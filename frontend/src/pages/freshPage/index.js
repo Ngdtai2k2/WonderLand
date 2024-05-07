@@ -10,7 +10,7 @@ export default function FreshPage() {
   // with 2 - query fresh posts
   return (
     <RenderPost
-      apiLink={`${BaseApi}/post/2`}
+      apiLink={`${BaseApi}/post/2?_order=desc&`}
       type={0}
       isHiddenButtonBar={false}
     />
