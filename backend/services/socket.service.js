@@ -3,7 +3,8 @@ const UserSocket = require("../models/userSocket.model");
 const socketService = {
   connection: async (socket) => {
     console.log("⚡ User connected:", socket.id);
-    if (socket.handshake.query.userId !== 'undefined') {
+    if (socket.handshake.query.userId !== "undefined") {
+      await UserSocket.deleteMany({ user: socket.handshake.query.userId });
       const userSocket = new UserSocket({
         user: socket.handshake.query.userId,
         socketId: socket.id,
