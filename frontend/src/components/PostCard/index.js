@@ -194,7 +194,7 @@ export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
               variant="rounded"
               src={post?.author?.media?.url}
               alt={post?.author?.fullname}
-              sx={{width: 48, height: 48}}
+              sx={{ width: 48, height: 48 }}
             />
           </Link>
         }

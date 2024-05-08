@@ -1,32 +1,32 @@
-import React, { useEffect, useState } from "react";
-import Zoom from "react-medium-image-zoom";
-import { useParams } from "react-router-dom";
-import { useTheme } from "@emotion/react";
-import axios from "axios";
+import React, { useEffect, useState } from 'react';
+import Zoom from 'react-medium-image-zoom';
+import { useParams } from 'react-router-dom';
+import { useTheme } from '@emotion/react';
+import axios from 'axios';
 
-import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
-import Button from "@mui/material/Button";
-import TabContext from "@mui/lab/TabContext";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import TabContext from '@mui/lab/TabContext';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
-import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
-import WhatshotRoundedIcon from "@mui/icons-material/WhatshotRounded";
-import QueryBuilderRoundedIcon from "@mui/icons-material/QueryBuilderRounded";
-import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
+import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded';
+import WhatshotRoundedIcon from '@mui/icons-material/WhatshotRounded';
+import QueryBuilderRoundedIcon from '@mui/icons-material/QueryBuilderRounded';
+import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
 
-import CustomBox from "../../components/CustomBox";
-import NotFound from "../../components/NotFound";
-import RenderPost from "../../components/RenderPost";
+import CustomBox from '../../components/CustomBox';
+import NotFound from '../../components/NotFound';
+import RenderPost from '../../components/RenderPost';
 
-import { BaseApi, createElementStyleForZoom } from "../../constants/constant";
-import { AvatarCategory } from "./styles";
-import LoadingCircularIndeterminate from "../../components/Loading";
-import ReadMore from "../../components/Readmore";
+import { BaseApi, createElementStyleForZoom } from '../../constants/constant';
+import { AvatarCategory } from './styles';
+import LoadingCircularIndeterminate from '../../components/Loading';
+import ReadMore from '../../components/Readmore';
 
 export default function CategoryDetail() {
   const [category, setCategory] = useState();
@@ -37,7 +37,7 @@ export default function CategoryDetail() {
   const theme = useTheme();
 
   useEffect(() => {
-    document.title = category ? category.name : "Category not found!";
+    document.title = category ? category.name : 'Category not found!';
   }, [category]);
 
   useEffect(() => {
@@ -112,8 +112,8 @@ export default function CategoryDetail() {
               <ReadMore
                 maxLength={100}
                 typographyProps={{
-                  component: "span",
-                  variant: "body1",
+                  component: 'span',
+                  variant: 'body1',
                 }}
               >
                 {category?.description}
