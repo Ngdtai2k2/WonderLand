@@ -7,7 +7,8 @@ const notificationService = {
     targetField,
     targetId,
     message,
-    link
+    link,
+    image
   ) => {
     const notification = await notificationModel.create({
       recipient: recipient,
@@ -16,6 +17,7 @@ const notificationService = {
       [targetField]: targetId,
       message: message,
       link: link,
+      image: image
     });
     if (!notification) {
       return res

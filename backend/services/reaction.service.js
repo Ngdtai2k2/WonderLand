@@ -42,6 +42,7 @@ const reactionService = {
   handleReaction: async (req, res, targetField) => {
     try {
       const { id, author, type } = req.body;
+
       const newType = type === 1;
 
       const targetModel = await (targetField === "postId"
@@ -60,6 +61,8 @@ const reactionService = {
       }
 
       const user = await userModel.findById(targetModel.author);
+      const userRequest = await userModel.findById(req.query.user_request).populate('media');
+
       const typeNotification =
         targetField === "postId" ? 0 : targetField === "commentId" ? 1 : 2;
       const actionField = targetField.slice(0, targetField.indexOf("Id"));
@@ -108,7 +111,8 @@ const reactionService = {
               targetField,
               id,
               msg,
-              `${id}`
+              `${id}`,
+              userRequest?.media?.url
             );
             if (userSocket.length > 0) {
               userSocket.forEach((socket) => {
@@ -135,7 +139,8 @@ const reactionService = {
             targetField,
             id,
             msg,
-            `${id}`
+            `${id}`,
+            userRequest?.media?.url
           );
           if (userSocket.length > 0) {
             userSocket.forEach((socket) => {

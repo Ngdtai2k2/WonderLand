@@ -36,6 +36,9 @@ const notificationSchema = new mongoose.Schema(
     link: {
       type: String,
       maxLength: 1000,
+    },
+    image: {
+      type: String,
     }
   },
   {

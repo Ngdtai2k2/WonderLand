@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import moment from 'moment';
 
+import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Menu from '@mui/material/Menu';
 import Typography from '@mui/material/Typography';
@@ -106,7 +107,11 @@ export default function ListNotifications({
         >
           Notifications
         </Typography>
-        <IconButton aria-label="menu settings notifications" size="small">
+        <IconButton
+          aria-label="menu settings notifications"
+          size="small"
+          sx={{ marginRight: 1 }}
+        >
           <MoreVertRoundedIcon />
         </IconButton>
       </Box>
@@ -133,9 +138,14 @@ export default function ListNotifications({
               notifications?.length === 0 ? (
                 ''
               ) : (
-                <p style={{ textAlign: 'center', fontSize: 12 }}>
-                  <i>Ohhh! You have seen it all</i>
-                </p>
+                <Typography
+                  variant="caption"
+                  display="flex"
+                  justifyContent="center"
+                  fontSize={12}
+                >
+                  Ohhh! You have seen it all
+                </Typography>
               )
             }
             scrollableTarget="list-notifications-container"
@@ -154,12 +164,21 @@ export default function ListNotifications({
                 }}
                 selected={!notification.read}
               >
-                <Typography variant="body1" fontWeight={400}>
-                  {notification.message}
-                </Typography>
-                <Typography variant="caption">
-                  {moment(notification.createdAt).fromNow()}
-                </Typography>
+                <Box display="flex" gap={1.5}>
+                  <Avatar
+                    src={notification.image}
+                    alt=""
+                    sx={{ width: 50, height: 50 }}
+                  />
+                  <Box>
+                    <Typography variant="body1" fontWeight={400}>
+                      {notification.message}
+                    </Typography>
+                    <Typography variant="caption">
+                      {moment(notification.createdAt).fromNow()}
+                    </Typography>
+                  </Box>
+                </Box>
               </MenuItemRounded>
             ))}
           </InfiniteScroll>

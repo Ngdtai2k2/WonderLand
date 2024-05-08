@@ -77,7 +77,7 @@ export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
       );
     try {
       await axiosJWT.post(
-        `${BaseApi}/reaction/like`,
+        `${BaseApi}/reaction/like?user_request=${user._id}`,
         {
           id: post?._id,
           author: user._id,
