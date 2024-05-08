@@ -164,7 +164,7 @@ const categoriesController = {
 
   getAllCategories: async (req, res) => {
     try {
-      const options = optionsPaginate(req);
+      const options = optionsPaginate(req, "-like -follow");
       let result = await Categories.paginate({}, options);
       result.docs = await Promise.all(
         result.docs.map(async (category) => {
