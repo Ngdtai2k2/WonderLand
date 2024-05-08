@@ -37,10 +37,6 @@ function DrawerList({ isAdmin }) {
       setLoading(true);
       const response = await axios.get(`${BaseApi}/category`);
       setCategories(response.data.result.docs);
-      localStorage.setItem(
-        'list-of-categories',
-        JSON.stringify(response.data.result.docs),
-      );
     } catch (error) {
       setCategories(null);
     } finally {
@@ -49,15 +45,10 @@ function DrawerList({ isAdmin }) {
   };
 
   useEffect(() => {
-    const storedCategories = localStorage.getItem('list-of-categories');
-    if (storedCategories) {
-      setCategories(JSON.parse(storedCategories));
-    } else {
-      getCategories();
-    }
+    getCategories();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
+
   return (
     <List>
       <ListItem>
