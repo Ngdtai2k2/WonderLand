@@ -75,6 +75,15 @@ const categoriesController = {
           .status(400)
           .json({ message: "Name and description are required." });
       }
+
+      const uniqueName = await Categories.findOne({ name: name });
+
+      if (uniqueName) {
+        return res
+          .status(400)
+          .json({ message: "Category name already exists!" });
+      }
+
       const id = req.params.id;
 
       if (!mongoose.Types.ObjectId.isValid(id)) {
