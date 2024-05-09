@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
@@ -10,9 +10,14 @@ import Typography from '@mui/material/Typography';
 import AskTab from './askTab';
 import PostTab from './postTab';
 import CustomBox from '../../components/CustomBox';
+import Rules from '../../components/Rules';
 
 export default function CreatePost() {
   const [tabIndex, setTabIndex] = useState(0);
+
+  useEffect(() => {
+    document.title = 'Create a new post';
+  }, []);
 
   const handleChangeTab = (event, newValue) => {
     setTabIndex(newValue);
@@ -43,9 +48,9 @@ export default function CreatePost() {
             </TabContext>
           </Paper>
         </Grid>
-        <Grid item xs={12} sm={4}>
-          <Paper variant="outlined" sx={{ paddingX: 2, paddingBottom: 2 }}>
-            heheeh
+        <Grid item xs={12} sm={4} marginBottom={2}>
+          <Paper variant="outlined" sx={{ p: 2 }}>
+            <Rules />
           </Paper>
         </Grid>
       </Grid>

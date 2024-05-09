@@ -167,8 +167,8 @@ export default function PostDetail() {
               </TextField>
               <Typography variant="caption">
                 Remember to keep comments respectful and to follow our
-                <Link href="#" marginLeft={0.5}>
-                  Here
+                <Link href="/rules" marginLeft={0.5}>
+                  WonderLand's rules
                 </Link>
               </Typography>
               <Box
