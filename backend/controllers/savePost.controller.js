@@ -29,7 +29,9 @@ const savePostController = {
       await SavePost.findOneAndDelete(savePost._id);
       return res.status(200).json({ message: "Post unsaved!", state: false });
     } catch (error) {
-      return res.status(500).json({ message: error.message });
+      return res
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
     }
   },
 
@@ -68,7 +70,7 @@ const savePostController = {
           const postId = savedPost.postId;
           let hasReacted = null;
           let hasSavedPost = null;
-          
+
           [hasReacted, hasSavedPost] = await Promise.all([
             reactionService.hasReactionPost(user._id, postId),
             savePostService.hasSavePost(user._id, postId),
