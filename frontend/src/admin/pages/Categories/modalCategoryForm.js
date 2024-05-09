@@ -14,20 +14,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { BaseApi, useToastTheme } from '../../../constants/constant';
 import { createAxios } from '../../../createInstance';
 import { ImageStyle } from './styles';
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  bgcolor: 'background.paper',
-  boxShadow: 24,
-  p: 2,
-  width: {
-    xs: '95%',
-    md: '50%',
-  },
-};
+import { BoxModal } from '../styles';
 
 export default function ModalCategoryForm({
   openModal,
@@ -60,35 +47,25 @@ export default function ModalCategoryForm({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isUpdate, data]);
 
-  const validateSchemaForCreate = Yup.object({
-    name: Yup.string().required('Please enter a name!'),
-    description: Yup.string().required('Please enter a description!'),
-    file: Yup.mixed()
-      .required('Please upload a photo!')
-      .test('fileType', 'File not supported!', (value) => {
-        if (!value) return true;
-        const imageTypes = [
-          'image/jpeg',
-          'image/png',
-          'image/jpg',
-          'image/gif',
-        ];
-        return value && imageTypes.includes(value.type);
-      }),
-  });
-
-  const validateSchemaForUpdate = Yup.object({
-    name: Yup.string(),
-    description: Yup.string(),
-    file: Yup.mixed().test('fileType', 'File not supported!', (value) => {
+  const fileValidation = Yup.mixed().test(
+    'fileType',
+    'File not supported!',
+    (value) => {
       if (!value) return true;
       const imageTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
       return value && imageTypes.includes(value.type);
-    }),
+    },
+  );
+
+  const validationSchema = Yup.object({
+    name: Yup.string().required('Please enter a name!'),
+    description: Yup.string()
+      .required('Please enter a description!')
+      .max(2000, 'This field is no more than 2000 characters!'),
+    file: isUpdate
+      ? fileValidation
+      : fileValidation.required('Please upload a photo!'),
   });
-  const validateSchema = isUpdate
-    ? validateSchemaForUpdate
-    : validateSchemaForCreate;
 
   const formik = useFormik({
     initialValues: {
@@ -96,14 +73,14 @@ export default function ModalCategoryForm({
       description: '',
       file: '',
     },
-    validateSchema,
+    validationSchema,
     onSubmit: async (values) => {
       try {
         setFetching(true);
         const formData = new FormData();
 
-        formData.append('name', values.name);
-        formData.append('description', values.description);
+        formData.append('name', values.name.trim());
+        formData.append('description', values.description.trim());
         formData.append('file', values.file);
 
         const response = await (isUpdate
@@ -118,10 +95,9 @@ export default function ModalCategoryForm({
           formik.resetForm();
           handleClearFile();
         }
-
-        toast.success(response.data.message, toastTheme);
+        return toast.success(response.data.message, toastTheme);
       } catch (error) {
-        toast.error(error.response.data.message, toastTheme);
+        return toast.error(error.response.data.message, toastTheme);
       } finally {
         setFetching(false);
       }
@@ -136,12 +112,17 @@ export default function ModalCategoryForm({
 
   return (
     <Modal open={openModal} onClose={handleClose}>
-      <Box
+      <BoxModal
         component="form"
         noValidate
         onSubmit={formik.handleSubmit}
-        sx={style}
         method="POST"
+        bgcolor="background.paper"
+        width={{
+          xs: '95%',
+          sm: '75%',
+          md: '50%',
+        }}
       >
         <Typography variant="h6">
           {isUpdate ? 'Update' : 'Add'} category
@@ -157,6 +138,7 @@ export default function ModalCategoryForm({
           autoComplete="name"
           value={formik.values.name}
           onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
           error={formik.touched.name && Boolean(formik.errors.name)}
           helperText={formik.touched.name && formik.errors.name}
         />
@@ -170,7 +152,22 @@ export default function ModalCategoryForm({
           name="description"
           autoComplete="description"
           value={formik.values.description}
-          onChange={formik.handleChange}
+          onChange={(e) => {
+            if (e.keyCode === 13 && e.shiftKey) {
+              e.preventDefault();
+              formik.setFieldValue(
+                'description',
+                `${formik.values.description}\n` +
+                  e.target.value.substring(
+                    e.target.selectionStart,
+                    e.target.selectionEnd,
+                  ),
+              );
+            } else {
+              formik.handleChange(e);
+            }
+          }}
+          onBlur={formik.handleBlur}
           error={
             formik.touched.description && Boolean(formik.errors.description)
           }
@@ -219,11 +216,12 @@ export default function ModalCategoryForm({
             loading={fetching ? fetching : false}
             variant="outlined"
             type="submit"
+            disabled={!formik.dirty || formik.isSubmitting || !formik.isValid}
           >
             Save
           </LoadingButton>
         </Box>
-      </Box>
+      </BoxModal>
     </Modal>
   );
 }

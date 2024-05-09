@@ -8,7 +8,16 @@ const optionsPaginate = require("../configs/optionsPaginate");
 const categoriesController = {
   create: async (req, res) => {
     try {
-      const { name, description } = req.body;
+      let { name, description } = req.body;
+
+      name = name.trim();
+      description = description.trim();
+
+      if (!name || !description) {
+        return res
+          .status(400)
+          .json({ message: "Name and description are required." });
+      }
 
       if (!req.file) {
         return res
@@ -56,7 +65,16 @@ const categoriesController = {
 
   updateCategory: async (req, res) => {
     try {
-      const { name, description } = req.body;
+      let { name, description } = req.body;
+
+      name = name.trim();
+      description = description.trim();
+
+      if (!name || !description) {
+        return res
+          .status(400)
+          .json({ message: "Name and description are required." });
+      }
       const id = req.params.id;
 
       if (!mongoose.Types.ObjectId.isValid(id)) {

@@ -11,6 +11,7 @@ const categoriesSchema = new mongoose.Schema(
     description: {
       type: String,
       required: true,
+      maxLength: 2000,
     },
     media: {
       type: mongoose.Schema.Types.ObjectId,

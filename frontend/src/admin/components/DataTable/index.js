@@ -32,7 +32,9 @@ export default function DataTable({ state, setState, columns }) {
           disableRowSelectionOnClick
         />
       ) : (
-        <Typography variant="body1">No data</Typography>
+        <Typography variant="body1" marginTop={5}>
+          No data
+        </Typography>
       )}
     </>
   );
