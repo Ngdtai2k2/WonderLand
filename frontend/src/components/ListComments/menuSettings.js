@@ -1,8 +1,8 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { useSelector } from 'react-redux';
 
 export default function MenuSettings({
   id,

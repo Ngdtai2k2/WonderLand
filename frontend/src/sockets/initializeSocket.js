@@ -29,9 +29,9 @@ export const handleSocketEvents = (socket, setEvent, isAdmin) => {
     setEvent(deleteReaction._id);
   });
 
-  if(isAdmin) {
-    socket.on('report-for-admin', (msg, notification)=> {
+  if (isAdmin) {
+    socket.on('report-for-admin', (msg, notification) => {
       setEvent(notification._id);
-    }) 
+    });
   }
 };
