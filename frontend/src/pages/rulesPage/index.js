@@ -22,11 +22,7 @@ export default function RulesPage() {
   return (
     <CustomBox>
       <Grid container>
-        <Grid
-          item
-          xs={12}
-          sm={4}
-        >
+        <Grid item xs={12} sm={4}>
           {currentMode === 'dark' ? (
             <ImageStyle src={Ruleslight} alt="image rules" />
           ) : (

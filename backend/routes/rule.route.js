@@ -5,6 +5,6 @@ const verifyMiddleware = require("../middleware/verifyToken");
 router.get('/', ruleController.getAll);
 router.post('/create', verifyMiddleware.tokenAndAdminAuth, ruleController.create);
 router.put('/update/:id', verifyMiddleware.tokenAndAdminAuth, ruleController.update);
-router.delete('/delete', verifyMiddleware.tokenAndAdminAuth, ruleController.delete);
+router.delete('/delete/:id', verifyMiddleware.tokenAndAdminAuth, ruleController.delete);
 
 module.exports = router;
