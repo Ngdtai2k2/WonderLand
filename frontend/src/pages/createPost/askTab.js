@@ -35,10 +35,6 @@ export default function AskTab() {
   let axiosJWT = user ? createAxios(user, dispatch) : undefined;
 
   useEffect(() => {
-    document.title = 'Create a new post';
-  }, []);
-
-  useEffect(() => {
     const getCategory = async () => {
       try {
         const response = await axios.get(BaseApi + '/category');
