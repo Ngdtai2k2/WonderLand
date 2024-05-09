@@ -30,6 +30,7 @@ function App() {
 
   return (
     <Router>
+      {/* When the socket event is captured, it will change the state to call the API again */}
       <NavigationBar isAdmin={isAdmin} state={event} />
       <Routes>
         {adminRoutes.map(({ path, element }) => (
