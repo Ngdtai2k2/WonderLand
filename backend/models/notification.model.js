@@ -8,7 +8,7 @@ const notificationSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    // type notification: 0 - post, 1 - comment, 2- reply
+    // type notification: 0 - post, 1 - comment, 2- reply, 3 - report
     type: {
       type: Number,
       required: true,

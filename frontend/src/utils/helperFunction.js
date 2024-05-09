@@ -29,6 +29,38 @@ export function changeState(setState) {
   setState((prev) => !prev);
 }
 
+// function support for open and close menu anchors
+export const handleOpenMenu = (
+  event,
+  id,
+  setStatesMenuAnchor,
+  setStatesIsMenuOpen,
+) => {
+  setStatesMenuAnchor((prev) => ({
+    ...prev,
+    [id]: event.currentTarget,
+  }));
+  setStatesIsMenuOpen((prev) => ({
+    ...prev,
+    [id]: true,
+  }));
+};
+
+export const handleCloseMenu = (
+  id,
+  setStatesMenuAnchor,
+  setStatesIsMenuOpen,
+) => {
+  setStatesMenuAnchor((prev) => ({
+    ...prev,
+    [id]: null,
+  }));
+  setStatesIsMenuOpen((prev) => ({
+    ...prev,
+    [id]: false,
+  }));
+};
+
 export function renderContentReply(content) {
   const atIndex = content.indexOf('@');
   if (atIndex !== -1) {

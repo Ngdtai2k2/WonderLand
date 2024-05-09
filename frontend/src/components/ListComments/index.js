@@ -14,11 +14,8 @@ import LoadingCircularIndeterminate from '../Loading';
 import MenuSettings from './menuSettings';
 import { useToastTheme, BaseApi } from '../../constants/constant';
 import { createAxios } from '../../createInstance';
-import {
-  getCommentsByPostId,
-  handleCloseMenu,
-  handleOpenMenu,
-} from '../../utils/commentServices';
+import { getCommentsByPostId } from '../../utils/commentServices';
+import { handleCloseMenu, handleOpenMenu } from '../../utils/helperFunction';
 import { BoxComment, ButtonLink } from './styles';
 import CommentItem from './commentItem';
 

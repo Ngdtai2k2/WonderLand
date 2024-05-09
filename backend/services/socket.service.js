@@ -18,6 +18,14 @@ const socketService = {
       });
     }
   },
+  getSocket: async (user) => {
+    const userSockets = await UserSocket.find({ user: user });
+    if (userSockets) {
+      return userSockets;
+    } else {
+      return null;
+    }
+  }
 };
 
 module.exports = socketService;

@@ -44,32 +44,4 @@ const refresh = (setIsLoading, setItems, setHasMore, page, postId, userId) => {
   );
 };
 
-// function support for open and close menu anchors
-const handleOpenMenu = (
-  event,
-  id,
-  setStatesMenuAnchor,
-  setStatesIsMenuOpen,
-) => {
-  setStatesMenuAnchor((prev) => ({
-    ...prev,
-    [id]: event.currentTarget,
-  }));
-  setStatesIsMenuOpen((prev) => ({
-    ...prev,
-    [id]: true,
-  }));
-};
-
-const handleCloseMenu = (id, setStatesMenuAnchor, setStatesIsMenuOpen) => {
-  setStatesMenuAnchor((prev) => ({
-    ...prev,
-    [id]: null,
-  }));
-  setStatesIsMenuOpen((prev) => ({
-    ...prev,
-    [id]: false,
-  }));
-};
-
-export { getCommentsByPostId, refresh, handleOpenMenu, handleCloseMenu };
+export { getCommentsByPostId, refresh };

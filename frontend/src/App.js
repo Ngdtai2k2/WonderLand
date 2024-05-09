@@ -26,7 +26,7 @@ function App() {
 
   const socket = initializeSocket(user?._id);
 
-  handleSocketEvents(socket, setEvent);
+  handleSocketEvents(socket, setEvent, isAdmin);
 
   return (
     <Router>

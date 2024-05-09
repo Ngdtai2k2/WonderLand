@@ -20,7 +20,7 @@ export const initializeSocket = (userId) => {
   return socket;
 };
 
-export const handleSocketEvents = (socket, setEvent) => {
+export const handleSocketEvents = (socket, setEvent, isAdmin) => {
   socket.on('msg-action-reaction', (msg, notification) => {
     setEvent(notification._id);
   });
@@ -28,4 +28,10 @@ export const handleSocketEvents = (socket, setEvent) => {
   socket.on('msg-action-removed-reaction', (msg, deleteReaction) => {
     setEvent(deleteReaction._id);
   });
+
+  if(isAdmin) {
+    socket.on('report-for-admin', (msg, notification)=> {
+      setEvent(notification._id);
+    }) 
+  }
 };

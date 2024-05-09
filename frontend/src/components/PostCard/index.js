@@ -32,7 +32,11 @@ import {
   createElementStyleForZoom,
   useToastTheme,
 } from '../../constants/constant';
-import { convertNumber } from '../../utils/helperFunction';
+import {
+  convertNumber,
+  handleCloseMenu,
+  handleOpenMenu,
+} from '../../utils/helperFunction';
 import {
   BoxStyled,
   BoxSubHeader,
@@ -41,6 +45,7 @@ import {
   CardStyled,
 } from './styles';
 import 'video-react/dist/video-react.css';
+import MenuSettings from './menuSettings';
 
 export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
   const [isIntersecting, setIsIntersecting] = useState(false);
@@ -48,6 +53,8 @@ export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
   const [isLiked, setIsLiked] = useState(false);
   const [isDisliked, setIsDisliked] = useState(false);
   const [isSavePost, setIsSavePost] = useState(false);
+  const [menuAnchorEl, setMenuAnchorEl] = useState({});
+  const [isMenuOpen, setIsMenuOpen] = useState({});
 
   const dispatch = useDispatch();
   const theme = useTheme();
@@ -199,7 +206,13 @@ export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
           </Link>
         }
         action={
-          <IconButton aria-label="settings">
+          <IconButton
+            aria-label="settings"
+            id={`btn-post-settings-${post?._id}`}
+            onClick={(event) =>
+              handleOpenMenu(event, post._id, setMenuAnchorEl, setIsMenuOpen)
+            }
+          >
             <MoreVertIcon />
           </IconButton>
         }
@@ -234,6 +247,14 @@ export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
               {post?.category?.name}
             </Typography>
           </BoxSubHeader>
+        }
+      />
+      <MenuSettings
+        id={post._id}
+        menuAnchorEl={menuAnchorEl[post._id]}
+        isMenuOpen={isMenuOpen[post._id]}
+        handleCloseMenu={() =>
+          handleCloseMenu(post._id, setMenuAnchorEl, setIsMenuOpen)
         }
       />
       <CardContent sx={{ paddingX: 1, paddingY: 0, marginBottom: 0.5 }}>
