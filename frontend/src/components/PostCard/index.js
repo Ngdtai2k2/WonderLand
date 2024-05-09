@@ -44,8 +44,8 @@ import {
   CardMediaStyled,
   CardStyled,
 } from './styles';
-import 'video-react/dist/video-react.css';
 import MenuSettings from './menuSettings';
+import 'video-react/dist/video-react.css';
 
 export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
   const [isIntersecting, setIsIntersecting] = useState(false);
@@ -57,9 +57,9 @@ export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
   const [isMenuOpen, setIsMenuOpen] = useState({});
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const theme = useTheme();
   const toastTheme = useToastTheme();
-  const navigate = useNavigate();
 
   const user = useSelector((state) => state.auth.login?.currentUser);
   const accessToken = user?.accessToken;
@@ -209,9 +209,15 @@ export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
           <IconButton
             aria-label="settings"
             id={`btn-post-settings-${post?._id}`}
-            onClick={(event) =>
-              handleOpenMenu(event, post._id, setMenuAnchorEl, setIsMenuOpen)
-            }
+            onClick={(event) => {
+              if (!user) {
+                toast.warning(
+                  'You need to be signed in to perform this action!',
+                  toastTheme,
+                );
+              }
+              handleOpenMenu(event, post._id, setMenuAnchorEl, setIsMenuOpen);
+            }}
           >
             <MoreVertIcon />
           </IconButton>

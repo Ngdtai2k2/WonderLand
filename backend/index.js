@@ -14,6 +14,8 @@ const savePostRoute = require("./routes/savePost.route");
 const commentRoute = require("./routes/comment.route");
 const reportRoute = require("./routes/report.route");
 const notificationRoute = require("./routes/notification.route");
+const ruleRoute = require("./routes/rule.route");
+
 const socketService = require("./services/socket.service");
 
 dotenv.config();
@@ -56,6 +58,7 @@ app.use("/api/v1/save-post", savePostRoute);
 app.use("/api/v1/comment", commentRoute);
 app.use("/api/v1/notification", notificationRoute);
 app.use("/api/v1/report", reportRoute);
+app.use("/api/v1/rule", ruleRoute);
 
 io.on('connection', (socket) => {
   socketService.connection(socket);
