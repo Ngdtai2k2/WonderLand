@@ -1,3 +1,5 @@
+const optionsPaginate = require("../configs/optionsPaginate");
+const { reportPopulateOptions } = require("../constants/constants");
 const commentModel = require("../models/comment.model");
 const postModel = require("../models/post.model");
 const reportModel = require("../models/report.model");
@@ -26,6 +28,7 @@ const reportController = {
             return commentModel.findById(id);
           case "reply":
             targetField = "replyId";
+            console.log(commentModel.findById(_comment_id));
             return commentModel
               .findById(_comment_id)
               .then((comment) =>
@@ -37,21 +40,20 @@ const reportController = {
       };
 
       const item = await getModel(_report);
+
       if (!item)
-        return res
-          .status(404)
-          .json({ message: `${_report.capitalize()} not found!` });
+        return res.status(404).json({ message: `${_report} not found!` });
 
       if (item.author.toString() === userId)
         return res
           .status(400)
           .json({ message: `You cannot report your own ${_report}!` });
 
-      const report = reportModel.findOne({
-        [`${_report}`]: id,
+      const report = reportModel.find({
+        [_report]: id,
         user: userId,
       });
-      if (report)
+      if (report.length > 0)
         return res
           .status(400)
           .json({ message: `You have already reported this ${_report}!` });
@@ -63,6 +65,11 @@ const reportController = {
         status: 0,
         rule: rule,
       });
+
+      if (_report === "reply") {
+        newReport.comment = _comment_id;
+      }
+
       await newReport.save();
 
       const admins = await userService.getAdmins(req, res);
@@ -93,6 +100,50 @@ const reportController = {
         .status(200)
         .json({ message: "The report has been submitted!", newReport });
     } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "An error occurred, please try again later!" });
+    }
+  },
+
+  getAll: async (req, res) => {
+    try {
+      const options = optionsPaginate(req);
+      let result = await reportModel.paginate({}, options);
+
+      result.docs = await Promise.all(
+        result.docs.map(async (report) => {
+          let reply;
+          const comment = await commentModel.findById(report?.comment);
+          if (comment && report.reply) {
+            reply = comment.replies.find((reply) =>
+              reply._id.equals(report.reply)
+            );
+            if (reply) {
+              const author = await userModel
+                .findById(reply.author)
+                .select("_id nickname")
+                .populate({
+                  path: "media",
+                  select: "_id url",
+                });
+              reply = { ...reply.toObject(), author };
+            }
+          }
+          const updatedReport = {
+            ...report.toObject(),
+            reply,
+          };
+          return await reportModel.populate(
+            updatedReport,
+            reportPopulateOptions
+          );
+        })
+      );
+
+      return res.status(200).json({ result });
+    } catch (error) {
+      console.log(error.message);
       return res
         .status(500)
         .json({ message: "An error occurred, please try again later!" });

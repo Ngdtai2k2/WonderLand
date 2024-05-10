@@ -188,6 +188,7 @@ export default function ListComments({ postId, newComment }) {
                           )
                         }
                         handleDelete={() => handleDeleteComment(commentId)}
+                        isReply={false}
                       />
                       {/* end  menu settings for comments*/}
                     </BoxComment>
@@ -221,6 +222,7 @@ export default function ListComments({ postId, newComment }) {
                                   {/* menu setting reply */}
                                   <MenuSettings
                                     id={reply._id}
+                                    commentId={reply.commentId}
                                     author={reply.author._id}
                                     menuAnchorEl={menuAnchorEl[reply._id]}
                                     isMenuOpen={isMenuOpen[reply._id]}
@@ -237,6 +239,7 @@ export default function ListComments({ postId, newComment }) {
                                         reply._id,
                                       );
                                     }}
+                                    isReply={true}
                                   />
                                   {/* end menu settings reply */}
                                 </BoxComment>

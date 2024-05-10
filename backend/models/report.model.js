@@ -16,7 +16,7 @@ const reportSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Comment",
     },
-    replyComment: {
+    reply: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Comment.replies",
     },
