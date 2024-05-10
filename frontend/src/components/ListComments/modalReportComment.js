@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
@@ -12,25 +11,17 @@ import LoadingButton from '@mui/lab/LoadingButton';
 
 import { useToastTheme, BaseApi } from '../../constants/constant';
 import { createAxios } from '../../createInstance';
+import { BoxModal } from '../styles';
+import { toast } from 'react-toastify';
 import Rules from '../Rules';
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  bgcolor: 'background.paper',
-  borderRadius: 2,
-  boxShadow: 24,
-  p: 2,
-  width: {
-    xs: '95%',
-    sm: '70%',
-    md: '50%',
-  },
-};
-
-export default function ModalReportForm({ open, handleClose, id }) {
+export default function ModalReportComment({
+  open,
+  handleClose,
+  id,
+  isReply,
+  commentId,
+}) {
   const [fetching, setFetching] = useState();
   const [selectRule, setSelectRule] = useState();
 
@@ -41,6 +32,10 @@ export default function ModalReportForm({ open, handleClose, id }) {
   const accessToken = user?.accessToken;
 
   let axiosJWT = user ? createAxios(user, dispatch) : undefined;
+
+  const urlApi = !isReply
+    ? `${BaseApi}/report/create?_report=comment`
+    : `${BaseApi}/report/create?_report=reply&_comment_id=${commentId}`;
 
   const formik = useFormik({
     initialValues: {
@@ -53,7 +48,7 @@ export default function ModalReportForm({ open, handleClose, id }) {
       try {
         setFetching(true);
         const response = await axiosJWT.post(
-          `${BaseApi}/report/create?_report=post`,
+          urlApi,
           {
             id: id,
             reason: values.reason,
@@ -83,15 +78,22 @@ export default function ModalReportForm({ open, handleClose, id }) {
       aria-labelledby="modal-report-form"
       aria-describedby="modal-report-form-description"
     >
-      <Box
-        sx={style}
-        component="form"
-        noValidate
-        method="POST"
+      <BoxModal
+        bgcolor="background.paper"
+        sx={{
+          width: {
+            xs: '95%',
+            sm: '70%',
+            md: '50%',
+          },
+        }}
         onSubmit={formik.handleSubmit}
+        method="POST"
+        noValidate
+        component="form"
       >
         <Typography
-          id="modal-modal-title"
+          id={`modal-report-comment-${id}`}
           variant="h6"
           component="h2"
           textAlign="center"
@@ -133,7 +135,7 @@ export default function ModalReportForm({ open, handleClose, id }) {
             Report
           </LoadingButton>
         </Box>
-      </Box>
+      </BoxModal>
     </Modal>
   );
 }
