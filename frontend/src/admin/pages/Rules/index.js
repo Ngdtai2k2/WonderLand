@@ -129,7 +129,7 @@ export default function Rules() {
             </Button>
             <LoadingButton
               variant="outlined"
-              color='error'
+              color="error"
               loading={loadingDelete[params.row._id]}
               onClick={() => handleDelete(params.row._id)}
             >

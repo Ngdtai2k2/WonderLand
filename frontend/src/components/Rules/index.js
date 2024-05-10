@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Collapse from '@mui/material/Collapse';
+import Checkbox from '@mui/material/Checkbox';
 
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import KeyboardArrowUpRoundedIcon from '@mui/icons-material/KeyboardArrowUpRounded';
@@ -12,16 +13,26 @@ import KeyboardArrowUpRoundedIcon from '@mui/icons-material/KeyboardArrowUpRound
 import { BaseApi } from '../../constants/constant';
 import LoadingCircularIndeterminate from '../Loading';
 
-export default function Rules() {
+export default function Rules({ isReport, setState }) {
   const [rules, setRules] = useState();
   const [loading, setLoading] = useState(false);
   const [openRule, setOpenRule] = useState({});
+  const [checked, setChecked] = useState({});
 
   const handleOpenDescriptionRule = (id) => {
     setOpenRule((prevState) => ({
       ...prevState,
       [id]: !prevState[id],
     }));
+  };
+
+  const handleChangeChecked = (id) => {
+    setChecked((prevState) => {
+      const newChecked = {};
+      newChecked[id] = !prevState[id];
+      return newChecked;
+    });
+    setState(id);
   };
 
   const getAllRules = async () => {
@@ -44,15 +55,17 @@ export default function Rules() {
   return loading ? (
     <LoadingCircularIndeterminate />
   ) : (
-    <Box>
-      <Typography
-        variant="h6"
-        fontWeight={700}
-        textAlign="center"
-        marginBottom={2}
-      >
-        Rules
-      </Typography>
+    <Box sx={isReport ? { overflowY: 'auto', height: '55vh' } : {}}>
+      {!isReport && (
+        <Typography
+          variant="h6"
+          fontWeight={700}
+          textAlign="center"
+          marginBottom={2}
+        >
+          Rules
+        </Typography>
+      )}
       {rules ? (
         rules?.map((rule) => (
           <Box key={rule._id}>
@@ -61,9 +74,19 @@ export default function Rules() {
               justifyContent="space-between"
               alignItems="center"
             >
-              <Typography variant="h6" fontSize={18} fontWeight={600}>
-                {rule.name}
-              </Typography>
+              <Box display="flex" alignItems="center">
+                {isReport && (
+                  <Checkbox
+                    size="small"
+                    onChange={() => handleChangeChecked(rule._id)}
+                    checked={checked[rule._id] || false}
+                  />
+                )}
+                <Typography variant="h6" fontSize={18} fontWeight={600}>
+                  {rule.name}
+                </Typography>
+              </Box>
+
               <IconButton
                 size="small"
                 onClick={() => handleOpenDescriptionRule(rule._id)}

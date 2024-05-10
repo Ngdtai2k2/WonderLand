@@ -171,7 +171,11 @@ export default function ListNotifications({
                     sx={{ width: 50, height: 50 }}
                   />
                   <Box>
-                    <Typography variant="body1" fontWeight={400}>
+                    <Typography
+                      variant="body1"
+                      fontWeight={400}
+                      sx={{ whiteSpace: 'pre-wrap' }}
+                    >
                       {notification.message}
                     </Typography>
                     <Typography variant="caption">

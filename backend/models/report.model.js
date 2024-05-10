@@ -20,9 +20,12 @@ const reportSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Comment.replies",
     },
+    rule: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Rule",
+    },
     reason: {
       type: String,
-      required: true,
       maxLength: 1000,
     },
     status: {

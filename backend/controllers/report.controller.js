@@ -9,7 +9,7 @@ const userService = require("../services/user.service");
 const reportController = {
   create: async (req, res) => {
     try {
-      const { id, userId, reason } = req.body;
+      const { id, userId, reason, rule } = req.body;
       const { _report, _comment_id } = req.query;
 
       const user = await userModel.findById(userId);
@@ -41,14 +41,27 @@ const reportController = {
         return res
           .status(404)
           .json({ message: `${_report.capitalize()} not found!` });
-      if (!reason)
-        return res.status(400).json({ message: "Please provide a reason!" });
+
+      if (item.author.toString() === userId)
+        return res
+          .status(400)
+          .json({ message: `You cannot report your own ${_report}!` });
+
+      const report = reportModel.findOne({
+        [`${_report}`]: id,
+        user: userId,
+      });
+      if (report)
+        return res
+          .status(400)
+          .json({ message: `You have already reported this ${_report}!` });
 
       const newReport = new reportModel({
         user: userId,
         [`${_report}`]: id,
         reason,
         status: 0,
+        rule: rule,
       });
       await newReport.save();
 
@@ -76,9 +89,10 @@ const reportController = {
         });
       });
 
-      return res.status(200).json({ message: "The report has been submitted!", newReport });
+      return res
+        .status(200)
+        .json({ message: "The report has been submitted!", newReport });
     } catch (error) {
-      console.log(error.message);
       return res
         .status(500)
         .json({ message: "An error occurred, please try again later!" });

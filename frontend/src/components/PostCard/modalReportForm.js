@@ -12,6 +12,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 
 import { useToastTheme, BaseApi } from '../../constants/constant';
 import { createAxios } from '../../createInstance';
+import Rules from '../Rules';
 
 const style = {
   position: 'absolute',
@@ -31,6 +32,7 @@ const style = {
 
 export default function ModalReportForm({ open, handleClose, id }) {
   const [fetching, setFetching] = useState();
+  const [selectRule, setSelectRule] = useState();
 
   const toastTheme = useToastTheme();
   const dispatch = useDispatch();
@@ -45,7 +47,7 @@ export default function ModalReportForm({ open, handleClose, id }) {
       reason: '',
     },
     validationSchema: Yup.object({
-      reason: Yup.string().required('The reason field is required!'),
+      reason: Yup.string(),
     }),
     onSubmit: async (values) => {
       try {
@@ -55,6 +57,7 @@ export default function ModalReportForm({ open, handleClose, id }) {
           {
             id: id,
             reason: values.reason,
+            rule: selectRule,
             userId: user._id,
           },
           {
@@ -87,29 +90,39 @@ export default function ModalReportForm({ open, handleClose, id }) {
         method="POST"
         onSubmit={formik.handleSubmit}
       >
-        <Typography id="modal-modal-title" variant="h6" component="h2">
+        <Typography
+          id="modal-modal-title"
+          variant="h6"
+          component="h2"
+          textAlign="center"
+          fontWeight={700}
+          marginBottom={2}
+        >
           Report
         </Typography>
+        <Rules isReport={true} setState={setSelectRule} />
         <TextField
           margin="normal"
           size="small"
-          required
           fullWidth
           id="reason"
-          label="Reason"
+          label="Reason (Optional)"
           name="reason"
           autoComplete="reason"
           value={formik.values.reason}
           onChange={formik.handleChange}
           error={formik.touched.reason && Boolean(formik.errors.reason)}
           helperText={formik.touched.reason && formik.errors.reason}
+          sx={{
+            marginTop: 5,
+          }}
         />
         <Box display="flex" justifyContent="center" marginTop={1}>
           <LoadingButton
             loading={fetching ? fetching : false}
             variant="outlined"
             type="submit"
-            disabled={!formik.dirty || formik.isSubmitting || !formik.isValid}
+            disabled={formik.isSubmitting || !formik.isValid}
             sx={{
               width: {
                 xs: '30%',
