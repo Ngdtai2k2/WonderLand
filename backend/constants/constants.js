@@ -1,7 +1,7 @@
 const postPopulateOptions = [
   {
     path: "author",
-    select: "id fullname nickname",
+    select: "_id fullname nickname",
     populate: {
       path: "media",
       model: "Media",
@@ -23,7 +23,7 @@ const postPopulateOptions = [
 const commentPopulateOptions = [
   {
     path: "author",
-    select: "id fullname nickname",
+    select: "_id fullname nickname",
     populate: {
       path: "media",
       model: "Media",
@@ -40,7 +40,7 @@ const commentPopulateOptions = [
     populate: [
       {
         path: "author",
-        select: "id fullname nickname",
+        select: "_id fullname nickname",
         populate: {
           path: "media",
           model: "Media",
