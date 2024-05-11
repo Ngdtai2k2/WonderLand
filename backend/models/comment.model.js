@@ -22,6 +22,10 @@ const commentSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Media",
     },
+    isHidden: {
+      type: Boolean,
+      default: false,
+    },
     replies: [
       {
         author: {
@@ -41,6 +45,10 @@ const commentSchema = new mongoose.Schema(
         media: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Media",
+        },
+        isHidden: {
+          type: Boolean,
+          default: false,
         },
         createdAt: {
           type: Date,

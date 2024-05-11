@@ -26,6 +26,7 @@ import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import ClearIcon from '@mui/icons-material/Clear';
+import BlockRoundedIcon from '@mui/icons-material/BlockRounded';
 
 import LoadingCircularIndeterminate from '../Loading';
 import { useToastTheme, BaseApi } from '../../constants/constant';
@@ -226,8 +227,21 @@ export default function CommentItem({
           </Typography>
         </Box>
         <Box display="flex" flexDirection="column">
-          <Typography variant={isReply ? 'caption' : 'body2'}>
-            {renderContentReply(data.content)}
+          <Typography
+            variant={isReply ? 'caption' : 'body2'}
+            fontStyle={data.isHidden && 'italic'}
+            display="flex"
+            alignItems="center"
+          >
+            {data.isHidden ? (
+              <>
+                <BlockRoundedIcon fontSize="16px" color="error" />
+                This comment has been hidden!
+                <BlockRoundedIcon fontSize="16px" color="error" />
+              </>
+            ) : (
+              renderContentReply(data.content)
+            )}
           </Typography>
           {data.media?.url && <ImageStyle src={data.media?.url} alt="" />}
         </Box>
