@@ -409,7 +409,7 @@ export default function CommentItem({
             </Box>
           )}
         </Collapse>
-        {data.replies?.length > 0 && !isReply && (
+        {data?.replies?.length > 0 && !isReply && (
           <ButtonLink
             underline="hover"
             onClick={() => handleShowReply(data._id)}
