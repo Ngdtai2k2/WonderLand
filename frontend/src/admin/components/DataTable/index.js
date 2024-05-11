@@ -3,7 +3,7 @@ import React from 'react';
 import Typography from '@mui/material/Typography';
 import { DataGrid } from '@mui/x-data-grid';
 
-export default function DataTable({ state, setState, columns }) {
+export default function DataTable({ state, setState, columns, getRowHeight }) {
   return (
     <>
       {state.data.length > 0 ? (
@@ -30,6 +30,7 @@ export default function DataTable({ state, setState, columns }) {
           columns={columns}
           checkboxSelection
           disableRowSelectionOnClick
+          getRowHeight={getRowHeight}
         />
       ) : (
         <Typography variant="body1" marginTop={5}>
