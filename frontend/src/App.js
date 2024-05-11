@@ -28,10 +28,12 @@ function App() {
 
   handleSocketEvents(socket, setEvent, isAdmin);
 
+  const isRunningInIFrame = window.self !== window.top;
+
   return (
     <Router>
       {/* When the socket event is captured, it will change the state to call the API again */}
-      <NavigationBar isAdmin={isAdmin} state={event} />
+      {!isRunningInIFrame && <NavigationBar isAdmin={isAdmin} state={event} />}
       <Routes>
         {adminRoutes.map(({ path, element }) => (
           <Route
