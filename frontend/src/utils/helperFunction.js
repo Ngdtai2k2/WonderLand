@@ -62,29 +62,31 @@ export const handleCloseMenu = (
 };
 
 export function renderContentReply(content) {
-  const atIndex = content.indexOf('@');
-  if (atIndex !== -1) {
-    const username = content.substring(atIndex + 1).split(' ')[0];
-    const beforeUsername = content.substring(0, atIndex);
-    const afterUsername = content.substring(atIndex + 1 + username.length);
-    return (
-      <>
-        {beforeUsername}
-        <Link href={`/u/${username}`} underline="hover" fontSize={13.5}>
-          @{username}
-        </Link>
-        <ReadMore
-          maxLength={100}
-          typographyProps={{
-            component: 'span',
-            variant: 'caption',
-            sx: { fontSize: 13.5 },
-          }}
-        >
-          {afterUsername}
-        </ReadMore>
-      </>
-    );
+  if (content && typeof content === 'string') {
+    const atIndex = content.indexOf('@');
+    if (atIndex !== -1) {
+      const username = content.substring(atIndex + 1).split(' ')[0];
+      const beforeUsername = content.substring(0, atIndex);
+      const afterUsername = content.substring(atIndex + 1 + username.length);
+      return (
+        <>
+          {beforeUsername}
+          <Link href={`/u/${username}`} underline="hover" fontSize={13.5}>
+            @{username}
+          </Link>
+          <ReadMore
+            maxLength={100}
+            typographyProps={{
+              component: 'span',
+              variant: 'caption',
+              sx: { fontSize: 13.5 },
+            }}
+          >
+            {afterUsername}
+          </ReadMore>
+        </>
+      );
+    }
   }
   return content;
 }
