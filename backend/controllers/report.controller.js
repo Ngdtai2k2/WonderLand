@@ -109,7 +109,9 @@ const reportController = {
   getAll: async (req, res) => {
     try {
       const options = optionsPaginate(req);
-      let result = await reportModel.paginate({}, options);
+      const { _status } = req.query;
+
+      let result = await reportModel.paginate({ status: _status }, options);
 
       result.docs = await Promise.all(
         result.docs.map(async (report) => {

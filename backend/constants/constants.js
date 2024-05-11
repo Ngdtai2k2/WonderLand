@@ -56,4 +56,39 @@ const commentPopulateOptions = [
   },
 ];
 
-module.exports = { postPopulateOptions, commentPopulateOptions };
+const reportPopulateOptions = [
+  {
+    path: "user",
+    select: "_id nickname",
+    populate: {
+      path: "media",
+      select: "url type",
+    },
+  },
+  {
+    path: "post",
+    select: "_id title content",
+    populate: {
+      path: "media",
+      select: "url type",
+    },
+  },
+  {
+    path: "comment",
+    select: "_id content",
+    populate: {
+      path: "media",
+      select: "url type",
+    },
+  },
+  {
+    path: "rule",
+    select: "_id name description",
+  },
+];
+
+module.exports = {
+  postPopulateOptions,
+  commentPopulateOptions,
+  reportPopulateOptions,
+};

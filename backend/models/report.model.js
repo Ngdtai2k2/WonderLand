@@ -3,6 +3,7 @@ const mongoosePaginate = require("mongoose-paginate-v2");
 
 const reportSchema = new mongoose.Schema(
   {
+    // Reporter
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
