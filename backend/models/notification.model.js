@@ -33,10 +33,6 @@ const notificationSchema = new mongoose.Schema(
       type: String,
       maxLength: 1000,
     },
-    link: {
-      type: String,
-      maxLength: 1000,
-    },
     image: {
       type: String,
     }

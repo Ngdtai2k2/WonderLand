@@ -111,7 +111,6 @@ const reactionService = {
               targetField,
               id,
               msg,
-              `${id}`,
               userRequest?.media?.url
             );
             if (userSocket.length > 0) {
@@ -139,7 +138,6 @@ const reactionService = {
             targetField,
             id,
             msg,
-            `${id}`,
             userRequest?.media?.url
           );
           if (userSocket.length > 0) {
