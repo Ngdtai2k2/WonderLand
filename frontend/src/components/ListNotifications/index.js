@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
@@ -40,6 +41,8 @@ export default function ListNotifications({
 
   const user = useSelector((state) => state.auth.login?.currentUser);
   const accessToken = user?.accessToken;
+  const decodedToken = accessToken ? jwtDecode(accessToken) : null;
+  const isAdmin = decodedToken ? decodedToken.isAdmin || false : false;
 
   let axiosJWT = user ? createAxios(user, dispatch) : undefined;
 
@@ -160,6 +163,8 @@ export default function ListNotifications({
                   }
                   if (notification.type === 0) {
                     navigate(`/post/${notification.postId}`);
+                  } else if (notification.type === 3 && isAdmin) {
+                    navigate(`/admin/reports`);
                   }
                 }}
                 selected={!notification.read}
