@@ -34,4 +34,8 @@ export const handleSocketEvents = (socket, setEvent, isAdmin) => {
       setEvent(notification._id);
     });
   }
+
+  socket.on('action-delete-post', (msg, post) => {
+    setEvent(post._id);
+  });
 };
