@@ -1,9 +1,11 @@
 const optionsPaginate = require("../configs/optionsPaginate");
 const { reportPopulateOptions } = require("../constants/constants");
+
 const commentModel = require("../models/comment.model");
 const postModel = require("../models/post.model");
 const reportModel = require("../models/report.model");
 const userModel = require("../models/user.model");
+
 const notificationService = require("../services/notification.service");
 const socketService = require("../services/socket.service");
 const userService = require("../services/user.service");
@@ -28,7 +30,6 @@ const reportController = {
             return commentModel.findById(id);
           case "reply":
             targetField = "replyId";
-            console.log(commentModel.findById(_comment_id));
             return commentModel
               .findById(_comment_id)
               .then((comment) =>
@@ -81,7 +82,6 @@ const reportController = {
           targetField,
           id,
           `${user.nickname} has just sent a ${_report} report for you to review!`,
-          newReport?._id,
           "https://img.upanh.tv/2024/05/09/report.jpg"
         );
         const sockets = await socketService.getSocket(admin._id);
@@ -90,7 +90,7 @@ const reportController = {
             .to(socket.socketId)
             .emit(
               "report-for-admin",
-              `You just received a report from ${user.nickname}, please check!`,
+              `${user.nickname} has just sent a ${_report} report for you to review!`,
               notification
             );
         });
@@ -145,7 +145,78 @@ const reportController = {
 
       return res.status(200).json({ result });
     } catch (error) {
-      console.log(error.message);
+      return res
+        .status(500)
+        .json({ message: "An error occurred, please try again later!" });
+    }
+  },
+
+  rejectedReport: async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const report = await reportModel.findById(id).populate("user");
+      if (!report)
+        return res.status(404).json({ message: "Report not found!" });
+      if (report.status == 2)
+        return res
+          .status(400)
+          .json({ message: "This report has already been rejected!" });
+      // rejected
+      report.status = 2;
+      await report.save();
+
+      let target;
+      let targetField;
+      if (report.post) {
+        target = await postModel.findById(report.post).populate("author");
+        targetField = "post";
+      } else if (report.comment && report.reply) {
+        target = await commentModel
+          .findById(report.comment)
+          .then((comment) =>
+            comment.replies.find((reply) => reply._id.equals(report.reply))
+          );
+        const author = await userModel
+          .findById(target.author)
+          .select("_id nickname")
+          .populate({
+            path: "media",
+            select: "_id url",
+          });
+        target = { ...target.toObject(), author };
+        targetField = "reply";
+      } else {
+        target = await commentModel.findById(report.comment).populate("author");
+        targetField = "comment";
+      }
+      // push notification
+      const sockets = await socketService.getSocket(report.user);
+      sockets.forEach(async (socket) => {
+        // create notification
+        let notification;
+        if (!report.user.isAdmin) {
+          notification = await notificationService.createNotification(
+            report.user,
+            3,
+            `${targetField}Id`,
+            target?._id,
+            `Report ${target.author.nickname}'s ${targetField} of your rejected account!`,
+            "https://img.upanh.tv/2024/05/11/OIG2.oag.jpg"
+          );
+        }
+        // push notification
+        global._io
+          .to(socket.socketId)
+          .emit(
+            "report-refused",
+            `Report ${target.author.nickname}'s ${targetField} of your rejected account!`,
+            notification
+          );
+      });
+
+      return res.status(200).json({ message: "Report refused!" });
+    } catch (error) {
       return res
         .status(500)
         .json({ message: "An error occurred, please try again later!" });

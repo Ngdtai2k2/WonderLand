@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useTheme } from '@emotion/react';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { useTheme } from '@emotion/react';
 
 import Typography from '@mui/material/Typography';
 import Select from '@mui/material/Select';
@@ -9,16 +10,18 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Box from '@mui/material/Box';
 import Tooltip from '@mui/material/Tooltip';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 import CustomBox from '../../../components/CustomBox';
 import LoadingCircularIndeterminate from '../../../components/Loading';
 import DataTable from '../../components/DataTable';
+import ModalWebView from '../../components/ModalWebView';
 import { createAxios } from '../../../createInstance';
 import {
   BaseApi,
   createElementStyleForZoom,
+  useToastTheme,
 } from '../../../constants/constant';
-import ModalWebView from '../../components/ModalWebView';
 import { LinkStyle } from './styles';
 
 export default function ReportsManager() {
@@ -33,9 +36,11 @@ export default function ReportsManager() {
   const [selectOrder, setSelectOrder] = useState(0);
   const [openModal, setOpenModal] = useState(false);
   const [dataWebView, setDataWebView] = useState({ src: '', title: '' });
+  const [loadingReject, setLoadingReject] = useState({});
 
   const dispatch = useDispatch();
   const theme = useTheme();
+  const toastTheme = useToastTheme();
 
   const user = useSelector((state) => state.auth.login?.currentUser);
   const accessToken = user?.accessToken;
@@ -89,6 +94,29 @@ export default function ReportsManager() {
     });
   };
 
+  const handleRejectReport = async (id) => {
+    try {
+      setLoadingReject((prevState) => ({
+        ...prevState,
+        [id]: true,
+      }));
+      const response = await axiosJWT.post(`${BaseApi}/report/${id}/reject`, {
+        headers: {
+          token: `Bearer ${accessToken}`,
+        },
+      });
+      toast.success(response.data.message, toastTheme);
+      getAllReports();
+    } catch (e) {
+      toast.success(e.response.data.message, toastTheme);
+    } finally {
+      setLoadingReject((prevState) => ({
+        ...prevState,
+        [id]: false,
+      }));
+    }
+  };
+
   const columns = [
     {
       field: '_id',
@@ -104,9 +132,19 @@ export default function ReportsManager() {
           <Typography
             variant="caption"
             fontWeight={700}
-            color={params.row?.status ? '#00e676' : '#ff9800'}
+            color={
+              params.row?.status === 1
+                ? '#00e676'
+                : params.row?.status === 2
+                  ? '#ff1744'
+                  : '#ff9800'
+            }
           >
-            {params.row?.status ? 'Done' : 'Pedding'}
+            {params.row?.status === 1
+              ? 'Done'
+              : params.row?.status === 2
+                ? 'Rejected'
+                : 'Pending'}
           </Typography>
         );
       },
@@ -193,6 +231,37 @@ export default function ReportsManager() {
         return new Date(params.row.createdAt).toLocaleString();
       },
     },
+    {
+      field: 'updatedAt',
+      headerName: 'Updated at',
+      width: 210,
+      renderCell: (params) => {
+        return new Date(params.row.updatedAt).toLocaleString();
+      },
+    },
+    {
+      field: 'action',
+      headerName: 'Action',
+      width: 210,
+      renderCell: (params) => {
+        return (
+          selectStatus !== 2 && (
+            <LoadingButton
+              loading={
+                loadingReject[params.row._id]
+                  ? loadingReject[params.row._id]
+                  : false
+              }
+              variant="outlined"
+              color="error"
+              onClick={() => handleRejectReport(params.row._id)}
+            >
+              Reject
+            </LoadingButton>
+          )
+        );
+      },
+    },
   ];
 
   return (
@@ -212,6 +281,7 @@ export default function ReportsManager() {
           >
             <MenuItem value={0}>Pending</MenuItem>
             <MenuItem value={1}>Done</MenuItem>
+            <MenuItem value={2}>Rejected</MenuItem>
           </Select>
         </FormControl>
         <FormControl sx={{ marginY: 2, minWidth: 120 }} size="small">

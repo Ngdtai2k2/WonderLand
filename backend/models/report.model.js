@@ -29,6 +29,7 @@ const reportSchema = new mongoose.Schema(
       type: String,
       maxLength: 1000,
     },
+    // 0 - pending, 1 - approved, 2 - rejected
     status: {
       type: Number,
       required: true,
