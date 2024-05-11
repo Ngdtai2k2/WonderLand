@@ -10,14 +10,14 @@ import Collapse from '@mui/material/Collapse';
 
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
 
-import LoadingCircularIndeterminate from '../Loading';
 import MenuSettings from './menuSettings';
+import CommentItem from './commentItem';
+import LoadingCircularIndeterminate from '../Loading';
 import { useToastTheme, BaseApi } from '../../constants/constant';
-import { createAxios } from '../../createInstance';
 import { getCommentsByPostId } from '../../utils/commentServices';
 import { handleCloseMenu, handleOpenMenu } from '../../utils/helperFunction';
+import { createAxios } from '../../createInstance';
 import { BoxComment, ButtonLink } from './styles';
-import CommentItem from './commentItem';
 
 export default function ListComments({ postId, newComment }) {
   const [comments, setComments] = useState([]);

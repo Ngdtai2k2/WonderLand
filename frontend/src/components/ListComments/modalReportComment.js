@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -12,7 +13,6 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { useToastTheme, BaseApi } from '../../constants/constant';
 import { createAxios } from '../../createInstance';
 import { BoxModal } from '../styles';
-import { toast } from 'react-toastify';
 import Rules from '../Rules';
 
 export default function ModalReportComment({
