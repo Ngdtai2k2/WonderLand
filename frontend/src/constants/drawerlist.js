@@ -6,6 +6,7 @@ import QuestionMarkRoundedIcon from '@mui/icons-material/QuestionMarkRounded';
 import AdminPanelSettingsRoundedIcon from '@mui/icons-material/AdminPanelSettingsRounded';
 import CategoryRoundedIcon from '@mui/icons-material/CategoryRounded';
 import GavelRoundedIcon from '@mui/icons-material/GavelRounded';
+import ReportProblemRoundedIcon from '@mui/icons-material/ReportProblemRounded';
 
 export const publicDrawerList = [
   { link: '/', icon: <HomeRoundedIcon />, text: 'Home' },
@@ -31,5 +32,10 @@ export const adminDrawerList = [
     link: '/admin/rules',
     icon: <GavelRoundedIcon />,
     text: 'Rules',
+  },
+  {
+    link: '/admin/reports',
+    icon: <ReportProblemRoundedIcon />,
+    text: 'Reports list',
   },
 ];
