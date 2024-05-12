@@ -45,7 +45,7 @@ const authController = {
     try {
       const { nickname } = req.body;
       const uniqueNickname = await User.findOne({ nickname: nickname });
-      
+
       if (uniqueNickname) {
         return res.json({ unique: false });
       } else {
@@ -125,7 +125,7 @@ const authController = {
 
         res.cookie("refreshToken", refreshToken, {
           httpOnly: true,
-          secure: false,
+          secure: true,
           path: "/",
           sameSite: "strict",
         });
@@ -149,20 +149,20 @@ const authController = {
   },
 
   requestRefreshToken: async (req, res) => {
-    let refreshToken = req.cookies.refreshToken;
-
-    if (!refreshToken) {
-      const dataToken = await RefreshToken.findOne({
-        user: req.params.id,
-        device: req.params.device,
-      });
-      refreshToken = dataToken?.token;
-      if (!refreshToken) {
-        return res.status(401).json({ message: "You're not authenticated!" });
-      }
-    }
-
     try {
+      let refreshToken = req.cookies.refreshToken;
+
+      if (!refreshToken) {
+        const dataToken = await RefreshToken.findOne({
+          user: req.params.id,
+          device: req.params.device,
+        });
+        refreshToken = dataToken?.token;
+        if (!refreshToken) {
+          return res.status(401).json({ message: "You're not authenticated!" });
+        }
+      }
+
       const refreshTokenDoc = await RefreshToken.findOne({
         token: refreshToken,
       });
@@ -190,14 +190,13 @@ const authController = {
 
           res.cookie("refreshToken", newRefreshToken, {
             httpOnly: true,
-            secure: false,
+            secure: true,
             path: "/",
             sameSite: "strict",
           });
 
           return res.status(200).json({
-            accessToken: newAccessToken,
-            refreshToken: newRefreshToken,
+            accessToken: newAccessToken
           });
         }
       );
