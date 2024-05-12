@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 
@@ -9,10 +10,8 @@ import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 import { BoxModal } from '../styles';
-import { toast } from 'react-toastify';
-import { useDispatch, useSelector } from 'react-redux';
 import { useToastTheme, BaseApi } from '../../../constants/constant';
-import { createAxios } from '../../../createInstance';
+import useUserAxios from '../../../hooks/useUserAxios';
 
 export default function ModalRuleForm({
   openModal,
@@ -22,13 +21,8 @@ export default function ModalRuleForm({
 }) {
   const [fetching, setFetching] = useState(false);
 
-  const dispatch = useDispatch();
   const toastTheme = useToastTheme();
-
-  const user = useSelector((state) => state.auth.login?.currentUser);
-  const accessToken = user?.accessToken;
-
-  let axiosJWT = user ? createAxios(user, dispatch) : undefined;
+  const { accessToken, axiosJWT } = useUserAxios();
 
   useEffect(() => {
     if (isUpdate && data) {

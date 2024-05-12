@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { useDispatch, useSelector } from 'react-redux';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import Typography from '@mui/material/Typography';
@@ -16,7 +15,7 @@ import LoadingCircularIndeterminate from '../Loading';
 import { useToastTheme, BaseApi } from '../../constants/constant';
 import { getCommentsByPostId } from '../../utils/commentServices';
 import { handleCloseMenu, handleOpenMenu } from '../../utils/helperFunction';
-import { createAxios } from '../../createInstance';
+import useUserAxios from '../../hooks/useUserAxios';
 import { BoxComment, ButtonLink } from './styles';
 
 export default function ListComments({ postId, newComment }) {
@@ -37,14 +36,9 @@ export default function ListComments({ postId, newComment }) {
   const [menuAnchorEl, setMenuAnchorEl] = useState({});
   const [openCollapse, setOpenCollapse] = useState({});
 
-  const dispatch = useDispatch();
   const toastTheme = useToastTheme();
   const page = useRef(1);
-
-  const user = useSelector((state) => state.auth.login?.currentUser);
-  const accessToken = user?.accessToken;
-
-  let axiosJWT = user ? createAxios(user, dispatch) : undefined;
+  const { user, accessToken, axiosJWT } = useUserAxios();
 
   useEffect(() => {
     getCommentsByPostId(

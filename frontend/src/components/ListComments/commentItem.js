@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import moment from 'moment';
@@ -30,10 +29,10 @@ import BlockRoundedIcon from '@mui/icons-material/BlockRounded';
 
 import LoadingCircularIndeterminate from '../Loading';
 import { useToastTheme, BaseApi } from '../../constants/constant';
-import { createAxios } from '../../createInstance';
 import { BoxAlignCenter, ButtonLink, ImageStyle } from './styles';
 import { VisuallyHiddenInput } from '../../pages/styles';
 import { renderContentReply } from '../../utils/helperFunction';
+import useUserAxios from '../../hooks/useUserAxios';
 
 export default function CommentItem({
   data,
@@ -54,13 +53,8 @@ export default function CommentItem({
   const [fileReply, setFileReply] = useState(null);
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const toastTheme = useToastTheme();
-
-  const user = useSelector((state) => state.auth.login?.currentUser);
-  const accessToken = user?.accessToken;
-
-  let axiosJWT = user ? createAxios(user, dispatch) : undefined;
+  const { user, accessToken, axiosJWT } = useUserAxios();
 
   useEffect(() => {
     setIsLiked(data?.hasReacted === true);

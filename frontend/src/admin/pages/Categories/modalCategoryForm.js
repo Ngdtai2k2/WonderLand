@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 
@@ -12,7 +11,8 @@ import Badge from '@mui/material/Badge';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 import { BaseApi, useToastTheme } from '../../../constants/constant';
-import { createAxios } from '../../../createInstance';
+import useUserAxios from '../../../hooks/useUserAxios';
+
 import { ImageStyle } from './styles';
 import { BoxModal } from '../styles';
 
@@ -25,13 +25,9 @@ export default function ModalCategoryForm({
   const [file, setFile] = useState();
   const [fetching, setFetching] = useState();
 
-  const dispatch = useDispatch();
   const toastTheme = useToastTheme();
 
-  const user = useSelector((state) => state.auth.login?.currentUser);
-  const accessToken = user?.accessToken;
-
-  let axiosJWT = user ? createAxios(user, dispatch) : undefined;
+  const { accessToken, axiosJWT } = useUserAxios();
 
   useEffect(() => {
     if (isUpdate && data) {

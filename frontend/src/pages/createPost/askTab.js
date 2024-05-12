@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
@@ -15,24 +14,20 @@ import LoadingButton from '@mui/lab/LoadingButton';
 
 import CreateRoundedIcon from '@mui/icons-material/CreateRounded';
 
-import { createAxios } from '../../createInstance';
 import { BaseApi, useToastTheme } from '../../constants/constant';
 import LoadingCircularIndeterminate from '../../components/Loading';
 import { FlexCenterBox } from './styles';
+import useUserAxios from '../../hooks/useUserAxios';
 
 export default function AskTab() {
   const [category, setCategory] = useState(null);
   const [loading, setLoading] = useState(true);
   const [fetching, setFetching] = useState();
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const toastTheme = useToastTheme();
 
-  const user = useSelector((state) => state.auth.login?.currentUser);
-  const accessToken = user?.accessToken;
-
-  let axiosJWT = user ? createAxios(user, dispatch) : undefined;
+  const { user, accessToken, axiosJWT } = useUserAxios();
 
   useEffect(() => {
     const getCategory = async () => {

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -11,8 +10,8 @@ import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 import { useToastTheme, BaseApi } from '../../constants/constant';
-import { createAxios } from '../../createInstance';
 import Rules from '../Rules';
+import useUserAxios from '../../hooks/useUserAxios';
 
 const style = {
   position: 'absolute',
@@ -35,12 +34,7 @@ export default function ModalReportForm({ open, handleClose, id }) {
   const [selectRule, setSelectRule] = useState();
 
   const toastTheme = useToastTheme();
-  const dispatch = useDispatch();
-
-  const user = useSelector((state) => state.auth.login?.currentUser);
-  const accessToken = user?.accessToken;
-
-  let axiosJWT = user ? createAxios(user, dispatch) : undefined;
+  const { user, accessToken, axiosJWT } = useUserAxios();
 
   const formik = useFormik({
     initialValues: {

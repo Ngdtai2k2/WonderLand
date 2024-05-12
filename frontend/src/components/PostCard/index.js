@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { ControlBar, Player } from 'video-react';
 import { toast } from 'react-toastify';
@@ -25,7 +24,6 @@ import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import ThumbUpRoundedIcon from '@mui/icons-material/ThumbUpRounded';
 import ThumbDownRoundedIcon from '@mui/icons-material/ThumbDownRounded';
 
-import { createAxios } from '../../createInstance';
 import {
   BaseApi,
   IntersectionObserverOptions,
@@ -45,6 +43,7 @@ import {
   CardStyled,
 } from './styles';
 import MenuSettings from './menuSettings';
+import useUserAxios from '../../hooks/useUserAxios';
 import 'video-react/dist/video-react.css';
 
 export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
@@ -56,15 +55,11 @@ export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
   const [menuAnchorEl, setMenuAnchorEl] = useState({});
   const [isMenuOpen, setIsMenuOpen] = useState({});
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const theme = useTheme();
   const toastTheme = useToastTheme();
 
-  const user = useSelector((state) => state.auth.login?.currentUser);
-  const accessToken = user?.accessToken;
-
-  let axiosJWT = user ? createAxios(user, dispatch) : undefined;
+  const { user, accessToken, axiosJWT } = useUserAxios();
 
   useEffect(() => {
     setIsLiked(post?.hasReacted === true);

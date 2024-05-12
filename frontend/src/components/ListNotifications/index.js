@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useDispatch, useSelector } from 'react-redux';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import moment from 'moment';
 
@@ -20,9 +19,9 @@ import {
   getNotificationByUserId,
   refresh,
 } from '../../utils/notificationServices';
-import { createAxios } from '../../createInstance';
 import { useToastTheme, BaseApi } from '../../constants/constant';
 import { MenuItemRounded } from './styles';
+import useUserAxios from '../../hooks/useUserAxios';
 
 export default function ListNotifications({
   open,
@@ -36,15 +35,12 @@ export default function ListNotifications({
 
   const page = useRef(1);
   const toastTheme = useToastTheme();
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  
+  const { user, accessToken, axiosJWT } = useUserAxios();
 
-  const user = useSelector((state) => state.auth.login?.currentUser);
-  const accessToken = user?.accessToken;
   const decodedToken = accessToken ? jwtDecode(accessToken) : null;
   const isAdmin = decodedToken ? decodedToken.isAdmin || false : false;
-
-  let axiosJWT = user ? createAxios(user, dispatch) : undefined;
 
   useEffect(() => {
     page.current = 1;

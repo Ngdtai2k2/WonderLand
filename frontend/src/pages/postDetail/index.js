@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
@@ -26,8 +25,8 @@ import PostCard from '../../components/PostCard';
 import ListComments from '../../components/ListComments';
 
 import { useToastTheme, BaseApi } from '../../constants/constant';
-import { createAxios } from '../../createInstance';
 import { VisuallyHiddenInput } from '../styles';
+import useUserAxios from '../../hooks/useUserAxios';
 
 export default function PostDetail() {
   const [isLoading, setIsLoading] = useState(false);
@@ -37,12 +36,9 @@ export default function PostDetail() {
   const [newComment, setNewComment] = useState();
 
   const { id } = useParams();
-  const dispatch = useDispatch();
   const toastTheme = useToastTheme();
-  const user = useSelector((state) => state.auth.login?.currentUser);
-  const accessToken = user?.accessToken;
 
-  let axiosJWT = user ? createAxios(user, dispatch) : undefined;
+  const { user, accessToken, axiosJWT } = useUserAxios();
 
   const getPostById = async (id) => {
     try {

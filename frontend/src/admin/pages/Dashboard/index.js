@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
@@ -15,9 +14,9 @@ import VisibilityOffRoundedIcon from '@mui/icons-material/VisibilityOffRounded';
 import DataTable from '../../components/DataTable';
 import CustomBox from '../../../components/CustomBox';
 import { BaseApi } from '../../../constants/constant';
-import { createAxios } from '../../../createInstance';
 import { convertNumber } from '../../../utils/helperFunction';
 import { BoxContainer, BoxIcon, BoxItems } from './styles';
+import useUserAxios from '../../../hooks/useUserAxios';
 
 export default function Dashboard() {
   const [totalUsers, setTotalUsers] = useState(NaN);
@@ -40,17 +39,12 @@ export default function Dashboard() {
     page: 1,
     pageSize: 5,
   });
+  
+  const { accessToken, axiosJWT } = useUserAxios();
 
   useEffect(() => {
     document.title = 'Admin - Dashboard';
   });
-
-  const dispatch = useDispatch();
-
-  const user = useSelector((state) => state.auth.login?.currentUser);
-  const accessToken = user?.accessToken;
-
-  let axiosJWT = user ? createAxios(user, dispatch) : undefined;
 
   useEffect(() => {
     async function getTotalUsers() {

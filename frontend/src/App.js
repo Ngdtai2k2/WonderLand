@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { jwtDecode } from 'jwt-decode';
 
 import { publicRoutes } from './routes/public';
@@ -13,22 +12,22 @@ import {
   handleSocketEvents,
   initializeSocket,
 } from './sockets/initializeSocket';
+import useUserAxios from './hooks/useUserAxios';
 
 function App() {
   // eslint-disable-next-line no-unused-vars
   const [openModal, setOpenModal] = useState(false);
   const [event, setEvent] = useState();
 
-  const user = useSelector((state) => state.auth.login?.currentUser);
-  const accessToken = user?.accessToken;
+  const isRunningInIFrame = window.self !== window.top;
+  const { user, accessToken } = useUserAxios();
+  
   const decodedToken = accessToken ? jwtDecode(accessToken) : null;
   const isAdmin = decodedToken ? decodedToken.isAdmin || false : false;
 
   const socket = initializeSocket(user?._id);
 
   handleSocketEvents(socket, setEvent, isAdmin);
-
-  const isRunningInIFrame = window.self !== window.top;
 
   return (
     <Router>

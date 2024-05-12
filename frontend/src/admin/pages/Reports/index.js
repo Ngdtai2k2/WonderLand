@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useTheme } from '@emotion/react';
 
@@ -16,13 +15,13 @@ import CustomBox from '../../../components/CustomBox';
 import LoadingCircularIndeterminate from '../../../components/Loading';
 import DataTable from '../../components/DataTable';
 import ModalWebView from '../../components/ModalWebView';
-import { createAxios } from '../../../createInstance';
 import {
   BaseApi,
   createElementStyleForZoom,
   useToastTheme,
 } from '../../../constants/constant';
 import { LinkStyle } from './styles';
+import useUserAxios from '../../../hooks/useUserAxios';
 
 export default function ReportsManager() {
   const [reportState, setReportState] = useState({
@@ -38,14 +37,10 @@ export default function ReportsManager() {
   const [dataWebView, setDataWebView] = useState({ src: '', title: '' });
   const [loadingReject, setLoadingReject] = useState({});
 
-  const dispatch = useDispatch();
   const theme = useTheme();
   const toastTheme = useToastTheme();
+  const {accessToken, axiosJWT } = useUserAxios();
 
-  const user = useSelector((state) => state.auth.login?.currentUser);
-  const accessToken = user?.accessToken;
-
-  let axiosJWT = user ? createAxios(user, dispatch) : undefined;
 
   useEffect(() => {
     document.title = 'Reports management';

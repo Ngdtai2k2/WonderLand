@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
 import ModalReportComment from './modalReportComment';
+import useUserAxios from '../../hooks/useUserAxios';
 
 export default function MenuSettings({
   id,
@@ -18,7 +18,7 @@ export default function MenuSettings({
 }) {
   const [open, setOpen] = useState(false);
 
-  const user = useSelector((state) => state.auth.login?.currentUser);
+  const { user } = useUserAxios();
 
   return (
     <>

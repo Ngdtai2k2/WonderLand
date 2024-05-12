@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 
 import Typography from '@mui/material/Typography';
@@ -12,9 +11,10 @@ import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 import CustomBox from '../../../components/CustomBox';
 import DataTable from '../../components/DataTable';
+
 import { BaseApi, useToastTheme } from '../../../constants/constant';
 import ModalRuleForm from './modalRuleForm';
-import { createAxios } from '../../../createInstance';
+import useUserAxios from '../../../hooks/useUserAxios';
 
 export default function Rules() {
   const [openModal, setOpenModal] = useState(false);
@@ -30,11 +30,7 @@ export default function Rules() {
   const [loadingDelete, setLoadingDelete] = useState({});
 
   const toastTheme = useToastTheme();
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.login?.currentUser);
-  const accessToken = user?.accessToken;
-
-  let axiosJWT = user ? createAxios(user, dispatch) : undefined;
+  const { accessToken, axiosJWT } = useUserAxios();
 
   useEffect(() => {
     document.title = 'Rules management';

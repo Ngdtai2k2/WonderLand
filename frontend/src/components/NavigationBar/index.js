@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useTheme } from '@emotion/react';
 
 import { useColorScheme } from '@mui/material';
@@ -30,6 +30,7 @@ import { useToastTheme, BaseApi } from '../../constants/constant';
 import { createAxios } from '../../createInstance';
 import { logOut } from '../../redux/apiRequest/authApi';
 import { logOutSuccess } from '../../redux/slice/userSlice';
+import useUserAxios from '../../hooks/useUserAxios';
 
 export default function NavigationBar({ isAdmin, state }) {
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -47,15 +48,13 @@ export default function NavigationBar({ isAdmin, state }) {
   const backgroundColorAppBar = isDarkMode ? '#121212' : '#f4f4f4';
   const colorAppBar = isDarkMode ? '#f4f4f4' : '#121212';
 
-  const user = useSelector((state) => state.auth.login?.currentUser);
-  const accessToken = user?.accessToken;
+  const { user, accessToken, axiosJWT } = useUserAxios();
+
   const id = user?._id;
   const device = user?.device;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  let axiosJWT = user ? createAxios(user, dispatch) : undefined;
 
   const toggleDrawer = (newOpen) => () => {
     setOpenDrawer(newOpen);

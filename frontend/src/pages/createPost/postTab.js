@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
@@ -19,11 +18,11 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CreateRoundedIcon from '@mui/icons-material/CreateRounded';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import { createAxios } from '../../createInstance';
 import LoadingCircularIndeterminate from '../../components/Loading';
 import { BaseApi, useToastTheme } from '../../constants/constant';
 import { FlexCenterBox } from './styles';
 import { VisuallyHiddenInput } from '../styles';
+import useUserAxios from '../../hooks/useUserAxios';
 
 export default function PostTab() {
   const [category, setCategory] = useState(null);
@@ -32,14 +31,10 @@ export default function PostTab() {
   const [loading, setLoading] = useState(true);
   const [fetching, setFetching] = useState();
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const toastTheme = useToastTheme();
 
-  const user = useSelector((state) => state.auth.login?.currentUser);
-  const accessToken = user?.accessToken;
-
-  let axiosJWT = user ? createAxios(user, dispatch) : undefined;
+  const { user, accessToken, axiosJWT } = useUserAxios();
 
   useEffect(() => {
     const getCategory = async () => {
