@@ -1,4 +1,5 @@
 const optionsPaginate = require("../configs/optionsPaginate");
+
 const notificationModel = require("../models/notification.model");
 
 const notificationController = {

@@ -2,10 +2,12 @@ const mongoose = require("mongoose");
 
 const { postPopulateOptions } = require("../constants/constants");
 const optionsPaginate = require("../configs/optionsPaginate");
-const Comments = require("../models/comment.model");
-const Post = require("../models/post.model");
-const Reaction = require("../models/reaction.model");
-const User = require("../models/user.model");
+
+const commentsModel = require("../models/comment.model");
+const postModel = require("../models/post.model");
+const reactionModel = require("../models/reaction.model");
+const userModel = require("../models/user.model");
+
 const commentService = require("../services/comment.service");
 const reactionService = require("../services/reaction.service");
 const savePostService = require("../services/savePost.service");
@@ -16,7 +18,7 @@ const reactionController = {
   },
 
   hasReactionPost: async (userId, postId) => {
-    const reaction = await Reaction.findOne({
+    const reaction = await reactionModel.findOne({
       author: userId,
       postId: postId,
     });
@@ -29,7 +31,7 @@ const reactionController = {
   countReactions: async (postId, commentId) => {
     try {
       const query = commentId ? { commentId } : { postId };
-      const reactions = await Reaction.countDocuments({
+      const reactions = await reactionModel.countDocuments({
         ...query,
         type: { $in: [0, 1] },
       });
@@ -46,12 +48,12 @@ const reactionController = {
         return res.status(404).json({ message: "Please provide your userId!" });
       }
       const user = await (mongoose.Types.ObjectId.isValid(author)
-        ? User.findOne({ _id: author })
-        : User.findOne({ nickname: author }));
+        ? userModel.findOne({ _id: author })
+        : userModel.findOne({ nickname: author }));
 
       if (!user) return res.status(404).json({ message: "User not found!" });
 
-      const reactionPosts = await Reaction.find({ author: user._id }).populate(
+      const reactionPosts = await reactionModel.find({ author: user._id }).populate(
         "postId"
       );
 
@@ -62,7 +64,7 @@ const reactionController = {
       const postIdList = filteredPosts.map((post) => post.postId);
 
       const options = optionsPaginate(req);
-      const result = await Post.paginate({ _id: { $in: postIdList } }, options);
+      const result = await postModel.paginate({ _id: { $in: postIdList } }, options);
 
       result.docs = await Promise.all(
         result.docs.map(async (reactionPost) => {
@@ -88,7 +90,7 @@ const reactionController = {
             totalComment,
           };
 
-          return await Post.populate(updatedSavedPost, postPopulateOptions);
+          return await postModel.populate(updatedSavedPost, postPopulateOptions);
         })
       );
 
@@ -108,20 +110,20 @@ const reactionController = {
     try {
       const { id, author, type } = req.body;
 
-      const reply = await Comments.findOne({ "replies._id": id });
+      const reply = await commentsModel.findOne({ "replies._id": id });
       if (!reply) {
         return res.status(404).json({ message: "Reply not found!" });
       }
-      const reaction = await Reaction.findOne({
+      const reaction = await reactionModel.findOne({
         author,
         replyId: id,
       });
       if (reaction) {
         if (reaction.type == type) {
-          await Reaction.findOneAndDelete(reaction._id);
+          await reactionModel.findOneAndDelete(reaction._id);
           return res.status(200).json({ removed: true });
         } else {
-          await Reaction.findOneAndUpdate(
+          await reactionModel.findOneAndUpdate(
             { _id: reaction._id },
             {
               type: type,
@@ -133,7 +135,7 @@ const reactionController = {
           return res.status(200).json({ message: "Reaction updated!" });
         }
       } else {
-        await Reaction.create({
+        await reactionModel.create({
           author: author,
           type: type,
           replyId: id,
@@ -141,7 +143,6 @@ const reactionController = {
         return res.status(201).json({ message: "Reaction saved!" });
       }
     } catch (error) {
-      console.log(error.message);
       return res
         .status(500)
         .json({ message: "An error occurred please try again later!" });

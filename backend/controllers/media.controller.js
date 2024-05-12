@@ -1,11 +1,11 @@
-const Media = require("../models/media.model");
+const mediaModel = require("../models/media.model");
 
 const mediaController = {
   createMedia: async (req, res) => {
     try {
       const { url, type, description, cloudinary_id } = req;
 
-      const newMedia = new Media({
+      const newMedia = new mediaModel({
         url: url,
         type: type,
         description: description,
@@ -23,7 +23,7 @@ const mediaController = {
     try {
       const { url, type, description, cloudinary_id } = req.body.media;
 
-      const updatedMedia = await Media.findByIdAndUpdate(media, {
+      const updatedMedia = await mediaModel.findByIdAndUpdate(media, {
         url: url,
         type: type,
         description: description,
@@ -38,7 +38,7 @@ const mediaController = {
 
   deleteMedia: async (req, res, media) => {
     try {
-      await Media.findByIdAndDelete(media);
+      await mediaModel.findByIdAndDelete(media);
       return true;
     } catch (error) {
       return false;

@@ -2,7 +2,9 @@ const mongoose = require("mongoose");
 
 const Post = require("../models/post.model");
 const Categories = require("../models/categories.model");
+
 const uploadMediaCloudinary = require("./uploadMediaCloudinary.controller");
+
 const optionsPaginate = require("../configs/optionsPaginate");
 
 const categoriesController = {

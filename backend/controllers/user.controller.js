@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
-const User = require("../models/user.model");
+
+const userModel = require("../models/user.model");
+
 const uploadMediaCloudinary = require("./uploadMediaCloudinary.controller");
 const mediaController = require("./media.controller");
 const optionsPaginate = require("../configs/optionsPaginate");
@@ -8,7 +10,7 @@ const userController = {
   getAllUsers: async (req, res) => {
     try {
       const options = optionsPaginate(req, "-password -isAdmin");
-      const users = await User.paginate({}, options);
+      const users = await userModel.paginate({}, options);
 
       return res.status(200).json({ users });
     } catch (error) {
@@ -20,7 +22,7 @@ const userController = {
 
   deleteUserById: async (req, res) => {
     try {
-      const user = await User.findByIdAndDelete(req.params.id);
+      const user = await userModel.findByIdAndDelete(req.params.id);
       if (!user) {
         return res.status(404).json({ message: "User not found!" });
       }
@@ -36,11 +38,13 @@ const userController = {
     try {
       let user;
       if (mongoose.Types.ObjectId.isValid(req.params.id)) {
-        user = await User.findOne({ _id: req.params.id })
+        user = await userModel
+          .findOne({ _id: req.params.id })
           .select("-password -isAdmin")
           .populate("media");
       } else {
-        user = await User.findOne({ nickname: req.params.id })
+        user = await userModel
+          .findOne({ nickname: req.params.id })
           .select("-password -isAdmin")
           .populate("media");
       }
@@ -57,14 +61,14 @@ const userController = {
 
   updateUserById: async (req, res) => {
     try {
-      const user = await User.findById(req.params.id).populate("media");
+      const user = await userModel.findById(req.params.id).populate("media");
 
       if (!user) {
         return res.status(404).json({ message: "User not found!" });
       }
 
       if (req.body.email && req.body.email !== user.email) {
-        const existingUser = await User.findOne({ email: req.body.email });
+        const existingUser = await userModel.findOne({ email: req.body.email });
         if (existingUser) {
           return res.status(400).json({ message: "Email already exists!" });
         }
@@ -91,11 +95,12 @@ const userController = {
         user.media = data._id;
       }
 
-      const userUpdate = await User.findByIdAndUpdate(
-        req.params.id,
-        req.file ? { $set: { ...req.body, media: user.media } } : req.body,
-        { new: true }
-      )
+      const userUpdate = await userModel
+        .findByIdAndUpdate(
+          req.params.id,
+          req.file ? { $set: { ...req.body, media: user.media } } : req.body,
+          { new: true }
+        )
         .select("-password -isAdmin")
         .populate("media");
 
@@ -103,13 +108,15 @@ const userController = {
         .status(200)
         .json({ user: userUpdate, message: "Successful update profile!" });
     } catch (error) {
-      return res.status(500).json({ message: "Something went wrong!" });
+      return res
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
     }
   },
 
   countUser: async (req, res) => {
     try {
-      const total = await User.countDocuments();
+      const total = await userModel.countDocuments();
       return res.status(200).json({ total });
     } catch (error) {
       return res
@@ -132,7 +139,7 @@ const userController = {
         today.getDate() + 1
       );
 
-      const users = await User.paginate(
+      const users = await userModel.paginate(
         { createdAt: { $gte: startOfToday, $lt: endOfToday } },
         options
       );

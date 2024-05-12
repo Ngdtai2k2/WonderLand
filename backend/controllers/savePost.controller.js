@@ -1,9 +1,11 @@
 const mongoose = require("mongoose");
 const { postPopulateOptions } = require("../constants/constants");
 const optionsPaginate = require("../configs/optionsPaginate");
-const Post = require("../models/post.model");
-const SavePost = require("../models/savePost.model");
-const User = require("../models/user.model");
+
+const postModel = require("../models/post.model");
+const savePostModel = require("../models/savePost.model");
+const userModel = require("../models/user.model");
+
 const commentService = require("../services/comment.service");
 const reactionService = require("../services/reaction.service");
 const savePostService = require("../services/savePost.service");
@@ -12,21 +14,21 @@ const savePostController = {
   handleSavePost: async (req, res) => {
     try {
       const { user, id } = req.body;
-      const post = await Post.findById(id);
+      const post = await postModel.findById(id);
       if (!post) return res.status(404).json({ message: "Post not found!" });
-      const savePost = await SavePost.findOne({
+      const savePost = await savePostModel.findOne({
         user,
         postId: id,
       });
 
       if (!savePost) {
-        await SavePost.create({
+        await savePostModel.create({
           user: user,
           postId: id,
         });
         return res.status(201).json({ message: "Post saved!", state: true });
       }
-      await SavePost.findOneAndDelete(savePost._id);
+      await savePostModel.findOneAndDelete(savePost._id);
       return res.status(200).json({ message: "Post unsaved!", state: false });
     } catch (error) {
       return res
@@ -36,7 +38,7 @@ const savePostController = {
   },
 
   hasSavePost: async (userId, postId) => {
-    const savePost = await SavePost.findOne({
+    const savePost = await savePostModel.findOne({
       user: userId,
       postId: postId,
     });
@@ -55,15 +57,15 @@ const savePostController = {
           .json({ message: "Please provide your user ID!" });
       }
       const user = await (mongoose.Types.ObjectId.isValid(author)
-        ? User.findOne({ _id: author })
-        : User.findOne({ nickname: author }));
+        ? userModel.findOne({ _id: author })
+        : userModel.findOne({ nickname: author }));
 
       if (!user) return res.status(404).json({ message: "User not found!" });
 
       const options = optionsPaginate(req);
 
-      const result = await SavePost.paginate({ user: user._id }, options);
-      await SavePost.populate(result.docs, { path: "postId" });
+      const result = await savePostModel.paginate({ user: user._id }, options);
+      await savePostModel.populate(result.docs, { path: "postId" });
 
       result.docs = await Promise.all(
         result.docs.map(async (savedPost) => {
@@ -89,7 +91,7 @@ const savePostController = {
             totalComment,
           };
 
-          return (savedPost = await Post.populate(
+          return (savedPost = await postModel.populate(
             updatedSavedPost,
             postPopulateOptions
           ));

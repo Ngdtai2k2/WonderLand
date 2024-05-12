@@ -1,4 +1,5 @@
 const optionsPaginate = require("../configs/optionsPaginate");
+
 const ruleModel = require("../models/rule.model");
 
 const ruleController = {
