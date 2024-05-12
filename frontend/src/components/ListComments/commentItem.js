@@ -57,10 +57,10 @@ export default function CommentItem({
   const { user, accessToken, axiosJWT } = useUserAxios();
 
   useEffect(() => {
-    setIsLiked(data?.hasReacted === true);
-    setIsDisliked(data?.hasReacted === false);
-    setTotalLike(data?.totalLike);
-    setTotalDislike(data?.totalDislike);
+    setIsLiked(data?.hasReacted === true || false);
+    setIsDisliked(data?.hasReacted === false || false);
+    setTotalLike(data?.totalLike || 0);
+    setTotalDislike(data?.totalDislike || 0);
   }, [data]);
 
   const validationSchema = Yup.object({
