@@ -36,7 +36,7 @@ export default function ListNotifications({
   const page = useRef(1);
   const toastTheme = useToastTheme();
   const navigate = useNavigate();
-  
+
   const { user, accessToken, axiosJWT } = useUserAxios();
 
   const decodedToken = accessToken ? jwtDecode(accessToken) : null;

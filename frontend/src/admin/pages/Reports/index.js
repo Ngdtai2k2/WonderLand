@@ -39,8 +39,7 @@ export default function ReportsManager() {
 
   const theme = useTheme();
   const toastTheme = useToastTheme();
-  const {accessToken, axiosJWT } = useUserAxios();
-
+  const { accessToken, axiosJWT } = useUserAxios();
 
   useEffect(() => {
     document.title = 'Reports management';

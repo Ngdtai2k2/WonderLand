@@ -21,7 +21,7 @@ function App() {
 
   const isRunningInIFrame = window.self !== window.top;
   const { user, accessToken } = useUserAxios();
-  
+
   const decodedToken = accessToken ? jwtDecode(accessToken) : null;
   const isAdmin = decodedToken ? decodedToken.isAdmin || false : false;
 

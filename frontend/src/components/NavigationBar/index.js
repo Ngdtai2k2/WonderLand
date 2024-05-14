@@ -2,8 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useTheme } from '@emotion/react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 import { useColorScheme } from '@mui/material';
+import TextField from '@mui/material/TextField';
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -35,6 +38,7 @@ import useUserAxios from '../../hooks/useUserAxios';
 export default function NavigationBar({ isAdmin, state }) {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [anchorElNotifications, setAnchorElNotifications] = useState(null);
+  const [anchorElSearch, setAnchorElSearch] = useState(null);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [totalUnreadNotifications, setTotalUnreadNotifications] = useState(0);
@@ -58,10 +62,6 @@ export default function NavigationBar({ isAdmin, state }) {
 
   const toggleDrawer = (newOpen) => () => {
     setOpenDrawer(newOpen);
-  };
-
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
   };
 
   const handleCloseUserMenu = () => {
@@ -89,7 +89,6 @@ export default function NavigationBar({ isAdmin, state }) {
     setOpenModal(true);
     handleCloseUserMenu();
   };
-  const handleCloseModal = () => setOpenModal(false);
 
   const countUnreadNotifications = async (userId) => {
     try {
@@ -117,6 +116,18 @@ export default function NavigationBar({ isAdmin, state }) {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataFromChild, state]);
+
+  const formik = useFormik({
+    initialValues: {
+      search: '',
+    },
+    validationSchema: Yup.object({
+      search: Yup.string().max(100),
+    }),
+    onSubmit: (values) => {
+      navigate(`/search?q=${values.search}`);
+    },
+  });
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -162,9 +173,49 @@ export default function NavigationBar({ isAdmin, state }) {
               Wonder Land
             </Link>
           </Typography>
-          <IconButton aria-label="search">
+          <IconButton
+            aria-label="search"
+            id="button-search"
+            onClick={(event) => setAnchorElSearch(event.currentTarget)}
+          >
             <SearchRoundedIcon />
           </IconButton>
+          {/* search form */}
+          <Menu
+            id="search-form"
+            anchorEl={anchorElSearch}
+            open={Boolean(anchorElSearch)}
+            onClose={() => setAnchorElSearch(null)}
+            MenuListProps={{
+              'aria-labelledby': 'button-search',
+            }}
+          >
+            <Box
+              component="form"
+              noValidate
+              method="POST"
+              onSubmit={formik.handleSubmit}
+              paddingX={1}
+              paddingY={0}
+              display="flex"
+              alignItems="flex-end"
+            >
+              <SearchRoundedIcon sx={{ mr: 1, my: 0.5 }} />
+              <TextField
+                id="search"
+                label="Search"
+                name="search"
+                size="small"
+                variant="standard"
+                sx={{ boxShadow: 0 }}
+                value={formik.values.search}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.search && Boolean(formik.errors.search)}
+                helperText={formik.touched.search && formik.errors.search}
+              />
+            </Box>
+          </Menu>
           <IconButton
             aria-label="notifications"
             onClick={(event) => setAnchorElNotifications(event.currentTarget)}
@@ -191,13 +242,19 @@ export default function NavigationBar({ isAdmin, state }) {
             </IconButton>
           </Tooltip>
           <Tooltip title="Open menu">
-            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, m: 1 }}>
+            <IconButton
+              onClick={(event) => {
+                setAnchorElUser(event.currentTarget);
+              }}
+              sx={{ p: 0, m: 1 }}
+            >
               <Avatar
                 src={user?.media?.url}
                 alt={'Avatar of ' + user?.fullname}
               />
             </IconButton>
           </Tooltip>
+          {/* menu user */}
           <Menu
             sx={{ mt: '40px' }}
             id="menu-appbar"
@@ -207,10 +264,6 @@ export default function NavigationBar({ isAdmin, state }) {
               horizontal: 'right',
             }}
             keepMounted
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
             open={Boolean(anchorElUser)}
             onClose={handleCloseUserMenu}
           >
@@ -219,7 +272,7 @@ export default function NavigationBar({ isAdmin, state }) {
             )}
             <ModalAuth
               openModal={openModal}
-              handleCloseModal={handleCloseModal}
+              handleCloseModal={() => setOpenModal(false)}
             />
             {user
               ? [
