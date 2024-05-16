@@ -10,24 +10,9 @@ import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 import { useToastTheme, BaseApi } from '../../constants/constant';
+import { BoxModal } from '../styles';
 import Rules from '../Rules';
 import useUserAxios from '../../hooks/useUserAxios';
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  bgcolor: 'background.paper',
-  borderRadius: 2,
-  boxShadow: 24,
-  p: 2,
-  width: {
-    xs: '95%',
-    sm: '70%',
-    md: '50%',
-  },
-};
 
 export default function ModalReportForm({ open, handleClose, id }) {
   const [fetching, setFetching] = useState();
@@ -77,8 +62,13 @@ export default function ModalReportForm({ open, handleClose, id }) {
       aria-labelledby="modal-report-form"
       aria-describedby="modal-report-form-description"
     >
-      <Box
-        sx={style}
+      <BoxModal
+        bgcolor="background.paper"
+        width={{
+          xs: '95%',
+          sm: '70%',
+          md: '50%',
+        }}
         component="form"
         noValidate
         method="POST"
@@ -127,7 +117,7 @@ export default function ModalReportForm({ open, handleClose, id }) {
             Report
           </LoadingButton>
         </Box>
-      </Box>
+      </BoxModal>
     </Modal>
   );
 }
