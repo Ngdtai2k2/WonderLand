@@ -4,6 +4,7 @@ const verifyMiddleware = require("../middleware/verifyToken");
 const postController = require("../controllers/post.controller");
 const storage = require("../configs/multer.config");
 
+router.post("/view", postController.viewPost);
 router.post(
   "/create",
   verifyMiddleware.token,
@@ -14,5 +15,10 @@ router.post(
 router.post("/:typeQuery", postController.getAllPost);
 router.post("/d/:id", postController.getPostById);
 router.post("/category/:category", postController.getPostByCategory);
+router.delete(
+  "/delete/:id/report",
+  verifyMiddleware.tokenAndAdminAuth,
+  postController.deletePostReport
+);
 
 module.exports = router;

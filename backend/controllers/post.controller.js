@@ -105,7 +105,7 @@ const postController = {
 
   getAllPost: async (req, res) => {
     try {
-      const { type, author } = req.body;
+      const { type, request_user } = req.body;
       const { typeQuery } = req.params;
 
       const options = optionsPaginate(req);
@@ -123,10 +123,10 @@ const postController = {
         result.docs.map(async (post) => {
           let hasReacted = null;
           let hasSavedPost = null;
-          if (author) {
-            const user = await (mongoose.Types.ObjectId.isValid(author)
-              ? User.findOne({ _id: author })
-              : User.findOne({ nickname: author }));
+          if (request_user) {
+            const user = await (mongoose.Types.ObjectId.isValid(request_user)
+              ? User.findOne({ _id: request_user })
+              : User.findOne({ nickname: request_user }));
 
             if (!user)
               return res.status(404).json({ message: "User not found!" });
@@ -134,6 +134,8 @@ const postController = {
               reactionService.hasReactionPost(user._id, post._id),
               savePostService.hasSavePost(user._id, post._id),
             ]);
+            const userHasViewedPost = post?.viewers?.includes(request_user);
+            if (userHasViewedPost) return null;
           }
 
           const [totalReaction, totalComment] = await Promise.all([
@@ -160,12 +162,14 @@ const postController = {
           return await Post.populate(updatedPost, postPopulateOptions);
         })
       );
-
+      
+      result.docs = result.docs.filter(post => post !== null);
       // Sort the result array based on EdgeRank
       result.docs.sort((a, b) => b.edgeRank - a.edgeRank);
 
-      res.status(200).json({ result });
+      return res.status(200).json({ result });
     } catch (error) {
+      console.error(error.message);
       return res
         .status(500)
         .json({ message: "An error occurred please try again later!" });
@@ -279,6 +283,64 @@ const postController = {
       return res
         .status(200)
         .json({ result: { docs: populatedDocs, ...paginationData } });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
+    }
+  },
+
+  viewPost: async (req, res) => {
+    try {
+      const { userId, postId } = req.body;
+
+      const user = await User.findById(userId);
+      if (!user) return res.status(404).json({ message: "User not found!" });
+
+      const post = await Post.findById(postId);
+      if (!post) return res.status(404).json({ message: "Post not found!" });
+
+      if (!post.viewers.includes(userId)) {
+        post.viewers.push(userId);
+        await post.save();
+      }
+
+      return res.status(200).json({ post });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
+    }
+  },
+
+  deletePostReport: async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const post = await Post.findById(id);
+      if (!post) return res.status(404).json({ message: "Post not found!" });
+
+      await reactionModel.deleteMany({ postId: post._id });
+      await commentModel.deleteMany({ postId: post._id });
+      await Post.findByIdAndDelete(id);
+
+      const userSocket = await userSocketModel.find({
+        user: post.author,
+      });
+
+      if (userSocket.length > 0) {
+        userSocket.forEach(async (socket) => {
+          global._io
+            .to(socket.socketId)
+            .emit(
+              "action-delete-post",
+              "Your post was removed for violating community standards!",
+              post
+            );
+        });
+      }
+
+      return res.status(200).json({ message: "Deleted post successfully!" });
     } catch (error) {
       return res
         .status(500)

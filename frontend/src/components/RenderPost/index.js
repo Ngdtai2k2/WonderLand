@@ -10,7 +10,7 @@ import SentimentVeryDissatisfiedRoundedIcon from '@mui/icons-material/SentimentV
 import ButtonBar from '../ButtonBar';
 import PostCard from '../PostCard';
 import LoadingCircularIndeterminate from '../Loading';
-import { fetchData, refresh } from '../../utils/postServices';
+import { getPosts, refresh } from '../../utils/postServices';
 
 export default function RenderPost({ apiLink, type, isHiddenButtonBar }) {
   const [data, setData] = useState([]);
@@ -20,7 +20,7 @@ export default function RenderPost({ apiLink, type, isHiddenButtonBar }) {
   const user = useSelector((state) => state.auth.login?.currentUser);
 
   useEffect(() => {
-    fetchData(apiLink, setData, data, setHasMore, page, user?._id, type);
+    getPosts(apiLink, setData, data, setHasMore, page, user?._id, type);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -65,15 +65,7 @@ export default function RenderPost({ apiLink, type, isHiddenButtonBar }) {
         dataLength={data.length}
         next={() => {
           if (hasMore) {
-            fetchData(
-              apiLink,
-              setData,
-              data,
-              setHasMore,
-              page,
-              user?._id,
-              type,
-            );
+            getPosts(apiLink, setData, data, setHasMore, page, user?._id, type);
           }
         }}
         hasMore={hasMore}

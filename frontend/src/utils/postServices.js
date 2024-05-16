@@ -1,9 +1,10 @@
 import axios from 'axios';
+import { BaseApi } from '../constants/constant';
 
-const fetchData = (apiLink, setItems, items, setHasMore, page, user, type) => {
+const getPosts = (apiLink, setItems, items, setHasMore, page, user, type) => {
   axios
     .post(`${apiLink}_page=${page.current}&_limit=5`, {
-      author: user,
+      request_user: user,
       type: type,
     })
     .then((res) => {
@@ -20,7 +21,18 @@ const fetchData = (apiLink, setItems, items, setHasMore, page, user, type) => {
 
 const refresh = (apiLink, setItems, setHasMore, page, user, type) => {
   page.current = 1;
-  fetchData(apiLink, setItems, [], setHasMore, page, user, type);
+  getPosts(apiLink, setItems, [], setHasMore, page, user, type);
 };
 
-export { fetchData, refresh };
+const handleViewPost = async (postId, userId) => {
+  try {
+    await axios.post(`${BaseApi}/post/view`, {
+      postId: postId,
+      userId: userId,
+    });
+  } catch (error) {
+    console.error(error.response.data.message);
+  }
+};
+
+export { getPosts, refresh, handleViewPost };

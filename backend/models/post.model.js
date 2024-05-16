@@ -30,6 +30,12 @@ const postSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    viewers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   { timestamps: true }
 );

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import { ControlBar, Player } from 'video-react';
@@ -45,6 +45,7 @@ import {
 import MenuSettings from './menuSettings';
 import useUserAxios from '../../hooks/useUserAxios';
 import 'video-react/dist/video-react.css';
+import { handleViewPost } from '../../utils/postServices';
 
 export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
   const [isIntersecting, setIsIntersecting] = useState(false);
@@ -58,6 +59,7 @@ export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
   const navigate = useNavigate();
   const theme = useTheme();
   const toastTheme = useToastTheme();
+  const postRef = useRef(null);
 
   const { user, accessToken, axiosJWT } = useUserAxios();
 
@@ -173,8 +175,34 @@ export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
     createElementStyleForZoom(theme);
   }, [theme, theme.palette.mode]);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          handleViewPost(post?._id, user?._id);
+          observer.unobserve(postRef.current);
+        }
+      },
+      { threshold: 0.5 },
+    );
+
+    const currentRef = postRef.current;
+
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [postRef]);
+
   return (
     <CardStyled
+      ref={postRef}
       sx={{
         width: {
           xs: xs,
@@ -184,6 +212,7 @@ export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
           xl: xl,
         },
       }}
+      className="post-card"
     >
       <CardHeader
         avatar={
