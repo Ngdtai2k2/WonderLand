@@ -3,11 +3,15 @@ const mongoose = require("mongoose");
 const Category = require("../models/categories.model");
 const User = require("../models/user.model");
 const Post = require("../models/post.model");
+
 const optionsPaginate = require("../configs/optionsPaginate");
 const uploadMediaCloudinary = require("./uploadMediaCloudinary.controller");
+
 const reactionService = require("../services/reaction.service");
 const savePostService = require("../services/savePost.service");
 const commentService = require("../services/comment.service");
+const algorithmsService = require("../services/algorithms.service");
+
 const { postPopulateOptions } = require("../constants/constants");
 
 const postController = {
@@ -137,21 +141,31 @@ const postController = {
             commentService.count(post._id),
           ]);
 
+          const edgeRank = await algorithmsService.calculateEdgeRank({
+            likes: totalReaction,
+            comments: totalComment,
+            shares: 0, // Assuming shares are not considered in your EdgeRank calculation
+            createdAt: post.createdAt,
+          });
+
           const updatedPost = {
             ...post.toObject(),
             hasReacted,
             hasSavedPost,
             totalReaction,
             totalComment,
+            edgeRank,
           };
 
           return await Post.populate(updatedPost, postPopulateOptions);
         })
       );
 
+      // Sort the result array based on EdgeRank
+      result.docs.sort((a, b) => b.edgeRank - a.edgeRank);
+
       res.status(200).json({ result });
     } catch (error) {
-      console.error(error.message);
       return res
         .status(500)
         .json({ message: "An error occurred please try again later!" });
