@@ -354,6 +354,16 @@ const postController = {
 
       await reactionModel.deleteMany({ postId: post._id });
       await commentModel.deleteMany({ postId: post._id });
+      if (post.media?.cloudinary_id) {
+        if (post.media.type === 0) {
+          await uploadMediaCloudinary.deleteFile(post.media.cloudinary_id);
+        } else {
+          await uploadMediaCloudinary.deleteFile(
+            post.media.cloudinary_id,
+            "video"
+          );
+        }
+      }
       await postModel.findByIdAndDelete(id);
 
       const userSocket = await userSocketModel.find({
