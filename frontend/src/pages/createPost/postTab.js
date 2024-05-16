@@ -158,6 +158,7 @@ export default function PostTab() {
         margin="normal"
         required
         id="title"
+        name="title"
         label="Title"
         type="text"
         value={formik.values.title}
