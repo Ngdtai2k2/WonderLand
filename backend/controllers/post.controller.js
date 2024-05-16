@@ -2,7 +2,10 @@ const mongoose = require("mongoose");
 
 const Category = require("../models/categories.model");
 const User = require("../models/user.model");
-const Post = require("../models/post.model");
+const postModel = require("../models/post.model");
+const userSocketModel = require("../models/userSocket.model");
+const reactionModel = require("../models/reaction.model");
+const commentModel = require("../models/comment.model");
 
 const optionsPaginate = require("../configs/optionsPaginate");
 const uploadMediaCloudinary = require("./uploadMediaCloudinary.controller");
@@ -43,7 +46,7 @@ const postController = {
           });
       }
 
-      const newPost = new Post({
+      const newPost = new postModel({
         author: author,
         title: title,
         content: content || null,
@@ -63,12 +66,42 @@ const postController = {
     }
   },
 
+  delete: async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const post = await postModel.findById(id).populate("media");
+      if (!post) return res.status(404).json({ message: "Post not found!" });
+
+      await reactionModel.deleteMany({ postId: post._id });
+      await commentModel.deleteMany({ postId: post._id });
+      if (post.media?.cloudinary_id) {
+        if (post.media.type === 0) {
+          await uploadMediaCloudinary.deleteFile(post.media.cloudinary_id);
+        } else {
+          await uploadMediaCloudinary.deleteFile(
+            post.media.cloudinary_id,
+            "video"
+          );
+        }
+      }
+      await postModel.findByIdAndDelete(id);
+
+      return res.status(200).json({ message: "Delete post successfully!" });
+    } catch (error) {
+      console.error(error.message);
+      return res
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
+    }
+  },
+
   getPostById: async (req, res) => {
     try {
       const id = req.params.id;
       const { user } = req.body;
 
-      const post = await Post.findById(id);
+      const post = await postModel.findById(id);
       if (!post) {
         return res.status(404).json({ message: "Post not found!" });
       }
@@ -117,7 +150,7 @@ const postController = {
         query.createdAt = { $gte: twentyFourHoursAgo };
       }
 
-      let result = await Post.paginate(query, options);
+      let result = await postModel.paginate(query, options);
 
       result.docs = await Promise.all(
         result.docs.map(async (post) => {
@@ -159,17 +192,16 @@ const postController = {
             edgeRank,
           };
 
-          return await Post.populate(updatedPost, postPopulateOptions);
+          return await postModel.populate(updatedPost, postPopulateOptions);
         })
       );
-      
-      result.docs = result.docs.filter(post => post !== null);
+
+      result.docs = result.docs.filter((post) => post !== null);
       // Sort the result array based on EdgeRank
       result.docs.sort((a, b) => b.edgeRank - a.edgeRank);
 
       return res.status(200).json({ result });
     } catch (error) {
-      console.error(error.message);
       return res
         .status(500)
         .json({ message: "An error occurred please try again later!" });
@@ -187,7 +219,7 @@ const postController = {
       if (!user) return res.status(404).json({ message: "User not found!" });
 
       const options = optionsPaginate(req);
-      const { docs, ...paginationData } = await Post.paginate(
+      const { docs, ...paginationData } = await postModel.paginate(
         { author: user._id },
         options
       );
@@ -216,7 +248,7 @@ const postController = {
             totalComment,
           };
 
-          return await Post.populate(updatedPost, postPopulateOptions);
+          return await postModel.populate(updatedPost, postPopulateOptions);
         })
       );
 
@@ -245,7 +277,7 @@ const postController = {
 
       const options = optionsPaginate(req);
       // query the posts of the day
-      const { docs, ...paginationData } = await Post.paginate(
+      const { docs, ...paginationData } = await postModel.paginate(
         { category: categoryData._id, createdAt: { $gte: oneDayAgo } },
         { options }
       );
@@ -271,7 +303,7 @@ const postController = {
             totalReaction,
             totalComment,
           };
-          return await Post.populate(updatedPost, postPopulateOptions);
+          return await postModel.populate(updatedPost, postPopulateOptions);
         })
       );
 
@@ -297,7 +329,7 @@ const postController = {
       const user = await User.findById(userId);
       if (!user) return res.status(404).json({ message: "User not found!" });
 
-      const post = await Post.findById(postId);
+      const post = await postModel.findById(postId);
       if (!post) return res.status(404).json({ message: "Post not found!" });
 
       if (!post.viewers.includes(userId)) {
@@ -317,12 +349,12 @@ const postController = {
     try {
       const { id } = req.params;
 
-      const post = await Post.findById(id);
+      const post = await postModel.findById(id);
       if (!post) return res.status(404).json({ message: "Post not found!" });
 
       await reactionModel.deleteMany({ postId: post._id });
       await commentModel.deleteMany({ postId: post._id });
-      await Post.findByIdAndDelete(id);
+      await postModel.findByIdAndDelete(id);
 
       const userSocket = await userSocketModel.find({
         user: post.author,

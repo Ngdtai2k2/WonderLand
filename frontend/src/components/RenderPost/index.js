@@ -15,6 +15,7 @@ import { getPosts, refresh } from '../../utils/postServices';
 export default function RenderPost({ apiLink, type, isHiddenButtonBar }) {
   const [data, setData] = useState([]);
   const [hasMore, setHasMore] = useState(true);
+  const [isRefresh, setIsRefresh] = useState();
 
   const page = useRef(1);
   const user = useSelector((state) => state.auth.login?.currentUser);
@@ -23,6 +24,13 @@ export default function RenderPost({ apiLink, type, isHiddenButtonBar }) {
     getPosts(apiLink, setData, data, setHasMore, page, user?._id, type);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (isRefresh !== undefined) {
+      refresh(apiLink, setData, setHasMore, page, user?._id, type);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isRefresh]);
 
   return (
     <>
@@ -46,6 +54,7 @@ export default function RenderPost({ apiLink, type, isHiddenButtonBar }) {
             xs="100%"
             sm="70%"
             md="50%"
+            setState={setIsRefresh}
           />
         ))}
         {!hasMore && (

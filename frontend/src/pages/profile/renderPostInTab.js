@@ -16,12 +16,13 @@ export default function RenderPostInTab({ apiLink }) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
+  const [refresh, setRefresh] = useState();
 
   const { id } = useParams();
   const toastTheme = useToastTheme();
 
   useEffect(() => {
-    const getSavePostByUser = async () => {
+    const getPostsByUser = async () => {
       try {
         setLoading(true);
         const response = await axios.post(
@@ -42,9 +43,9 @@ export default function RenderPostInTab({ apiLink }) {
         setLoading(false);
       }
     };
-    getSavePostByUser();
+    getPostsByUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [apiLink, id, page]);
+  }, [apiLink, id, page, refresh]);
 
   const handleChangePage = (event, value) => {
     setPage(value);
@@ -67,6 +68,7 @@ export default function RenderPostInTab({ apiLink }) {
           detail={false}
           xs="100%"
           md="65%"
+          setState={setRefresh}
         />
       ))}
       <Pagination

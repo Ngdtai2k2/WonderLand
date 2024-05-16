@@ -20,5 +20,10 @@ router.delete(
   verifyMiddleware.tokenAndAdminAuth,
   postController.deletePostReport
 );
+router.delete(
+  "/delete/:id",
+  verifyMiddleware.verifyTokenAndUserAuthorization,
+  postController.delete
+);
 
 module.exports = router;

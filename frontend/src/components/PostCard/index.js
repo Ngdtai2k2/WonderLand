@@ -47,7 +47,16 @@ import useUserAxios from '../../hooks/useUserAxios';
 import 'video-react/dist/video-react.css';
 import { handleViewPost } from '../../utils/postServices';
 
-export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
+export default function PostCard({
+  post,
+  detail,
+  sm,
+  xs,
+  md,
+  lg,
+  xl,
+  setState,
+}) {
   const [isIntersecting, setIsIntersecting] = useState(false);
   const [totalReaction, setTotalReaction] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
@@ -280,12 +289,13 @@ export default function PostCard({ post, detail, sm, xs, md, lg, xl }) {
         }
       />
       <MenuSettings
-        id={post._id}
+        post={post}
         menuAnchorEl={menuAnchorEl[post._id]}
         isMenuOpen={isMenuOpen[post._id]}
         handleCloseMenu={() =>
           handleCloseMenu(post._id, setMenuAnchorEl, setIsMenuOpen)
         }
+        setState={setState}
       />
       <CardContent sx={{ paddingX: 1, paddingY: 0, marginBottom: 0.5 }}>
         <Typography variant="body1" fontWeight={550}>

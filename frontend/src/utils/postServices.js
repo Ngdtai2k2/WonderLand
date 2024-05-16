@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { BaseApi } from '../constants/constant';
+import { toast } from 'react-toastify';
 
 const getPosts = (apiLink, setItems, items, setHasMore, page, user, type) => {
   axios
@@ -35,4 +36,28 @@ const handleViewPost = async (postId, userId) => {
   }
 };
 
-export { getPosts, refresh, handleViewPost };
+const handleDeletePost = async (
+  postId,
+  userId,
+  axiosJWT,
+  accessToken,
+  toastTheme,
+  setState,
+) => {
+  try {
+    const response = await axiosJWT.delete(
+      `${BaseApi}/post/delete/${postId}?request_user=${userId}`,
+      {
+        headers: {
+          token: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    toast.success(response?.data?.message, toastTheme);
+    setState(Math.floor(Math.random() * 1000));
+  } catch (error) {
+    toast.error(error?.response?.data?.message, toastTheme);
+  }
+};
+
+export { getPosts, refresh, handleViewPost, handleDeletePost };
