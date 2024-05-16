@@ -244,7 +244,7 @@ export default function PostCard({
             id={`btn-post-settings-${post?._id}`}
             onClick={(event) => {
               if (!user) {
-                toast.warning(
+                return toast.warning(
                   'You need to be signed in to perform this action!',
                   toastTheme,
                 );
