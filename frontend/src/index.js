@@ -18,6 +18,11 @@ import 'react-medium-image-zoom/dist/styles.css';
 import './index.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+console.log(
+  "%cWARNING! %cDon't take anyone's word for running the script here...",
+  'color: red; font-size: 60px',
+  'color: yellow; font-size: 30px',
+);
 root.render(
   // <React.StrictMode>
   <Provider store={store}>

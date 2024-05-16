@@ -11,7 +11,7 @@ export const initializeSocket = (userId) => {
     });
 
     socket.on('connect', () => {
-      console.info('⚡⚡⚡⚡⚡⚡⚡');
+      console.log('%c⚡SOCKET ON!⚡', 'color: yellow; font-size: 20px');
     });
 
     return socket;
