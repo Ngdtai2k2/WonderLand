@@ -134,7 +134,9 @@ export default function ModalEditPost({ open, handleClose, id, setState }) {
       aria-describedby="modal-edit-form-description"
     >
       {loading ? (
-        <LoadingCircularIndeterminate />
+        <>
+          <LoadingCircularIndeterminate />
+        </>
       ) : (
         <BoxModal
           bgcolor="background.paper"
