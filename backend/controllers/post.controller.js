@@ -6,6 +6,7 @@ const postModel = require("../models/post.model");
 const userSocketModel = require("../models/userSocket.model");
 const reactionModel = require("../models/reaction.model");
 const commentModel = require("../models/comment.model");
+const savePostModel = require("../models/savePost.model");
 
 const optionsPaginate = require("../configs/optionsPaginate");
 const uploadMediaCloudinary = require("./uploadMediaCloudinary.controller");
@@ -134,6 +135,7 @@ const postController = {
 
       await reactionModel.deleteMany({ postId: post._id });
       await commentModel.deleteMany({ postId: post._id });
+      await savePostModel.deleteMany({ postId: post._id });
       if (post.media?.cloudinary_id) {
         if (post.media.type === 0) {
           await uploadMediaCloudinary.deleteFile(post.media.cloudinary_id);
@@ -412,6 +414,7 @@ const postController = {
 
       await reactionModel.deleteMany({ postId: post._id });
       await commentModel.deleteMany({ postId: post._id });
+      await savePostModel.deleteMany({ postId: post._id });
       if (post.media?.cloudinary_id) {
         if (post.media.type === 0) {
           await uploadMediaCloudinary.deleteFile(post.media.cloudinary_id);
