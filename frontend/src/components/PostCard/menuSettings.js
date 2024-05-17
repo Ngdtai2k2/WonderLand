@@ -8,6 +8,7 @@ import ModalReportForm from './modalReportForm';
 import { handleDeletePost } from '../../utils/postServices';
 import useUserAxios from '../../hooks/useUserAxios';
 import { useToastTheme } from '../../constants/constant';
+import ModalEditPost from './modalEditPost';
 
 export default function MenuSettings({
   post,
@@ -17,6 +18,7 @@ export default function MenuSettings({
   setState,
 }) {
   const [open, setOpen] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
 
   const toastTheme = useToastTheme();
   const { user, accessToken, axiosJWT } = useUserAxios();
@@ -68,7 +70,13 @@ export default function MenuSettings({
           >
             Delete
           </MenuItem>,
-          <MenuItem key={`edit-${post?._id}`} onClick={handleCloseMenu}>
+          <MenuItem
+            key={`edit-${post?._id}`}
+            onClick={() => {
+              handleCloseMenu();
+              setOpenEdit(true);
+            }}
+          >
             Edit
           </MenuItem>,
         ]}
@@ -76,6 +84,14 @@ export default function MenuSettings({
           Download media
         </MenuItem>
       </Menu>
+      {post?.author?._id === user?._id && (
+        <ModalEditPost
+          open={openEdit}
+          handleClose={() => setOpenEdit(false)}
+          id={post?._id}
+          setState={setState}
+        />
+      )}
       {!isAdmin && (
         <ModalReportForm
           open={open}

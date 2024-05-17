@@ -15,6 +15,12 @@ router.post(
 router.post("/:typeQuery", postController.getAllPost);
 router.post("/d/:id", postController.getPostById);
 router.post("/category/:category", postController.getPostByCategory);
+router.put(
+  "/update/:id",
+  verifyMiddleware.verifyTokenAndUserAuthorization,
+  storage.single("file"),
+  postController.update
+);
 router.delete(
   "/delete/:id/report",
   verifyMiddleware.tokenAndAdminAuth,

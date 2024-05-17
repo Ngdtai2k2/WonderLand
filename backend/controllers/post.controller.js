@@ -66,6 +66,65 @@ const postController = {
     }
   },
 
+  update: async (req, res) => {
+    try {
+      const { id } = req.params;
+      let { content, category, title } = req.body;
+
+      title = title.trim();
+      if (!title)
+        return res.status(400).json({ message: "Please provide a title!" });
+
+      const post = await postModel.findById(id).populate("media");
+      if (!post) return res.status(404).json({ message: "Post not found!" });
+
+      let data;
+      if (req.file) {
+        // delete old file
+        if (post.media?.cloudinary_id) {
+          if (post.media?.type === 0) {
+            await uploadMediaCloudinary.deleteFile(post.media.cloudinary_id);
+          } else {
+            await uploadMediaCloudinary.deleteFile(
+              post.media.cloudinary_id,
+              "video"
+            );
+          }
+        }
+        // update new file
+        if (req.file.mimetype.startsWith("image/"))
+          data = await uploadMediaCloudinary.uploadImage(req, res);
+        else data = await uploadMediaCloudinary.uploadVideo(req, res);
+
+        if (data === null)
+          return res.status(400).json({
+            message: req.file.mimetype.startsWith("image/")
+              ? "Upload image failed!"
+              : "Upload video failed!",
+          });
+      }
+
+      const updatedPost = await postModel.findByIdAndUpdate(
+        { _id: id },
+        {
+          title: title,
+          content: content || null,
+          category: category,
+          media: req.file ? data._id : null,
+        },
+        { new: true }
+      );
+      return res
+        .status(200)
+        .json({ message: "Updated post successfully!", updatedPost });
+    } catch (error) {
+      console.log(error.message);
+      return res
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
+    }
+  },
+
   delete: async (req, res) => {
     try {
       const { id } = req.params;
@@ -89,7 +148,6 @@ const postController = {
 
       return res.status(200).json({ message: "Delete post successfully!" });
     } catch (error) {
-      console.error(error.message);
       return res
         .status(500)
         .json({ message: "An error occurred please try again later!" });

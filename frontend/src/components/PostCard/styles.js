@@ -31,3 +31,9 @@ export const BoxSubHeader = styled(Box)(() => ({
   marginTop: 2,
   cursor: 'pointer',
 }));
+
+export const FlexCenterBox = styled(Box)(() => ({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+}));
