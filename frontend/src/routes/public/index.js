@@ -7,6 +7,7 @@ import HomePage from '../../pages/homePage';
 import PostDetail from '../../pages/postDetail';
 import Profile from '../../pages/profile';
 import RulesPage from '../../pages/rulesPage';
+import SearchPage from '../../pages/searchPage';
 import Settings from '../../pages/settings';
 import TrendingPage from '../../pages/trendingPage';
 
@@ -22,5 +23,6 @@ export const publicRoutes = [
   { path: '/post/:id', element: <PostDetail /> },
   { path: '/category/:name', element: <CategoryDetail /> },
   { path: '/rules', element: <RulesPage /> },
+  { path: '/search', element: <SearchPage /> },
   { path: '*', element: <NotFound /> },
 ];

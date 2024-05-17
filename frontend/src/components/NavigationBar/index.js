@@ -2,11 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useTheme } from '@emotion/react';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
 
 import { useColorScheme } from '@mui/material';
-import TextField from '@mui/material/TextField';
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -34,6 +31,7 @@ import { createAxios } from '../../createInstance';
 import { logOut } from '../../redux/apiRequest/authApi';
 import { logOutSuccess } from '../../redux/slice/userSlice';
 import useUserAxios from '../../hooks/useUserAxios';
+import SearchForm from '../SearchForm';
 
 export default function NavigationBar({ isAdmin, state }) {
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -117,18 +115,6 @@ export default function NavigationBar({ isAdmin, state }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataFromChild, state]);
 
-  const formik = useFormik({
-    initialValues: {
-      search: '',
-    },
-    validationSchema: Yup.object({
-      search: Yup.string().max(100),
-    }),
-    onSubmit: (values) => {
-      navigate(`/search?q=${values.search}`);
-    },
-  });
-
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
@@ -186,35 +172,12 @@ export default function NavigationBar({ isAdmin, state }) {
             anchorEl={anchorElSearch}
             open={Boolean(anchorElSearch)}
             onClose={() => setAnchorElSearch(null)}
+            keepMounted
             MenuListProps={{
               'aria-labelledby': 'button-search',
             }}
           >
-            <Box
-              component="form"
-              noValidate
-              method="POST"
-              onSubmit={formik.handleSubmit}
-              paddingX={1}
-              paddingY={0}
-              display="flex"
-              alignItems="flex-end"
-            >
-              <SearchRoundedIcon sx={{ mr: 1, my: 0.5 }} />
-              <TextField
-                id="search"
-                label="Search"
-                name="search"
-                size="small"
-                variant="standard"
-                sx={{ boxShadow: 0 }}
-                value={formik.values.search}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.search && Boolean(formik.errors.search)}
-                helperText={formik.touched.search && formik.errors.search}
-              />
-            </Box>
+            <SearchForm onClose={() => setAnchorElSearch(null)} />
           </Menu>
           <IconButton
             aria-label="notifications"
