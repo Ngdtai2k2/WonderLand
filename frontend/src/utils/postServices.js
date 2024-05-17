@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { BaseApi } from '../constants/constant';
 import { toast } from 'react-toastify';
+
+import { BaseApi } from '../constants/constant';
 
 const getPosts = (apiLink, setItems, items, setHasMore, page, user, type) => {
   axios
@@ -60,4 +61,18 @@ const handleDeletePost = async (
   }
 };
 
-export { getPosts, refresh, handleViewPost, handleDeletePost };
+const getPostById = async (postId, setData, toastTheme) => {
+  try {
+    const response = await axios.post(`${BaseApi}/post/d/${postId}`);
+    setData(response.data.result);
+  } catch (error) {
+    if (error.response && error.response.status === 404) {
+      setData(null);
+      toast.error('Cannot find data!', toastTheme);
+    } else {
+      toast.error('Something went wrong!', toastTheme);
+    }
+  }
+};
+
+export { getPosts, refresh, handleViewPost, handleDeletePost, getPostById };
