@@ -22,7 +22,7 @@ router.put(
   postController.update
 );
 router.delete(
-  "/delete/:id/report",
+  "/delete/:id/report/:reportId",
   verifyMiddleware.tokenAndAdminAuth,
   postController.deletePostReport
 );

@@ -41,7 +41,7 @@ export default function SearchForm({ onClose }) {
     } else {
       setDataSearch([]);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.search]);
 
   return (

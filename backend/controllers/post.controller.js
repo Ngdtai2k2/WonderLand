@@ -7,6 +7,7 @@ const userSocketModel = require("../models/userSocket.model");
 const reactionModel = require("../models/reaction.model");
 const commentModel = require("../models/comment.model");
 const savePostModel = require("../models/savePost.model");
+const reportModel = require("../models/report.model");
 
 const optionsPaginate = require("../configs/optionsPaginate");
 const uploadMediaCloudinary = require("./uploadMediaCloudinary.controller");
@@ -15,6 +16,7 @@ const reactionService = require("../services/reaction.service");
 const savePostService = require("../services/savePost.service");
 const commentService = require("../services/comment.service");
 const algorithmsService = require("../services/algorithms.service");
+const notificationService = require("../services/notification.service");
 
 const { postPopulateOptions } = require("../constants/constants");
 
@@ -407,10 +409,14 @@ const postController = {
 
   deletePostReport: async (req, res) => {
     try {
-      const { id } = req.params;
+      const { id, reportId } = req.params;
 
       const post = await postModel.findById(id);
       if (!post) return res.status(404).json({ message: "Post not found!" });
+
+      const report = await reportModel.findById(reportId);
+      if (!report)
+        return res.status(404).json({ message: "Report not found!" });
 
       await reactionModel.deleteMany({ postId: post._id });
       await commentModel.deleteMany({ postId: post._id });
@@ -427,6 +433,24 @@ const postController = {
       }
       await postModel.findByIdAndDelete(id);
 
+      const notification = await notificationService.createNotification(
+        post.author,
+        3,
+        id,
+        "Your post was removed for violating community standards!",
+        ""
+      );
+
+      await reportModel.findByIdAndUpdate(
+        reportId,
+        {
+          status: 1,
+        },
+        {
+          new: true,
+        }
+      );
+
       const userSocket = await userSocketModel.find({
         user: post.author,
       });
@@ -438,13 +462,14 @@ const postController = {
             .emit(
               "action-delete-post",
               "Your post was removed for violating community standards!",
-              post
+              notification
             );
         });
       }
 
       return res.status(200).json({ message: "Deleted post successfully!" });
     } catch (error) {
+      console.log(error.message);
       return res
         .status(500)
         .json({ message: "An error occurred please try again later!" });

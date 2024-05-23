@@ -44,7 +44,7 @@ export default function SearchPage() {
       setHasLoadMorePost,
       currentPage,
     );
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, currentPage]);
 
   const loadMore = () => {

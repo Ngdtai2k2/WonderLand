@@ -36,6 +36,7 @@ export default function ReportsManager() {
   const [openModal, setOpenModal] = useState(false);
   const [dataWebView, setDataWebView] = useState({ src: '', title: '' });
   const [loadingReject, setLoadingReject] = useState({});
+  const [loadingDelete, setLoadingDelete] = useState({});
 
   const theme = useTheme();
   const toastTheme = useToastTheme();
@@ -108,6 +109,24 @@ export default function ReportsManager() {
         ...prevState,
         [id]: false,
       }));
+    }
+  };
+
+  const handleDeleteReport = async (id, reportId) => {
+    try {
+      setLoadingDelete((prevState) => ({ ...prevState, [id]: true }));
+      const response = await axiosJWT.delete(
+        `${BaseApi}/post/delete/${id}/report/${reportId}`,
+        {
+          headers: { token: `Bearer ${accessToken}` },
+        },
+      );
+      toast.success(response.data.message, toastTheme);
+      getAllReports();
+    } catch (error) {
+      toast.error(error.response.message, toastTheme);
+    } finally {
+      setLoadingDelete((prevState) => ({ ...prevState, [id]: false }));
     }
   };
 
@@ -240,18 +259,32 @@ export default function ReportsManager() {
       renderCell: (params) => {
         return (
           selectStatus !== 2 && (
-            <LoadingButton
-              loading={
-                loadingReject[params.row._id]
-                  ? loadingReject[params.row._id]
-                  : false
-              }
-              variant="outlined"
-              color="error"
-              onClick={() => handleRejectReport(params.row._id)}
-            >
-              Reject
-            </LoadingButton>
+            <Box gap={1}>
+              <LoadingButton
+                loading={
+                  loadingReject[params.row._id]
+                    ? loadingReject[params.row._id]
+                    : false
+                }
+                variant="outlined"
+                color="error"
+                onClick={() => handleRejectReport(params.row._id)}
+              >
+                Reject
+              </LoadingButton>
+              <LoadingButton
+                loading={
+                  loadingDelete[params.row.post?._id]
+                    ? loadingDelete[params.row.post?._id]
+                    : false
+                }
+                variant="outlined"
+                color="error"
+                onClick={() => handleDeleteReport(params.row.post?._id, params.row._id)}
+              >
+                Delete
+              </LoadingButton>
+            </Box>
           )
         );
       },

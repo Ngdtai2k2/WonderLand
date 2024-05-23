@@ -35,8 +35,8 @@ export const handleSocketEvents = (socket, setEvent, isAdmin) => {
     });
   }
 
-  socket.on('action-delete-post', (msg, post) => {
-    setEvent(post._id);
+  socket.on('action-delete-post', (msg, notification) => {
+    setEvent(notification._id);
   });
 
   socket.on('report-refused', (msg, notification) => {

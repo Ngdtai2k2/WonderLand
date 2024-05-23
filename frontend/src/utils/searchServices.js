@@ -1,5 +1,5 @@
-import axios from "axios";
-import { BaseApi } from "../constants/constant";
+import axios from 'axios';
+import { BaseApi } from '../constants/constant';
 
 const search = async (
   userId,
@@ -10,7 +10,7 @@ const search = async (
   setHasLoadMoreUser,
   setHasLoadMorePost,
   page = 1,
-  limit = 5
+  limit = 5,
 ) => {
   try {
     setIsLoading(true);
@@ -54,7 +54,7 @@ const search = async (
     }
   } catch (error) {
     setData({ users: [], posts: [] });
-    console.error("Error searching:", error);
+    console.error('Error searching:', error);
   } finally {
     setIsLoading(false);
   }
