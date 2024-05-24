@@ -16,6 +16,7 @@ const reportRoute = require("./routes/report.route");
 const notificationRoute = require("./routes/notification.route");
 const ruleRoute = require("./routes/rule.route");
 const searchRoute = require("./routes/search.route");
+const friendsRoute = require("./routes/friends.route");
 
 const socketService = require("./services/socket.service");
 
@@ -61,6 +62,7 @@ app.use("/api/v1/notification", notificationRoute);
 app.use("/api/v1/report", reportRoute);
 app.use("/api/v1/rule", ruleRoute);
 app.use("/api/v1/search", searchRoute);
+app.use("/api/v1/friend", friendsRoute);
 
 io.on('connection', (socket) => {
   socketService.connection(socket);

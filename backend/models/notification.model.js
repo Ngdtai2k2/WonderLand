@@ -8,7 +8,7 @@ const notificationSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    // type notification: 0 - post, 1 - comment, 2- reply, 3 - report
+    // type notification: 0 - post, 1 - comment, 2- reply, 3 - report, 4 - friends
     type: {
       type: Number,
       required: true,
@@ -28,6 +28,10 @@ const notificationSchema = new mongoose.Schema(
     replyId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Comment.replies",
+    },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
     },
     message: {
       type: String,

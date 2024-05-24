@@ -9,14 +9,19 @@ const notificationService = {
     message,
     image
   ) => {
-    const notification = await notificationModel.create({
+    let notificationData = {
       recipient: recipient,
       type: type,
       read: false,
-      [targetField]: targetId,
       message: message,
-      image: image
-    });
+      image: image,
+    };
+
+    if (targetField) {
+      notificationData[targetField] = targetId;
+    }
+    const notification = await notificationModel.create(notificationData);
+    
     if (!notification) {
       return res
         .status(500)

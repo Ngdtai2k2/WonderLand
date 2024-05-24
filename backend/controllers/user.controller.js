@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const userModel = require("../models/user.model");
+const friendsModel = require("../models/friends.model");
 
 const uploadMediaCloudinary = require("./uploadMediaCloudinary.controller");
 const mediaController = require("./media.controller");
@@ -36,22 +37,55 @@ const userController = {
 
   findUserById: async (req, res) => {
     try {
-      let user;
-      if (mongoose.Types.ObjectId.isValid(req.params.id)) {
-        user = await userModel
-          .findOne({ _id: req.params.id })
+      const { user } = req.params;
+      const { request_user } = req.query;
+
+      let userData;
+      if (mongoose.Types.ObjectId.isValid(user)) {
+        userData = await userModel
+          .findOne({ _id: user })
           .select("-password -isAdmin")
           .populate("media");
       } else {
-        user = await userModel
-          .findOne({ nickname: req.params.id })
+        userData = await userModel
+          .findOne({ nickname: user })
           .select("-password -isAdmin")
           .populate("media");
       }
-      if (!user) {
+      if (!userData) {
         return res.status(404).json({ message: "User not found" });
       }
-      return res.status(200).json({ user });
+      const friend = await friendsModel.findOne({
+        user: request_user,
+        friend: userData._id,
+      });
+
+      let hasSendRequestAddFriend;
+      let isFriend = false;
+
+      if (friend) {
+        hasSendRequestAddFriend = true;
+      } else {
+        hasSendRequestAddFriend = false;
+      }
+
+      const friendRequest = await friendsModel.findOne({
+        $or: [
+          { user: userData._id, friend: request_user },
+          { user: request_user, friend: userData._id },
+        ],
+      });
+
+      if (friendRequest && friendRequest.status === 1) {
+        isFriend = true;
+      }
+
+      return res.status(200).json({
+        user: userData,
+        hasSendRequestAddFriend,
+        isFriend,
+        friendRequest,
+      });
     } catch (error) {
       return res
         .status(500)

@@ -21,25 +21,23 @@ export const initializeSocket = (userId) => {
 };
 
 export const handleSocketEvents = (socket, setEvent, isAdmin) => {
-  socket.on('msg-action-reaction', (msg, notification) => {
-    setEvent(notification._id);
-  });
+  const registerEvent = (event, handler) => {
+    socket.on(event, (msg, data) => handler(data));
+  };
 
-  socket.on('msg-action-removed-reaction', (msg, deleteReaction) => {
-    setEvent(deleteReaction._id);
+  const events = [
+    'msg-action-reaction',
+    'msg-action-removed-reaction',
+    'action-delete-post',
+    'report-refused',
+    'msg-friend-request',
+  ];
+
+  events.forEach((event) => {
+    registerEvent(event, (data) => setEvent(data._id));
   });
 
   if (isAdmin) {
-    socket.on('report-for-admin', (msg, notification) => {
-      setEvent(notification._id);
-    });
+    registerEvent('report-for-admin', (data) => setEvent(data._id));
   }
-
-  socket.on('action-delete-post', (msg, notification) => {
-    setEvent(notification._id);
-  });
-
-  socket.on('report-refused', (msg, notification) => {
-    setEvent(notification._id);
-  });
 };

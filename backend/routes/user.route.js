@@ -5,7 +5,7 @@ const storage = require("../configs/multer.config");
 const postController = require("../controllers/post.controller");
 
 router.post("/post", postController.getAllPostByUserId);
-router.get("/:id", userController.findUserById);
+router.get("/:user", userController.findUserById);
 router.delete(
   "/:id",
   verifyMiddleware.verifyTokenAndUserAuthorization,
