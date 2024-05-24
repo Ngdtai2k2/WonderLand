@@ -280,7 +280,9 @@ export default function ReportsManager() {
                 }
                 variant="outlined"
                 color="error"
-                onClick={() => handleDeleteReport(params.row.post?._id, params.row._id)}
+                onClick={() =>
+                  handleDeleteReport(params.row.post?._id, params.row._id)
+                }
               >
                 Delete
               </LoadingButton>
