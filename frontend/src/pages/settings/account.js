@@ -6,7 +6,6 @@ import { useFormik } from 'formik';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
-import MailOutlineRoundedIcon from '@mui/icons-material/MailOutlineRounded';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -16,6 +15,9 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import InputAdornment from '@mui/material/InputAdornment';
+
+import MailOutlineRoundedIcon from '@mui/icons-material/MailOutlineRounded';
+import FingerprintRoundedIcon from '@mui/icons-material/FingerprintRounded';
 import WarningAmberRoundedIcon from '@mui/icons-material/WarningAmberRounded';
 
 import { createAxios } from '../../createInstance';
@@ -40,11 +42,16 @@ export default function Account() {
       .email('Invalid email address!')
       .max(50, 'Emails must be less than 50 characters!')
       .required('Email is required!'),
+    nickname: Yup.string()
+      .required('Nickname is required!')
+      .min(5)
+      .max(20, 'Nickname must be at least 20 characters!'),
   });
 
   const formik = useFormik({
     initialValues: {
       email: user?.email || '',
+      nickname: user?.nickname || '',
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -111,8 +118,41 @@ export default function Account() {
           error={formik.touched.email && Boolean(formik.errors.email)}
           helperText={formik.touched.email && formik.errors.email}
         />
-        <Typography variant="caption" fontStyle="italic" sx={{ marginTop: 1 }}>
+        <Typography
+          variant="caption"
+          marginBottom={2}
+          fontStyle="italic"
+          sx={{ marginTop: 1 }}
+        >
           Email will not be displayed publicly !!!
+        </Typography>
+        <TextField
+          id="nickname"
+          label="Nickname"
+          variant="standard"
+          required
+          fullWidth
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <FingerprintRoundedIcon sx={{ fontSize: 16 }} />
+              </InputAdornment>
+            ),
+          }}
+          value={formik.values.nickname}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.touched.nickname && Boolean(formik.errors.nickname)}
+          helperText={formik.touched.nickname && formik.errors.nickname}
+        />
+        <Typography
+          variant="caption"
+          marginBottom={1}
+          fontStyle="italic"
+          sx={{ marginTop: 1 }}
+        >
+          The link to your profile looks like this:{' '}
+          {process.env.REACT_APP_DOMAIN}/u/{formik.values.nickname}
         </Typography>
         <Box
           display="flex"

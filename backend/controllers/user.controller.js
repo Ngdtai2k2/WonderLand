@@ -74,6 +74,15 @@ const userController = {
         }
       }
 
+      if (req.body.nickname && req.body.nickname !== user.nickname) {
+        const existingUser = await userModel.findOne({
+          nickname: req.body.nickname,
+        });
+        if (existingUser) {
+          return res.status(400).json({ message: "Nickname already exists!" });
+        }
+      }
+
       if (req.file) {
         const media = user?.media;
         if (media) {
