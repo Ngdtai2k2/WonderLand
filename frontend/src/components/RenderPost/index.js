@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import Box from '@mui/material/Box';
@@ -11,6 +10,7 @@ import ButtonBar from '../ButtonBar';
 import PostCard from '../PostCard';
 import LoadingCircularIndeterminate from '../Loading';
 import { getPosts, refresh } from '../../utils/postServices';
+import useUserAxios from '../../hooks/useUserAxios';
 
 export default function RenderPost({ apiLink, type, isHiddenButtonBar }) {
   const [data, setData] = useState([]);
@@ -18,7 +18,7 @@ export default function RenderPost({ apiLink, type, isHiddenButtonBar }) {
   const [isRefresh, setIsRefresh] = useState();
 
   const page = useRef(1);
-  const user = useSelector((state) => state.auth.login?.currentUser);
+  const { user } = useUserAxios();
 
   useEffect(() => {
     getPosts(apiLink, setData, data, setHasMore, page, user?._id, type);
