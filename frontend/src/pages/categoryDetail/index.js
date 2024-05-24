@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import Zoom from 'react-medium-image-zoom';
 import { useParams } from 'react-router-dom';
 import { useTheme } from '@emotion/react';
@@ -15,26 +16,41 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
 import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded';
+import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 import WhatshotRoundedIcon from '@mui/icons-material/WhatshotRounded';
 import QueryBuilderRoundedIcon from '@mui/icons-material/QueryBuilderRounded';
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
+// eslint-disable-next-line no-unused-vars
+import NotificationsActiveRoundedIcon from '@mui/icons-material/NotificationsActiveRounded';
+import NotificationsOffRoundedIcon from '@mui/icons-material/NotificationsOffRounded';
 
 import CustomBox from '../../components/CustomBox';
 import NotFound from '../../components/NotFound';
 import RenderPost from '../../components/RenderPost';
-
-import { BaseApi, createElementStyleForZoom } from '../../constants/constant';
-import { AvatarCategory } from './styles';
 import LoadingCircularIndeterminate from '../../components/Loading';
 import ReadMore from '../../components/Readmore';
 
+import { convertNumber } from '../../utils/helperFunction';
+import useUserAxios from '../../hooks/useUserAxios';
+import {
+  BaseApi,
+  createElementStyleForZoom,
+  useToastTheme,
+} from '../../constants/constant';
+import { AvatarCategory } from './styles';
+
 export default function CategoryDetail() {
   const [category, setCategory] = useState();
+  const [totalLike, setTotalLike] = useState(0);
+  const [hasLiked, setHasLiked] = useState(false);
+  const [hasFollowed, setHasFollowed] = useState(false);
   const [loading, setLoading] = useState(false);
   const [tabIndex, setTabIndex] = useState(0);
 
   const { name } = useParams();
   const theme = useTheme();
+  const toastTheme = useToastTheme();
+  const { user, accessToken, axiosJWT } = useUserAxios();
 
   useEffect(() => {
     document.title = category ? category.name : 'Category not found!';
@@ -48,10 +64,16 @@ export default function CategoryDetail() {
     const getCategoryDetails = async () => {
       try {
         setLoading(true);
-        const response = await axios.post(`${BaseApi}/category/details`, {
+        const url = user
+          ? `${BaseApi}/category/details?request_user=${user._id}`
+          : `${BaseApi}/category/details`;
+        const response = await axios.post(url, {
           name: name,
         });
         setCategory(response.data.category);
+        setTotalLike(response.data.category.like.length);
+        setHasLiked(response.data.hasLiked);
+        setHasFollowed(response.data.hasFollowed);
       } catch (error) {
         setCategory(null);
       } finally {
@@ -59,10 +81,75 @@ export default function CategoryDetail() {
       }
     };
     getCategoryDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name]);
 
   const handleChangeTab = (event, newValue) => {
     setTabIndex(newValue);
+  };
+
+  const handleLikeCategory = async () => {
+    try {
+      if (!user) {
+        return toast.warning(
+          'You need to be signed in to use this feature!',
+          toastTheme,
+        );
+      }
+      const response = await axiosJWT.post(
+        `${BaseApi}/category/like/${name}`,
+        {
+          userId: user._id,
+        },
+        {
+          headers: {
+            token: `Bearer ${accessToken}`,
+          },
+        },
+      );
+      const resData = response.data;
+      if (resData.isUnliked) {
+        setTotalLike(totalLike - 1);
+        setHasLiked(false);
+      } else {
+        setTotalLike(totalLike + 1);
+        setHasLiked(true);
+      }
+      toast.success(resData.message, toastTheme);
+    } catch (error) {
+      toast.error(error.response.data.message, toastTheme);
+    }
+  };
+
+  const handleFollowCategory = async () => {
+    try {
+      if (!user) {
+        return toast.warning(
+          'You need to be signed in to use this feature!',
+          toastTheme,
+        );
+      }
+      const response = await axiosJWT.post(
+        `${BaseApi}/category/follow/${name}`,
+        {
+          userId: user._id,
+        },
+        {
+          headers: {
+            token: `Bearer ${accessToken}`,
+          },
+        },
+      );
+      const resData = response.data;
+      if (resData.isUnfollowed) {
+        setHasFollowed(false);
+      } else {
+        setHasFollowed(true);
+      }
+      toast.success(resData.message, toastTheme);
+    } catch (error) {
+      toast.error(error.response.data.message, toastTheme);
+    }
   };
 
   return loading ? (
@@ -105,9 +192,18 @@ export default function CategoryDetail() {
                 <Typography variant="h4" fontWeight={700}>
                   {category?.name}
                 </Typography>
-                <Button variant="outlined" sx={{ height: 30 }}>
-                  Follow
-                </Button>
+                <Box display="flex" alignItems="center" gap={0.5}>
+                  <Button
+                    variant="outlined"
+                    sx={{ height: 30 }}
+                    onClick={() => handleFollowCategory()}
+                  >
+                    {hasFollowed ? 'Unfollow' : 'Follow'}
+                  </Button>
+                  <IconButton size="small">
+                    <NotificationsOffRoundedIcon />
+                  </IconButton>
+                </Box>
               </Box>
               <ReadMore
                 maxLength={100}
@@ -121,11 +217,22 @@ export default function CategoryDetail() {
             </Box>
             <Box display="flex" justifyContent="flex-end" alignItems="center">
               <Box display="flex" justifyContent="center" alignItems="center">
-                <IconButton aria-label="like category">
-                  <FavoriteBorderRoundedIcon />
+                <IconButton
+                  aria-label="like category"
+                  onClick={() => handleLikeCategory()}
+                >
+                  {hasLiked ? (
+                    <FavoriteRoundedIcon color="error" />
+                  ) : (
+                    <FavoriteBorderRoundedIcon color="error" />
+                  )}
                 </IconButton>
-                <Typography variant="body1" paddingX={0.5}>
-                  111
+                <Typography
+                  variant="body1"
+                  paddingX={0.5}
+                  color={hasLiked ? 'error' : ''}
+                >
+                  {convertNumber(totalLike)}
                 </Typography>
               </Box>
             </Box>

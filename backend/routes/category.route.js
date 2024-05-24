@@ -23,5 +23,15 @@ router.delete(
   categoriesController.deleteCategory
 );
 router.post("/details", categoriesController.getCategoryDetails);
+router.post(
+  "/like/:categoryName",
+  verifyMiddleware.token,
+  categoriesController.handleLikeCategory
+);
+router.post(
+  "/follow/:categoryName",
+  verifyMiddleware.token,
+  categoriesController.handleFollowCategory
+);
 
 module.exports = router;

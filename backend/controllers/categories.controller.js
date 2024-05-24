@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 
-const Post = require("../models/post.model");
-const Categories = require("../models/categories.model");
+const userModel = require("../models/user.model");
+const postModel = require("../models/post.model");
+const categoriesModel = require("../models/categories.model");
 
 const uploadMediaCloudinary = require("./uploadMediaCloudinary.controller");
 
@@ -27,7 +28,7 @@ const categoriesController = {
           .json({ message: "Category must contain a photo!" });
       }
 
-      const uniqueName = await Categories.findOne({ name: name });
+      const uniqueName = await categoriesModel.findOne({ name: name });
 
       if (uniqueName) {
         return res
@@ -78,7 +79,7 @@ const categoriesController = {
           .json({ message: "Name and description are required." });
       }
 
-      const uniqueName = await Categories.findOne({ name: name });
+      const uniqueName = await categoriesModel.findOne({ name: name });
 
       if (uniqueName) {
         return res
@@ -91,7 +92,7 @@ const categoriesController = {
       if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(400).json({ message: "Invalid category id!" });
       }
-      const category = await Categories.findById(id).populate("media");
+      const category = await categoriesModel.findById(id).populate("media");
       if (!category) {
         return res.status(404).json({ message: "Category not found!" });
       }
@@ -119,7 +120,7 @@ const categoriesController = {
           return res.status(400).json({ message: "Image not uploaded!" });
         }
 
-        await Categories.findOneAndUpdate(
+        await categoriesModel.findOneAndUpdate(
           {
             _id: id,
           },
@@ -135,7 +136,7 @@ const categoriesController = {
           .json({ message: "Updated category successfully!" });
       }
 
-      await Categories.findOneAndUpdate(
+      await categoriesModel.findOneAndUpdate(
         { _id: id },
         {
           name: name || category.name,
@@ -156,13 +157,13 @@ const categoriesController = {
     try {
       const id = req.params.id;
       if (mongoose.Types.ObjectId.isValid(id)) {
-        const category = await Categories.findById(id).populate("media");
+        const category = await categoriesModel.findById(id).populate("media");
 
         if (!category) {
           return res.status(404).json({ message: "Category not found!" });
         }
 
-        const post = await Post.find({ category: category._id });
+        const post = await postModel.find({ category: category._id });
         if (post.length > 0) {
           return res.status(400).json({
             message:
@@ -179,7 +180,7 @@ const categoriesController = {
             .json({ message: "An error occurred, please try again later!" });
         }
 
-        await Categories.findByIdAndDelete(id);
+        await categoriesModel.findByIdAndDelete(id);
 
         res.status(200).json({ message: "Deleted category successfully!" });
       }
@@ -194,10 +195,10 @@ const categoriesController = {
   getAllCategories: async (req, res) => {
     try {
       const options = optionsPaginate(req, "-like -follow");
-      let result = await Categories.paginate({}, options);
+      let result = await categoriesModel.paginate({}, options);
       result.docs = await Promise.all(
         result.docs.map(async (category) => {
-          return await Categories.populate(category, {
+          return await categoriesModel.populate(category, {
             path: "media",
             select: "url type description",
           });
@@ -214,14 +215,136 @@ const categoriesController = {
   getCategoryDetails: async (req, res) => {
     try {
       const { name } = req.body;
-      const category = await Categories.findOne({ name: name }).populate(
-        "media",
-        "url type description"
-      );
+      const { request_user } = req.query;
+
+      let hasLiked = false;
+      let hasFollowed = false;
+
+      const category = await categoriesModel
+        .findOne({ name: name })
+        .populate("media", "url type description");
       if (!category) {
         return res.status(404).json({ message: "Category not found!" });
       }
-      return res.status(200).json({ category });
+
+      if (request_user) {
+        const user = await userModel.findById(request_user);
+        if (!user) {
+          return res.status(404).json({ message: "User not found!" });
+        }
+        hasLiked = category.like.some(
+          (like) => like.user.toString() === request_user
+        );
+        hasFollowed = category.follow.some(
+          (follow) => follow.user.toString() === request_user
+        );
+      }
+
+      return res.status(200).json({ category, hasLiked, hasFollowed });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
+    }
+  },
+
+  handleLikeCategory: async (req, res) => {
+    try {
+      const { userId } = req.body;
+      const { categoryName } = req.params;
+
+      const user = await userModel.findById(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found!" });
+      }
+      const category = await categoriesModel.findOne({ name: categoryName });
+      if (!category) {
+        return res.status(404).json({ message: "Category not found!" });
+      }
+
+      const hasLiked = category.like.some(
+        (like) => like.user.toString() === userId
+      );
+
+      if (hasLiked) {
+        await categoriesModel.findByIdAndUpdate(
+          category._id,
+          {
+            $pull: {
+              like: { user: userId },
+            },
+          },
+          { new: true }
+        );
+        return res
+          .status(200)
+          .json({ message: "Unliked category successfully!", isUnliked: true });
+      } else {
+        await categoriesModel.findByIdAndUpdate(
+          category._id,
+          {
+            $push: {
+              like: { user: userId },
+            },
+          },
+          { new: true }
+        );
+        return res
+          .status(200)
+          .json({ message: "Liked category successfully!", isUnliked: false });
+      }
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
+    }
+  },
+
+  handleFollowCategory: async (req, res) => {
+    try {
+      const { userId } = req.body;
+      const { categoryName } = req.params;
+      const user = await userModel.findById(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found!" });
+      }
+      const category = await categoriesModel.findOne({ name: categoryName });
+      if (!category) {
+        return res.status(404).json({ message: "Category not found!" });
+      }
+      const hasFollowed = category.follow.some(
+        (follow) => follow.user.toString() === userId
+      );
+
+      if (hasFollowed) {
+        await categoriesModel.findByIdAndUpdate(
+          category._id,
+          {
+            $pull: {
+              follow: { user: userId },
+            },
+          },
+          { new: true }
+        );
+        return res.status(200).json({
+          message: "Unfollowed category successfully!",
+          isUnfollowed: true,
+        });
+      } else {
+        await categoriesModel.findByIdAndUpdate(
+          category._id,
+          {
+            $push: {
+              follow: { user: userId },
+            },
+          },
+          { new: true }
+        );
+        return res.status(200).json({
+          message: "Followed category successfully!",
+          isUnfollowed: false,
+        });
+      }
     } catch (error) {
       return res
         .status(500)
