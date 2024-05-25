@@ -161,6 +161,8 @@ export default function ListNotifications({
                     navigate(`/post/${notification.postId}`);
                   } else if (notification.type === 3 && isAdmin) {
                     navigate(`/admin/reports`);
+                  } else if (notification.type === 4) {
+                    navigate(`/friends?tab_index=1`);
                   }
                 }}
                 selected={!notification.read}
