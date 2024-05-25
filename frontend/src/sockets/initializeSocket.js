@@ -40,4 +40,6 @@ export const handleSocketEvents = (socket, setEvent, isAdmin) => {
   if (isAdmin) {
     registerEvent('report-for-admin', (data) => setEvent(data._id));
   }
+
+  registerEvent('msg-socket-connected', (data) => setEvent(data));
 };

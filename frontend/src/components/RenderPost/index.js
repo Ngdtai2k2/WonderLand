@@ -52,8 +52,6 @@ export default function RenderPost({ apiLink, type, isHiddenButtonBar }) {
             post={post}
             detail={false}
             xs="100%"
-            sm="70%"
-            md="50%"
             setState={setIsRefresh}
           />
         ))}

@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 
 import RenderPost from '../../components/RenderPost';
+import GridColumnLayout from '../../components/GridColumnLayout';
+
 import { BaseApi } from '../../constants/constant';
 
 export default function AskPage() {
@@ -9,10 +11,12 @@ export default function AskPage() {
   });
   // with 3 - query ask posts
   return (
-    <RenderPost
-      apiLink={`${BaseApi}/post/3?_order=desc&`}
-      type={1}
-      isHiddenButtonBar={false}
-    />
+    <GridColumnLayout>
+      <RenderPost
+        apiLink={`${BaseApi}/post/3?_order=desc&`}
+        type={1}
+        isHiddenButtonBar={false}
+      />
+    </GridColumnLayout>
   );
 }

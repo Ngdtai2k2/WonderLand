@@ -7,7 +7,9 @@ const getFriendsList = async (
   setData,
   data,
   setHasMore,
+  setLoading,
 ) => {
+  setLoading(true);
   await axiosJWT
     .post(
       `${apiLink}?_page=${page.current}&_limit=10&request_user=${user?._id}`,
@@ -18,6 +20,7 @@ const getFriendsList = async (
       },
     )
     .then((res) => {
+      setLoading(false);
       if (res.data.docs.length === 0) {
         setData([...data]);
         setHasMore(false);
