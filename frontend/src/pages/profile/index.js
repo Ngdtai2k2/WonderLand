@@ -62,9 +62,11 @@ export default function Profile() {
     const getUserProfile = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(
-          `${BaseApi}/user/${id}?request_user=${user._id}`,
-        );
+        const url = user
+          ? `${BaseApi}/user/${id}?request_user=${user?._id}`
+          : `${BaseApi}/user/${id}`;
+
+        const response = await axios.get(url);
         setData(response?.data?.user);
         setHasSendRequestAddFriend(response?.data?.hasSendRequestAddFriend);
         setIsFriend(response?.data?.isFriend);
@@ -102,8 +104,8 @@ export default function Profile() {
       const response = await axiosJWT.post(
         `${BaseApi}/friend/send-request`,
         {
-          userId: user._id,
-          friendId: data._id,
+          userId: user?._id,
+          friendId: data?._id,
         },
         {
           headers: {
@@ -129,8 +131,8 @@ export default function Profile() {
       const response = await axiosJWT.post(
         `${BaseApi}/friend/cancel-request`,
         {
-          userId: user._id,
-          friendId: data._id,
+          userId: user?._id,
+          friendId: data?._id,
         },
         {
           headers: {
@@ -156,8 +158,8 @@ export default function Profile() {
       const response = await axiosJWT.post(
         `${BaseApi}/friend/accept-request`,
         {
-          userId: data._id,
-          friendId: user._id,
+          userId: data?._id,
+          friendId: user?._id,
         },
         {
           headers: {
@@ -181,10 +183,10 @@ export default function Profile() {
         );
       }
       const response = await axiosJWT.post(
-        `${BaseApi}/friend/delete-friend?request_user=${user._id}`,
+        `${BaseApi}/friend/delete-friend?request_user=${user?._id}`,
         {
-          userId: user._id,
-          friendId: data._id,
+          userId: user?._id,
+          friendId: data?._id,
         },
         {
           headers: {
@@ -244,7 +246,7 @@ export default function Profile() {
           }}
           gap={1}
         >
-          {user._id !== data._id && (
+          {user?._id !== data?._id && (
             <>
               {isFriend ? (
                 <>
@@ -264,7 +266,7 @@ export default function Profile() {
                     description="Are you sure you want to end this friendship and all the shared memories 😭?"
                   />
                 </>
-              ) : friendRequest && friendRequest.friend === user._id ? (
+              ) : friendRequest && friendRequest.friend === user?._id ? (
                 /* handle modal confirm later  */
                 <ButtonStyled
                   variant="outlined"
@@ -300,7 +302,7 @@ export default function Profile() {
             </>
           )}
 
-          {user._id === data._id && (
+          {user?._id === data?._id && (
             <ButtonStyled variant="outlined" size="small" href="/friends">
               <GroupRoundedIcon /> Friends list
             </ButtonStyled>
