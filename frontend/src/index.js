@@ -24,17 +24,15 @@ console.log(
   'color: yellow; font-size: 30px',
 );
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <CssVarsProvider theme={themes}>
-          <CssBaseline />
-          <App />
-          <ToastContainer />
-        </CssVarsProvider>
-      </PersistGate>
-    </Provider>
-  </React.StrictMode>,
+  <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
+      <CssVarsProvider theme={themes}>
+        <CssBaseline />
+        <App />
+        <ToastContainer />
+      </CssVarsProvider>
+    </PersistGate>
+  </Provider>,
 );
 
 reportWebVitals();
