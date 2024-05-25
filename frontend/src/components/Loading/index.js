@@ -10,6 +10,7 @@ export default function LoadingCircularIndeterminate({ size }) {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        overflow: 'hidden',
       }}
     >
       <CircularProgress size={size ? size : 40} />
