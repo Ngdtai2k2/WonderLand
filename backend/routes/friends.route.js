@@ -18,5 +18,6 @@ router.post(
   verifyMiddleware.token,
   friendsController.deleteFriend
 );
+router.post("/:id", verifyMiddleware.token, friendsController.getFriendsList);
 
 module.exports = router;

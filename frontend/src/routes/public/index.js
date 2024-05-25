@@ -4,6 +4,7 @@ import CategoryDetail from '../../pages/categoryDetail';
 import CreatePost from '../../pages/createPost';
 import FreshPage from '../../pages/freshPage';
 import HomePage from '../../pages/homePage';
+import FriendsList from '../../pages/friendsList';
 import PostDetail from '../../pages/postDetail';
 import Profile from '../../pages/profile';
 import RulesPage from '../../pages/rulesPage';
@@ -24,5 +25,6 @@ export const publicRoutes = [
   { path: '/category/:name', element: <CategoryDetail /> },
   { path: '/rules', element: <RulesPage /> },
   { path: '/search', element: <SearchPage /> },
+  { path: '/friends', element: <FriendsList /> },
   { path: '*', element: <NotFound /> },
 ];

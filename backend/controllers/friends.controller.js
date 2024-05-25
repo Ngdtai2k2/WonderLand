@@ -5,6 +5,8 @@ const notificationsModel = require("../models/notification.model");
 
 const notificationService = require("../services/notification.service");
 
+const optionsPaginate = require("../configs/optionsPaginate");
+
 const friendsController = {
   request: async (req, res) => {
     try {
@@ -189,6 +191,48 @@ const friendsController = {
       });
 
       return res.status(200).json({ message: "Separation is sad 😭x100!" });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
+    }
+  },
+
+  getFriendsList: async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const options = optionsPaginate(req);
+
+      const user = await userModel.findById(id);
+      if (!user) return res.status(404).json({ message: "User not found!" });
+
+      let friendsList = await friendsModel.paginate(
+        {
+          $or: [
+            { user: id, status: 1 },
+            { friend: id, status: 1 },
+          ],
+        },
+        options
+      );
+
+      friendsList.docs = await Promise.all(
+        friendsList.docs.map(async (friend) => {
+          const friendId = friend.friend;
+          const friendData = await userModel
+            .findById(friendId == id ? friend.user : friendId)
+            .select("-password -isAdmin -email")
+            .populate({
+              path: "media",
+              select: "type url",
+            });
+
+          return friendData;
+        })
+      );
+
+      return res.status(200).json(friendsList);
     } catch (error) {
       return res
         .status(500)

@@ -28,10 +28,12 @@ import Diversity1Icon from '@mui/icons-material/Diversity1';
 import CustomBox from '../../components/CustomBox';
 import NotFound from '../../components/NotFound';
 import LoadingCircularIndeterminate from '../../components/Loading';
+import ConfirmDialog from '../../components/Dialog';
 
 import PostTab from './postTab';
 import ReactionTab from './reactionTab';
 import SavedPostTab from './savedPostTab';
+
 import { BaseApi, useToastTheme } from '../../constants/constant';
 import useUserAxios from '../../hooks/useUserAxios';
 import { ButtonTab, TypographyButtonTab } from '../styles';
@@ -45,6 +47,7 @@ export default function Profile() {
   const [hasSendRequestAddFriend, setHasSendRequestAddFriend] = useState(false);
   const [isFriend, setIsFriend] = useState(false);
   const [friendRequest, setFriendRequest] = useState();
+  const [openModalConfirm, setOpenModalConfirm] = useState(false);
 
   const theme = useTheme();
   const toastTheme = useToastTheme();
@@ -244,14 +247,23 @@ export default function Profile() {
           {user._id !== data._id && (
             <>
               {isFriend ? (
-                <ButtonStyled
-                  variant="outlined"
-                  size="small"
-                  color="success"
-                  onClick={handleDeleteFriend}
-                >
-                  <Diversity1Icon fontSize="small" /> Friend
-                </ButtonStyled>
+                <>
+                  <ButtonStyled
+                    variant="outlined"
+                    size="small"
+                    color="success"
+                    onClick={() => setOpenModalConfirm(true)}
+                  >
+                    <Diversity1Icon fontSize="small" /> Friend
+                  </ButtonStyled>
+                  <ConfirmDialog
+                    open={openModalConfirm}
+                    handleClose={() => setOpenModalConfirm(false)}
+                    title="Confirm unfriend 🤔"
+                    handleConfirm={() => handleDeleteFriend()}
+                    description="Are you sure you want to end this friendship and all the shared memories 😭?"
+                  />
+                </>
               ) : friendRequest && friendRequest.friend === user._id ? (
                 /* handle modal confirm later  */
                 <ButtonStyled
@@ -289,8 +301,8 @@ export default function Profile() {
           )}
 
           {user._id === data._id && (
-            <ButtonStyled variant="outlined" size="small">
-              <GroupRoundedIcon /> List friends
+            <ButtonStyled variant="outlined" size="small" href="/friends">
+              <GroupRoundedIcon /> Friends list
             </ButtonStyled>
           )}
         </Box>
