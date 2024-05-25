@@ -129,8 +129,10 @@ const friendsController = {
       if (!friend) return res.status(404).json({ message: "User not found!" });
 
       let friendData = await friendsModel.findOne({
-        user: userId,
-        friend: friendId,
+        $or: [
+          { user: userId, friend: friendId },
+          { user: friendId, friend: userId },
+        ],
       });
 
       if (!friendData) {
@@ -200,18 +202,18 @@ const friendsController = {
 
   getFriendsList: async (req, res) => {
     try {
-      const { id } = req.params;
+      const { request_user } = req.query;
 
       const options = optionsPaginate(req);
 
-      const user = await userModel.findById(id);
+      const user = await userModel.findById(request_user);
       if (!user) return res.status(404).json({ message: "User not found!" });
 
       let friendsList = await friendsModel.paginate(
         {
           $or: [
-            { user: id, status: 1 },
-            { friend: id, status: 1 },
+            { user: request_user, status: 1 },
+            { friend: request_user, status: 1 },
           ],
         },
         options
@@ -221,7 +223,7 @@ const friendsController = {
         friendsList.docs.map(async (friend) => {
           const friendId = friend.friend;
           const friendData = await userModel
-            .findById(friendId == id ? friend.user : friendId)
+            .findById(friendId == request_user ? friend.user : friendId)
             .select("-password -isAdmin -email")
             .populate({
               path: "media",
@@ -234,6 +236,44 @@ const friendsController = {
 
       return res.status(200).json(friendsList);
     } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
+    }
+  },
+
+  getFriendsRequestList: async (req, res) => {
+    try {
+      const { request_user } = req.query;
+
+      const user = await userModel.findById(request_user);
+      if (!user) return res.status(404).json({ message: "User not found!" });
+      const options = optionsPaginate(req);
+
+      const friendsRequestList = await friendsModel.paginate(
+        {
+          friend: request_user,
+          status: 0,
+        },
+        options
+      );
+
+      friendsRequestList.docs = await Promise.all(
+        friendsRequestList.docs.map(async (friend) => {
+          const friendId = friend.user;
+          const friendData = await userModel
+            .findById(friendId)
+            .select("-password -isAdmin -email")
+            .populate({
+              path: "media",
+              select: "type url",
+            });
+          return friendData;
+        })
+      );
+      return res.status(200).json(friendsRequestList);
+    } catch (error) {
+      console.error(error.message);
       return res
         .status(500)
         .json({ message: "An error occurred please try again later!" });

@@ -15,9 +15,19 @@ router.post(
 );
 router.post(
   "/delete-friend",
-  verifyMiddleware.token,
+  verifyMiddleware.verifyTokenAndUserAuthorization,
   friendsController.deleteFriend
 );
-router.post("/:id", verifyMiddleware.token, friendsController.getFriendsList);
+// Transmit user requests via Query (request_user)
+router.post(
+  "/",
+  verifyMiddleware.verifyTokenAndUserAuthorization,
+  friendsController.getFriendsList
+);
+router.post(
+  "/request-friend",
+  verifyMiddleware.verifyTokenAndUserAuthorization,
+  friendsController.getFriendsRequestList
+);
 
 module.exports = router;

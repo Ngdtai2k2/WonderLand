@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import moment from 'moment';
 
@@ -9,14 +9,11 @@ import Typography from '@mui/material/Typography';
 import ListItem from '@mui/material/ListItem';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-import PersonRemoveRoundedIcon from '@mui/icons-material/PersonRemoveRounded';
-
 import LoadingCircularIndeterminate from '../../components/Loading';
-import ConfirmDialog from '../../components/Dialog';
 
-import { getFriendsList, refreshFriendList } from '../../utils/friendServices';
-import { useToastTheme, BaseApi } from '../../constants/constant';
+import { BaseApi, useToastTheme } from '../../constants/constant';
 import useUserAxios from '../../hooks/useUserAxios';
+import { getFriendsList, refreshFriendList } from '../../utils/friendServices';
 import {
   AvatarFriendList,
   BoxInfo,
@@ -24,33 +21,37 @@ import {
   ListItemButtonContainer,
   TypographyCenter,
 } from './styles';
+import ConfirmDialog from '../../components/Dialog';
 
-export default function FriendsListTab() {
-  const [friendsList, setFriendList] = useState([]);
-  const [hasMore, setHasMore] = useState(true);
-  const [isLoadingDelete, setIsLoadingDelete] = useState({});
+export default function FriendsRequestListTab() {
+  const [friendsRequestList, setFriendRequestList] = useState([]);
+  const [isLoading, setIsLoading] = useState({});
+  const [friendAccepted, setFriendAccepted] = useState([]);
   const [friendDeleted, setFriendDeleted] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
   const [openModalConfirm, setOpenModalConfirm] = useState(false);
 
-  const toastTheme = useToastTheme();
-  const navigate = useNavigate();
   const page = useRef(1);
+  const navigate = useNavigate();
+  const toastTheme = useToastTheme();
   const { user, accessToken, axiosJWT } = useUserAxios();
 
   useEffect(() => {
-    document.title = 'Friends List';
+    document.title = 'Friends Request List';
   }, []);
+
+  const url = `${BaseApi}/friend/request-friend`;
 
   useEffect(() => {
     if (user) {
       getFriendsList(
-        `${BaseApi}/friend`,
+        url,
         axiosJWT,
         accessToken,
         page,
         user,
-        setFriendList,
-        friendsList,
+        setFriendRequestList,
+        friendsRequestList,
         setHasMore,
       );
     } else {
@@ -63,12 +64,48 @@ export default function FriendsListTab() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleAcceptFriendRequest = async (friendId) => {
+    try {
+      setIsLoading({
+        ...isLoading,
+        [friendId]: false,
+      });
+      if (!user) {
+        return toast.warning(
+          'You need to be signed in to perform this action!',
+          toastTheme,
+        );
+      }
+      const response = await axiosJWT.post(
+        `${BaseApi}/friend/accept-request`,
+        {
+          userId: user?._id,
+          friendId: friendId,
+        },
+        {
+          headers: {
+            token: `Bearer ${accessToken}`,
+          },
+        },
+      );
+      setFriendAccepted([...friendAccepted, friendId]);
+      toast.success(response.data.message, toastTheme);
+    } catch (error) {
+      toast.error(error.response.data.message, toastTheme);
+    } finally {
+      setIsLoading({
+        ...isLoading,
+        [friendId]: true,
+      });
+    }
+  };
+
   const handleDeleteFriend = async (friendId) => {
     try {
-      setIsLoadingDelete((prevState) => ({
-        ...prevState,
-        [friendId]: true,
-      }));
+      setIsLoading({
+        ...isLoading,
+        [friendId]: false,
+      });
       if (!user) {
         return toast.warning(
           'You need to be signed in to perform this action!',
@@ -92,29 +129,29 @@ export default function FriendsListTab() {
     } catch (error) {
       toast.error(error.response.data.message, toastTheme);
     } finally {
-      setIsLoadingDelete((prevState) => ({
-        ...prevState,
-        [friendId]: false,
-      }));
+      setIsLoading({
+        ...isLoading,
+        [friendId]: true,
+      });
     }
   };
 
   return (
     <>
       <Box gap={2}>
-        <ListContainer id="friend-list">
+        <ListContainer id="friend-request-list">
           <InfiniteScroll
-            dataLength={friendsList.length}
+            dataLength={friendsRequestList.length}
             next={() => {
               if (hasMore) {
                 getFriendsList(
-                  `${BaseApi}/friend`,
+                  url,
                   axiosJWT,
                   accessToken,
                   page,
                   user,
-                  setFriendList,
-                  friendsList,
+                  setFriendRequestList,
+                  friendsRequestList,
                   setHasMore,
                 );
               }
@@ -123,61 +160,76 @@ export default function FriendsListTab() {
             loader={<LoadingCircularIndeterminate />}
             refreshFunction={() =>
               refreshFriendList(
-                `${BaseApi}/friend`,
+                url,
                 axiosJWT,
                 accessToken,
                 page,
                 user,
-                setFriendList,
+                setFriendRequestList,
                 setHasMore,
               )
             }
             pullDownToRefresh
             endMessage={
-              friendsList?.length === 0 ? (
+              friendsRequestList?.length === 0 ? (
                 <TypographyCenter variant="caption">
                   Opp! It's sad that you haven't made anyone!
                 </TypographyCenter>
               ) : (
                 <TypographyCenter variant="caption">
-                  Ohhh! Make friends to expand your friend list 😘
+                  Ohhh! You've seen all the friend requests list!
                 </TypographyCenter>
               )
             }
-            scrollableTarget="friend-list"
+            scrollableTarget="friend-request-list"
           >
-            {friendsList &&
-              friendsList?.map((friend, index) => {
+            {friendsRequestList &&
+              friendsRequestList?.map((friend, index) => {
                 return (
                   !friendDeleted.includes(friend._id) && (
                     <ListItem
                       key={index}
                       secondaryAction={
-                        <LoadingButton
-                          loading={isLoadingDelete[friend._id] || false}
-                          loadingPosition="start"
-                          startIcon={
-                            <PersonRemoveRoundedIcon fontSize="small" />
-                          }
-                          variant="outlined"
-                          edge="end"
-                          size="big"
-                          onClick={() => setOpenModalConfirm(true)}
-                          sx={{ fontSize: 12, paddingX: 1.2 }}
-                        >
-                          Unfriend
-                        </LoadingButton>
+                        friendAccepted.includes(friend._id) ? (
+                          <>
+                            <LoadingButton
+                              variant="outlined"
+                              color="error"
+                              edge="end"
+                              size="big"
+                              onClick={() => setOpenModalConfirm(true)}
+                              sx={{ fontSize: 12, paddingX: 1.2 }}
+                            >
+                              Unfriend
+                            </LoadingButton>
+                            <ConfirmDialog
+                              open={openModalConfirm}
+                              handleClose={() => setOpenModalConfirm(false)}
+                              title="Confirm unfriend 🤔"
+                              handleConfirm={() =>
+                                handleDeleteFriend(friend._id)
+                              }
+                              description="Are you sure you want to end this friendship and all the shared memories 😭?"
+                            />
+                          </>
+                        ) : (
+                          <LoadingButton
+                            variant="outlined"
+                            color="success"
+                            edge="end"
+                            size="big"
+                            onClick={() =>
+                              handleAcceptFriendRequest(friend._id)
+                            }
+                            sx={{ fontSize: 12, paddingX: 1.2 }}
+                          >
+                            Accept
+                          </LoadingButton>
+                        )
                       }
                       disablePadding
                       sx={{ marginY: 1, paddingX: 1 }}
                     >
-                      <ConfirmDialog
-                        open={openModalConfirm}
-                        handleClose={() => setOpenModalConfirm(false)}
-                        title="Confirm unfriend 🤔"
-                        handleConfirm={() => handleDeleteFriend(friend._id)}
-                        description="Are you sure you want to end this friendship and all the shared memories 😭?"
-                      />
                       <ListItemButtonContainer
                         dense
                         onClick={() => navigate(`/u/${friend.nickname}`)}
