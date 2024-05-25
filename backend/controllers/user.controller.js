@@ -44,12 +44,12 @@ const userController = {
       if (mongoose.Types.ObjectId.isValid(user)) {
         userData = await userModel
           .findOne({ _id: user })
-          .select("-password -isAdmin")
+          .select("-password -isAdmin -email")
           .populate("media");
       } else {
         userData = await userModel
           .findOne({ nickname: user })
-          .select("-password -isAdmin")
+          .select("-password -isAdmin -email")
           .populate("media");
       }
       if (!userData) {
