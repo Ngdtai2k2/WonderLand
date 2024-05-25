@@ -181,7 +181,7 @@ export default function Profile() {
         );
       }
       const response = await axiosJWT.post(
-        `${BaseApi}/friend/delete-friend`,
+        `${BaseApi}/friend/delete-friend?request_user=${user._id}`,
         {
           userId: user._id,
           friendId: data._id,

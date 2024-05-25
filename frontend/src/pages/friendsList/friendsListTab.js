@@ -38,7 +38,7 @@ export default function FriendsListTab() {
 
   const getFriendsList = async () => {
     await axiosJWT
-      .post(`${BaseApi}/friend/${user?._id}?_page=${page.current}&_limit=10`, {
+      .post(`${BaseApi}/friend/${user?._id}?_page=${page.current}&_limit=10&request_user=${user?._id}`, {
         headers: {
           token: `Bearer ${accessToken}`,
         },
@@ -88,7 +88,7 @@ export default function FriendsListTab() {
         );
       }
       const response = await axiosJWT.post(
-        `${BaseApi}/friend/delete-friend`,
+        `${BaseApi}/friend/delete-friend?request_user=${user?._id}`,
         {
           userId: user._id,
           friendId: friendId,
