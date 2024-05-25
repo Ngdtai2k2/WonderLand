@@ -1,3 +1,5 @@
+const mongoose = require("mongoose");
+
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
@@ -8,6 +10,8 @@ const crypto = require("crypto");
 const RefreshToken = require("../models/refreshToken.model");
 const User = require("../models/user.model");
 const ResetPassword = require("../models/resetPassword.model");
+const friendsModel = require("../models/friends.model");
+const userSocketModel = require("../models/userSocket.model");
 
 const createMailOptions = require("../configs/mail.config");
 
@@ -138,6 +142,32 @@ const authController = {
         if (user.media) {
           responseData.media = user.media;
         }
+
+        // push socket to friends list
+        const friends = await friendsModel.find({
+          $or: [{ user: user._id }, { friend: user._id }],
+        });
+
+        let userSockets = [];
+
+        await Promise.all(
+          friends.map(async (friend) => {
+            const id = user._id.equals(friend.friend)
+              ? friend.user
+              : friend.friend;
+            const sockets = await userSocketModel.find({ user: id });
+            userSockets.push(...sockets);
+          })
+        );
+
+        if (userSockets.length > 0) {
+          userSockets.forEach(async (socket) => {
+            global._io
+              .to(socket.socketId)
+              .emit("msg-socket-connected", `${user._id} online`, user._id);
+          });
+        }
+
         return res.status(200).json(responseData);
       }
     } catch (error) {
@@ -195,7 +225,7 @@ const authController = {
           });
 
           return res.status(200).json({
-            accessToken: newAccessToken
+            accessToken: newAccessToken,
           });
         }
       );
@@ -209,6 +239,7 @@ const authController = {
   logoutUser: async (req, res) => {
     try {
       const { id, device } = req.body;
+
       await RefreshToken.deleteOne({ user: id, device: device });
       res.clearCookie("refreshToken");
 
