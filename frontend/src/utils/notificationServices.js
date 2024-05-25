@@ -13,9 +13,6 @@ const getNotificationByUserId = async (
     .post(
       `${BaseApi}/notification/user?_page=${page.current}&_limit=5&_order=desc&request_user=${userId}`,
       {
-        id: userId,
-      },
-      {
         headers: {
           token: `Bearer ${accessToken}`,
         },

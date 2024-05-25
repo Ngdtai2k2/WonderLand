@@ -35,10 +35,10 @@ const notificationController = {
 
   getNotificationByUserId: async (req, res) => { 
     try {
-      const { id } = req.body;
+      const { request_user } = req.query;
 
       const options = optionsPaginate(req);
-      const notifications = await notificationModel.paginate({ recipient: id }, options);
+      const notifications = await notificationModel.paginate({ recipient: request_user }, options);
 
       return res.status(200).json({ notifications });
     } catch (error) {
