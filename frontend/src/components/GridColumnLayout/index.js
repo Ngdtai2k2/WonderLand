@@ -35,7 +35,6 @@ export default function GridColumnLayout({ children }) {
   const socket = initializeSocket(user?._id);
 
   handleSocketEvents(socket, setEvent);
-  console.log(event);
   useEffect(() => {
     if (user) {
       getFriendsList(
@@ -110,79 +109,79 @@ export default function GridColumnLayout({ children }) {
             Contacts
           </Typography>
           <ListContainer id="list-contacts">
-            {friendsList.length === 0 && !isLoading ? (
-              !user ? (
-                <Typography variant="caption">
-                  Sign in to experience more features 😉!
-                </Typography>
-              ) : (
-                <Typography variant="caption">
-                  No contacts, make friends to connect 🤘!
-                </Typography>
-              )
+            {isLoading ? (
+              <LoadingCircularIndeterminate size={24} />
+            ) : friendsList && friendsList.length === 0 ? (
+              <Typography variant="caption">
+                {user
+                  ? 'No contacts, make friends to connect 🤘!'
+                  : 'Sign in to experience more features 😉!'}
+              </Typography>
             ) : (
-              <InfiniteScroll
-                dataLength={friendsList.length}
-                next={() => {
-                  if (hasMore) {
-                    getFriendsList(
+              !isLoading && (
+                <InfiniteScroll
+                  dataLength={friendsList.length}
+                  next={() => {
+                    if (hasMore) {
+                      getFriendsList(
+                        `${BaseApi}/friend`,
+                        axiosJWT,
+                        accessToken,
+                        page,
+                        user,
+                        setFriendsList,
+                        friendsList,
+                        setHasMore,
+                      );
+                    }
+                  }}
+                  hasMore={hasMore}
+                  loader={<LoadingCircularIndeterminate size={24} />}
+                  pullDownToRefresh
+                  refreshFunction={() => {
+                    refreshFriendList(
                       `${BaseApi}/friend`,
                       axiosJWT,
                       accessToken,
                       page,
                       user,
                       setFriendsList,
-                      friendsList,
                       setHasMore,
                     );
-                  }
-                }}
-                hasMore={hasMore}
-                loader={<LoadingCircularIndeterminate size={24} />}
-                pullDownToRefresh
-                refreshFunction={() => {
-                  refreshFriendList(
-                    `${BaseApi}/friend`,
-                    axiosJWT,
-                    accessToken,
-                    page,
-                    user,
-                    setFriendsList,
-                    setHasMore,
-                  );
-                }}
-                scrollableTarget="list-contacts"
-              >
-                {friendsList.map((friend) => (
-                  <ListItemButton
-                    key={friend?._id}
-                    sx={{ paddingX: 1, borderRadius: 1 }}
-                  >
-                    <Box display="flex" alignItems="center" gap={1.5}>
-                      {friendOnline && friendOnline.includes(friend._id) ? (
-                        <StyledBadge
-                          overlap="circular"
-                          anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'right',
-                          }}
-                          variant="dot"
-                        >
+                  }}
+                  scrollableTarget="list-contacts"
+                >
+                  {friendsList.map((friend) => (
+                    <ListItemButton
+                      key={friend?._id}
+                      sx={{ paddingX: 1, borderRadius: 1 }}
+                    >
+                      <Box display="flex" alignItems="center" gap={1.5}>
+                        {friendOnline && friendOnline.includes(friend._id) ? (
+                          <StyledBadge
+                            overlap="circular"
+                            anchorOrigin={{
+                              vertical: 'bottom',
+                              horizontal: 'right',
+                            }}
+                            variant="dot"
+                          >
+                            <Avatar src={friend?.media?.url} alt="Avatar" />
+                          </StyledBadge>
+                        ) : (
                           <Avatar src={friend?.media?.url} alt="Avatar" />
-                        </StyledBadge>
-                      ) : (
-                        <Avatar src={friend?.media?.url} alt="Avatar" />
-                      )}
+                        )}
 
-                      <Typography variant="body1" fontWeight={600}>
-                        {friend?.nickname.length > 30
-                          ? friend?.nickname.slice(0, 30) + '...'
-                          : friend?.nickname}
-                      </Typography>
-                    </Box>
-                  </ListItemButton>
-                ))}
-              </InfiniteScroll>
+                        <Typography variant="body1" fontWeight={600}>
+                          {friend?.nickname.length > 30
+                            ? friend?.nickname.slice(0, 30) + '...'
+                            : friend?.nickname}
+                        </Typography>
+                      </Box>
+                    </ListItemButton>
+                  ))}
+                </InfiniteScroll>
+              )
             )}
           </ListContainer>
         </Paper>
