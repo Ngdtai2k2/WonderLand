@@ -90,3 +90,10 @@ export function renderContentReply(content) {
   }
   return content;
 }
+
+export function getFileExtension(url) {
+  const dotIndex = url.lastIndexOf('.');
+  if (dotIndex === -1) return '';
+  const extension = url.substring(dotIndex + 1);
+  return extension;
+}
