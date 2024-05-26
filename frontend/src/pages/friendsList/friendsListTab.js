@@ -31,6 +31,7 @@ export default function FriendsListTab() {
   const [isLoadingDelete, setIsLoadingDelete] = useState({});
   const [friendDeleted, setFriendDeleted] = useState([]);
   const [openModalConfirm, setOpenModalConfirm] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const toastTheme = useToastTheme();
   const navigate = useNavigate();
@@ -52,6 +53,7 @@ export default function FriendsListTab() {
         setFriendList,
         friendsList,
         setHasMore,
+        setIsLoading,
       );
     } else {
       toast.warning(
@@ -103,111 +105,115 @@ export default function FriendsListTab() {
     <>
       <Box gap={2}>
         <ListContainer id="friend-list">
-          <InfiniteScroll
-            dataLength={friendsList.length}
-            next={() => {
-              if (hasMore) {
-                getFriendsList(
+          {isLoading ? (
+            <LoadingCircularIndeterminate />
+          ) : (
+            <InfiniteScroll
+              dataLength={friendsList.length}
+              next={() => {
+                if (hasMore) {
+                  getFriendsList(
+                    `${BaseApi}/friend`,
+                    axiosJWT,
+                    accessToken,
+                    page,
+                    user,
+                    setFriendList,
+                    friendsList,
+                    setHasMore,
+                  );
+                }
+              }}
+              hasMore={hasMore}
+              loader={<LoadingCircularIndeterminate />}
+              refreshFunction={() =>
+                refreshFriendList(
                   `${BaseApi}/friend`,
                   axiosJWT,
                   accessToken,
                   page,
                   user,
                   setFriendList,
-                  friendsList,
                   setHasMore,
-                );
+                )
               }
-            }}
-            hasMore={hasMore}
-            loader={<LoadingCircularIndeterminate />}
-            refreshFunction={() =>
-              refreshFriendList(
-                `${BaseApi}/friend`,
-                axiosJWT,
-                accessToken,
-                page,
-                user,
-                setFriendList,
-                setHasMore,
-              )
-            }
-            pullDownToRefresh
-            endMessage={
-              friendsList?.length === 0 ? (
-                <TypographyCenter variant="caption">
-                  Opp! It's sad that you haven't made anyone!
-                </TypographyCenter>
-              ) : (
-                <TypographyCenter variant="caption">
-                  Ohhh! Make friends to expand your friend list 😘
-                </TypographyCenter>
-              )
-            }
-            scrollableTarget="friend-list"
-          >
-            {friendsList &&
-              friendsList?.map((friend, index) => {
-                return (
-                  !friendDeleted.includes(friend._id) && (
-                    <ListItem
-                      key={index}
-                      secondaryAction={
-                        <LoadingButton
-                          loading={isLoadingDelete[friend._id] || false}
-                          loadingPosition="start"
-                          startIcon={
-                            <PersonRemoveRoundedIcon fontSize="small" />
-                          }
-                          variant="outlined"
-                          edge="end"
-                          size="big"
-                          onClick={() => setOpenModalConfirm(true)}
-                          sx={{ fontSize: 12, paddingX: 1.2 }}
-                        >
-                          Unfriend
-                        </LoadingButton>
-                      }
-                      disablePadding
-                      sx={{ marginY: 1, paddingX: 1 }}
-                    >
-                      <ConfirmDialog
-                        open={openModalConfirm}
-                        handleClose={() => setOpenModalConfirm(false)}
-                        title="Confirm unfriend 🤔"
-                        handleConfirm={() => handleDeleteFriend(friend._id)}
-                        description="Are you sure you want to end this friendship and all the shared memories 😭?"
-                      />
-                      <ListItemButtonContainer
-                        dense
-                        onClick={() => navigate(`/u/${friend.nickname}`)}
+              pullDownToRefresh
+              endMessage={
+                friendsList?.length === 0 ? (
+                  <TypographyCenter variant="caption">
+                    Opp! It's sad that you haven't made anyone!
+                  </TypographyCenter>
+                ) : (
+                  <TypographyCenter variant="caption">
+                    Ohhh! Make friends to expand your friend list 😘
+                  </TypographyCenter>
+                )
+              }
+              scrollableTarget="friend-list"
+            >
+              {friendsList &&
+                friendsList?.map((friend, index) => {
+                  return (
+                    !friendDeleted.includes(friend._id) && (
+                      <ListItem
+                        key={index}
+                        secondaryAction={
+                          <LoadingButton
+                            loading={isLoadingDelete[friend._id] || false}
+                            loadingPosition="start"
+                            startIcon={
+                              <PersonRemoveRoundedIcon fontSize="small" />
+                            }
+                            variant="outlined"
+                            edge="end"
+                            size="big"
+                            onClick={() => setOpenModalConfirm(true)}
+                            sx={{ fontSize: 12, paddingX: 1.2 }}
+                          >
+                            Unfriend
+                          </LoadingButton>
+                        }
+                        disablePadding
+                        sx={{ marginY: 1, paddingX: 1 }}
                       >
-                        <AvatarFriendList
-                          src={friend?.media?.url}
-                          alt="avatar"
-                          variant="rounded"
+                        <ConfirmDialog
+                          open={openModalConfirm}
+                          handleClose={() => setOpenModalConfirm(false)}
+                          title="Confirm unfriend 🤔"
+                          handleConfirm={() => handleDeleteFriend(friend._id)}
+                          description="Are you sure you want to end this friendship and all the shared memories 😭?"
                         />
-                        <Box>
-                          <BoxInfo>
-                            <Typography variant="body1" fontWeight={700}>
-                              {friend.nickname}
+                        <ListItemButtonContainer
+                          dense
+                          onClick={() => navigate(`/u/${friend.nickname}`)}
+                        >
+                          <AvatarFriendList
+                            src={friend?.media?.url}
+                            alt="avatar"
+                            variant="rounded"
+                          />
+                          <Box>
+                            <BoxInfo>
+                              <Typography variant="body1" fontWeight={700}>
+                                {friend.nickname}
+                              </Typography>
+                              <Typography variant="caption" fontSize={10}>
+                                Joined {moment(friend.createdAt).fromNow()}
+                              </Typography>
+                            </BoxInfo>
+                            <Typography variant="body1">
+                              {friend.about.length > 30
+                                ? friend.about.slice(0, 30) + '...'
+                                : friend.about}
                             </Typography>
-                            <Typography variant="caption" fontSize={10}>
-                              Joined {moment(friend.createdAt).fromNow()}
-                            </Typography>
-                          </BoxInfo>
-                          <Typography variant="body1">
-                            {friend.about.length > 30
-                              ? friend.about.slice(0, 30) + '...'
-                              : friend.about}
-                          </Typography>
-                        </Box>
-                      </ListItemButtonContainer>
-                    </ListItem>
-                  )
-                );
-              })}
-          </InfiniteScroll>
+                          </Box>
+                        </ListItemButtonContainer>
+                      </ListItem>
+                    )
+                  );
+                })}
+            </InfiniteScroll>
+          )}
         </ListContainer>
       </Box>
     </>
