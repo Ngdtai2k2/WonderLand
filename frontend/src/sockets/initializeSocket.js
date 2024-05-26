@@ -41,5 +41,9 @@ export const handleSocketEvents = (socket, setEvent, isAdmin) => {
     registerEvent('report-for-admin', (data) => setEvent(data._id));
   }
 
-  registerEvent('msg-socket-connected', (data) => setEvent(data));
+  registerEvent('msg-socket-connected', (data) =>
+    setTimeout(() => {
+      setEvent(data);
+    }, 1000),
+  );
 };
