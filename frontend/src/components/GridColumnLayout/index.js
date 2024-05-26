@@ -9,7 +9,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import Avatar from '@mui/material/Avatar';
 
 import LoadingCircularIndeterminate from '../Loading';
-import FunnyImages from '../FunnyImages';
+import WidgetImage from '../WidgetImage';
 
 import { BaseApi } from '../../constants/constant';
 import useUserAxios from '../../hooks/useUserAxios';
@@ -88,7 +88,7 @@ export default function GridColumnLayout({ children }) {
   return (
     <Grid container>
       <GridHiddenMobile item xs={12} md={3} marginTop={17}>
-        <FunnyImages />
+        <WidgetImage />
       </GridHiddenMobile>
       <Grid item xs={12} md={6}>
         {children}

@@ -18,7 +18,7 @@ import {
 } from '../../constants/constant';
 import { getFileExtension } from '../../utils/helperFunction';
 
-export default function FunnyImages() {
+export default function WidgetImage() {
   const [imageURL, setImageURL] = useState();
   const [type, setType] = useState();
   const [isLoading, setIsLoading] = useState(false);
