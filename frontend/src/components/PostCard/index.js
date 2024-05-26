@@ -187,7 +187,7 @@ export default function PostCard({
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && user) {
           handleViewPost(post?._id, user?._id);
           observer.unobserve(postRef.current);
         }
