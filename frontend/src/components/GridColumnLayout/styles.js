@@ -5,6 +5,8 @@ import List from '@mui/material/List';
 import Badge from '@mui/material/Badge';
 
 export const GridHiddenMobile = styled(Grid)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'flex-end',
   [theme.breakpoints.up('xs')]: {
     display: 'none',
   },

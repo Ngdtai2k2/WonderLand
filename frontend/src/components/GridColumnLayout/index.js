@@ -8,8 +8,8 @@ import Box from '@mui/material/Box';
 import ListItemButton from '@mui/material/ListItemButton';
 import Avatar from '@mui/material/Avatar';
 
-import CustomBox from '../CustomBox';
 import LoadingCircularIndeterminate from '../Loading';
+import FunnyImages from '../FunnyImages';
 
 import { BaseApi } from '../../constants/constant';
 import useUserAxios from '../../hooks/useUserAxios';
@@ -87,23 +87,16 @@ export default function GridColumnLayout({ children }) {
 
   return (
     <Grid container>
-      <GridHiddenMobile item xs={12} md={3}>
-        <CustomBox paddingTop={8}>111</CustomBox>
+      <GridHiddenMobile item xs={12} md={3} marginTop={17}>
+        <FunnyImages />
       </GridHiddenMobile>
       <Grid item xs={12} md={6}>
         {children}
       </Grid>
-      <GridHiddenMobile
-        item
-        xs={12}
-        md={3}
-        marginTop={17}
-        display="flex"
-        alignItems="flex-end"
-      >
+      <GridHiddenMobile item xs={12} md={3} marginTop={17}>
         <Paper
           elevation={1}
-          sx={{ position: 'fixed', padding: 1.5, width: '24%' }}
+          sx={{ position: 'sticky', top: 75, padding: 1.5, marginRight: 1.5 }}
         >
           <Typography variant="body1" fontWeight={600}>
             Contacts
