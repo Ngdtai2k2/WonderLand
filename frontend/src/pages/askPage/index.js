@@ -12,11 +12,7 @@ export default function AskPage() {
   // with 3 - query ask posts
   return (
     <GridColumnLayout>
-      <RenderPost
-        apiLink={`${BaseApi}/post/3?_order=desc&`}
-        type={1}
-        isHiddenButtonBar={false}
-      />
+      <RenderPost apiLink={`${BaseApi}/post/3?_order=desc&`} type={1} />
     </GridColumnLayout>
   );
 }

@@ -13,11 +13,7 @@ export default function HomePage() {
 
   return (
     <GridColumnLayout>
-      <RenderPost
-        apiLink={`${BaseApi}/post/4?_order=desc&`}
-        type={0}
-        isHiddenButtonBar={false}
-      />
+      <RenderPost apiLink={`${BaseApi}/post/4?_order=desc&`} type={0} />
     </GridColumnLayout>
   );
 }

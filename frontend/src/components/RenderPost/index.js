@@ -6,13 +6,12 @@ import Typography from '@mui/material/Typography';
 
 import SentimentVeryDissatisfiedRoundedIcon from '@mui/icons-material/SentimentVeryDissatisfiedRounded';
 
-import ButtonBar from '../ButtonBar';
 import PostCard from '../PostCard';
 import LoadingCircularIndeterminate from '../Loading';
 import { getPosts, refresh } from '../../utils/postServices';
 import useUserAxios from '../../hooks/useUserAxios';
 
-export default function RenderPost({ apiLink, type, isHiddenButtonBar }) {
+export default function RenderPost({ apiLink, type }) {
   const [data, setData] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const [isRefresh, setIsRefresh] = useState();
@@ -34,14 +33,13 @@ export default function RenderPost({ apiLink, type, isHiddenButtonBar }) {
 
   return (
     <>
-      {!isHiddenButtonBar && <ButtonBar />}
       <Box
         display="flex"
         justifyContent="center"
         flexDirection="column"
         alignItems="center"
         gap={2}
-        margin={{
+        marginX={{
           xs: 1.5,
           md: 3,
         }}

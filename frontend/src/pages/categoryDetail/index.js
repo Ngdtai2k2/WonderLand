@@ -286,13 +286,11 @@ export default function CategoryDetail() {
         {tabIndex === 0 && (
           <RenderPost
             apiLink={`${BaseApi}/post/category/${name}?_isFresh=false&_order=desc&_sort=createdAt&`}
-            isHiddenButtonBar={true}
           />
         )}
         {tabIndex === 1 && (
           <RenderPost
             apiLink={`${BaseApi}/post/category/${name}?_isFresh=true&_order=desc&_sort=createdAt&`}
-            isHiddenButtonBar={true}
           />
         )}
         {tabIndex === 2 && (

@@ -10,7 +10,7 @@ export const GridHiddenMobile = styled(Grid)(({ theme }) => ({
   [theme.breakpoints.up('xs')]: {
     display: 'none',
   },
-  [theme.breakpoints.up('md')]: {
+  [theme.breakpoints.up('sm')]: {
     display: 'block',
   },
 }));

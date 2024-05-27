@@ -3,7 +3,6 @@ import { useTheme } from '@emotion/react';
 import Zoom from 'react-medium-image-zoom';
 import axios from 'axios';
 
-import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
@@ -17,6 +16,7 @@ import {
   createElementStyleForZoom,
 } from '../../constants/constant';
 import { getFileExtension } from '../../utils/helperFunction';
+import { PaperSticky } from '../styles';
 
 export default function WidgetImage() {
   const [imageURL, setImageURL] = useState();
@@ -65,9 +65,15 @@ export default function WidgetImage() {
   }, [theme, theme.palette.mode]);
 
   return (
-    <Paper
+    <PaperSticky
       elevation={1}
-      sx={{ position: 'sticky', top: 75, padding: 1.5, marginLeft: 1 }}
+      sx={{
+        top: 75,
+        padding: 1,
+        marginLeft: 1,
+        marginBottom: 1,
+        height: '250px',
+      }}
     >
       <Box display="flex" alignItems="center" justifyContent="space-between">
         <Typography variant="body1" fontWeight={600}>
@@ -119,11 +125,11 @@ export default function WidgetImage() {
               width="100%"
               height="200px"
               loading="lazy"
-              style={{ borderRadius: 3, objectFit: 'cover' }}
+              style={{ borderRadius: 3, objectFit: 'cover', marginBottom: 1 }}
             />
           </Zoom>
         )}
       </Box>
-    </Paper>
+    </PaperSticky>
   );
 }

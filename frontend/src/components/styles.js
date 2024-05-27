@@ -1,5 +1,7 @@
-import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
+
+import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
 
 export const BoxModal = styled(Box)({
   position: 'absolute',
@@ -21,4 +23,9 @@ export const VisuallyHiddenInput = styled('input')({
   whiteSpace: 'nowrap',
   width: 1,
   cursor: 'pointer',
+});
+
+export const PaperSticky = styled(Paper)({
+  position: 'sticky',
+  padding: 15,
 });
