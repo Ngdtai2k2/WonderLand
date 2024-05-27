@@ -30,6 +30,8 @@ export default function FriendsRequestListTab() {
   const [friendDeleted, setFriendDeleted] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const [openModalConfirm, setOpenModalConfirm] = useState(false);
+  // eslint-disable-next-line no-unused-vars
+  const [isLoadingList, setIsLoadingList] = useState(false);
 
   const page = useRef(1);
   const navigate = useNavigate();
@@ -53,6 +55,7 @@ export default function FriendsRequestListTab() {
         setFriendRequestList,
         friendsRequestList,
         setHasMore,
+        setIsLoadingList
       );
     } else {
       toast.warning(
