@@ -45,8 +45,9 @@ export default function ListNotifications({
   useEffect(() => {
     page.current = 1;
     if (user) {
-      refresh(
+      getNotificationByUserId(
         setNotifications,
+        notifications,
         setHasMore,
         page,
         user?._id,
