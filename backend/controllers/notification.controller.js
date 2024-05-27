@@ -1,6 +1,7 @@
 const optionsPaginate = require("../configs/optionsPaginate");
 
 const notificationModel = require("../models/notification.model");
+const userModel = require("../models/user.model");
 
 const notificationController = {
   confirmRead: async (req, res) => {
@@ -23,30 +24,44 @@ const notificationController = {
   countUnreadNotifications: async (req, res) => {
     try {
       const { id } = req.body;
-      const notifications = await notificationModel.find({ recipient: id, read: false });
+      const notifications = await notificationModel.find({
+        recipient: id,
+        read: false,
+      });
 
       return res.status(200).json({ total: notifications.length });
     } catch (error) {
       return res
-       .status(500)
-       .json({ message: "An error occurred please try again later!" });
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
     }
   },
 
-  getNotificationByUserId: async (req, res) => { 
+  getNotificationByUserId: async (req, res) => {
     try {
-      const { request_user } = req.query;
+      const { request_user, type } = req.query;
+
+      const user = await userModel.findById(request_user);
+      if (!user) {
+        return res.status(404).json({ message: "User not found!" });
+      }
 
       const options = optionsPaginate(req);
-      const notifications = await notificationModel.paginate({ recipient: request_user }, options);
+      const query = { recipient: request_user };
+
+      if (type) {
+        query.type = { $in: type };
+      }
+
+      const notifications = await notificationModel.paginate(query, options);
 
       return res.status(200).json({ notifications });
     } catch (error) {
       return res
-       .status(500)
-       .json({ message: "An error occurred please try again later!" });
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
     }
-  }
+  },
 };
 
 module.exports = notificationController;

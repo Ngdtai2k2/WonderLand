@@ -32,6 +32,7 @@ export const handleSocketEvents = (socket, setEvent, isAdmin) => {
     'report-refused',
     'msg-friend-request',
     'msg-your-birthday',
+    'msg-friend-birthday',
   ];
 
   events.forEach((event) => {
@@ -47,4 +48,6 @@ export const handleSocketEvents = (socket, setEvent, isAdmin) => {
       setEvent(data);
     }, 1000),
   );
+
+  registerEvent('msg-friend-birthday', (data) => setEvent(data));
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -8,12 +8,17 @@ import CelebrationRoundedIcon from '@mui/icons-material/CelebrationRounded';
 import { getCurrentDate } from '../../utils/helperFunction';
 import useUserAxios from '../../hooks/useUserAxios';
 import { initializeSocket } from '../../sockets/initializeSocket';
+import { getNotificationByUserId } from '../../utils/notificationServices';
 
 export default function WidgetBirthday() {
   const [msgYourBirthday, setMsgYourBirthday] = useState(null);
   const [event, setEvent] = useState();
+  const [notifications, setNotifications] = useState([]);
+  // eslint-disable-next-line no-unused-vars
+  const [hasMore, setHasMore] = useState(true);
 
-  const { user } = useUserAxios();
+  const page = useRef(1);
+  const { user, accessToken, axiosJWT } = useUserAxios();
 
   const socket = initializeSocket(user?._id);
 
@@ -52,6 +57,25 @@ export default function WidgetBirthday() {
     }
   }, [storedData, event, user]);
 
+  useEffect(() => {
+    page.current = 1;
+    if (user) {
+      getNotificationByUserId(
+        setNotifications,
+        notifications,
+        setHasMore,
+        page,
+        user?._id,
+        accessToken,
+        axiosJWT,
+        5,
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
+  console.log(notifications);
+
   return (
     <>
       <Box display="flex" alignItems="center" justifyContent="space-between">
@@ -62,9 +86,19 @@ export default function WidgetBirthday() {
           {getCurrentDate()}
         </Typography>
       </Box>
-      <Typography marginTop={1} variant="body2">
-        {msgYourBirthday ? msgYourBirthday : `It's a dull day`}
-      </Typography>
+      <Box marginTop={1}>
+        {msgYourBirthday ? (
+          <Typography variant="body2">{msgYourBirthday}</Typography>
+        ) : notifications && notifications.length > 0 ? (
+          notifications.slice(0, 2).map((item) => (
+            <Typography variant="body2" key={item._id}>
+              {item.message}
+            </Typography>
+          ))
+        ) : (
+          'No events today!'
+        )}
+      </Box>
     </>
   );
 }

@@ -55,7 +55,7 @@ export default function FriendsRequestListTab() {
         setFriendRequestList,
         friendsRequestList,
         setHasMore,
-        setIsLoadingList
+        setIsLoadingList,
       );
     } else {
       toast.warning(
