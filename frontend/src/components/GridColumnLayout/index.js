@@ -107,7 +107,7 @@ export default function GridColumnLayout({ children }) {
             sx={{
               top: 333,
               marginLeft: 1,
-              padding: 1
+              padding: 1,
             }}
           >
             <WidgetBirthday />

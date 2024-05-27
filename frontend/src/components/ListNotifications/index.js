@@ -148,6 +148,16 @@ export default function ListNotifications({
                 </Typography>
               )
             }
+            refreshFunction={() =>
+              refresh(
+                setNotifications,
+                setHasMore,
+                page,
+                user?._id,
+                accessToken,
+                axiosJWT,
+              )
+            }
             scrollableTarget="list-notifications-container"
           >
             {notifications.map((notification) => (
