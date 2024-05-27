@@ -10,6 +10,7 @@ const timezone = "Asia/Ho_Chi_Minh";
 
 // cron job on 0h 0m every day
 cron.schedule("0 0 * * *", async () => {
+  console.log("Cron job running...");
   try {
     const today = moment().tz(timezone).startOf("day");
     const todayMonthDay = today.format("MM-DD");
@@ -32,7 +33,6 @@ cron.schedule("0 0 * * *", async () => {
     });
 
     let userSockets = [];
-    let notification;
 
     if (users.length > 0) {
       // get socket
@@ -42,7 +42,7 @@ cron.schedule("0 0 * * *", async () => {
 
       // push notification for user
       users.forEach(async (user) => {
-        notification = await notificationService.createNotification(
+        await notificationService.createNotification(
           user._id,
           // 5 - server notification
           5,
@@ -62,10 +62,11 @@ cron.schedule("0 0 * * *", async () => {
           .emit(
             "msg-your-birthday",
             `Today is your birthday, have a wonderful day!!!`,
-            notification
+            socket
           );
       });
     }
+    console.log("Cron job completed!");
   } catch (e) {
     console.error("An error occurred!");
   }
