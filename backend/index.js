@@ -32,12 +32,13 @@ const io = socketio(server, {
   },
 });
 
-global._io  =  io; 
+global._io = io;
 
 mongoose
   .connect(process.env.MONGOOSE_DB)
   .then(() => {
     console.log(">>> Connected to MongoDB successfully!");
+    require("./cronjob/birthdayCron");
   })
   .catch((error) => {
     console.error(">>> Error connecting to MongoDB:", error);
@@ -66,7 +67,7 @@ app.use("/api/v1/search", searchRoute);
 app.use("/api/v1/friend", friendsRoute);
 app.use("/api/v1/socket", socketRoute);
 
-io.on('connection', (socket) => {
+io.on("connection", (socket) => {
   socketService.connection(socket);
 });
 
@@ -74,4 +75,3 @@ const PORT = process.env.PORT || 8000;
 server.listen(PORT, () => {
   console.log(`>>> Server running on port ${PORT}`);
 });
-

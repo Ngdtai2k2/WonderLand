@@ -31,6 +31,7 @@ export const handleSocketEvents = (socket, setEvent, isAdmin) => {
     'action-delete-post',
     'report-refused',
     'msg-friend-request',
+    'msg-your-birthday',
   ];
 
   events.forEach((event) => {
