@@ -38,8 +38,8 @@ const postController = {
       let data;
       if (req.file) {
         if (req.file.mimetype.startsWith("image/"))
-          data = await uploadMediaCloudinary.uploadImage(req, res);
-        else data = await uploadMediaCloudinary.uploadVideo(req, res);
+          data = await uploadMediaCloudinary.uploadImage(req, res, 'posts');
+        else data = await uploadMediaCloudinary.uploadVideo(req, res, 'posts/video');
 
         if (data === null)
           return res.status(400).json({
@@ -96,8 +96,8 @@ const postController = {
         }
         // update new file
         if (req.file.mimetype.startsWith("image/"))
-          data = await uploadMediaCloudinary.uploadImage(req, res);
-        else data = await uploadMediaCloudinary.uploadVideo(req, res);
+          data = await uploadMediaCloudinary.uploadImage(req, res, 'posts');
+        else data = await uploadMediaCloudinary.uploadVideo(req, res, 'posts/video');
 
         if (data === null)
           return res.status(400).json({

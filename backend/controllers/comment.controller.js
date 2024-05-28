@@ -21,7 +21,7 @@ const commentController = {
 
       if (req.file) {
         if (req.file.mimetype.startsWith("image/"))
-          data = await uploadMediaCloudinary.uploadImage(req, res);
+          data = await uploadMediaCloudinary.uploadImage(req, res, 'comments');
 
         if (data === null)
           return res.status(400).json({ message: "Upload image failed!" });
@@ -140,7 +140,7 @@ const commentController = {
       let data;
       if (req.file) {
         if (req.file.mimetype.startsWith("image/"))
-          data = await uploadMediaCloudinary.uploadImage(req, res);
+          data = await uploadMediaCloudinary.uploadImage(req, res, 'comments');
 
         if (data === null)
           return res.status(400).json({ message: "Upload image failed!" });

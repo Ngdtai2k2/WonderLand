@@ -38,7 +38,7 @@ const categoriesController = {
 
       let data;
       if (req.file.mimetype.startsWith("image/"))
-        data = await uploadMediaCloudinary.uploadImage(req, res);
+        data = await uploadMediaCloudinary.uploadImage(req, res, "categories");
       else {
         return res.status(415).json({
           message: "File not supported!",
@@ -109,7 +109,11 @@ const categoriesController = {
         let data;
 
         if (req.file.mimetype.startsWith("image/"))
-          data = await uploadMediaCloudinary.uploadImage(req, res);
+          data = await uploadMediaCloudinary.uploadImage(
+            req,
+            res,
+            "categories"
+          );
         else {
           return res.status(415).json({
             message: "File not supported!",

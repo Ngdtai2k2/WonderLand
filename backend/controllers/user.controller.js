@@ -130,7 +130,7 @@ const userController = {
           }
         }
 
-        const data = await uploadMediaCloudinary.uploadImage(req, res);
+        const data = await uploadMediaCloudinary.uploadImage(req, res, 'profile');
         if (data === null) {
           return res.status(400).json({ message: "Image not uploaded!" });
         }
