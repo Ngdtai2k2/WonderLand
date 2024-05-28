@@ -1,7 +1,12 @@
+const moment = require("moment-timezone");
+
 const optionsPaginate = require("../configs/optionsPaginate");
 
 const notificationModel = require("../models/notification.model");
 const userModel = require("../models/user.model");
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 const notificationController = {
   confirmRead: async (req, res) => {
@@ -50,13 +55,19 @@ const notificationController = {
       const query = { recipient: request_user };
 
       if (type) {
+        const timeZone =  process.env.TIME_ZONE;
+        const startOfDay = moment().tz(timeZone).startOf("day").toDate();
+        const endOfDay = moment().tz(timeZone).endOf("day").toDate();
+
         query.type = { $in: type };
+        query.createdAt = { $gte: startOfDay, $lte: endOfDay };
       }
 
       const notifications = await notificationModel.paginate(query, options);
 
       return res.status(200).json({ notifications });
     } catch (error) {
+      console.log(error.message);
       return res
         .status(500)
         .json({ message: "An error occurred please try again later!" });
