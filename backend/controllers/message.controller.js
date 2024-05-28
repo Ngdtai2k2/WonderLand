@@ -5,7 +5,13 @@ const userSocketModel = require("../models/userSocket.model");
 const messageController = {
   addMessage: async (req, res) => {
     try {
-      const { chatId, senderId, message } = req.body;
+      let { chatId, senderId, message } = req.body;
+
+      message.trim();
+      
+      if (!chatId ||!senderId ||!message) {
+        return res.status(400).json({ message: "Invalid data!" });
+      }
 
       const chat = await chatModel.findById(chatId);
 
@@ -42,7 +48,6 @@ const messageController = {
 
       return res.status(200).json(result);
     } catch (error) {
-      console.error(error.message);
       return res
         .status(500)
         .json({ message: "An error occurred please try again later!" });
