@@ -1,29 +1,29 @@
-import React, { useEffect, useRef, useState } from "react";
-import { toast } from "react-toastify";
-import InputEmoji from "react-input-emoji";
-import moment from "moment";
+import React, { useEffect, useRef, useState } from 'react';
+import { toast } from 'react-toastify';
+import InputEmoji from 'react-input-emoji';
+import moment from 'moment';
 
-import Tooltip from "@mui/material/Tooltip";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton";
-import Divider from "@mui/material/Divider";
+import Tooltip from '@mui/material/Tooltip';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
+import Divider from '@mui/material/Divider';
 
-import SendRoundedIcon from "@mui/icons-material/SendRounded";
-import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
+import SendRoundedIcon from '@mui/icons-material/SendRounded';
+import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 
-import { BaseApi, useToastTheme } from "../../constants/constant";
-import { initializeSocket } from "../../sockets/initializeSocket";
-import useUserAxios from "../../hooks/useUserAxios";
+import { BaseApi, useToastTheme } from '../../constants/constant';
+import { initializeSocket } from '../../sockets/initializeSocket';
+import useUserAxios from '../../hooks/useUserAxios';
 
-import { BoxMessage, PaperMessage } from "./styles";
-import newMessageSoundEffect from "../../assets/sounds/new-message.mp3";
+import { BoxMessage, PaperMessage } from './styles';
+import newMessageSoundEffect from '../../assets/sounds/new-message.mp3';
 
 export default function ChatBox({ chat }) {
   const [userData, setUserData] = useState(null);
   const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState("");
+  const [newMessage, setNewMessage] = useState('');
 
   const { user, accessToken, axiosJWT } = useUserAxios();
   const toastTheme = useToastTheme();
@@ -33,13 +33,13 @@ export default function ChatBox({ chat }) {
   const messageSoundEffect = new Audio(newMessageSoundEffect);
   messageSoundEffect.volume = 0.5;
 
-  socket.on("new-message", (data) => {
+  socket.on('new-message', (data) => {
     setMessages([...messages, data]);
     messageSoundEffect.play();
   });
 
   useEffect(() => {
-    scroll.current?.scrollIntoView({ behavior: "smooth" });
+    scroll.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, chat]);
 
   useEffect(() => {
@@ -99,10 +99,10 @@ export default function ChatBox({ chat }) {
           headers: {
             token: `Bearer ${accessToken}`,
           },
-        }
+        },
       );
       setMessages([...messages, response.data]);
-      setNewMessage("");
+      setNewMessage('');
     } catch (error) {
       toast.error(error.response.data.message, toastTheme);
     }
@@ -152,13 +152,22 @@ export default function ChatBox({ chat }) {
       <Box
         height="60vh"
         maxHeight="60vh"
-        sx={{ overflowX: "hidden", overflowY: "auto" }}
+        sx={{ overflowX: 'hidden', overflowY: 'auto' }}
       >
         {messages.length === 0 ? (
-          <Box display="flex" justifyContent="center" flexDirection='column' alignItems='center'>
-            <Avatar src={userData?.media?.url} sx={{width: 60, height: 60}}/>
-            <Typography variant="body1" fontWeight={700}>{userData?.nickname}</Typography>
-            <Typography variant="caption" fontWeight={500} marginTop={2}>You can now message {userData?.nickname}.</Typography>
+          <Box
+            display="flex"
+            justifyContent="center"
+            flexDirection="column"
+            alignItems="center"
+          >
+            <Avatar src={userData?.media?.url} sx={{ width: 60, height: 60 }} />
+            <Typography variant="body1" fontWeight={700}>
+              {userData?.nickname}
+            </Typography>
+            <Typography variant="caption" fontWeight={500} marginTop={2}>
+              You can now message {userData?.nickname}.
+            </Typography>
           </Box>
         ) : (
           messages.map((message) =>
@@ -171,8 +180,8 @@ export default function ChatBox({ chat }) {
               >
                 <PaperMessage
                   sx={{
-                    backgroundColor: "#138aff",
-                    color: "#ffffff",
+                    backgroundColor: '#138aff',
+                    color: '#ffffff',
                   }}
                 >
                   <Tooltip title={moment(message.createdAt).fromNow()}>
@@ -190,8 +199,8 @@ export default function ChatBox({ chat }) {
               >
                 <PaperMessage
                   sx={{
-                    backgroundColor: "#4e4e4e",
-                    color: "#ffffff",
+                    backgroundColor: '#4e4e4e',
+                    color: '#ffffff',
                   }}
                 >
                   <Tooltip title={moment(message.createdAt).fromNow()}>
@@ -201,7 +210,7 @@ export default function ChatBox({ chat }) {
                   </Tooltip>
                 </PaperMessage>
               </BoxMessage>
-            )
+            ),
           )
         )}
       </Box>

@@ -206,7 +206,7 @@ export default function NavigationBar({ isAdmin, state }) {
               <NotificationsRoundedIcon />
             </Badge>
           </IconButton>
-          <IconButton aria-label="chat">
+          <IconButton aria-label="chat" onClick={() => navigate('/chat')}>
             <SmsRoundedIcon fontSize="small" />
           </IconButton>
           <ListNotifications
