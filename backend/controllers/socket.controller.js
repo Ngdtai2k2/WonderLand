@@ -24,7 +24,26 @@ const socketController = {
         offline: offlineUsers,
       });
     } catch (error) {
-      res
+      return res
+        .status(500)
+        .json({ message: "An error occurred please try again later!" });
+    }
+  },
+
+  checkOnlineByUser: async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const userSockets = await userSocketModel.find({ user: userId }).exec();
+
+      const onlineUserIds = userSockets.map((userSocket) =>
+        userSocket.user.toString()
+      );
+
+      const online = onlineUserIds.includes(userId.toString());
+
+      res.status(200).json({ online });
+    } catch (error) {
+      return res
         .status(500)
         .json({ message: "An error occurred please try again later!" });
     }

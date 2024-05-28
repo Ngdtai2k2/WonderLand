@@ -19,6 +19,7 @@ const chatController = {
         const result = await newChat.save();
         return res.status(200).json(result);
       }
+      return res.status(200).json(existingChat);
     } catch (error) {
       return res
         .status(500)
@@ -28,7 +29,7 @@ const chatController = {
 
   userChats: async (req, res) => {
     try {
-      const chat = await chatModel.findOne({
+      const chat = await chatModel.find({
         members: {
           $in: [req.params.userId],
         },

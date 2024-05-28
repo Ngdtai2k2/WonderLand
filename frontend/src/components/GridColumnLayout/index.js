@@ -12,7 +12,7 @@ import WidgetImage from '../WidgetImage';
 import ButtonBar from '../ButtonBar';
 import WidgetBirthday from '../WidgetBirthday';
 
-import { BaseApi } from '../../constants/constant';
+import { BaseApi, useToastTheme } from '../../constants/constant';
 import useUserAxios from '../../hooks/useUserAxios';
 import { getFriendsList, refreshFriendList } from '../../utils/friendServices';
 
@@ -22,6 +22,8 @@ import {
 } from '../../sockets/initializeSocket';
 import { GridHiddenMobile, ListContainer } from './styles';
 import { PaperSticky, StyledBadge } from '../styles';
+import { useNavigate } from 'react-router-dom';
+import { handleCreateConversation } from '../../utils/chatServices';
 
 export default function GridColumnLayout({ children }) {
   const [friendsList, setFriendsList] = useState([]);
@@ -32,6 +34,8 @@ export default function GridColumnLayout({ children }) {
   const [event, setEvent] = useState(null);
 
   const page = useRef(1);
+  const toastTheme = useToastTheme();
+  const navigate = useNavigate();
   const { user, accessToken, axiosJWT } = useUserAxios();
 
   const socket = initializeSocket(user?._id);
@@ -168,6 +172,18 @@ export default function GridColumnLayout({ children }) {
                       <ListItemButton
                         key={friend?._id}
                         sx={{ paddingX: 1, borderRadius: 1 }}
+                        onClick={async () => {
+                          const data = await handleCreateConversation(
+                            user._id,
+                            friend._id,
+                            toastTheme,
+                            axiosJWT,
+                            accessToken,
+                          );
+                          if (data) {
+                            navigate(`/chat?chat_id=${data._id}`);
+                          }
+                        }}
                       >
                         <Box display="flex" alignItems="center" gap={1.5}>
                           {friendOnline && friendOnline.includes(friend._id) ? (

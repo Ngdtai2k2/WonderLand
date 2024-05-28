@@ -13,12 +13,15 @@ import CustomBox from '../../components/CustomBox';
 import Conversation from '../../components/Conversation';
 import ChatBox from '../../components/ChatBox';
 
+import { initializeSocket } from '../../sockets/initializeSocket';
+
 import { BaseApi } from '../../constants/constant';
 import useUserAxios from '../../hooks/useUserAxios';
 
 export default function ChatPage() {
   const [chats, setChats] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
+  const [receivedMessage, setReceivedMessage] = useState(null);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -28,6 +31,14 @@ export default function ChatPage() {
     document.title = 'Chats - WonderLand';
   });
 
+  const socket = initializeSocket(user?._id);
+
+  useEffect(() => {
+    socket.on('new-message', (data) => {
+      setReceivedMessage(data);
+    });
+  }, [socket]);
+
   useEffect(() => {
     const getChats = async () => {
       try {
@@ -36,7 +47,7 @@ export default function ChatPage() {
             token: `Bearer ${accessToken}`,
           },
         });
-        setChats([response.data]);
+        setChats(response.data);
       } catch (error) {
         setChats([]);
       }
@@ -92,7 +103,7 @@ export default function ChatPage() {
         </Grid>
         <Grid item xs={9}>
           <Paper elevation={1} sx={{ p: 2, height: '100%' }}>
-            <ChatBox chat={currentChat} />
+            <ChatBox chat={currentChat} receivedMessage={receivedMessage} />
           </Paper>
         </Grid>
       </Grid>

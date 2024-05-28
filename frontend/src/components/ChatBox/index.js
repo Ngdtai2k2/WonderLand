@@ -14,13 +14,14 @@ import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 
 import { BaseApi, useToastTheme } from '../../constants/constant';
-import { initializeSocket } from '../../sockets/initializeSocket';
+
 import useUserAxios from '../../hooks/useUserAxios';
 
 import { BoxMessage, PaperMessage } from './styles';
 import newMessageSoundEffect from '../../assets/sounds/new-message.mp3';
+import { Button } from '@mui/material';
 
-export default function ChatBox({ chat }) {
+export default function ChatBox({ chat, receivedMessage }) {
   const [userData, setUserData] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
@@ -28,19 +29,21 @@ export default function ChatBox({ chat }) {
   const { user, accessToken, axiosJWT } = useUserAxios();
   const toastTheme = useToastTheme();
 
-  const socket = initializeSocket(user?._id);
   //   sound effects
   const messageSoundEffect = new Audio(newMessageSoundEffect);
   messageSoundEffect.volume = 0.5;
 
-  socket.on('new-message', (data) => {
-    setMessages([...messages, data]);
-    messageSoundEffect.play();
-  });
+  useEffect(() => {
+    if (receivedMessage !== null && receivedMessage.chatId === chat?._id) {
+      setMessages([...messages, receivedMessage]);
+      messageSoundEffect.play();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [receivedMessage]);
 
   useEffect(() => {
     scroll.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, chat]);
+  }, [messages, chat, receivedMessage]);
 
   useEffect(() => {
     const userId = chat?.members?.find((id) => id !== user?._id);
@@ -88,23 +91,25 @@ export default function ChatBox({ chat }) {
 
   const handleSendMessage = async () => {
     try {
-      const response = await axiosJWT.post(
-        `${BaseApi}/message`,
-        {
-          senderId: user._id,
-          message: newMessage,
-          chatId: chat._id,
-        },
-        {
-          headers: {
-            token: `Bearer ${accessToken}`,
+      if (newMessage.trim() !== '') {
+        const response = await axiosJWT.post(
+          `${BaseApi}/message`,
+          {
+            senderId: user._id,
+            message: newMessage,
+            chatId: chat._id,
           },
-        },
-      );
-      setMessages([...messages, response.data]);
-      setNewMessage('');
+          {
+            headers: {
+              token: `Bearer ${accessToken}`,
+            },
+          },
+        );
+        setMessages([...messages, response.data]);
+        setNewMessage('');
+      }
     } catch (error) {
-      toast.error(error.response.data.message, toastTheme);
+      // toast.error(error.response.data.message, toastTheme);
     }
   };
 
@@ -215,15 +220,22 @@ export default function ChatBox({ chat }) {
         )}
       </Box>
       {/* chat input */}
-      <Box display="flex">
+      <Box display="flex" alignItems="center">
         <InputEmoji
           value={newMessage}
           onChange={handleChangeMessage}
+          cleanOnEnter
+          onEnter={handleSendMessage}
           placeholder="Type a message"
         />
-        <IconButton size="small" onClick={handleSendMessage}>
+        <Button
+          size="small"
+          variant="contained"
+          onClick={handleSendMessage}
+          sx={{ minWidth: '24px', height: '100%' }}
+        >
           <SendRoundedIcon fontSize="small" />
-        </IconButton>
+        </Button>
       </Box>
     </Box>
   );
