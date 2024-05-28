@@ -15,8 +15,8 @@ import ChatBox from '../../components/ChatBox';
 
 import { initializeSocket } from '../../sockets/initializeSocket';
 
-import { BaseApi } from '../../constants/constant';
 import useUserAxios from '../../hooks/useUserAxios';
+import { getChats } from '../../utils/chatServices';
 
 export default function ChatPage() {
   const [chats, setChats] = useState([]);
@@ -40,19 +40,9 @@ export default function ChatPage() {
   }, [socket]);
 
   useEffect(() => {
-    const getChats = async () => {
-      try {
-        const response = await axiosJWT.get(`${BaseApi}/chat/${user?._id}`, {
-          headers: {
-            token: `Bearer ${accessToken}`,
-          },
-        });
-        setChats(response.data);
-      } catch (error) {
-        setChats([]);
-      }
-    };
-    getChats();
+    if (user) {
+      getChats(axiosJWT, user?._id, accessToken, setChats);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 

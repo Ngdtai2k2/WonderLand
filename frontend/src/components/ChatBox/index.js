@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { toast } from 'react-toastify';
 import InputEmoji from 'react-input-emoji';
 import moment from 'moment';
 
@@ -9,17 +8,19 @@ import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
+import Button from '@mui/material/Button';
 
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 
-import { BaseApi, useToastTheme } from '../../constants/constant';
+import { BaseApi } from '../../constants/constant';
 
 import useUserAxios from '../../hooks/useUserAxios';
+import { getMessages } from '../../utils/chatServices';
+import { getUserByUserId } from '../../utils/userServices';
 
 import { BoxMessage, PaperMessage } from './styles';
 import newMessageSoundEffect from '../../assets/sounds/new-message.mp3';
-import { Button } from '@mui/material';
 
 export default function ChatBox({ chat, receivedMessage }) {
   const [userData, setUserData] = useState(null);
@@ -27,7 +28,6 @@ export default function ChatBox({ chat, receivedMessage }) {
   const [newMessage, setNewMessage] = useState('');
 
   const { user, accessToken, axiosJWT } = useUserAxios();
-  const toastTheme = useToastTheme();
 
   //   sound effects
   const messageSoundEffect = new Audio(newMessageSoundEffect);
@@ -48,39 +48,15 @@ export default function ChatBox({ chat, receivedMessage }) {
   useEffect(() => {
     const userId = chat?.members?.find((id) => id !== user?._id);
 
-    const getUserByUserId = async () => {
-      try {
-        const response = await axiosJWT.get(`${BaseApi}/user/${userId}`, {
-          headers: {
-            token: `Bearer ${accessToken}`,
-          },
-        });
-        setUserData(response.data.user);
-      } catch (error) {
-        toast.error(error.response.data.message, toastTheme);
-      }
-    };
     if (chat !== null) {
-      getUserByUserId();
+      getUserByUserId(axiosJWT, userId, accessToken, setUserData);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, chat]);
 
   useEffect(() => {
-    const getMessages = async () => {
-      try {
-        const response = await axiosJWT.get(`${BaseApi}/message/${chat?._id}`, {
-          headers: {
-            token: `Bearer ${accessToken}`,
-          },
-        });
-        setMessages(response.data);
-      } catch (error) {
-        toast.error(error.response.data.message, toastTheme);
-      }
-    };
     if (chat !== null) {
-      getMessages();
+      getMessages(axiosJWT, chat?._id, accessToken, setMessages);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chat, user]);

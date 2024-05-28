@@ -27,3 +27,29 @@ export const handleCreateConversation = async (
     return null;
   }
 };
+
+export const getChats = async (axiosJWT, userId, accessToken, setData) => {
+  try {
+    const response = await axiosJWT.get(`${BaseApi}/chat/${userId}`, {
+      headers: {
+        token: `Bearer ${accessToken}`,
+      },
+    });
+    setData(response.data);
+  } catch (error) {
+    setData([]);
+  }
+};
+
+export const getMessages = async (axiosJWT, chatId, accessToken, setData) => {
+  try {
+    const response = await axiosJWT.get(`${BaseApi}/message/${chatId}`, {
+      headers: {
+        token: `Bearer ${accessToken}`,
+      },
+    });
+    setData(response.data);
+  } catch (error) {
+    setData([]);
+  }
+};
