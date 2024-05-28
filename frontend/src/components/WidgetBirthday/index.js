@@ -74,8 +74,6 @@ export default function WidgetBirthday() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
-  console.log(notifications);
-
   return (
     <>
       <Box display="flex" alignItems="center" justifyContent="space-between">
