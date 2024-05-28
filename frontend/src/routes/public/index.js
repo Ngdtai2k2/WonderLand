@@ -11,6 +11,7 @@ import RulesPage from '../../pages/rulesPage';
 import SearchPage from '../../pages/searchPage';
 import Settings from '../../pages/settings';
 import TrendingPage from '../../pages/trendingPage';
+import ChatPage from '../../pages/chatPage';
 
 export const publicRoutes = [
   { path: '', element: <HomePage /> },
@@ -26,5 +27,6 @@ export const publicRoutes = [
   { path: '/rules', element: <RulesPage /> },
   { path: '/search', element: <SearchPage /> },
   { path: '/friends', element: <FriendsList /> },
+  { path: '/chat', element: <ChatPage /> },
   { path: '*', element: <NotFound /> },
 ];

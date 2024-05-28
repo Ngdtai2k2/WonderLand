@@ -22,6 +22,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import FileUploadRoundedIcon from '@mui/icons-material/FileUploadRounded';
 import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
+import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
+import SmsRoundedIcon from '@mui/icons-material/SmsRounded';
 
 import ListNotifications from '../ListNotifications';
 import DrawerList from '../../components/DrawerList';
@@ -151,12 +153,25 @@ export default function NavigationBar({ isAdmin, state }) {
               href="/"
               underline="none"
               variant="inherit"
-              fontSize={{
-                xs: '16px',
-                md: '20px',
+              fontSize="20px"
+              display={{
+                xs: 'none',
+                sm: 'block',
               }}
             >
               Wonder Land
+            </Link>
+            <Link
+              href="/"
+              underline="none"
+              width="fit-content"
+              display={{
+                xs: 'flex',
+                sm: 'none',
+              }}
+              alignItems="center"
+            >
+              <HomeRoundedIcon />
             </Link>
           </Typography>
           <IconButton
@@ -190,6 +205,9 @@ export default function NavigationBar({ isAdmin, state }) {
             >
               <NotificationsRoundedIcon />
             </Badge>
+          </IconButton>
+          <IconButton aria-label="chat">
+            <SmsRoundedIcon fontSize="small" />
           </IconButton>
           <ListNotifications
             open={Boolean(anchorElNotifications)}

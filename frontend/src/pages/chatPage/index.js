@@ -1,0 +1,101 @@
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+
+import Grid from '@mui/material/Grid';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+
+import CustomBox from '../../components/CustomBox';
+import Conversation from '../../components/Conversation';
+import ChatBox from '../../components/ChatBox';
+
+import { BaseApi } from '../../constants/constant';
+import useUserAxios from '../../hooks/useUserAxios';
+
+export default function ChatPage() {
+  const [chats, setChats] = useState([]);
+  const [currentChat, setCurrentChat] = useState(null);
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { user, accessToken, axiosJWT } = useUserAxios();
+
+  useEffect(() => {
+    document.title = 'Chats - WonderLand';
+  });
+
+  useEffect(() => {
+    const getChats = async () => {
+      try {
+        const response = await axiosJWT.get(`${BaseApi}/chat/${user?._id}`, {
+          headers: {
+            token: `Bearer ${accessToken}`,
+          },
+        });
+        setChats([response.data]);
+      } catch (error) {
+        setChats([]);
+      }
+    };
+    getChats();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
+  return (
+    <CustomBox
+      sx={{
+        marginX: {
+          xs: 1,
+          sm: 1.5,
+          md: 2,
+        },
+        marginTop: 10,
+      }}
+    >
+      <Grid container spacing={1} height="85vh">
+        <Grid item xs={3}>
+          <Paper
+            sx={{
+              p: 1,
+              height: '100%',
+            }}
+          >
+            <Typography variant="h6" fontWeight={700}>
+              Chats
+            </Typography>
+            <TextField size="small" fullWidth placeholder="Search friends..." />
+            <List
+              sx={{ maxHeight: '80vh', overflowY: 'auto', overflowX: 'hidden' }}
+            >
+              {chats.length > 0 &&
+                chats.map((chat) => (
+                  <ListItem
+                    disablePadding
+                    key={chat._id}
+                    sx={{ marginBottom: 1 }}
+                    onClick={() => {
+                      setCurrentChat(chat);
+                      navigate(`${location.pathname}?chat_id=${chat._id}`);
+                    }}
+                  >
+                    <ListItemButton sx={{ borderRadius: '5px', padding: 1 }}>
+                      <Conversation data={chat} />
+                    </ListItemButton>
+                  </ListItem>
+                ))}
+            </List>
+          </Paper>
+        </Grid>
+        <Grid item xs={9}>
+          <Paper elevation={1} sx={{ p: 2, height: '100%' }}>
+            <ChatBox chat={currentChat} />
+          </Paper>
+        </Grid>
+      </Grid>
+    </CustomBox>
+  );
+}

@@ -18,6 +18,8 @@ const ruleRoute = require("./routes/rule.route");
 const searchRoute = require("./routes/search.route");
 const friendsRoute = require("./routes/friends.route");
 const socketRoute = require("./routes/socket.route");
+const chatRoute = require("./routes/chat.route");
+const messageRoute = require("./routes/message.route");
 
 const socketService = require("./services/socket.service");
 
@@ -66,6 +68,8 @@ app.use("/api/v1/rule", ruleRoute);
 app.use("/api/v1/search", searchRoute);
 app.use("/api/v1/friend", friendsRoute);
 app.use("/api/v1/socket", socketRoute);
+app.use("/api/v1/chat", chatRoute);
+app.use("/api/v1/message", messageRoute);
 
 io.on("connection", (socket) => {
   socketService.connection(socket);

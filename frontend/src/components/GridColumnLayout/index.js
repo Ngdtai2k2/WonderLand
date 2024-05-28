@@ -20,8 +20,8 @@ import {
   handleSocketEvents,
   initializeSocket,
 } from '../../sockets/initializeSocket';
-import { GridHiddenMobile, ListContainer, StyledBadge } from './styles';
-import { PaperSticky } from '../styles';
+import { GridHiddenMobile, ListContainer } from './styles';
+import { PaperSticky, StyledBadge } from '../styles';
 
 export default function GridColumnLayout({ children }) {
   const [friendsList, setFriendsList] = useState([]);

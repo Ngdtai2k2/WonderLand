@@ -11,7 +11,7 @@ const resetPasswordSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      maxlenght: 6,
+      max_length: 6,
     },
     exp: {
       type: String,

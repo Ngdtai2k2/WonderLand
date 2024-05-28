@@ -7,19 +7,19 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      maxlenght: 50,
+      max_length: 50,
     },
     nickname: {
       type: String,
       required: true,
       unique: true,
-      minlenght: 5,
-      maxlenght: 20,
+      minlength: 5,
+      max_length: 20,
     },
     password: {
       type: String,
       required: true,
-      minlenght: 8,
+      minlength: 8,
     },
     fullname: {
       type: String,
@@ -40,7 +40,7 @@ const userSchema = new mongoose.Schema(
     },
     phone: {
       type: String,
-      maxlenght: 20,
+      max_length: 20,
     },
     isAdmin: {
       type: Boolean,
