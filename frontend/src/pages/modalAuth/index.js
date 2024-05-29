@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -17,6 +18,8 @@ import { BoxStyle, LeftAlignLink } from './styles';
 
 export default function ModalAuth({ openModal, handleCloseModal }) {
   const [tabIndex, setTabIndex] = useState(0);
+
+  const { t } = useTranslation(['auth']);
 
   const handleChangeTab = (event, newValue) => {
     setTabIndex(newValue);
@@ -46,8 +49,8 @@ export default function ModalAuth({ openModal, handleCloseModal }) {
               marginBottom: 2,
             }}
           >
-            <Tab sx={{ fontSize: '16px' }} label="Login" />
-            <Tab sx={{ fontSize: '16px' }} label="Sign Up" />
+            <Tab sx={{ fontSize: '16px' }} label={t('auth:sign_in')} />
+            <Tab sx={{ fontSize: '16px' }} label={t('auth:sign_up')} />
             <Tab sx={{ display: 'none' }} />
             <Tab sx={{ display: 'none' }} />
           </Tabs>
@@ -59,7 +62,7 @@ export default function ModalAuth({ openModal, handleCloseModal }) {
               justifyContent="center"
             >
               <UndoRoundedIcon sx={{ fontSize: '15px', marginRight: 0.3 }} />
-              Back to home
+              {t('auth:back_to_home')}
             </Typography>
           </LeftAlignLink>
           {tabIndex === 0 && <Login setTabIndex={setTabIndex} />}

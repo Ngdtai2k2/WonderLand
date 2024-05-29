@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 
 import Link from '@mui/material/Link';
 import List from '@mui/material/List';
@@ -8,7 +9,7 @@ import ListItem from '@mui/material/ListItem';
 import Typography from '@mui/material/Typography';
 
 import CustomListItemButton from '../CustomListItemButton';
-import { adminDrawerList, publicDrawerList } from '../../constants/drawerlist';
+import { AdminDrawerList, PublicDrawerList } from '../../constants/drawerlist';
 import { BaseApi } from '../../constants/constant';
 import LoadingCircularIndeterminate from '../Loading';
 
@@ -20,6 +21,7 @@ function DrawerList({ isAdmin }) {
   const [activeLink, setActiveLink] = useState(location.pathname);
 
   const navigate = useNavigate();
+  const { t } = useTranslation(['home', 'sidebar', 'message']);
 
   const handleLinkClick = (link) => {
     setActiveLink(link);
@@ -30,7 +32,7 @@ function DrawerList({ isAdmin }) {
     return link === activeLink ? true : false;
   };
 
-  const itemsToMap = isAdmin ? adminDrawerList : publicDrawerList;
+  const itemsToMap = isAdmin ? AdminDrawerList() : PublicDrawerList();
 
   const getCategories = async () => {
     try {
@@ -53,7 +55,7 @@ function DrawerList({ isAdmin }) {
     <List>
       <ListItem>
         <Link href="/" underline="none" variant="inherit">
-          Wonder Land
+          {t('home:site_name')}
         </Link>
       </ListItem>
       {itemsToMap.map((item, index) => (
@@ -66,7 +68,7 @@ function DrawerList({ isAdmin }) {
         />
       ))}
       <Typography variant="body1" marginLeft={1} marginY={1}>
-        Discover
+        {t('sidebar:discover')}
       </Typography>
       {loading ? (
         <LoadingCircularIndeterminate />
@@ -87,7 +89,7 @@ function DrawerList({ isAdmin }) {
           justifyContent="center"
           alignItems="center"
         >
-          No categories!
+          {t('message:no_categories')}
         </Typography>
       )}
     </List>

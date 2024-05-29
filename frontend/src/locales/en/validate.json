@@ -1,0 +1,21 @@
+{
+  "file": {
+    "support": "Support files with PNG, JPG, JPEG, GIF, MKV or MP4 file.",
+    "not_support": "File is not supported!",
+    "support_max_size": "JPG, JEPG, GIF or PNG, Max size: 5MB"
+  },
+  "email": {
+    "invalid": "Invalid email address!"
+  },
+  "required_field": "{{name}} is required.",
+  "max": "{{name}} must be under {{max}} characters.",
+  "min": "{{name}} is too short - should be {{min}} chars minimum.",
+  "matches_contain_number": "{{name}} must contains a number.",
+  "matches_not_contain_digits": "{{name}} can't contain numbers.",
+  "matches_contain_number_latin": "{{name}} can only contain Latin characters and numbers.",
+  "not_unique": "{{name}} is not unique.",
+  "token": "Please provide tokens from your mail.",
+  "not_one_of_new_password": "New password must be different from old password!",
+  "must_match": "{{name}} must match.",
+  "comment": "Comments must contain photos or text!"
+}

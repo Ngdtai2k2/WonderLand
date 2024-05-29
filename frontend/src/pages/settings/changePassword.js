@@ -1,7 +1,8 @@
-import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import * as Yup from 'yup';
+import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import React from 'react';
 
 import Box from '@mui/material/Box';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -18,6 +19,7 @@ import { loginSuccess } from '../../redux/slice/userSlice';
 import { useToastTheme } from '../../constants/constant';
 
 export default function ChangePassword() {
+  const { t } = useTranslation(['validate', 'field', 'settings']);
   const dispatch = useDispatch();
   const toastTheme = useToastTheme();
   const user = useSelector((state) => state.auth.login?.currentUser);
@@ -27,19 +29,28 @@ export default function ChangePassword() {
 
   const validationSchema = Yup.object({
     oldPassword: Yup.string()
-      .required('Password is required!')
-      .min(8, 'Password is too short - should be 8 chars minimum!'),
+      .required(t('validate:required_field', { name: t('field:password') }))
+      .min(8, t('validate:min', { name: t('field:password'), min: '8' }))
+      .matches(
+        /(?=.*[0-9])/,
+        t('validate:matches_contain_number', { name: t('field:password') }),
+      ),
     newPassword: Yup.string()
-      .required('Password is required!')
-      .min(8, 'Password is too short - should be 8 chars minimum!')
+      .required(t('validate:required_field', { name: t('field:password') }))
+      .min(8, t('validate:min', { name: t('field:password'), min: '8' }))
       .notOneOf(
         [Yup.ref('oldPassword')],
-        'New password must be different from old password!',
+        t('validate:not_one_of_new_password'),
       ),
     confirmPassword: Yup.string()
-      .required('Confirm password is required!')
-      .min(8, 'Password is too short - should be 8 chars minimum!')
-      .oneOf([Yup.ref('newPassword'), null], 'Passwords must match!'),
+      .required(
+        t('validate:required_field', { name: t('field:confirm_password') }),
+      )
+      .min(8, t('validate:min', { name: t('field:password'), min: '8' }))
+      .oneOf(
+        [Yup.ref('newPassword'), null],
+        t('validate:must_match', { name: t('field:password') }),
+      ),
   });
 
   const formik = useFormik({
@@ -70,7 +81,7 @@ export default function ChangePassword() {
       method="PUT"
     >
       <Typography variant="h5" fontWeight={700}>
-        Reset Password
+        {t('settings:reset_password')}
       </Typography>
       <Box marginTop={1} display="flex" flexDirection="column">
         <TextField
@@ -80,7 +91,7 @@ export default function ChangePassword() {
           required
           fullWidth
           id="oldPassword"
-          label="Old Password"
+          label={t('field:old_password')}
           name="oldPassword"
           autoComplete="oldPassword"
           InputProps={{
@@ -105,7 +116,7 @@ export default function ChangePassword() {
           required
           fullWidth
           id="newPassword"
-          label="New Password"
+          label={t('field:new_password')}
           name="newPassword"
           autoComplete="newPassword"
           InputProps={{
@@ -130,7 +141,7 @@ export default function ChangePassword() {
           required
           fullWidth
           value={formik.values.confirmPassword}
-          label="Confirm Password"
+          label={t('field:confirm_password')}
           name="confirmPassword"
           autoComplete="confirmPassword"
           InputProps={{
@@ -157,7 +168,7 @@ export default function ChangePassword() {
           variant="contained"
           disabled={!formik.dirty || formik.isSubmitting || !formik.isValid}
         >
-          Save
+          {t('settings.save')}
         </Button>
       </Box>
     </Box>

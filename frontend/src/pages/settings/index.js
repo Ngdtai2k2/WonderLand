@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { useMediaQuery } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
 
 import Box from '@mui/material/Box';
+import Tabs from '@mui/material/Tabs';
 import Paper from '@mui/material/Paper';
 import TabContext from '@mui/lab/TabContext';
-import Tabs from '@mui/material/Tabs';
+import { useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 import DriveFileRenameOutlineRoundedIcon from '@mui/icons-material/DriveFileRenameOutlineRounded';
 import SecurityRoundedIcon from '@mui/icons-material/SecurityRounded';
@@ -25,6 +26,7 @@ export default function Settings() {
   const [tabIndex, setTabIndex] = useState(0);
 
   const theme = useTheme();
+  const { t } = useTranslation(['settings']);
   const isSmOrBelow = useMediaQuery(theme.breakpoints.down('sm'));
   const user = useSelector((state) => state.auth.login?.currentUser);
 
@@ -66,7 +68,7 @@ export default function Settings() {
                 label={
                   <TypographyButtonTab gap={1}>
                     <AccountCircleIcon />
-                    Account
+                    {t('settings:account')}
                   </TypographyButtonTab>
                 }
               />
@@ -74,7 +76,7 @@ export default function Settings() {
                 label={
                   <TypographyButtonTab gap={1}>
                     <VpnKeyRoundedIcon />
-                    Password
+                    {t('settings:password')}
                   </TypographyButtonTab>
                 }
               />
@@ -82,7 +84,7 @@ export default function Settings() {
                 label={
                   <TypographyButtonTab gap={1}>
                     <DriveFileRenameOutlineRoundedIcon />
-                    Profile
+                    {t('settings:profile')}
                   </TypographyButtonTab>
                 }
               />
@@ -90,7 +92,7 @@ export default function Settings() {
                 label={
                   <TypographyButtonTab gap={1}>
                     <BlockRoundedIcon />
-                    Blocks
+                    {t('settings:blocks')}
                   </TypographyButtonTab>
                 }
               />
@@ -98,7 +100,7 @@ export default function Settings() {
                 label={
                   <TypographyButtonTab gap={1}>
                     <SecurityRoundedIcon />
-                    Privacy
+                    {t('settings:privacy')}
                   </TypographyButtonTab>
                 }
               />

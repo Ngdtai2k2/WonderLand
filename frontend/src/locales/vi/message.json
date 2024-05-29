@@ -1,0 +1,29 @@
+{
+  "no_data": "Không có dữ liệu.",
+  "no_categories": "Không có danh mục nào!",
+  "click_to_view": "Bấm để xem tất cả",
+  "seen_all": "Ohhh! Bạn đã thấy tất cả!",
+  "no_notifications": "Bạn không có thông báo mới nào cả!",
+  "need_login": "Bạn cần đăng nhập để dùng tính năng này!",
+  "no_event": "Không có sự kiện nào hôm nay!",
+  "no_more_post": "Bạn đã xem hết bài viết!",
+  "no_contacts": "Không có liên hệ nào, kết bạn để kết nối 🤘",
+  "login_more_features": "Đăng nhập để dùng nhiều tính năng hơn 😉!",
+  "dont_account": "Bạn chưa có tài khoản?",
+  "has_account": "Bạn đã có tài khoản? Đăng nhập ngay!",
+  "email_displayed_publicly": "Email sẽ không được hiển thị công khai.",
+  "link_look_like": "Liên kết đến hồ sơ của bạn trông như thế này:",
+  "post": {
+    "note_update": "Lưu ý: Sau khi cập nhật bài đăng của bạn, vui lòng đợi một lúc để chúng tôi tải tệp của bạn lên!",
+    "note_update_new_media": "Hãy cập nhật ảnh mới khi cập nhật bài viết nhé!"
+  },
+  "comment": {
+    "note": "Hãy nhớ giữ bình luận tôn trọng và theo dõi",
+    "site_name_rules": "điều luật của {{name}}",
+    "no": "Không có bình luận."
+  },
+  "chat": {
+    "note": "Hãy chọn người bạn mà bạn muốn kết nối!",
+    "can_message": "Bây giờ bạn có thể nhắn tin với"
+  }
+}

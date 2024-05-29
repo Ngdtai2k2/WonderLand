@@ -1,0 +1,15 @@
+{
+  "notification": "Notifications",
+  "search": "Search",
+  "create_post": "Create post",
+  "open_menu": "Open menu",
+  "profile": "Profile",
+  "settings_account": "Settings account",
+  "language": "Language",
+  "darkmode": "Dark mode",
+  "logout": "Log out",
+  "users": "Users",
+  "posts": "Posts",
+  "signup_or_login": "Signup or Login",
+  "select_lng": "Select language"
+}

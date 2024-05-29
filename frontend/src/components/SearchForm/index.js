@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -21,6 +22,7 @@ export default function SearchForm({ onClose }) {
 
   const navigate = useNavigate();
   const { user } = useUserAxios();
+  const { t } = useTranslation(['navigation', 'message']);
 
   const formik = useFormik({
     initialValues: {
@@ -65,7 +67,7 @@ export default function SearchForm({ onClose }) {
         <SearchRoundedIcon sx={{ mr: 1, my: 0.5 }} />
         <TextField
           id="search"
-          label="Search"
+          label={t('navigation:search')}
           name="search"
           size="small"
           variant="standard"
@@ -95,7 +97,7 @@ export default function SearchForm({ onClose }) {
                     onClose();
                   }}
                 >
-                  Users:
+                  {t('navigation:users')}:
                 </Typography>
                 {dataSearch.users?.data.map((user) => (
                   <MenuItem
@@ -123,7 +125,7 @@ export default function SearchForm({ onClose }) {
                   onClose();
                 }}
               >
-                Posts (Click here to view all)
+                {t('navigation:posts')} ({t('message:click_to_view')})
               </Typography>
             )}
           </>

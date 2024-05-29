@@ -1,0 +1,17 @@
+{
+  "account": "Account",
+  "password": "Password",
+  "profile": "Profile",
+  "blocks": "Blocks",
+  "privacy": "Privacy",
+  "save": "Save",
+  "delete_account": "Delete account",
+  "reset_password": "Reset Password",
+  "upload_image": "Upload image",
+  "dialog": {
+    "title": "Confirm delete account!",
+    "description": "You won't be able to recover your account after deleting, are you sure to take this action?",
+    "yes": "Delete Account",
+    "no": "Disagree"
+  }
+}

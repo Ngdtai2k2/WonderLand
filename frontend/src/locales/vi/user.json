@@ -1,0 +1,17 @@
+{
+  "reaction": "Tương tác",
+  "post": "Bài viết",
+  "comment": "Bình luận",
+  "save_post": "Đã lưu",
+  "friends_list": "Tất cả bạn bè",
+  "accept": "Đồng ý",
+  "cancel_request": "Hủy yêu cầu",
+  "add_friend": "Thêm bạn",
+  "send_message": "Nhắn tin",
+  "friend": "Bạn bè",
+  "confirm_unfriend": "Xác nhận hủy kết bạn 🤔",
+  "confirm_unfriend_description": "Bạn có chắc chắn muốn kết thúc tình bạn này và tất cả những kỷ niệm đã từng 😭?",
+  "cancel": "Hủy 😊",
+  "confirm": "Bye bye 😭",
+  "joined": "Tham gia"
+}

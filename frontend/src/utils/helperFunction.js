@@ -1,7 +1,9 @@
+import { toast } from 'react-toastify';
+import moment from 'moment';
+
 import { Link } from '@mui/material';
 
 import ReadMore from '../components/Readmore';
-import { toast } from 'react-toastify';
 
 export function ShortenContent(content, maxLength) {
   if (content.length <= maxLength) {
@@ -108,7 +110,14 @@ export function getCurrentDate(separator = '/') {
   return `${date}${separator}${month}${separator}${year}`;
 }
 
-export async function copyText(text, toastTheme) {
+export async function copyText(text, toastTheme, t) {
   await navigator.clipboard.writeText(text);
-  toast.success('Copy successfully!', toastTheme);
+  toast.success(t('post:share.copy_success'), toastTheme);
+}
+
+export async function setMomentLocale(locale) {
+  if (!moment.locales().includes(locale)) {
+    await import(`moment/locale/${locale}`);
+  }
+  moment.locale(locale);
 }

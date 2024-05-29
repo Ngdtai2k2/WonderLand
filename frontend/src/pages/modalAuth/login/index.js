@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import * as Yup from 'yup';
-import { useFormik } from 'formik';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -19,6 +20,7 @@ export default function Login({ setTabIndex }) {
 
   const dispatch = useDispatch();
   const toastTheme = useToastTheme();
+  const { t } = useTranslation(['validate', 'field', 'auth', 'message']);
 
   useEffect(() => {
     const rememberMeValue = localStorage.getItem('remenber_me') === 'true';
@@ -29,13 +31,16 @@ export default function Login({ setTabIndex }) {
 
   const validationSchema = Yup.object({
     email: Yup.string()
-      .email('Invalid email address!')
-      .max(50, 'Emails must be less than 50 characters!')
-      .required('Email is required!'),
+      .email(t('validate:email.invalid'))
+      .max(50, t('validate:max', { name: 'Email', max: '50' }))
+      .required(t('validate:required_field', { name: 'Email' })),
     password: Yup.string()
-      .required('Password is required!')
-      .min(8, 'Password is too short - should be 8 chars minimum!')
-      .matches(/(?=.*[0-9])/, 'Password must contain a number!'),
+      .required(t('validate:required_field', { name: t('field:password') }))
+      .min(8, t('validate:min', { name: t('field:password'), min: '8' }))
+      .matches(
+        /(?=.*[0-9])/,
+        t('validate:matches_contain_number', { name: t('field:password') }),
+      ),
   });
 
   const formik = useFormik({
@@ -72,7 +77,7 @@ export default function Login({ setTabIndex }) {
         required
         fullWidth
         id="email"
-        label="Email Address"
+        label={t('field:email')}
         name="email"
         autoComplete="email"
         value={formik.values.email}
@@ -87,7 +92,7 @@ export default function Login({ setTabIndex }) {
         required
         fullWidth
         name="password"
-        label="Password"
+        label={t('field:password')}
         type="password"
         id="password"
         autoComplete="current-password"
@@ -106,10 +111,10 @@ export default function Login({ setTabIndex }) {
             color="primary"
           />
         }
-        label="Remember me"
+        label={t('field:remember_me')}
       />
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-        Sign In
+        {t('auth:sign_in')}
       </Button>
       <Grid container>
         <Grid item xs>
@@ -119,7 +124,7 @@ export default function Login({ setTabIndex }) {
             }}
             variant="body2"
           >
-            Forgot password?
+            {t('auth:forgot_password')}
           </Link>
         </Grid>
         <Grid item>
@@ -129,7 +134,7 @@ export default function Login({ setTabIndex }) {
             }}
             variant="body2"
           >
-            Don't have an account? Sign Up
+            {t('message:dont_account')} {t('auth:sign_up')}
           </Link>
         </Grid>
       </Grid>

@@ -12,6 +12,8 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import themes from './themes';
 
+import './i18n/i18n';
+
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-toastify/dist/ReactToastify.min.css';
 import 'react-medium-image-zoom/dist/styles.css';
@@ -23,6 +25,7 @@ console.log(
   'color: red; font-size: 60px',
   'color: yellow; font-size: 30px',
 );
+
 root.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>

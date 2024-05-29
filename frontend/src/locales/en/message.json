@@ -1,0 +1,29 @@
+{
+  "no_data": "No data.",
+  "no_categories": "No categories!",
+  "click_to_view": "Click here to view all",
+  "seen_all": "Ohhh! You have seen it all!",
+  "no_notifications": "You have no new notifications at all!",
+  "need_login": "You need to be signed in to use this feature!",
+  "no_event": "No events today!",
+  "no_more_post": "No more posts!",
+  "no_contacts": "No contacts, make friends to connect 🤘",
+  "login_more_features": "Sign in to experience more features 😉!",
+  "dont_account": "Don't have an account?",
+  "has_account": "Already have an account? Sign in now!",
+  "email_displayed_publicly": "Email will not be displayed publicly.",
+  "link_look_like": "The link to your profile looks like this:",
+  "post": {
+    "note_update": "Note: After update your post, please allow one moment for us to upload your file!",
+    "note_update_new_media": "Please update the new photo when updating the post!"
+  },
+  "comment": {
+    "note": "Remember to keep comments respectful and to follow",
+    "site_name_rules": "{{name}}'s rules",
+    "no": "No comments."
+  },
+  "chat": {
+    "note": "Choose the friend you want to connect with!",
+    "can_message": "You can now message"
+  }
+}

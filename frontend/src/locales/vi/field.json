@@ -1,0 +1,27 @@
+{
+  "title": "Tiêu đề",
+  "content": "Nội dung",
+  "category": "Danh mục",
+  "reason": "Lý do",
+  "optional": "Tùy chọn",
+  "report": "Báo cáo",
+  "password": "Mật khẩu",
+  "confirm_password": "Xác nhận mật khẩu",
+  "new_password": "Mật khẩu mới",
+  "old_password": "Mật khẩu cũ",
+  "email": "Địa chỉ email",
+  "remember_me": "Nhớ tài khoản",
+  "fullname": "Họ tên",
+  "birthday": "Sinh nhật",
+  "phone": "Số điện thoại",
+  "about": "Giới thiệu",
+  "gender": {
+    "gender": "Giới tính",
+    "male": "Nam",
+    "female": "Nữ",
+    "other": "Khác"
+  },
+  "hometown": "Quê hương",
+  "comment": "Bình luận",
+  "enter_comment": "Nhập bình luận..."
+}

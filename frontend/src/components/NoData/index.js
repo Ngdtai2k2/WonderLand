@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
@@ -10,6 +11,8 @@ import { ImageStyle } from './styles';
 
 export default function NoData() {
   const theme = useTheme();
+  const { t } = useTranslation(['message']);
+
   const currentMode = theme.palette.mode;
 
   return (
@@ -29,7 +32,7 @@ export default function NoData() {
         )}
       </div>
       <Typography variant="h5" textAlign="center">
-        No data!
+        {t('message:no_data')}
       </Typography>
     </>
   );

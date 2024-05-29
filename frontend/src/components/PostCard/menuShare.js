@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -19,6 +20,7 @@ export default function MenuShare({
   handleCloseMenu,
 }) {
   const toastTheme = useToastTheme();
+  const { t } = useTranslation(['post']);
 
   const urlShareFacebook = 'https://www.facebook.com/sharer/sharer.php?u=';
   const urlShareTelegram = 'https://t.me/share/url?url=';
@@ -49,25 +51,26 @@ export default function MenuShare({
           copyText(
             `${process.env.REACT_APP_DOMAIN}/post/${post?._id}`,
             toastTheme,
+            t,
           )
         }
       >
         <ListItemIcon>
           <ContentPasteRoundedIcon fontSize="small" />
         </ListItemIcon>
-        <Typography variant="body1">Copy link</Typography>
+        <Typography variant="body1">{t('post:share.copy_link')}</Typography>
       </MenuItem>
       <MenuItem onClick={() => openBlankPage(urlShareFacebook, urlPost)}>
         <ListItemIcon>
           <FacebookRoundedIcon fontSize="small" />
         </ListItemIcon>
-        <Typography variant="body1">Share to facebook</Typography>
+        <Typography variant="body1">{t('post:share.facebook')}</Typography>
       </MenuItem>
       <MenuItem onClick={() => openBlankPage(urlShareTelegram, urlPost)}>
         <ListItemIcon>
           <SendRoundedIcon fontSize="small" />
         </ListItemIcon>
-        <Typography variant="body1">Share to telegram</Typography>
+        <Typography variant="body1">{t('post:share.telegram')}</Typography>
       </MenuItem>
     </Menu>
   );

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import * as Yup from 'yup';
-import { useFormik } from 'formik';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
 import { toast } from 'react-toastify';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import axios from 'axios';
 
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -36,6 +37,13 @@ export default function PostDetail() {
   const [newComment, setNewComment] = useState();
 
   const { id } = useParams();
+  const { t } = useTranslation([
+    'home',
+    'post',
+    'message',
+    'validate',
+    'field',
+  ]);
   const toastTheme = useToastTheme();
 
   const { user, accessToken, axiosJWT } = useUserAxios();
@@ -71,13 +79,22 @@ export default function PostDetail() {
   const validationSchema = Yup.object({
     content: Yup.string().max(
       1000,
-      'Comment content should not exceed 1000 characters',
+      t('validate:max', { name: t('field:comment'), max: '1000' }),
     ),
-    file: Yup.mixed().test('fileType', 'File not supported!', (value) => {
-      if (!value) return true;
-      const imageTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
-      return value && imageTypes.includes(value.type);
-    }),
+    file: Yup.mixed().test(
+      'fileType',
+      t('validate:file.not_support'),
+      (value) => {
+        if (!value) return true;
+        const imageTypes = [
+          'image/jpeg',
+          'image/png',
+          'image/jpg',
+          'image/gif',
+        ];
+        return value && imageTypes.includes(value.type);
+      },
+    ),
   });
 
   const formik = useFormik({
@@ -90,13 +107,10 @@ export default function PostDetail() {
       try {
         setFetching(true);
         if (!user) {
-          toast.warning(
-            'You need to be logged in to use this function',
-            toastTheme,
-          );
+          toast.warning(t('message:need_login'), toastTheme);
         }
         if (!values.content && !values.file) {
-          return toast.warning('Comments must contain photos or text!');
+          return toast.warning(t('validate:comment', toastTheme));
         }
         const formData = new FormData();
         formData.append('author', user?._id);
@@ -158,13 +172,15 @@ export default function PostDetail() {
                 size="small"
                 defaultValue={0}
               >
-                <MenuItem value={0}>Hot comments</MenuItem>
-                <MenuItem value={1}>New comments</MenuItem>
+                <MenuItem value={0}>{t('post:comment.hot')}</MenuItem>
+                <MenuItem value={1}>{t('post:comment.new')}</MenuItem>
               </TextField>
               <Typography variant="caption">
-                Remember to keep comments respectful and to follow our
+                {t('message:comment.note')}
                 <Link href="/rules" marginLeft={0.5}>
-                  WonderLand's rules
+                  {t('message:comment.site_name_rules', {
+                    name: t('home:site_name'),
+                  })}
                 </Link>
               </Typography>
               <Box
@@ -190,7 +206,8 @@ export default function PostDetail() {
                   size="small"
                   margin="normal"
                   type="text"
-                  placeholder="Enter your comment..."
+                  placeholder={t('field:enter_comment')}
+                  name="content"
                   value={formik.values.content}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}

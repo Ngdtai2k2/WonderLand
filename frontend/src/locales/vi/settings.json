@@ -1,0 +1,17 @@
+{
+  "account": "Tài khoản",
+  "password": "Mật khẩu",
+  "profile": "Hồ sơ",
+  "blocks": "Chặn",
+  "privacy": "Riêng tư",
+  "save": "Lưu",
+  "delete_account": "Xóa tài khoản",
+  "reset_password": "Đặt lại mật khẩu",
+  "upload_image": "Tải ảnh lên",
+  "dialog": {
+    "title": "Xác nhận xóa tài khoản!",
+    "description": "Bạn sẽ không thể khôi phục tài khoản của mình sau khi xóa, bạn có chắc chắn thực hiện hành động này không?",
+    "yes": "Xóa tài khoản",
+    "no": "Hủy"
+  }
+}

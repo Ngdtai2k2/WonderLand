@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { jwtDecode } from 'jwt-decode';
 
 import { publicRoutes } from './routes/public';
@@ -13,6 +14,7 @@ import {
   initializeSocket,
 } from './sockets/initializeSocket';
 import useUserAxios from './hooks/useUserAxios';
+import { setMomentLocale } from './utils/helperFunction';
 
 function App() {
   // eslint-disable-next-line no-unused-vars
@@ -21,6 +23,7 @@ function App() {
 
   const isRunningInIFrame = window.self !== window.top;
   const { user, accessToken } = useUserAxios();
+  const { i18n } = useTranslation();
 
   const decodedToken = accessToken ? jwtDecode(accessToken) : null;
   const isAdmin = decodedToken ? decodedToken.isAdmin || false : false;
@@ -28,6 +31,14 @@ function App() {
   const socket = initializeSocket(user?._id);
 
   handleSocketEvents(socket, setEvent, isAdmin);
+
+  useEffect(() => {
+    const changeLocale = async () => {
+      await setMomentLocale(i18n.language);
+    };
+
+    changeLocale();
+  }, [i18n.language]);
 
   return (
     <Router>

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -18,6 +19,7 @@ export default function WidgetBirthday() {
   const [hasMore, setHasMore] = useState(true);
 
   const page = useRef(1);
+  const { t } = useTranslation(['home', 'message']);
   const { user, accessToken, axiosJWT } = useUserAxios();
 
   const socket = initializeSocket(user?._id);
@@ -78,7 +80,7 @@ export default function WidgetBirthday() {
     <>
       <Box display="flex" alignItems="center" justifyContent="space-between">
         <Typography variant="body2" fontWeight={600} gap={0.2} display="flex">
-          Birthday <CelebrationRoundedIcon sx={{ fontSize: 18 }} />
+          {t('home:event')} <CelebrationRoundedIcon sx={{ fontSize: 18 }} />
         </Typography>
         <Typography variant="body2" fontWeight={600}>
           {getCurrentDate()}
@@ -94,7 +96,7 @@ export default function WidgetBirthday() {
             </Typography>
           ))
         ) : (
-          'No events today!'
+          t('message:no_event')
         )}
       </Box>
     </>

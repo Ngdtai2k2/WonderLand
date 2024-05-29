@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import * as Yup from 'yup';
+import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
@@ -31,6 +32,7 @@ export default function Account() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const toastTheme = useToastTheme();
+  const { t } = useTranslation(['validate', 'field', 'message', 'settings']);
 
   const user = useSelector((state) => state.auth.login?.currentUser);
   const accessToken = user?.accessToken;
@@ -39,13 +41,17 @@ export default function Account() {
 
   const validationSchema = Yup.object({
     email: Yup.string()
-      .email('Invalid email address!')
-      .max(50, 'Emails must be less than 50 characters!')
-      .required('Email is required!'),
+      .email(t('validate:email.invalid'))
+      .max(50, t('validate:max', { name: 'Email', max: '50' }))
+      .required(t('validate:required_field', { name: 'Email' })),
     nickname: Yup.string()
-      .required('Nickname is required!')
-      .min(5)
-      .max(20, 'Nickname must be at least 20 characters!'),
+      .min(5, t('validate:min', { name: 'Nickname', min: '5' }))
+      .max(20, t('validate:max', { name: 'Nickname', max: '20' }))
+      .required(t('validate:required_field', { name: 'Nickname' }))
+      .matches(
+        /^[a-zA-Z0-9]+$/,
+        t('validate:matches_contain_number_latin', { name: 'Nickname' }),
+      ),
   });
 
   const formik = useFormik({
@@ -96,12 +102,13 @@ export default function Account() {
       method="PUT"
     >
       <Typography variant="h5" fontWeight={700}>
-        Account
+        {t('settings:account')}
       </Typography>
       <Box marginTop={4} display="flex" flexDirection="column">
         <TextField
           id="email"
-          label="Email"
+          name="email"
+          label={t('field:email')}
           variant="standard"
           required
           fullWidth
@@ -124,12 +131,13 @@ export default function Account() {
           fontStyle="italic"
           sx={{ marginTop: 1 }}
         >
-          Email will not be displayed publicly !!!
+          {t('message:email_displayed_publicly')}
         </Typography>
         <TextField
           id="nickname"
           label="Nickname"
           variant="standard"
+          name="nickname"
           required
           fullWidth
           InputProps={{
@@ -151,8 +159,8 @@ export default function Account() {
           fontStyle="italic"
           sx={{ marginTop: 1 }}
         >
-          The link to your profile looks like this:{' '}
-          {process.env.REACT_APP_DOMAIN}/u/{formik.values.nickname}
+          {t('message:link_look_like')} {process.env.REACT_APP_DOMAIN}/u/
+          {formik.values.nickname}
         </Typography>
         <Box
           display="flex"
@@ -165,9 +173,11 @@ export default function Account() {
             variant="contained"
             disabled={!formik.dirty || formik.isSubmitting || !formik.isValid}
           >
-            Save
+            {t('settings:save')}
           </Button>
-          <Link onClick={handleClickOpenConfirmDialog}>Delete account?</Link>
+          <Link onClick={handleClickOpenConfirmDialog}>
+            {t('settings:delete_account')}
+          </Link>
           <Dialog
             open={openConfirmDialog}
             onClose={handleCloseConfirmDialog}
@@ -182,18 +192,23 @@ export default function Account() {
                 color="warning"
                 sx={{ marginRight: 1 }}
               />
-              Confirm delete account !!!
+              {t('settings:dialog.title')}
             </DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
-                You won't be able to recover your account after deleting, are
-                you sure to take this action?
+                {t('settings:dialog.description')}
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleCloseConfirmDialog}>Disagree</Button>
-              <Button onClick={handelDeleteAccount} color="error">
-                Delete Account
+              <Button variant="contained" onClick={handleCloseConfirmDialog}>
+                {t('settings:dialog.no')}
+              </Button>
+              <Button
+                variant="contained"
+                onClick={handelDeleteAccount}
+                color="error"
+              >
+                {t('settings:dialog.yes')}
               </Button>
             </DialogActions>
           </Dialog>

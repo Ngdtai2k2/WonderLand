@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -18,6 +19,7 @@ export default function MenuSettings({
 }) {
   const [open, setOpen] = useState(false);
 
+  const { t } = useTranslation(['post']);
   const { user } = useUserAxios();
 
   return (
@@ -39,10 +41,10 @@ export default function MenuSettings({
       >
         {author === user?._id && [
           <MenuItem key={`delete-${id}`} onClick={handleDelete}>
-            Delete
+            {t('post:comment.delete')}
           </MenuItem>,
           <MenuItem key={`edit-${id}`} onClick={handleCloseMenu}>
-            Edit
+            {t('post:comment.edit')}
           </MenuItem>,
         ]}
         {author !== user?._id && (
@@ -53,7 +55,7 @@ export default function MenuSettings({
               setOpen(true);
             }}
           >
-            Report
+            {t('post:comment.report')}
           </MenuItem>
         )}
       </Menu>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios';
@@ -49,6 +50,7 @@ export default function Profile() {
   const [friendRequest, setFriendRequest] = useState();
   const [openModalConfirm, setOpenModalConfirm] = useState(false);
 
+  const { t } = useTranslation(['user']);
   const theme = useTheme();
   const toastTheme = useToastTheme();
   const isSmOrBelow = useMediaQuery(theme.breakpoints.down('sm'));
@@ -86,7 +88,7 @@ export default function Profile() {
   }, [id]);
 
   useEffect(() => {
-    document.title = data && `${data?.fullname}'s profile`;
+    document.title = data ? `${data?.fullname}'s profile` : 'Loading...';
   }, [data?.fullname, data]);
 
   if (!data && !loading) {
@@ -232,7 +234,7 @@ export default function Profile() {
               {data?.fullname}
             </Typography>
             <Typography variant="caption">
-              Joined {moment(data?.createdAt).fromNow()}
+              {t('user:joined')} {moment(data?.createdAt).fromNow()}
             </Typography>
           </Box>
         </Box>
@@ -256,14 +258,16 @@ export default function Profile() {
                     color="success"
                     onClick={() => setOpenModalConfirm(true)}
                   >
-                    <Diversity1Icon fontSize="small" /> Friend
+                    <Diversity1Icon fontSize="small" /> {t('user:friend')}
                   </ButtonStyled>
                   <ConfirmDialog
                     open={openModalConfirm}
                     handleClose={() => setOpenModalConfirm(false)}
-                    title="Confirm unfriend 🤔"
+                    title={t('user:confirm_unfriend')}
                     handleConfirm={() => handleDeleteFriend()}
-                    description="Are you sure you want to end this friendship and all the shared memories 😭?"
+                    description={t('user:confirm_unfriend_description')}
+                    titleCancel={t('user:cancel')}
+                    titleConfirm={t('user:confirm')}
                   />
                 </>
               ) : friendRequest && friendRequest.friend === user?._id ? (
@@ -274,7 +278,8 @@ export default function Profile() {
                   color="success"
                   onClick={handleAcceptRequestAddFriend}
                 >
-                  <PersonAddAlt1RoundedIcon fontSize="small" /> Accept
+                  <PersonAddAlt1RoundedIcon fontSize="small" />{' '}
+                  {t('user:accept')}
                 </ButtonStyled>
               ) : hasSendRequestAddFriend ? (
                 <ButtonStyled
@@ -283,7 +288,8 @@ export default function Profile() {
                   color="error"
                   onClick={handleCancelRequestAddFriend}
                 >
-                  <PersonRemoveRoundedIcon fontSize="small" /> Cancel request
+                  <PersonRemoveRoundedIcon fontSize="small" />{' '}
+                  {t('user:cancel_request')}
                 </ButtonStyled>
               ) : (
                 <ButtonStyled
@@ -292,19 +298,20 @@ export default function Profile() {
                   color="primary"
                   onClick={handleSendRequestAddFriend}
                 >
-                  <PersonAddAlt1RoundedIcon fontSize="small" /> Add friend
+                  <PersonAddAlt1RoundedIcon fontSize="small" />{' '}
+                  {t('user:add_friend')}
                 </ButtonStyled>
               )}
 
               <ButtonStyled variant="outlined" size="small" color="info">
-                <SendRoundedIcon fontSize="small" /> Send message
+                <SendRoundedIcon fontSize="small" /> {t('user:send_message')}
               </ButtonStyled>
             </>
           )}
 
           {user?._id === data?._id && (
             <ButtonStyled variant="outlined" size="small" href="/friends">
-              <GroupRoundedIcon /> Friends list
+              <GroupRoundedIcon /> {t('user:friends_list')}
             </ButtonStyled>
           )}
         </Box>
@@ -324,7 +331,7 @@ export default function Profile() {
                 label={
                   <TypographyButtonTab gap={1}>
                     <AddReactionRoundedIcon />
-                    Reactions
+                    {t('user:reaction')}
                   </TypographyButtonTab>
                 }
               />
@@ -332,7 +339,7 @@ export default function Profile() {
                 label={
                   <TypographyButtonTab gap={1}>
                     <PostAddRoundedIcon />
-                    Posts
+                    {t('user:post')}
                   </TypographyButtonTab>
                 }
               />
@@ -340,7 +347,7 @@ export default function Profile() {
                 label={
                   <TypographyButtonTab gap={1}>
                     <CommentRoundedIcon />
-                    Comments
+                    {t('user:comment')}
                   </TypographyButtonTab>
                 }
               />
@@ -348,7 +355,7 @@ export default function Profile() {
                 label={
                   <TypographyButtonTab gap={1}>
                     <StarsRoundedIcon />
-                    Saved
+                    {t('user:save_post')}
                   </TypographyButtonTab>
                 }
               />

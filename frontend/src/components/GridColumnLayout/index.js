@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
@@ -20,10 +22,10 @@ import {
   handleSocketEvents,
   initializeSocket,
 } from '../../sockets/initializeSocket';
+import { handleCreateConversation } from '../../utils/chatServices';
+
 import { GridHiddenMobile, ListContainer } from './styles';
 import { PaperSticky, StyledBadge } from '../styles';
-import { useNavigate } from 'react-router-dom';
-import { handleCreateConversation } from '../../utils/chatServices';
 
 export default function GridColumnLayout({ children }) {
   const [friendsList, setFriendsList] = useState([]);
@@ -34,6 +36,7 @@ export default function GridColumnLayout({ children }) {
   const [event, setEvent] = useState(null);
 
   const page = useRef(1);
+  const { t } = useTranslation(['home', 'message']);
   const toastTheme = useToastTheme();
   const navigate = useNavigate();
   const { user, accessToken, axiosJWT } = useUserAxios();
@@ -123,7 +126,7 @@ export default function GridColumnLayout({ children }) {
         <GridHiddenMobile item xs={12} sm={3}>
           <PaperSticky elevation={1} sx={{ top: 75, marginRight: 1.5 }}>
             <Typography variant="body1" fontWeight={600}>
-              Contacts
+              {t('home:contacts')}
             </Typography>
             <ListContainer id="list-contacts">
               {isLoading ? (
@@ -131,8 +134,8 @@ export default function GridColumnLayout({ children }) {
               ) : friendsList && friendsList.length === 0 ? (
                 <Typography variant="caption">
                   {user
-                    ? 'No contacts, make friends to connect 🤘!'
-                    : 'Sign in to experience more features 😉!'}
+                    ? t('message:no_contacts')
+                    : t('message:login_more_features')}
                 </Typography>
               ) : (
                 !isLoading && (

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useFormik } from 'formik';
 import moment from 'moment';
 import * as Yup from 'yup';
-import { useFormik } from 'formik';
 
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -54,6 +55,7 @@ export default function CommentItem({
 
   const navigate = useNavigate();
   const toastTheme = useToastTheme();
+  const { t } = useTranslation(['post', 'validate', 'message', 'field']);
   const { user, accessToken, axiosJWT } = useUserAxios();
 
   useEffect(() => {
@@ -66,13 +68,22 @@ export default function CommentItem({
   const validationSchema = Yup.object({
     contentReply: Yup.string().max(
       1000,
-      'Comment content should not exceed 1000 characters',
+      t('validate:max', { name: t('field:comment'), max: '1000' }),
     ),
-    fileReply: Yup.mixed().test('fileType', 'File not supported!', (value) => {
-      if (!value) return true;
-      const imageTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
-      return value && imageTypes.includes(value.type);
-    }),
+    fileReply: Yup.mixed().test(
+      'fileType',
+      t('validate:file.not_support'),
+      (value) => {
+        if (!value) return true;
+        const imageTypes = [
+          'image/jpeg',
+          'image/png',
+          'image/jpg',
+          'image/gif',
+        ];
+        return value && imageTypes.includes(value.type);
+      },
+    ),
   });
 
   const formik = useFormik({
@@ -85,13 +96,10 @@ export default function CommentItem({
       try {
         setIsFetching(data._id);
         if (!user) {
-          toast.warning(
-            'You need to be logged in to use this function',
-            toastTheme,
-          );
+          return toast.warning(t('message:need_login'), toastTheme);
         }
         if (!values.contentReply && !values[`file-${data._id}`]) {
-          return toast.warning('Comments must contain photos or text!');
+          return toast.warning(t('validate:comment', toastTheme));
         }
         const formData = new FormData();
         formData.append('author', user?._id);
@@ -128,7 +136,7 @@ export default function CommentItem({
                 onClick={() => handleShowReply(data._id)}
                 sx={{ cursor: 'pointer', fontSize: 12 }}
               >
-                View comment
+                {t('post:comment.view_comment')}
               </Link>
             </Box>,
             toastTheme,
@@ -147,11 +155,7 @@ export default function CommentItem({
   };
 
   const handleLikeComment = async (type) => {
-    if (!user)
-      return toast.warning(
-        'You need to be signed in to perform this action!',
-        toastTheme,
-      );
+    if (!user) return toast.warning(t('message:need_login'), toastTheme);
     try {
       const apiUrl = isReply
         ? `${BaseApi}/reaction/reply/like`
@@ -230,7 +234,7 @@ export default function CommentItem({
             {data.isHidden ? (
               <>
                 <BlockRoundedIcon fontSize="16px" color="error" />
-                This comment has been hidden!
+                {t('post:comment.hidden')}
                 <BlockRoundedIcon fontSize="16px" color="error" />
               </>
             ) : (
@@ -252,7 +256,7 @@ export default function CommentItem({
               }
               onClick={() => handleOpenReply(data._id)}
             >
-              Reply
+              {t('post:comment.reply')}
             </Link>
             <IconButton
               aria-label="like"
@@ -331,7 +335,7 @@ export default function CommentItem({
               size="small"
               margin="normal"
               type="text"
-              placeholder="Enter your comment..."
+              placeholder={t('field:enter_comment')}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -428,10 +432,10 @@ export default function CommentItem({
               <ArrowDropDownRoundedIcon sx={{ p: 0 }} />
             )}
             {openCollapse[data._id]
-              ? 'Hide all'
-              : `View ${
+              ? t('post:comment.hide_all')
+              : `${t('post:comment.view')} ${
                   data.replies?.length
-                } ${data.replies?.length !== 1 ? 'comments' : 'comment'}`}
+                } ${data.replies?.length !== 1 ? t('post:comment.comments') : t('post:comment.comment')}`}
           </ButtonLink>
         )}
       </Box>

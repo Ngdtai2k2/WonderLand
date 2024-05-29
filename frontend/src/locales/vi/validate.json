@@ -1,0 +1,21 @@
+{
+  "file": {
+    "support": "Hỗ trợ các file PNG, JPG, JPEG, GIF, MKV hoặc MP4.",
+    "not_support": "File không hỗ trợ!",
+    "support_max_size": "JPG, JEPG, GIF hoặc PNG, Tối đa: 5MB"
+  },
+  "email": {
+    "invalid": "Email không hợp lệ!"
+  },
+  "required_field": "{{name}} là bắt buộc.",
+  "max": "{{name}} không được quá {{max}} kí tự.",
+  "min": "{{name}} quá ngắn - nên có ít nhất {{min}} kí tự.",
+  "matches_contain_number": "{{name}} phải chứa số.",
+  "matches_not_contain_digits": "{{name}} không được chứa số.",
+  "matches_contain_number_latin": "{{name}} chỉ có thể chứa các kí tự và số Latin.",
+  "not_unique": "{{name}} phải là duy nhất.",
+  "token": "Hãy cung cấp token từ mail bạn đã nhận.",
+  "not_one_of_new_password": "Mật khẩu mới không được giống mật khẩu cũ.",
+  "must_match": "{{name}} phải khớp.",
+  "comment": "Bình luận phải là ảnh hoặc văn bản!"
+}

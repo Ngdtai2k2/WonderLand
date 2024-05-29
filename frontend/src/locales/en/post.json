@@ -1,0 +1,34 @@
+{
+  "settings": {
+    "report": "Report",
+    "delete": "Delete",
+    "edit": "Edit",
+    "download_media": "Download media"
+  },
+  "share": {
+    "copy_link": "Copy link",
+    "copy_success": "Copy successfully!",
+    "facebook": "Share to facebook",
+    "telegram": "Share to telegram"
+  },
+  "update_post": "Update post",
+  "update": "Update",
+  "content": "Content",
+  "clear_file": "Delete file",
+  "choose_file": "Select file",
+  "comment": {
+    "hot": "Hot comments",
+    "new": "New comments",
+    "reply": "Reply",
+    "load_more": "Load more",
+    "view_comment": "View comment",
+    "hidden": "This comment has been hidden",
+    "hide_all": "Hide all",
+    "view": "View",
+    "comments": "comments",
+    "comment": "comment",
+    "delete": "Delete",
+    "edit": "Edit",
+    "report": "Report"
+  }
+}

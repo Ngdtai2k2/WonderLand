@@ -1,0 +1,17 @@
+{
+  "reaction": "Reactions",
+  "post": "Posts",
+  "comment": "Comments",
+  "save_post": "Saved",
+  "friends_list": "Friends list",
+  "accept": "Accept",
+  "cancel_request": "Cancel request",
+  "add_friend": "Add friend",
+  "send_message": "Send message",
+  "friend": "Friend",
+  "confirm_unfriend": "Confirm unfriend 🤔",
+  "confirm_unfriend_description": "Are you sure you want to end this friendship and all the shared memories 😭?",
+  "cancel": "Cancel 😊",
+  "confirm": "Bye bye 😭",
+  "joined": "Joined"
+}

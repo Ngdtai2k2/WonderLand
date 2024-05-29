@@ -13,6 +13,8 @@ export default function ConfirmDialog({
   title,
   description,
   handleConfirm,
+  titleCancel,
+  titleConfirm,
 }) {
   return (
     <Dialog
@@ -28,16 +30,25 @@ export default function ConfirmDialog({
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button variant="outlined" onClick={handleClose} color="error">
-          Cancel 😊
+        <Button
+          variant="contained"
+          onClick={handleClose}
+          color="error"
+          sx={{
+            color: 'white',
+          }}
+        >
+          {titleCancel}
         </Button>
         <Button
-          variant="outlined"
+          variant="contained"
           onClick={handleConfirm}
           color="success"
-          autoFocus
+          sx={{
+            color: 'white',
+          }}
         >
-          Bye bye 😭
+          {titleConfirm}
         </Button>
       </DialogActions>
     </Dialog>

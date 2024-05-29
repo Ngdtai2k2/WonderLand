@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { useTranslation } from 'react-i18next';
 
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -17,6 +18,7 @@ export default function RenderPost({ apiLink, type }) {
   const [isRefresh, setIsRefresh] = useState();
 
   const page = useRef(1);
+  const { t } = useTranslation(['message']);
   const { user } = useUserAxios();
 
   useEffect(() => {
@@ -62,7 +64,7 @@ export default function RenderPost({ apiLink, type }) {
             flexDirection="column"
           >
             <SentimentVeryDissatisfiedRoundedIcon />
-            No more posts!
+            {t('message:no_more_post')}
           </Typography>
         )}
       </Box>

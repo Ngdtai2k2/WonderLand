@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -32,6 +33,7 @@ export default function ModalEditPost({ open, handleClose, id, setState }) {
   const [fetching, setFetching] = useState();
   const [post, setPost] = useState();
 
+  const { t } = useTranslation(['post', 'message', 'validate', 'field']);
   const toastTheme = useToastTheme();
   const { user, accessToken, axiosJWT } = useUserAxios();
 
@@ -59,15 +61,17 @@ export default function ModalEditPost({ open, handleClose, id, setState }) {
   }, [post]);
 
   const validationSchema = Yup.object().shape({
-    category: Yup.string().required('Category is required'),
+    category: Yup.string().required(
+      t('validate:required_field', { name: 'Category' }),
+    ),
     title: Yup.string()
-      .required('Title is required')
-      .max(280, 'Title must be under 280 characters'),
+      .required(t('validate:required_field', { name: t('field:title') }))
+      .max(280, t('validate:max', { name: t('field:title'), max: '280' })),
     ...(post?.type === 0
       ? {
           file: Yup.mixed()
-            .required('File is required!')
-            .test('fileType', 'File not supported!', (value) => {
+            .required(t('validate:required_field', { name: 'File' }))
+            .test('fileType', t('validate:file.not_support'), (value) => {
               if (!value) return true;
               const imageTypes = [
                 'image/jpeg',
@@ -86,7 +90,7 @@ export default function ModalEditPost({ open, handleClose, id, setState }) {
       : {
           content: Yup.string().max(
             1500,
-            'Content must be under 1500 characters!',
+            t('validate:max', { name: t('field:content'), max: '1500' }),
           ),
         }),
   });
@@ -155,18 +159,17 @@ export default function ModalEditPost({ open, handleClose, id, setState }) {
           }}
         >
           <Typography variant="h6" textAlign="center">
-            Update post
+            {t('post:update_post')}
           </Typography>
           <Typography variant="caption">
-            Note: After update your post, please allow 1 moment for us to upload
-            your file!
+            {t('message:post.note_update')}
           </Typography>
           <TextField
             required
             margin="normal"
             id="category-update"
             select
-            label="Category"
+            label={t('field:category')}
             name="category"
             fullWidth
             size="small"
@@ -196,7 +199,7 @@ export default function ModalEditPost({ open, handleClose, id, setState }) {
             required
             id="title-update"
             name="title"
-            label="Title"
+            label={t('field:title')}
             type="text"
             fullWidth
             size="small"
@@ -212,7 +215,7 @@ export default function ModalEditPost({ open, handleClose, id, setState }) {
               rows={2}
               margin="normal"
               id="content-update"
-              label="Content"
+              label={t('field:content')}
               type="text"
               name="content"
               fullWidth
@@ -226,7 +229,7 @@ export default function ModalEditPost({ open, handleClose, id, setState }) {
           {post?.type === 0 && (
             <>
               <Typography variant="caption" color="error" fontStyle="italic">
-                Please update the new photo when updating the post!
+                {t('message:post.note_update_new_media')}
               </Typography>
               <Paper variant="outlined" sx={{ p: 2, marginY: 1 }}>
                 <Box
@@ -242,7 +245,7 @@ export default function ModalEditPost({ open, handleClose, id, setState }) {
                         onClick={handleClearFile}
                         variant="outlined"
                       >
-                        Clear File
+                        {t('post:clear_file')}
                       </Button>
                     </FlexCenterBox>
                   ) : (
@@ -269,7 +272,9 @@ export default function ModalEditPost({ open, handleClose, id, setState }) {
                         />
                         <FlexCenterBox flexDirection="column">
                           <CloudUploadIcon />
-                          <Typography variant="body1">Choose file</Typography>
+                          <Typography variant="body1">
+                            {t('post:choose_file')}
+                          </Typography>
                         </FlexCenterBox>
                       </Button>
                       <Typography
@@ -277,7 +282,7 @@ export default function ModalEditPost({ open, handleClose, id, setState }) {
                         fontStyle="italic"
                         textAlign="center"
                       >
-                        Support files with PNG, JPG, JPEG, GIF, MKV or MP4 file.
+                        {t('validate:file.support')}
                       </Typography>
                     </>
                   )}
@@ -316,7 +321,7 @@ export default function ModalEditPost({ open, handleClose, id, setState }) {
                 },
               }}
             >
-              Update
+              {t('post:update')}
             </LoadingButton>
           </FlexCenterBox>
         </BoxModal>

@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import axios from 'axios';
-import { toast } from 'react-toastify';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
@@ -36,6 +37,7 @@ export default function ListComments({ postId, newComment }) {
   const [menuAnchorEl, setMenuAnchorEl] = useState({});
   const [openCollapse, setOpenCollapse] = useState({});
 
+  const { t } = useTranslation(['message', 'post']);
   const toastTheme = useToastTheme();
   const page = useRef(1);
   const { user, accessToken, axiosJWT } = useUserAxios();
@@ -248,7 +250,8 @@ export default function ListComments({ postId, newComment }) {
                               handleShowMoreCommentReply(commentId, 1)
                             }
                           >
-                            <ArrowDropDownRoundedIcon /> Load more
+                            <ArrowDropDownRoundedIcon />{' '}
+                            {t('post:comment.load_more')}
                           </ButtonLink>
                         )}
                       </Collapse>
@@ -261,7 +264,7 @@ export default function ListComments({ postId, newComment }) {
             })
           ) : (
             <Typography variant="h6" textAlign="center">
-              No comment!
+              {t('message:comment.no')}
             </Typography>
           )}
           <InfiniteScroll

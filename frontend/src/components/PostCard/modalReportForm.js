@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -18,6 +19,7 @@ export default function ModalReportForm({ open, handleClose, id }) {
   const [fetching, setFetching] = useState();
   const [selectRule, setSelectRule] = useState();
 
+  const { t } = useTranslation(['field']);
   const toastTheme = useToastTheme();
   const { user, accessToken, axiosJWT } = useUserAxios();
 
@@ -82,7 +84,7 @@ export default function ModalReportForm({ open, handleClose, id }) {
           fontWeight={700}
           marginBottom={2}
         >
-          Report
+          {t('field:report')}
         </Typography>
         <Rules isReport={true} setState={setSelectRule} />
         <TextField
@@ -90,7 +92,7 @@ export default function ModalReportForm({ open, handleClose, id }) {
           size="small"
           fullWidth
           id="reason"
-          label="Reason (Optional)"
+          label={`${t('field:reason')} (${t('field:optional')})`}
           name="reason"
           autoComplete="reason"
           value={formik.values.reason}
@@ -114,7 +116,7 @@ export default function ModalReportForm({ open, handleClose, id }) {
               },
             }}
           >
-            Report
+            {t('field:report')}
           </LoadingButton>
         </Box>
       </BoxModal>

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import moment from 'moment';
+import { useTranslation } from 'react-i18next';
 
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -36,6 +37,7 @@ export default function ListNotifications({
   const page = useRef(1);
   const toastTheme = useToastTheme();
   const navigate = useNavigate();
+  const { t } = useTranslation(['navigation', 'message']);
 
   const { user, accessToken, axiosJWT } = useUserAxios();
 
@@ -105,7 +107,7 @@ export default function ListNotifications({
           marginX={1.2}
           marginBottom={1}
         >
-          Notifications
+          {t('navigation:notification')}
         </Typography>
         <IconButton
           aria-label="menu settings notifications"
@@ -144,7 +146,7 @@ export default function ListNotifications({
                   justifyContent="center"
                   fontSize={12}
                 >
-                  Ohhh! You have seen it all
+                  {t('message:seen_all')}
                 </Typography>
               )
             }
@@ -202,14 +204,14 @@ export default function ListNotifications({
           </InfiniteScroll>
         ) : (
           <Typography variant="body2" textAlign="center">
-            You have no new notifications at all!
+            {t('message:no_notifications')}
           </Typography>
         )
       ) : (
         <Box display="flex" flexDirection="column" alignItems="center">
           <LoginRoundedIcon sx={{ fontSize: 30 }} />
           <Typography variant="body2" textAlign="center">
-            You need to be signed in to use this feature!
+            {t('message:need_login')}
           </Typography>
         </Box>
       )}

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { jwtDecode } from 'jwt-decode';
 
 import Menu from '@mui/material/Menu';
@@ -21,6 +22,7 @@ export default function MenuSettings({
   const [openEdit, setOpenEdit] = useState(false);
 
   const toastTheme = useToastTheme();
+  const { t } = useTranslation(['post']);
   const { user, accessToken, axiosJWT } = useUserAxios();
 
   const decodedToken = accessToken ? jwtDecode(accessToken) : null;
@@ -51,7 +53,7 @@ export default function MenuSettings({
               setOpen(true);
             }}
           >
-            Report
+            {t('post:settings.report')}
           </MenuItem>
         )}
         {post?.author?._id === user?._id && [
@@ -68,7 +70,7 @@ export default function MenuSettings({
               )
             }
           >
-            Delete
+            {t('post:settings.delete')}
           </MenuItem>,
           <MenuItem
             key={`edit-${post?._id}`}
@@ -77,11 +79,11 @@ export default function MenuSettings({
               setOpenEdit(true);
             }}
           >
-            Edit
+            {t('post:settings.edit')}
           </MenuItem>,
         ]}
         <MenuItem key={`download-${post?._id}`} onClick={handleCloseMenu}>
-          Download media
+          {t('post:settings.download_media')}
         </MenuItem>
       </Menu>
       {post?.author?._id === user?._id && (

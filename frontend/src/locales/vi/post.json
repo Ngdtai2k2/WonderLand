@@ -1,0 +1,33 @@
+{
+  "settings": {
+    "report": "Báo cáo",
+    "delete": "Xóa",
+    "edit": "Chỉnh sửa",
+    "download_media": "Tải xuống phương tiện"
+  },
+  "share": {
+    "copy_link": "Chia sẻ link",
+    "copy_success": "Đã copy link!",
+    "facebook": "Chia sẻ facebook",
+    "telegram": "Chia sẻ telegram"
+  },
+  "update_post": "Cập nhập bài viết",
+  "update": "Cập nhập",
+  "clear_file": "Xóa file",
+  "choose_file": "Chọn file",
+  "comment": {
+    "hot": "Bình luận nổi bật",
+    "new": "Bình luận mới",
+    "reply": "Trả lời",
+    "load_more": "Xem thêm",
+    "view_comment": "Xem bình luận",
+    "hidden": "Bình luận này đã bị ẩn.",
+    "hide_all": "Ẩn tất cả",
+    "view": "Xem",
+    "comments": "bình luận",
+    "comment": "bình luận",
+    "delete": "Xóa bình luận",
+    "edit": "Chỉnh sửa",
+    "report": "Báo cáo"
+  }
+}

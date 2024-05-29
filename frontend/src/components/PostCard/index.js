@@ -47,6 +47,7 @@ import {
   CardStyled,
 } from './styles';
 import 'video-react/dist/video-react.css';
+import { useTranslation } from 'react-i18next';
 
 export default function PostCard({
   post,
@@ -72,6 +73,7 @@ export default function PostCard({
   const theme = useTheme();
   const toastTheme = useToastTheme();
   const postRef = useRef(null);
+  const { t } = useTranslation(['message']);
 
   const { user, accessToken, axiosJWT } = useUserAxios();
 
@@ -86,11 +88,7 @@ export default function PostCard({
   }, [post?.totalReaction]);
 
   const handleLikeClick = async (type) => {
-    if (!user)
-      return toast.warning(
-        'You need to be signed in to perform this action!',
-        toastTheme,
-      );
+    if (!user) return toast.warning(t('message:need_login'), toastTheme);
     try {
       await axiosJWT.post(
         `${BaseApi}/reaction/like?user_request=${user._id}`,
@@ -130,11 +128,7 @@ export default function PostCard({
   };
 
   const handleSavePost = async () => {
-    if (!user)
-      return toast.warning(
-        'You need to be signed in to perform this action!',
-        toastTheme,
-      );
+    if (!user) return toast.warning(t('message:need_login'), toastTheme);
     try {
       const response = await axiosJWT.post(
         `${BaseApi}/save-post`,
@@ -247,10 +241,7 @@ export default function PostCard({
             id={`btn-post-settings-${post?._id}`}
             onClick={(event) => {
               if (!user) {
-                return toast.warning(
-                  'You need to be signed in to perform this action!',
-                  toastTheme,
-                );
+                return toast.warning(t('message:need_login'), toastTheme);
               }
               handleOpenMenu(event, post._id, setMenuAnchorEl, setIsMenuOpen);
             }}

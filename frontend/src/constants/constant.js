@@ -30,3 +30,14 @@ export const createElementStyleForZoom = (theme) => {
 
 export const BaseApi = process.env.REACT_APP_BASE_URL;
 export const ImagesNoData = process.env.REACT_APP_IMAGES_NO_DATA;
+
+export const locales = [
+  {
+    code: 'en',
+    name: 'English',
+  },
+  {
+    code: 'vi',
+    name: 'Vietnamese',
+  },
+];

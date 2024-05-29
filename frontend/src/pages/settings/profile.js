@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import * as Yup from 'yup';
+import { useTranslation } from 'react-i18next';
+import React, { useState } from 'react';
 import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import dayjs from 'dayjs';
 
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateField } from '@mui/x-date-pickers/DateField';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
-import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Avatar from '@mui/material/Avatar';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -31,27 +32,36 @@ export default function Profile() {
   const [fetching, setFetching] = useState();
 
   const dispatch = useDispatch();
-
+  const { t } = useTranslation(['validate', 'field', 'settings']);
   const user = useSelector((state) => state.auth.login?.currentUser);
   const accessToken = user?.accessToken;
 
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   const validationSchema = Yup.object({
-    fullname: Yup.string().required('Fullname is required!'),
+    fullname: Yup.string()
+      .required(t('validate:required_field', { name: t('field:fullname') }))
+      .matches(
+        /^[^\d]+$/,
+        t('validate:matches_not_contain_digits', { name: t('field:fullname') }),
+      ),
     phone: Yup.string(),
     about: Yup.string(),
     hometown: Yup.string(),
     birthDate: Yup.date(),
-    image: Yup.mixed().test('fileType', 'File not support!', (value) => {
-      if (!value) return true;
-      return (
-        value &&
-        ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'].includes(
-          value.type,
-        )
-      );
-    }),
+    image: Yup.mixed().test(
+      'fileType',
+      t('validate:file.not_support'),
+      (value) => {
+        if (!value) return true;
+        return (
+          value &&
+          ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'].includes(
+            value.type,
+          )
+        );
+      },
+    ),
   });
 
   const formik = useFormik({
@@ -88,7 +98,7 @@ export default function Profile() {
         method="PUT"
       >
         <Typography variant="h5" fontWeight={700}>
-          Profile
+          {t('settings:profile')}
         </Typography>
         <Box marginTop={2} display="flex" flexDirection="column">
           <Box display="flex" alignItems="center" gap={2} marginBottom={2}>
@@ -105,6 +115,9 @@ export default function Profile() {
                 size="small"
                 tabIndex={-1}
                 startIcon={<CloudUploadIcon />}
+                sx={{
+                  textTransform: 'none',
+                }}
               >
                 <VisuallyHiddenInput
                   type="file"
@@ -118,10 +131,12 @@ export default function Profile() {
                     setImage(URL.createObjectURL(event.currentTarget.files[0]));
                   }}
                 />
-                {filename ? ShortenContent(filename, 30) : 'Uploade image'}
+                {filename
+                  ? ShortenContent(filename, 30)
+                  : t('settings:upload_image')}
               </Button>
               <Typography variant="caption" marginTop={0.5}>
-                JPG, JEPG, GIF or PNG, Max size: 5MB
+                {t('validate:file.support_max_size')}
               </Typography>
               {formik.touched.image && formik.errors.image && (
                 <Typography variant="caption" color="error">
@@ -135,7 +150,7 @@ export default function Profile() {
             required
             fullWidth
             id="fullname"
-            label="Full Name"
+            label={t('field:fullname')}
             type="text"
             size="small"
             value={formik.values.fullname}
@@ -146,7 +161,7 @@ export default function Profile() {
           />
           <DateField
             size="small"
-            label="Birthday"
+            label={t('field:birthday')}
             sx={{ marginY: 1 }}
             value={formik.values.birthday}
             onChange={(date) => formik.setFieldValue('birthday', date)}
@@ -158,7 +173,7 @@ export default function Profile() {
             margin="normal"
             fullWidth
             id="phone"
-            label="Phone"
+            label={t('field:phone')}
             type="text"
             size="small"
             value={formik.values.phone}
@@ -173,7 +188,7 @@ export default function Profile() {
             multiline
             rows={4}
             id="about"
-            label="About"
+            label={t('field:about')}
             type="text"
             value={formik.values.about}
             onChange={formik.handleChange}
@@ -185,7 +200,7 @@ export default function Profile() {
             margin="normal"
             id="gender"
             select
-            label="Gender"
+            label={t('field:gender.gender')}
             name="gender"
             size="small"
             value={formik.values.gender}
@@ -194,15 +209,15 @@ export default function Profile() {
             error={formik.touched.gender && Boolean(formik.errors.gender)}
             helperText={formik.touched.gender && formik.errors.gender}
           >
-            <MenuItem value={0}>Male</MenuItem>
-            <MenuItem value={1}>Female</MenuItem>
-            <MenuItem value={2}>Other</MenuItem>
+            <MenuItem value={0}>{t('field:gender.male')}</MenuItem>
+            <MenuItem value={1}>{t('field:gender.female')}</MenuItem>
+            <MenuItem value={2}>{t('field:gender.other')}</MenuItem>
           </TextField>
           <TextField
             margin="normal"
             fullWidth
             id="hometown"
-            label="Hometown"
+            label={t('field:hometown')}
             type="hometown"
             size="small"
             value={formik.values.hometown}
@@ -223,7 +238,7 @@ export default function Profile() {
             marginTop: 2,
           }}
         >
-          Post
+          {t('settings:save')}
         </LoadingButton>
       </Box>
     </LocalizationProvider>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -19,25 +20,33 @@ export default function Register({ setTabIndex }) {
 
   const dispatch = useDispatch();
   const toastTheme = useToastTheme();
+  const { t } = useTranslation(['validate', 'field', 'auth', 'message']);
 
   const validationSchema = Yup.object({
     email: Yup.string()
-      .email('Invalid email address!')
-      .max(50, 'Emails must be less than 50 characters!')
-      .required('Email is required!'),
+      .email(t('validate:email.invalid'))
+      .max(50, t('validate:max', { name: 'Email', max: '50' }))
+      .required(t('validate:required_field', { name: 'Email' })),
     password: Yup.string()
-      .required('Password is required!')
-      .min(8, 'Password is too short - should be 8 chars minimum!'),
+      .required(t('validate:required_field', { name: t('field:password') }))
+      .min(8, t('validate:min', { name: t('field:password'), min: '8' }))
+      .matches(
+        /(?=.*[0-9])/,
+        t('validate:matches_contain_number', { name: t('field:password') }),
+      ),
     fullname: Yup.string()
-      .required('Full name is required!')
-      .matches(/^[^\d]+$/, 'Full name cannot contain digits'),
+      .required(t('validate:required_field', { name: t('field:fullname') }))
+      .matches(
+        /^[^\d]+$/,
+        t('validate:matches_not_contain_digits', { name: t('field:fullname') }),
+      ),
     nickname: Yup.string()
-      .min(5, 'Nickname must be at least 5 characters')
-      .max(20, 'Nickname must be less than 20 characters!')
-      .required('Nickname is required!')
+      .min(5, t('validate:min', { name: 'Nickname', min: '5' }))
+      .max(20, t('validate:max', { name: 'Nickname', max: '20' }))
+      .required(t('validate:required_field', { name: 'Nickname' }))
       .matches(
         /^[a-zA-Z0-9]+$/,
-        'Nickname can only contain Latin characters and numbers',
+        t('validate:matches_contain_number_latin', { name: 'Nickname' }),
       ),
   });
 
@@ -70,7 +79,7 @@ export default function Register({ setTabIndex }) {
       setUniqueNickName(response.data.unique);
 
       if (!response.data.unique) {
-        formik.setFieldError('nickname', 'Nickname is not unique');
+        formik.setFieldError('nickname', t('validate:not_unique'));
       }
     }
   };
@@ -90,7 +99,7 @@ export default function Register({ setTabIndex }) {
         required
         fullWidth
         id="fullname"
-        label="Full Name"
+        label={t('field:fullname')}
         name="fullname"
         autoComplete="fullname"
         value={formik.values.fullname}
@@ -123,7 +132,7 @@ export default function Register({ setTabIndex }) {
         required
         fullWidth
         id="email"
-        label="Email Address"
+        label={t('field:email')}
         name="email"
         autoComplete="email"
         value={formik.values.email}
@@ -138,7 +147,7 @@ export default function Register({ setTabIndex }) {
         required
         fullWidth
         name="password"
-        label="Password"
+        label={t('field:password')}
         type="password"
         id="password"
         autoComplete="current-password"
@@ -149,7 +158,7 @@ export default function Register({ setTabIndex }) {
         helperText={formik.touched.password && formik.errors.password}
       />
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-        Register
+        {t('auth:sign_up')}
       </Button>
       <Grid container>
         <Grid item>
@@ -158,8 +167,9 @@ export default function Register({ setTabIndex }) {
               setTabIndex(0);
             }}
             variant="body2"
+            sx={{ cursor: 'pointer' }}
           >
-            {'Already have an account? Sign in now!'}
+            {t('message:has_account')}
           </Link>
         </Grid>
       </Grid>

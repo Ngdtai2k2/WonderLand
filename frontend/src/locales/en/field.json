@@ -1,0 +1,27 @@
+{
+  "title": "Title",
+  "content": "Content",
+  "category": "Category",
+  "reason": "Reason",
+  "optional": "Optional",
+  "report": "Report",
+  "password": "Password",
+  "confirm_password": "Confirm Password",
+  "new_password": "New Password",
+  "old_password": "Old Password",
+  "email": "Email",
+  "remember_me": "Remember me",
+  "fullname": "Fullname",
+  "birthday": "Birthday",
+  "phone": "Phone",
+  "about": "About",
+  "gender": {
+    "gender": "Gender",
+    "male": "Male",
+    "female": "Female",
+    "other": "Other"
+  },
+  "hometown": "Hometown",
+  "comment": "Comment",
+  "enter_comment": "Enter your comment..."
+}

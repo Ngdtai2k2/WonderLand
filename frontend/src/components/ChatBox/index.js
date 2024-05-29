@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import InputEmoji from 'react-input-emoji';
 import moment from 'moment';
 
@@ -19,8 +20,8 @@ import useUserAxios from '../../hooks/useUserAxios';
 import { getMessages } from '../../utils/chatServices';
 import { getUserByUserId } from '../../utils/userServices';
 
-import { BoxMessage, PaperMessage } from './styles';
 import newMessageSoundEffect from '../../assets/sounds/new-message.mp3';
+import { BoxMessage, PaperMessage } from './styles';
 
 export default function ChatBox({ chat, receivedMessage }) {
   const [userData, setUserData] = useState(null);
@@ -28,6 +29,7 @@ export default function ChatBox({ chat, receivedMessage }) {
   const [newMessage, setNewMessage] = useState('');
 
   const { user, accessToken, axiosJWT } = useUserAxios();
+  const { t } = useTranslation(['message']);
 
   //   sound effects
   const messageSoundEffect = new Audio(newMessageSoundEffect);
@@ -98,9 +100,7 @@ export default function ChatBox({ chat, receivedMessage }) {
       alignItems="center"
       height="100%"
     >
-      <Typography variant="body1">
-        Choose the friend you want to connect with!
-      </Typography>
+      <Typography variant="body1">{t('message:chat.note')}</Typography>
     </Box>
   ) : (
     <Box>
@@ -147,7 +147,7 @@ export default function ChatBox({ chat, receivedMessage }) {
               {userData?.nickname}
             </Typography>
             <Typography variant="caption" fontWeight={500} marginTop={2}>
-              You can now message {userData?.nickname}.
+              {t('message:chat.can_message')} {userData?.nickname}.
             </Typography>
           </Box>
         ) : (

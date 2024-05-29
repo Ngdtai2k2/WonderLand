@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { useTheme } from '@emotion/react';
+import { useTranslation } from 'react-i18next';
 
-import { useColorScheme } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -11,8 +10,6 @@ import Badge from '@mui/material/Badge';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Switch from '@mui/material/Switch';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
@@ -27,37 +24,28 @@ import SmsRoundedIcon from '@mui/icons-material/SmsRounded';
 
 import ListNotifications from '../ListNotifications';
 import DrawerList from '../../components/DrawerList';
-import ModalAuth from '../../pages/modalAuth';
-import { useToastTheme, BaseApi } from '../../constants/constant';
-import { createAxios } from '../../createInstance';
-import { logOut } from '../../redux/apiRequest/authApi';
-import { logOutSuccess } from '../../redux/slice/userSlice';
-import useUserAxios from '../../hooks/useUserAxios';
 import SearchForm from '../SearchForm';
+import UserMenu from '../UserMenu';
+
+import { BaseApi } from '../../constants/constant';
+import useUserAxios from '../../hooks/useUserAxios';
 
 export default function NavigationBar({ isAdmin, state }) {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [anchorElNotifications, setAnchorElNotifications] = useState(null);
   const [anchorElSearch, setAnchorElSearch] = useState(null);
   const [openDrawer, setOpenDrawer] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
   const [totalUnreadNotifications, setTotalUnreadNotifications] = useState(0);
   const [dataFromChild, setDataFromChild] = useState();
 
-  const { mode, setMode } = useColorScheme();
-
+  const { t } = useTranslation(['navigation', 'home']);
   const theme = useTheme();
-  const toastTheme = useToastTheme();
   const isDarkMode = theme.palette.mode === 'dark';
   const backgroundColorAppBar = isDarkMode ? '#121212' : '#f4f4f4';
   const colorAppBar = isDarkMode ? '#f4f4f4' : '#121212';
 
   const { user, accessToken, axiosJWT } = useUserAxios();
 
-  const id = user?._id;
-  const device = user?.device;
-
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const toggleDrawer = (newOpen) => () => {
@@ -68,26 +56,8 @@ export default function NavigationBar({ isAdmin, state }) {
     setAnchorElUser(null);
   };
 
-  const handleLogout = () => {
-    handleCloseUserMenu();
-    logOut(
-      dispatch,
-      id,
-      device,
-      navigate,
-      accessToken,
-      createAxios(user, dispatch, logOutSuccess),
-      toastTheme,
-    );
-  };
-
   const handelNavigate = (path) => {
     navigate(path);
-  };
-
-  const handleOpenModal = () => {
-    setOpenModal(true);
-    handleCloseUserMenu();
   };
 
   const countUnreadNotifications = async (userId) => {
@@ -159,7 +129,7 @@ export default function NavigationBar({ isAdmin, state }) {
                 sm: 'block',
               }}
             >
-              Wonder Land
+              {t('home:site_name')}
             </Link>
             <Link
               href="/"
@@ -194,6 +164,7 @@ export default function NavigationBar({ isAdmin, state }) {
           >
             <SearchForm onClose={() => setAnchorElSearch(null)} />
           </Menu>
+          {/* notification */}
           <IconButton
             aria-label="notifications"
             onClick={(event) => setAnchorElNotifications(event.currentTarget)}
@@ -206,9 +177,6 @@ export default function NavigationBar({ isAdmin, state }) {
               <NotificationsRoundedIcon />
             </Badge>
           </IconButton>
-          <IconButton aria-label="chat" onClick={() => navigate('/chat')}>
-            <SmsRoundedIcon fontSize="small" />
-          </IconButton>
           <ListNotifications
             open={Boolean(anchorElNotifications)}
             handleClose={() => setAnchorElNotifications(null)}
@@ -217,12 +185,18 @@ export default function NavigationBar({ isAdmin, state }) {
             // When the socket event is captured, it will change the state to call the API again
             eventState={state}
           />
-          <Tooltip title="Created post">
+          {/* chat */}
+          <IconButton aria-label="chat" onClick={() => navigate('/chat')}>
+            <SmsRoundedIcon fontSize="small" />
+          </IconButton>
+          {/* created post */}
+          <Tooltip title={t('navigation:create_post')}>
             <IconButton onClick={() => handelNavigate('/create/post')}>
               <FileUploadRoundedIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Open menu">
+          {/* button open menu */}
+          <Tooltip title={t('navigation:open_menu')}>
             <IconButton
               onClick={(event) => {
                 setAnchorElUser(event.currentTarget);
@@ -236,53 +210,11 @@ export default function NavigationBar({ isAdmin, state }) {
             </IconButton>
           </Tooltip>
           {/* menu user */}
-          <Menu
-            sx={{ mt: '40px' }}
-            id="menu-appbar"
+          <UserMenu
             anchorEl={anchorElUser}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            keepMounted
-            open={Boolean(anchorElUser)}
-            onClose={handleCloseUserMenu}
-          >
-            {user ? null : (
-              <MenuItem onClick={handleOpenModal}>Signup or Login</MenuItem>
-            )}
-            <ModalAuth
-              openModal={openModal}
-              handleCloseModal={() => setOpenModal(false)}
-            />
-            {user
-              ? [
-                  <MenuItem
-                    key="profile"
-                    onClick={() => handelNavigate('/u/' + user?.nickname)}
-                  >
-                    Profile
-                  </MenuItem>,
-                  <MenuItem
-                    key="settings"
-                    onClick={() => handelNavigate('/settings')}
-                  >
-                    Settings
-                  </MenuItem>,
-                ]
-              : null}
-            <MenuItem
-              onClick={() => setMode(mode === 'light' ? 'dark' : 'light')}
-            >
-              <Typography>Dark mode</Typography>
-              <Switch
-                sx={{ marginLeft: 2 }}
-                size="small"
-                checked={mode === 'light' ? false : true}
-              />
-            </MenuItem>
-            {user ? <MenuItem onClick={handleLogout}>Logout</MenuItem> : null}
-          </Menu>
+            setAnchorEl={setAnchorElUser}
+            handleClose={handleCloseUserMenu}
+          />
         </Toolbar>
       </AppBar>
     </Box>

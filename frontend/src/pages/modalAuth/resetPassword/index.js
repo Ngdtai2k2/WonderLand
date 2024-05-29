@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import * as Yup from 'yup';
-import { useFormik } from 'formik';
-import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import axios from 'axios';
 
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -17,22 +18,28 @@ export default function ResetPassword({ setTabIndex }) {
 
   const toastTheme = useToastTheme();
   const email = localStorage.getItem('email_reset_password');
+  const { t } = useTranslation(['validate', 'field', 'auth']);
 
   const validationSchema = Yup.object({
     token: Yup.string()
-      .required('Please provide tokens from your mail!')
-      .max(6, 'Token no more than 6 characters'),
+      .required(t('validate:token'))
+      .max(6, t('validate:min', { name: 'Token', min: '6' })),
     newPassword: Yup.string()
-      .required('Password is required!')
-      .min(8, 'Password is too short - should be 8 chars minimum!')
+      .required(t('validate:required_field', { name: t('field:password') }))
+      .min(8, t('validate:min', { name: t('field:password'), min: '8' }))
       .notOneOf(
         [Yup.ref('oldPassword')],
-        'New password must be different from old password!',
+        t('validate:not_one_of_new_password'),
       ),
     confirmPassword: Yup.string()
-      .required('Confirm password is required!')
-      .min(8, 'Password is too short - should be 8 chars minimum!')
-      .oneOf([Yup.ref('newPassword'), null], 'Passwords must match!'),
+      .required(
+        t('validate:required_field', { name: t('field:confirm_password') }),
+      )
+      .min(8, t('validate:min', { name: t('field:password'), min: '8' }))
+      .oneOf(
+        [Yup.ref('newPassword'), null],
+        t('validate:must_match', { name: t('field:password') }),
+      ),
   });
 
   const formik = useFormik({
@@ -90,7 +97,7 @@ export default function ResetPassword({ setTabIndex }) {
         required
         fullWidth
         id="newPassword"
-        label="New Password"
+        label={t('field:new_password')}
         name="newPassword"
         autoComplete="newPassword"
         InputProps={{
@@ -113,7 +120,7 @@ export default function ResetPassword({ setTabIndex }) {
         required
         fullWidth
         value={formik.values.confirmPassword}
-        label="Confirm Password"
+        label={t('field:confirm_password')}
         name="confirmPassword"
         autoComplete="confirmPassword"
         InputProps={{
@@ -141,7 +148,7 @@ export default function ResetPassword({ setTabIndex }) {
         disabled={!formik.dirty || formik.isSubmitting || !formik.isValid}
         sx={{ my: 1 }}
       >
-        Reset Password
+        {t('auth:reset_password')}
       </LoadingButton>
     </Box>
   );

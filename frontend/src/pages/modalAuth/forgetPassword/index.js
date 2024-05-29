@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import * as Yup from 'yup';
 import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import axios from 'axios';
 
 import Box from '@mui/material/Box';
@@ -14,12 +15,13 @@ export default function ForgetPassword({ setTabIndex }) {
   const [fetching, setFetching] = useState();
 
   const toastTheme = useToastTheme();
+  const { t } = useTranslation(['validate', 'auth']);
 
   const validationSchema = Yup.object({
     email: Yup.string()
-      .email('Invalid email address!')
-      .max(50, 'Emails must be less than 50 characters!')
-      .required('Email is required!'),
+      .email(t('validate:email.invalid'))
+      .max(50, t('validate:max', { name: 'Email', max: '50' }))
+      .required(t('validate:required_field', { name: 'Email' })),
   });
 
   const formik = useFormik({
@@ -58,7 +60,7 @@ export default function ForgetPassword({ setTabIndex }) {
         required
         fullWidth
         id="email"
-        label="Email Address"
+        label={t('field:email')}
         name="email"
         autoComplete="email"
         value={formik.values.email}
@@ -75,7 +77,7 @@ export default function ForgetPassword({ setTabIndex }) {
         disabled={!formik.dirty || formik.isSubmitting || !formik.isValid}
         sx={{ my: 1 }}
       >
-        Send
+        {t('auth:send')}
       </LoadingButton>
     </Box>
   );
