@@ -1,6 +1,7 @@
 import { Link } from '@mui/material';
 
 import ReadMore from '../components/Readmore';
+import { toast } from 'react-toastify';
 
 export function ShortenContent(content, maxLength) {
   if (content.length <= maxLength) {
@@ -105,4 +106,9 @@ export function getCurrentDate(separator = '/') {
   const year = newDate.getFullYear();
 
   return `${date}${separator}${month}${separator}${year}`;
+}
+
+export async function copyText(text, toastTheme) {
+  await navigator.clipboard.writeText(text);
+  toast.success('Copy successfully!', toastTheme);
 }

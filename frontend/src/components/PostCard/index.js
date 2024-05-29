@@ -35,6 +35,10 @@ import {
   handleCloseMenu,
   handleOpenMenu,
 } from '../../utils/helperFunction';
+import MenuSettings from './menuSettings';
+import MenuShare from './menuShare';
+import useUserAxios from '../../hooks/useUserAxios';
+import { handleViewPost } from '../../utils/postServices';
 import {
   BoxStyled,
   BoxSubHeader,
@@ -42,10 +46,7 @@ import {
   CardMediaStyled,
   CardStyled,
 } from './styles';
-import MenuSettings from './menuSettings';
-import useUserAxios from '../../hooks/useUserAxios';
 import 'video-react/dist/video-react.css';
-import { handleViewPost } from '../../utils/postServices';
 
 export default function PostCard({
   post,
@@ -64,6 +65,8 @@ export default function PostCard({
   const [isSavePost, setIsSavePost] = useState(false);
   const [menuAnchorEl, setMenuAnchorEl] = useState({});
   const [isMenuOpen, setIsMenuOpen] = useState({});
+  const [menuAnchorElShare, setMenuAnchorElShare] = useState({});
+  const [isMenuShareOpen, setIsMenuShareOpen] = useState({});
 
   const navigate = useNavigate();
   const theme = useTheme();
@@ -391,9 +394,33 @@ export default function PostCard({
               <TurnedInNotRoundedIcon />
             )}
           </IconButton>
-          <IconButton aria-label="share" size="small">
+          <IconButton
+            aria-label="share"
+            size="small"
+            id={`btn-post-share-${post?._id}`}
+            onClick={(event) => {
+              handleOpenMenu(
+                event,
+                post._id,
+                setMenuAnchorElShare,
+                setIsMenuShareOpen,
+              );
+            }}
+          >
             <ShareIcon />
           </IconButton>
+          <MenuShare
+            post={post}
+            menuAnchorEl={menuAnchorElShare[post?._id]}
+            isMenuOpen={isMenuShareOpen[post?._id]}
+            handleCloseMenu={() =>
+              handleCloseMenu(
+                post._id,
+                setMenuAnchorElShare,
+                setIsMenuShareOpen,
+              )
+            }
+          />
         </BoxStyled>
       </CardActionsStyled>
     </CardStyled>
