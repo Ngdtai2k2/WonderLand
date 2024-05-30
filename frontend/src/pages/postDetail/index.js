@@ -220,7 +220,13 @@ export default function PostDetail() {
                   <IconButton
                     sx={{ p: 0.5 }}
                     size="small"
-                    onClick={() => document.getElementById('image').click()}
+                    onClick={() => {
+                      if (user) {
+                        document.getElementById('image').click();
+                      } else {
+                        toast.warning(t('message:need_login'), toastTheme);
+                      }
+                    }}
                   >
                     <AddAPhotoIcon />
                   </IconButton>

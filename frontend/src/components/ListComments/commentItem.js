@@ -362,9 +362,13 @@ export default function CommentItem({
               <IconButton
                 sx={{ p: 0.5 }}
                 size="small"
-                onClick={() =>
-                  document.getElementById(`image-reply-${data._id}`).click()
-                }
+                onClick={() => {
+                  if (user) {
+                    document.getElementById(`image-reply-${data._id}`).click();
+                  } else {
+                    toast.warning(t('message:need_login'), toastTheme);
+                  }
+                }}
               >
                 <AddAPhotoIcon />
               </IconButton>
