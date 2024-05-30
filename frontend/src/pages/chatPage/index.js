@@ -42,7 +42,7 @@ export default function ChatPage() {
   useEffect(() => {
     if (user) {
       getChats(axiosJWT, user?._id, accessToken, setChats);
-    }
+    } else navigate('/');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 

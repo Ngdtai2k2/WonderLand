@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@emotion/react';
-import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
@@ -27,7 +28,7 @@ import DrawerList from '../../components/DrawerList';
 import SearchForm from '../SearchForm';
 import UserMenu from '../UserMenu';
 
-import { BaseApi } from '../../constants/constant';
+import { BaseApi, useToastTheme } from '../../constants/constant';
 import useUserAxios from '../../hooks/useUserAxios';
 
 export default function NavigationBar({ isAdmin, state }) {
@@ -40,6 +41,7 @@ export default function NavigationBar({ isAdmin, state }) {
 
   const { t } = useTranslation(['navigation', 'home']);
   const theme = useTheme();
+  const toastTheme = useToastTheme();
   const isDarkMode = theme.palette.mode === 'dark';
   const backgroundColorAppBar = isDarkMode ? '#121212' : '#f4f4f4';
   const colorAppBar = isDarkMode ? '#f4f4f4' : '#121212';
@@ -186,7 +188,16 @@ export default function NavigationBar({ isAdmin, state }) {
             eventState={state}
           />
           {/* chat */}
-          <IconButton aria-label="chat" onClick={() => navigate('/chat')}>
+          <IconButton
+            aria-label="chat"
+            onClick={() => {
+              if (user) {
+                navigate('/chat');
+              } else {
+                toast.warning(t('message:need_login'), toastTheme);
+              }
+            }}
+          >
             <SmsRoundedIcon fontSize="small" />
           </IconButton>
           {/* created post */}
