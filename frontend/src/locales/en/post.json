@@ -30,5 +30,11 @@
     "delete": "Delete",
     "edit": "Edit",
     "report": "Report"
+  },
+  "create": {
+    "title": "Create post",
+    "post": "Post",
+    "ask": "Ask",
+    "post_": "Post"
   }
 }

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
@@ -26,6 +27,7 @@ export default function AskTab() {
 
   const navigate = useNavigate();
   const toastTheme = useToastTheme();
+  const { t } = useTranslation(['post', 'validate', 'message', 'field']);
 
   const { user, accessToken, axiosJWT } = useUserAxios();
 
@@ -44,11 +46,16 @@ export default function AskTab() {
   }, []);
 
   const validationSchema = Yup.object({
-    category: Yup.string().required('Category is required!'),
+    category: Yup.string().required(
+      t('validate:required_field', { name: t('field:category') }),
+    ),
     title: Yup.string()
-      .required('Title is required!')
-      .max(280, 'Title must be under 280 characters!'),
-    content: Yup.string().max(1500, 'Content must be under 1500 characters!'),
+      .required(t('validate:required_field', { name: t('field:title') }))
+      .max(280, t('validate:max', { name: t('field:title'), max: '280' })),
+    content: Yup.string().max(
+      1500,
+      t('validate:max', { name: t('field:content'), max: '1500' }),
+    ),
   });
 
   const formik = useFormik({
@@ -92,16 +99,13 @@ export default function AskTab() {
       justifyContent="center"
       flexDirection="column"
     >
-      <Typography variant="caption">
-        Note: After creating your post, please allow 1 moment for us to upload
-        your file!
-      </Typography>
+      <Typography variant="caption">{t('message:post.note_create')}</Typography>
       <TextField
         required
         margin="normal"
         id="category"
         select
-        label="Category"
+        label={t('field:category')}
         name="category"
         fullWidth
         value={formik.values.category}
@@ -129,7 +133,7 @@ export default function AskTab() {
         margin="normal"
         required
         id="title"
-        label="Title"
+        label={t('field:title')}
         type="text"
         value={formik.values.title}
         onChange={formik.handleChange}
@@ -142,7 +146,7 @@ export default function AskTab() {
         rows={4}
         margin="normal"
         id="content"
-        label="Content"
+        label={t('field:content')}
         type="text"
         value={formik.values.content}
         onChange={formik.handleChange}
@@ -165,7 +169,7 @@ export default function AskTab() {
             },
           }}
         >
-          Post
+          {t('post:create.post_')}
         </LoadingButton>
       </FlexCenterBox>
     </Box>

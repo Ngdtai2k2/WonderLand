@@ -29,5 +29,11 @@
     "delete": "Xóa bình luận",
     "edit": "Chỉnh sửa",
     "report": "Báo cáo"
+  },
+  "create": {
+    "title": "Tạo bài viết",
+    "post": "Bài viết",
+    "ask": "Câu hỏi",
+    "post_": "Đăng bài"
   }
 }

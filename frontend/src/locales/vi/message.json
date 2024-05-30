@@ -14,6 +14,7 @@
   "email_displayed_publicly": "Email sẽ không được hiển thị công khai.",
   "link_look_like": "Liên kết đến hồ sơ của bạn trông như thế này:",
   "post": {
+    "note_create": "Lưu ý: Sau khi tạo bài đăng của bạn, vui lòng đợi một lúc để chúng tôi tải lên tệp của bạn!",
     "note_update": "Lưu ý: Sau khi cập nhật bài đăng của bạn, vui lòng đợi một lúc để chúng tôi tải tệp của bạn lên!",
     "note_update_new_media": "Hãy cập nhật ảnh mới khi cập nhật bài viết nhé!"
   },

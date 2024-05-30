@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
@@ -15,9 +16,11 @@ import Rules from '../../components/Rules';
 export default function CreatePost() {
   const [tabIndex, setTabIndex] = useState(0);
 
+  const { t } = useTranslation(['post']);
+
   useEffect(() => {
-    document.title = 'Create a new post';
-  }, []);
+    document.title = t('post:create.title');
+  }, [t]);
 
   const handleChangeTab = (event, newValue) => {
     setTabIndex(newValue);
@@ -25,7 +28,7 @@ export default function CreatePost() {
   return (
     <CustomBox marginX={{ xs: 0, md: 4 }}>
       <Typography variant="h5" fontWeight={700} textAlign="center">
-        Create Post
+        {t('post:create.title')}
       </Typography>
       <Grid container spacing={1} marginTop={2}>
         <Grid item xs={12} sm={8}>
@@ -40,8 +43,8 @@ export default function CreatePost() {
                   marginBottom: 2,
                 }}
               >
-                <Tab sx={{ fontSize: '16px' }} label="Post" />
-                <Tab sx={{ fontSize: '16px' }} label="Ask" />
+                <Tab sx={{ fontSize: '16px' }} label={t('post:create.post')} />
+                <Tab sx={{ fontSize: '16px' }} label={t('post:create.ask')} />
               </Tabs>
               {tabIndex === 0 && <PostTab />}
               {tabIndex === 1 && <AskTab />}

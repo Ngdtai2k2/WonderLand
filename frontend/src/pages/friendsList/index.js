@@ -22,7 +22,7 @@ export default function FriendsList() {
   const [tabIndex, setTabIndex] = useState(0);
 
   const theme = useTheme();
-  const {t} = useTranslation(['friends'])
+  const { t } = useTranslation(['friends']);
   const isSmOrBelow = useMediaQuery(theme.breakpoints.down('sm'));
 
   const queryString = window.location.search;
@@ -52,7 +52,9 @@ export default function FriendsList() {
               label={
                 <BoxSpaceBetween>
                   <Diversity3RoundedIcon />
-                  <Typography variant="body1">{t('friends:friends_list')}</Typography>
+                  <Typography variant="body1">
+                    {t('friends:friends_list')}
+                  </Typography>
                 </BoxSpaceBetween>
               }
             />
@@ -60,7 +62,9 @@ export default function FriendsList() {
               label={
                 <BoxSpaceBetween>
                   <GroupAddRoundedIcon />
-                  <Typography variant="body1">{t('friends:friends_request_list')}</Typography>
+                  <Typography variant="body1">
+                    {t('friends:friends_request_list')}
+                  </Typography>
                 </BoxSpaceBetween>
               }
             />

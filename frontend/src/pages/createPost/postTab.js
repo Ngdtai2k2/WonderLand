@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
@@ -33,7 +34,7 @@ export default function PostTab() {
 
   const navigate = useNavigate();
   const toastTheme = useToastTheme();
-
+  const { t } = useTranslation(['post', 'validate', 'message', 'field']);
   const { user, accessToken, axiosJWT } = useUserAxios();
 
   useEffect(() => {
@@ -51,13 +52,15 @@ export default function PostTab() {
   }, []);
 
   const validationSchema = Yup.object({
-    category: Yup.string().required('Category is required'),
+    category: Yup.string().required(
+      t('validate:required_field', { name: t('field:category') }),
+    ),
     title: Yup.string()
-      .required('Title is required')
-      .max(280, 'Title must be under 280 characters'),
+      .required(t('validate:required_field', { name: t('field:title') }))
+      .max(280, t('validate:max', { name: t('field:title'), max: '280' })),
     file: Yup.mixed()
       .required('File is required!')
-      .test('fileType', 'File not supported!', (value) => {
+      .test('fileType', t('validate:file.not_support'), (value) => {
         if (!value) return true;
         const imageTypes = [
           'image/jpeg',
@@ -121,16 +124,13 @@ export default function PostTab() {
       justifyContent="center"
       flexDirection="column"
     >
-      <Typography variant="caption">
-        Note: After creating your post, please allow 1 moment for us to upload
-        your file!
-      </Typography>
+      <Typography variant="caption">{t('message:post.note_create')}</Typography>
       <TextField
         required
         margin="normal"
         id="category"
         select
-        label="Category"
+        label={t('field:category')}
         name="category"
         fullWidth
         value={formik.values.category}
@@ -159,7 +159,7 @@ export default function PostTab() {
         required
         id="title"
         name="title"
-        label="Title"
+        label={t('field:title')}
         type="text"
         value={formik.values.title}
         onChange={formik.handleChange}
@@ -176,7 +176,7 @@ export default function PostTab() {
                 onClick={handleClearFile}
                 variant="outlined"
               >
-                Clear File
+                {t('post:clear_file')}
               </Button>
             </FlexCenterBox>
           ) : (
@@ -203,7 +203,10 @@ export default function PostTab() {
                 />
                 <FlexCenterBox flexDirection="column">
                   <CloudUploadIcon />
-                  <Typography variant="body1">Choose file</Typography>
+                  <Typography variant="body1">
+                    {' '}
+                    {t('post:choose_file')}
+                  </Typography>
                 </FlexCenterBox>
               </Button>
               <Typography
@@ -211,7 +214,7 @@ export default function PostTab() {
                 fontStyle="italic"
                 textAlign="center"
               >
-                Support files with PNG, JPG, JPEG, GIF, MKV or MP4 file.
+                {t('validate:file.support')}
               </Typography>
             </>
           )}
@@ -245,7 +248,7 @@ export default function PostTab() {
             },
           }}
         >
-          Post
+          {t('post:create.post_')}
         </LoadingButton>
       </FlexCenterBox>
     </Box>

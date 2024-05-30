@@ -14,6 +14,7 @@
   "email_displayed_publicly": "Email will not be displayed publicly.",
   "link_look_like": "The link to your profile looks like this:",
   "post": {
+    "note_create": "Note: After creating your post, please allow one moment for us to upload your file!",
     "note_update": "Note: After update your post, please allow one moment for us to upload your file!",
     "note_update_new_media": "Please update the new photo when updating the post!"
   },
