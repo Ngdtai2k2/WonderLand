@@ -15,13 +15,15 @@ const friendsController = {
       if (userId == friendId) {
         return res
           .status(400)
-          .json({ message: "You can't add yourself as a friend!" });
+          .json({ message: req.t("friends.not_add_yourself") });
       }
 
       const user = await userModel.findById(userId);
-      if (!user) return res.status(404).json({ message: req.t("not_found.user") });
+      if (!user)
+        return res.status(404).json({ message: req.t("not_found.user") });
       const friend = await userModel.findById(friendId);
-      if (!friend) return res.status(404).json({ message: req.t("not_found.user") });
+      if (!friend)
+        return res.status(404).json({ message: req.t("not_found.user") });
       const userRequestAddFriend = await friendsModel.findOne({
         user: userId,
         friend: friendId,
@@ -29,7 +31,7 @@ const friendsController = {
       if (userRequestAddFriend) {
         return res
           .status(400)
-          .json({ message: "You have already sent a friend request!" });
+          .json({ message: req.t("friends.already_sent_request") });
       }
 
       const newFriendRequest = new friendsModel({
@@ -61,13 +63,9 @@ const friendsController = {
         });
       }
 
-      return res
-        .status(201)
-        .json({ message: "Friend requests have been sent!" });
+      return res.status(201).json({ message: req.t("friends.sent_request") });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: req.t('server_error') });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -76,10 +74,12 @@ const friendsController = {
       const { userId, friendId } = req.body;
 
       const user = await userModel.findById(userId);
-      if (!user) return res.status(404).json({ message: req.t("not_found.user") });
+      if (!user)
+        return res.status(404).json({ message: req.t("not_found.user") });
 
       const friend = await userModel.findById(friendId);
-      if (!friend) return res.status(404).json({ message: req.t("not_found.user") });
+      if (!friend)
+        return res.status(404).json({ message: req.t("not_found.user") });
 
       const friendRequest = await friendsModel.findOne({
         $or: [
@@ -91,7 +91,7 @@ const friendsController = {
       if (friendRequest && friendRequest.status === 1) {
         return res
           .status(400)
-          .json({ message: "You two have become friends 😍!" });
+          .json({ message: req.t("friends.become_friend") });
       }
 
       const userRequestAddFriend = await friendsModel.deleteMany({
@@ -102,7 +102,7 @@ const friendsController = {
       if (!userRequestAddFriend) {
         return res
           .status(400)
-          .json({ message: "You have not sent a friend request!" });
+          .json({ message: req.t("friends.not_sent_request") });
       }
 
       await notificationsModel.deleteMany({
@@ -112,11 +112,9 @@ const friendsController = {
       });
       return res
         .status(200)
-        .json({ message: "Successfully cancel your friend request!" });
+        .json({ message: req.t("friends.cancel_request_success") });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: req.t('server_error') });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -124,9 +122,11 @@ const friendsController = {
     try {
       const { userId, friendId } = req.body;
       const user = await userModel.findById(userId);
-      if (!user) return res.status(404).json({ message: req.t("not_found.user") });
+      if (!user)
+        return res.status(404).json({ message: req.t("not_found.user") });
       const friend = await userModel.findById(friendId);
-      if (!friend) return res.status(404).json({ message: req.t("not_found.user") });
+      if (!friend)
+        return res.status(404).json({ message: req.t("not_found.user") });
 
       let friendData = await friendsModel.findOne({
         $or: [
@@ -138,19 +138,15 @@ const friendsController = {
       if (!friendData) {
         return res
           .status(400)
-          .json({ message: "You have not sent a friend request!" });
+          .json({ message: req.t("friends.not_sent_request") });
       }
 
       friendData.status = 1;
       await friendData.save();
 
-      return res
-        .status(200)
-        .json({ message: "You two have become friends 😍!" });
+      return res.status(200).json({ message: req.t("friends.become_friend") });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: req.t('server_error') });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -159,9 +155,11 @@ const friendsController = {
       const { userId, friendId } = req.body;
 
       const user = await userModel.findById(userId);
-      if (!user) return res.status(404).json({ message: req.t("not_found.user") });
+      if (!user)
+        return res.status(404).json({ message: req.t("not_found.user") });
       const friend = await userModel.findById(friendId);
-      if (!friend) return res.status(404).json({ message: req.t("not_found.user") });
+      if (!friend)
+        return res.status(404).json({ message: req.t("not_found.user") });
 
       const friendRequest = await friendsModel.findOne({
         $or: [
@@ -173,7 +171,7 @@ const friendsController = {
       if (!friendRequest) {
         return res
           .status(400)
-          .json({ message: "You are not friends with this user!" });
+          .json({ message: req.t("friends.not_friend_with_user") });
       }
 
       // delete friend
@@ -192,11 +190,11 @@ const friendsController = {
         ],
       });
 
-      return res.status(200).json({ message: "Separation is sad 😭x100!" });
-    } catch (error) {
       return res
-        .status(500)
-        .json({ message: req.t('server_error') });
+        .status(200)
+        .json({ message: req.t("friends.deleted_success") });
+    } catch (error) {
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -207,7 +205,8 @@ const friendsController = {
       const options = optionsPaginate(req);
 
       const user = await userModel.findById(request_user);
-      if (!user) return res.status(404).json({ message: req.t("not_found.user") });
+      if (!user)
+        return res.status(404).json({ message: req.t("not_found.user") });
 
       let friendsList = await friendsModel.paginate(
         {
@@ -236,9 +235,7 @@ const friendsController = {
 
       return res.status(200).json(friendsList);
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: req.t('server_error') });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -247,7 +244,8 @@ const friendsController = {
       const { request_user } = req.query;
 
       const user = await userModel.findById(request_user);
-      if (!user) return res.status(404).json({ message: req.t("not_found.user") });
+      if (!user)
+        return res.status(404).json({ message: req.t("not_found.user") });
       const options = optionsPaginate(req);
 
       const friendsRequestList = await friendsModel.paginate(
@@ -274,9 +272,7 @@ const friendsController = {
       return res.status(200).json(friendsRequestList);
     } catch (error) {
       console.error(error.message);
-      return res
-        .status(500)
-        .json({ message: req.t('server_error') });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 };

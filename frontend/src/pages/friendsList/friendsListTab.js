@@ -44,10 +44,13 @@ export default function FriendsListTab() {
     document.title = t('friends:friends_list');
   }, [t]);
 
+  const url = `${BaseApi}/friend`;
+
   useEffect(() => {
     if (user) {
       getFriendsList(
-        `${BaseApi}/friend`,
+        i18n.language,
+        url,
         axiosJWT,
         accessToken,
         page,
@@ -82,6 +85,7 @@ export default function FriendsListTab() {
         {
           headers: {
             token: `Bearer ${accessToken}`,
+            'Accept-Language': i18n.language,
           },
         },
       );
@@ -109,7 +113,8 @@ export default function FriendsListTab() {
               next={() => {
                 if (hasMore) {
                   getFriendsList(
-                    `${BaseApi}/friend`,
+                    i18n.language,
+                    url,
                     axiosJWT,
                     accessToken,
                     page,
@@ -124,7 +129,8 @@ export default function FriendsListTab() {
               loader={<LoadingCircularIndeterminate />}
               refreshFunction={() =>
                 refreshFriendList(
-                  `${BaseApi}/friend`,
+                  i18n.language,
+                  url,
                   axiosJWT,
                   accessToken,
                   page,

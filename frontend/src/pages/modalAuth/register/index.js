@@ -78,9 +78,17 @@ export default function Register({ setTabIndex }) {
       nickname.length > 5 &&
       !Boolean(formik.errors.nickname)
     ) {
-      const response = await axios.post(`${BaseApi}/auth/check-nickname`, {
-        nickname: nickname,
-      });
+      const response = await axios.post(
+        `${BaseApi}/auth/check-nickname`,
+        {
+          nickname: nickname,
+        },
+        {
+          headers: {
+            'Accept-Language': i18n.language,
+          },
+        },
+      );
       setUniqueNickName(response.data.unique);
 
       if (!response.data.unique) {

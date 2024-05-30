@@ -49,6 +49,7 @@ export default function FriendsRequestListTab() {
   useEffect(() => {
     if (user) {
       getFriendsList(
+        i18n.language,
         url,
         axiosJWT,
         accessToken,
@@ -84,6 +85,7 @@ export default function FriendsRequestListTab() {
         {
           headers: {
             token: `Bearer ${accessToken}`,
+            'Accept-Language': i18n.language,
           },
         },
       );
@@ -117,6 +119,7 @@ export default function FriendsRequestListTab() {
         {
           headers: {
             token: `Bearer ${accessToken}`,
+            'Accept-Language': i18n.language,
           },
         },
       );
@@ -141,6 +144,7 @@ export default function FriendsRequestListTab() {
             next={() => {
               if (hasMore) {
                 getFriendsList(
+                  i18n.language,
                   url,
                   axiosJWT,
                   accessToken,
@@ -156,6 +160,7 @@ export default function FriendsRequestListTab() {
             loader={<LoadingCircularIndeterminate />}
             refreshFunction={() =>
               refreshFriendList(
+                i18n.language,
                 url,
                 axiosJWT,
                 accessToken,

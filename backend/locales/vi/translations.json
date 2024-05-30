@@ -33,6 +33,16 @@
         "deleted_success": "Bình luận đã được xóa!",
         "reply_deleted": "Bình luận đã được xóa!"
     },
+    "friends": {
+        "not_add_yourself": "Bạn không thể kết bạn với bản thân!",
+        "already_sent_request": "Bạn đã gửi một yêu cầu kết bạn!",
+        "sent_request": "Lời mời kết bạn đã được gửi!",
+        "become_friend": "Hai bạn đã trở thành bạn bè 😍!",
+        "not_sent_request": "Bạn chưa gửi yêu cầu kết bạn!",
+        "cancel_request_success": "Hủy thành công yêu cầu kết bạn của bạn!",
+        "not_friend_with_user": "Bạn không phải là bạn với người dùng này!",
+        "deleted_success": "Chia ly thật là buồn 😭x100!"
+    },
     "not_found": {
         "user": "Không tìm thấy người dùng!",
         "email": "Không tìm thấy email!",

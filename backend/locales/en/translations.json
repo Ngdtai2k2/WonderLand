@@ -33,6 +33,16 @@
         "deleted_success": "Comment has been deleted!",
         "reply_deleted": "Comment reply has been deleted!"
     },
+    "friends": {
+        "not_add_yourself": "You can't add yourself as a friend!",
+        "already_sent_request": "You have already sent a friend request!",
+        "sent_request": "Friend requests have been sent!",
+        "become_friend": "You two have become friends 😍!",
+        "not_sent_request": "You have not sent a friend request!",
+        "cancel_request_success": "Successfully cancel your friend request!",
+        "not_friend_with_user": "You are not friends with this user!",
+        "deleted_success": "Separation is sad 😭x100!"
+    },
     "not_found": {
         "user": "User not found!",
         "email": "Email not found!",

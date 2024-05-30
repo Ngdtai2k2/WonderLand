@@ -50,7 +50,7 @@ export default function Profile() {
   const [friendRequest, setFriendRequest] = useState();
   const [openModalConfirm, setOpenModalConfirm] = useState(false);
 
-  const { t, i18n } = useTranslation(['user']);
+  const { t, i18n } = useTranslation(['user', 'message']);
   const theme = useTheme();
   const toastTheme = useToastTheme();
   const isSmOrBelow = useMediaQuery(theme.breakpoints.down('sm'));
@@ -98,10 +98,7 @@ export default function Profile() {
   const handleSendRequestAddFriend = async () => {
     try {
       if (!user) {
-        return toast.warning(
-          'You need to be signed in to perform this action!',
-          toastTheme,
-        );
+        return toast.warning(t('message:need_login'), toastTheme);
       }
       const response = await axiosJWT.post(
         `${BaseApi}/friend/send-request`,
@@ -112,6 +109,7 @@ export default function Profile() {
         {
           headers: {
             token: `Bearer ${accessToken}`,
+            'Accept-Language': i18n.language,
           },
         },
       );
@@ -125,10 +123,7 @@ export default function Profile() {
   const handleCancelRequestAddFriend = async () => {
     try {
       if (!user) {
-        return toast.warning(
-          'You need to be signed in to perform this action!',
-          toastTheme,
-        );
+        return toast.warning(t('message:need_login'), toastTheme);
       }
       const response = await axiosJWT.post(
         `${BaseApi}/friend/cancel-request`,
@@ -139,6 +134,7 @@ export default function Profile() {
         {
           headers: {
             token: `Bearer ${accessToken}`,
+            'Accept-Language': i18n.language,
           },
         },
       );
@@ -152,10 +148,7 @@ export default function Profile() {
   const handleAcceptRequestAddFriend = async () => {
     try {
       if (!user) {
-        return toast.warning(
-          'You need to be signed in to perform this action!',
-          toastTheme,
-        );
+        return toast.warning(t('message:need_login'), toastTheme);
       }
       const response = await axiosJWT.post(
         `${BaseApi}/friend/accept-request`,
@@ -166,6 +159,7 @@ export default function Profile() {
         {
           headers: {
             token: `Bearer ${accessToken}`,
+            'Accept-Language': i18n.language,
           },
         },
       );
@@ -179,10 +173,7 @@ export default function Profile() {
   const handleDeleteFriend = async () => {
     try {
       if (!user) {
-        return toast.warning(
-          'You need to be signed in to perform this action!',
-          toastTheme,
-        );
+        return toast.warning(t('message:need_login'), toastTheme);
       }
       const response = await axiosJWT.post(
         `${BaseApi}/friend/delete-friend?request_user=${user?._id}`,
@@ -193,6 +184,7 @@ export default function Profile() {
         {
           headers: {
             token: `Bearer ${accessToken}`,
+            'Accept-Language': i18n.language,
           },
         },
       );

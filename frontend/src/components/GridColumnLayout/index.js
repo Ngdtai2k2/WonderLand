@@ -48,6 +48,7 @@ export default function GridColumnLayout({ children }) {
   useEffect(() => {
     if (user) {
       getFriendsList(
+        i18n.language,
         `${BaseApi}/friend`,
         axiosJWT,
         accessToken,
@@ -145,6 +146,7 @@ export default function GridColumnLayout({ children }) {
                     next={() => {
                       if (hasMore) {
                         getFriendsList(
+                          i18n.language,
                           `${BaseApi}/friend`,
                           axiosJWT,
                           accessToken,
@@ -161,6 +163,7 @@ export default function GridColumnLayout({ children }) {
                     pullDownToRefresh
                     refreshFunction={() => {
                       refreshFriendList(
+                        i18n.language,
                         `${BaseApi}/friend`,
                         axiosJWT,
                         accessToken,

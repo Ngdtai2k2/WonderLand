@@ -1,4 +1,5 @@
 const getFriendsList = async (
+  lng,
   apiLink,
   axiosJWT,
   accessToken,
@@ -17,6 +18,7 @@ const getFriendsList = async (
       {
         headers: {
           token: `Bearer ${accessToken}`,
+          'Accept-Language': lng,
         },
       },
     )
@@ -34,6 +36,7 @@ const getFriendsList = async (
 };
 
 const refreshFriendList = (
+  lng,
   apiLink,
   axiosJWT,
   accessToken,
@@ -44,6 +47,7 @@ const refreshFriendList = (
 ) => {
   page.current = 1;
   getFriendsList(
+    lng,
     apiLink,
     axiosJWT,
     accessToken,
