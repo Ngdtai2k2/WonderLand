@@ -157,7 +157,7 @@ const reportController = {
 
       const report = await reportModel.findById(id).populate("user");
       if (!report)
-        return res.status(404).json({ message: "Report not found!" });
+        return res.status(404).json({ message: req.t('not_found.report') });
       if (report.status == 2)
         return res
           .status(400)

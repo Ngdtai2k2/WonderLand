@@ -15,7 +15,7 @@ const savePostController = {
     try {
       const { user, id } = req.body;
       const post = await postModel.findById(id);
-      if (!post) return res.status(404).json({ message: "Post not found!" });
+      if (!post) return res.status(404).json({ message: req.t('not_found.post') });
       const savePost = await savePostModel.findOne({
         user,
         postId: id,

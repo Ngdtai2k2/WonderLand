@@ -93,8 +93,11 @@ export default function PostTab() {
           `${BaseApi}/post/create`,
           formData,
           {
-            headers: { token: `Bearer ${accessToken}` },
-            'Content-Type': 'multipart/form-data',
+            headers: {
+              'Accept-Language': i18n.language,
+              'Content-Type': 'multipart/form-data',
+              token: `Bearer ${accessToken}`,
+            },
           },
         );
         toast.success(response.data.message, toastTheme);

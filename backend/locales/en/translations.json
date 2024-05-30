@@ -43,13 +43,24 @@
         "not_friend_with_user": "You are not friends with this user!",
         "deleted_success": "Separation is sad 😭x100!"
     },
+    "post": {
+        "provide_author": "Please provide an author!",
+        "create_post_success": "Created post successfully!",
+        "create_ask_success": "Created ask successfully!",
+        "provide_title": "Please provide a title!",
+        "updated_success": "Updated post successfully!",
+        "deleted_success": "Deleted post successfully!"
+    },
     "not_found": {
         "user": "User not found!",
         "email": "Email not found!",
         "category" :"Category not found!",
         "chat": "Chat not found!",
         "messages" : "Messages not found!",
-        "comment": "Comment not found!"
+        "comment": "Comment not found!",
+        "author": "Author not found!",
+        "post": "Post not found!",
+        "report": "Report not found!"
     },
     "server_error": "An error occurred please try again later!",
     "message": {
@@ -63,6 +74,7 @@
     },
     "file": {
         "not_supported": "File not supported!",
-        "image_not_upload": "Image not uploaded!"
+        "image_not_upload": "Image not uploaded!",
+        "video_not_upload": "Upload video failed!"
     }
 }

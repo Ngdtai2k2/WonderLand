@@ -185,7 +185,7 @@ export default function PostCard({
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && user) {
-          handleViewPost(post?._id, user?._id);
+          handleViewPost(i18n.language, post?._id, user?._id);
           observer.unobserve(postRef.current);
         }
       },

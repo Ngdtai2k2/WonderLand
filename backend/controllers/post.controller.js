@@ -26,10 +26,10 @@ const postController = {
       const { author, content, category, title, type } = req.body;
 
       if (!author)
-        return res.status(400).json({ message: "Please provide an author!" });
+        return res.status(400).json({ message: req.t("post.provide_author") });
 
       if (!User.findOne(author))
-        return res.status(400).json({ message: "Cannot find author!" });
+        return res.status(400).json({ message: req.t("not_found.author") });
 
       const categoryData = await Category.findById(category);
       if (!categoryData)
@@ -38,14 +38,19 @@ const postController = {
       let data;
       if (req.file) {
         if (req.file.mimetype.startsWith("image/"))
-          data = await uploadMediaCloudinary.uploadImage(req, res, 'posts');
-        else data = await uploadMediaCloudinary.uploadVideo(req, res, 'posts/video');
+          data = await uploadMediaCloudinary.uploadImage(req, res, "posts");
+        else
+          data = await uploadMediaCloudinary.uploadVideo(
+            req,
+            res,
+            "posts/video"
+          );
 
         if (data === null)
           return res.status(400).json({
             message: req.file.mimetype.startsWith("image/")
               ? req.t("file.image_not_upload")
-              : "Upload video failed!",
+              : req.t("file.video_not_upload"),
           });
       }
 
@@ -60,12 +65,12 @@ const postController = {
 
       const post = await newPost.save();
       const successMessage =
-        type == 0 ? "Created post successfully!" : "Created ask successfully!";
+        type == 0
+          ? req.t("post.create_post_success")
+          : req.t("post.create_ask_success");
       return res.status(201).json({ message: successMessage, post: post });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: req.t('server_error') });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -76,10 +81,11 @@ const postController = {
 
       title = title.trim();
       if (!title)
-        return res.status(400).json({ message: "Please provide a title!" });
+        return res.status(400).json({ message: req.t("post.provide_title") });
 
       const post = await postModel.findById(id).populate("media");
-      if (!post) return res.status(404).json({ message: "Post not found!" });
+      if (!post)
+        return res.status(404).json({ message: req.t("not_found.post") });
 
       let data;
       if (req.file) {
@@ -96,14 +102,19 @@ const postController = {
         }
         // update new file
         if (req.file.mimetype.startsWith("image/"))
-          data = await uploadMediaCloudinary.uploadImage(req, res, 'posts');
-        else data = await uploadMediaCloudinary.uploadVideo(req, res, 'posts/video');
+          data = await uploadMediaCloudinary.uploadImage(req, res, "posts");
+        else
+          data = await uploadMediaCloudinary.uploadVideo(
+            req,
+            res,
+            "posts/video"
+          );
 
         if (data === null)
           return res.status(400).json({
             message: req.file.mimetype.startsWith("image/")
               ? req.t("file.image_not_upload")
-              : "Upload video failed!",
+              : req.t("file.video_not_upload"),
           });
       }
 
@@ -119,12 +130,9 @@ const postController = {
       );
       return res
         .status(200)
-        .json({ message: "Updated post successfully!", updatedPost });
+        .json({ message: req.t("post.updated_success"), updatedPost });
     } catch (error) {
-      console.log(error.message);
-      return res
-        .status(500)
-        .json({ message: req.t('server_error') });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -133,7 +141,8 @@ const postController = {
       const { id } = req.params;
 
       const post = await postModel.findById(id).populate("media");
-      if (!post) return res.status(404).json({ message: "Post not found!" });
+      if (!post)
+        return res.status(404).json({ message: req.t("not_found.post") });
 
       await reactionModel.deleteMany({ postId: post._id });
       await commentModel.deleteMany({ postId: post._id });
@@ -150,11 +159,9 @@ const postController = {
       }
       await postModel.findByIdAndDelete(id);
 
-      return res.status(200).json({ message: "Delete post successfully!" });
+      return res.status(200).json({ message: req.t("post.deleted_success") });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: req.t('server_error') });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -165,7 +172,7 @@ const postController = {
 
       const post = await postModel.findById(id);
       if (!post) {
-        return res.status(404).json({ message: "Post not found!" });
+        return res.status(404).json({ message: req.t("not_found.post") });
       }
 
       let hasReacted = null;
@@ -192,9 +199,7 @@ const postController = {
       };
       return res.status(200).json({ result });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: req.t("server_error") });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -264,9 +269,7 @@ const postController = {
 
       return res.status(200).json({ result });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: req.t('server_error') });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -278,7 +281,8 @@ const postController = {
         ? User.findOne({ _id: id })
         : User.findOne({ nickname: id }));
 
-      if (!user) return res.status(404).json({ message: req.t("not_found.user") });
+      if (!user)
+        return res.status(404).json({ message: req.t("not_found.user") });
 
       const options = optionsPaginate(req);
       const { docs, ...paginationData } = await postModel.paginate(
@@ -318,9 +322,7 @@ const postController = {
         .status(200)
         .json({ result: { docs: populatedDocs, ...paginationData } });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: req.t('server_error') });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -378,9 +380,7 @@ const postController = {
         .status(200)
         .json({ result: { docs: populatedDocs, ...paginationData } });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: req.t('server_error') });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -389,10 +389,12 @@ const postController = {
       const { userId, postId } = req.body;
 
       const user = await User.findById(userId);
-      if (!user) return res.status(404).json({ message: req.t("not_found.user") });
+      if (!user)
+        return res.status(404).json({ message: req.t("not_found.user") });
 
       const post = await postModel.findById(postId);
-      if (!post) return res.status(404).json({ message: "Post not found!" });
+      if (!post)
+        return res.status(404).json({ message: req.t("not_found.post") });
 
       if (!post.viewers.includes(userId)) {
         post.viewers.push(userId);
@@ -401,9 +403,7 @@ const postController = {
 
       return res.status(200).json({ post });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: req.t('server_error') });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -412,11 +412,12 @@ const postController = {
       const { id, reportId } = req.params;
 
       const post = await postModel.findById(id);
-      if (!post) return res.status(404).json({ message: "Post not found!" });
+      if (!post)
+        return res.status(404).json({ message: req.t("not_found.post") });
 
       const report = await reportModel.findById(reportId);
       if (!report)
-        return res.status(404).json({ message: "Report not found!" });
+        return res.status(404).json({ message: req.t("not_found.report") });
 
       await reactionModel.deleteMany({ postId: post._id });
       await commentModel.deleteMany({ postId: post._id });
@@ -467,12 +468,9 @@ const postController = {
         });
       }
 
-      return res.status(200).json({ message: "Deleted post successfully!" });
+      return res.status(200).json({ message: req.t("post.deleted_success") });
     } catch (error) {
-      console.log(error.message);
-      return res
-        .status(500)
-        .json({ message: req.t('server_error') });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 };

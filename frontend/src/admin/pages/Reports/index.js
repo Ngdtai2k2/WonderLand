@@ -125,7 +125,10 @@ export default function ReportsManager() {
       const response = await axiosJWT.delete(
         `${BaseApi}/post/delete/${id}/report/${reportId}`,
         {
-          headers: { token: `Bearer ${accessToken}` },
+          headers: {
+            token: `Bearer ${accessToken}`,
+            'Accept-Language': i18n.language,
+          },
         },
       );
       toast.success(response.data.message, toastTheme);

@@ -53,6 +53,10 @@ export default function PostDetail() {
       setIsLoading(true);
       const response = await axios.post(`${BaseApi}/post/d/${id}`, {
         user: user?._id,
+      }, {
+        headers: {
+          'Accept-Language': i18n.language,
+        }
       });
       setPost(response.data.result);
     } catch (error) {

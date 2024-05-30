@@ -61,6 +61,7 @@ export default function MenuSettings({
             key={`delete-${post?._id}`}
             onClick={() =>
               handleDeletePost(
+                i18n.language,
                 post?._id,
                 user?._id,
                 axiosJWT,

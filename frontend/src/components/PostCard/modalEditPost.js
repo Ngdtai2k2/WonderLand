@@ -44,7 +44,7 @@ export default function ModalEditPost({ open, handleClose, id, setState }) {
 
   useEffect(() => {
     if (id) {
-      getPostById(id, setPost, toastTheme);
+      getPostById(i18n.language, id, setPost, toastTheme);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
@@ -110,8 +110,11 @@ export default function ModalEditPost({ open, handleClose, id, setState }) {
           `${BaseApi}/post/update/${id}?request_user=${user?._id}`,
           formData,
           {
-            headers: { token: `Bearer ${accessToken}` },
-            'Content-Type': 'multipart/form-data',
+            headers: {
+              token: `Bearer ${accessToken}`,
+              'Accept-Language': i18n.language,
+              'Content-Type': 'multipart/form-data',
+            },
           },
         );
         toast.success(response.data.message, toastTheme);
