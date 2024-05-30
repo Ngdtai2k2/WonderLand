@@ -43,13 +43,24 @@
         "not_friend_with_user": "Bạn không phải là bạn với người dùng này!",
         "deleted_success": "Chia ly thật là buồn 😭x100!"
     },
+    "post": {
+        "provide_author": "Tác giả bài viết không được trống!",
+        "create_post_success": "Đăng tải bài viết thành công!",
+        "create_ask_success": "Đăng tải câu hỏi thành công!",
+        "provide_title": "Tiêu đề bài viết không được trống!",
+        "updated_success": "Cập nhập bài viết thành công!",
+        "deleted_success": "Bài viết đã được xóa!"
+    },
     "not_found": {
         "user": "Không tìm thấy người dùng!",
         "email": "Không tìm thấy email!",
         "category" :"Không tìm thấy danh mục!",
         "chat": "Không tìm thấy cuộc trò chuyện!",
         "messages": "Không tìm thấy tin nhắn nào!",
-        "comment": "Không tìm thấy bình luận!"
+        "comment": "Không tìm thấy bình luận!",
+        "author": "Không tìm thấy người dùng!",
+        "post": "Không tìm thấy bài viết!",
+        "report": "Không tìm thấy báo cáo!"
     },
     "server_error": "Đã xảy ra lỗi, vui lòng thử lại sau!",
     "message": {
@@ -63,6 +74,7 @@
     },
     "file": {
         "not_supported": "Định dạng file không được hỗ trợ!",
-        "image_not_upload": "Tải ảnh lên không thành công!"
+        "image_not_upload": "Tải ảnh lên không thành công!",
+        "video_not_upload": "Tải video lên không thành công!"
     }
 }
