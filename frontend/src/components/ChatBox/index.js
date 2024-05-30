@@ -51,7 +51,7 @@ export default function ChatBox({ chat, receivedMessage }) {
     const userId = chat?.members?.find((id) => id !== user?._id);
 
     if (chat !== null) {
-      getUserByUserId(axiosJWT, userId, accessToken, setUserData);
+      getUserByUserId(userId, setUserData);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, chat]);

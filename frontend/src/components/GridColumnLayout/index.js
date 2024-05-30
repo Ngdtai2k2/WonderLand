@@ -44,6 +44,7 @@ export default function GridColumnLayout({ children }) {
   const socket = initializeSocket(user?._id);
 
   handleSocketEvents(socket, setEvent);
+
   useEffect(() => {
     if (user) {
       getFriendsList(
@@ -61,7 +62,7 @@ export default function GridColumnLayout({ children }) {
       setFriendsList([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     const userIds = friendsList.map((friend) => friend._id);
@@ -88,7 +89,7 @@ export default function GridColumnLayout({ children }) {
   };
 
   useEffect(() => {
-    if (!isLoading && user && friendsList.length > 0) {
+    if (!isLoading && user && axiosJWT && friendsList.length > 0) {
       handleCheckOnline(listUserIds);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

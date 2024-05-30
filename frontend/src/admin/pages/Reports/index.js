@@ -56,6 +56,7 @@ export default function ReportsManager() {
     const response = await axiosJWT.get(
       `${BaseApi}/report?_status=${selectStatus}&_page=${reportState.page}
         &_limit=${reportState.pageSize}&_order=${selectOrder ? 'asc' : 'desc'}`,
+      {},
       {
         headers: {
           token: `Bearer ${accessToken}`,
@@ -97,11 +98,15 @@ export default function ReportsManager() {
         ...prevState,
         [id]: true,
       }));
-      const response = await axiosJWT.post(`${BaseApi}/report/${id}/reject`, {
-        headers: {
-          token: `Bearer ${accessToken}`,
+      const response = await axiosJWT.post(
+        `${BaseApi}/report/${id}/reject`,
+        {},
+        {
+          headers: {
+            token: `Bearer ${accessToken}`,
+          },
         },
-      });
+      );
       toast.success(response.data.message, toastTheme);
       getAllReports();
     } catch (e) {

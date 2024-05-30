@@ -52,11 +52,15 @@ export default function Dashboard() {
   useEffect(() => {
     async function getTotalUsers() {
       try {
-        const response = await axiosJWT.post(`${BaseApi}/user/total`, {
-          headers: {
-            token: `Bearer ${accessToken}`,
+        const response = await axiosJWT.post(
+          `${BaseApi}/user/total`,
+          {},
+          {
+            headers: {
+              token: `Bearer ${accessToken}`,
+            },
           },
-        });
+        );
         setTotalUsers(response.data.total);
       } catch (error) {
         setTotalUsers(NaN);
@@ -70,6 +74,7 @@ export default function Dashboard() {
     setNewUsersState((old) => ({ ...old, isLoading: true }));
     const response = await axiosJWT.post(
       `${BaseApi}/user/today?_page=${newUsersState.page}&_limit=${newUsersState.pageSize}`,
+      {},
       {
         headers: {
           token: `Bearer ${accessToken}`,
@@ -88,6 +93,7 @@ export default function Dashboard() {
     setUsersState((old) => ({ ...old, isLoading: true }));
     const response = await axiosJWT.post(
       `${BaseApi}/user?_page=${usersState.page}&_limit=${usersState.pageSize}`,
+      {},
       {
         headers: {
           token: `Bearer ${accessToken}`,

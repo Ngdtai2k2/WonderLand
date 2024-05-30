@@ -65,6 +65,7 @@ export default function ListNotifications({
     try {
       await axiosJWT.post(
         `${BaseApi}/notification/confirm-read/${notificationId}?request_user=${user?._id}`,
+        {},
         {
           headers: {
             token: `Bearer ${accessToken}`,

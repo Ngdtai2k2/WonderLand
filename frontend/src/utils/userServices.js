@@ -1,17 +1,9 @@
+import axios from 'axios';
 import { BaseApi } from '../constants/constant';
 
-export const getUserByUserId = async (
-  axiosJWT,
-  userId,
-  accessToken,
-  setData,
-) => {
+export const getUserByUserId = async (userId, setData) => {
   try {
-    const response = await axiosJWT.get(`${BaseApi}/user/${userId}`, {
-      headers: {
-        token: `Bearer ${accessToken}`,
-      },
-    });
+    const response = await axios.get(`${BaseApi}/user/${userId}`);
     setData(response.data.user);
   } catch (error) {
     setData(null);

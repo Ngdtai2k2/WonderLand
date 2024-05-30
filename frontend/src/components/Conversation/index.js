@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -30,11 +31,7 @@ export default function Conversation({ data }) {
   useEffect(() => {
     const getUserByUserId = async () => {
       try {
-        const response = await axiosJWT.get(`${BaseApi}/user/${userId}`, {
-          headers: {
-            token: `Bearer ${accessToken}`,
-          },
-        });
+        const response = await axios.get(`${BaseApi}/user/${userId}`);
         setUserData(response.data.user);
       } catch (error) {
         toast.error(error.response.data.message, toastTheme);
@@ -47,11 +44,15 @@ export default function Conversation({ data }) {
   useEffect(() => {
     const handleCheckUserOnline = async () => {
       try {
-        const res = await axiosJWT.post(`${BaseApi}/socket/online/${userId}`, {
-          headers: {
-            token: `Bearer ${accessToken}`,
+        const res = await axiosJWT.post(
+          `${BaseApi}/socket/online/${userId}`,
+          {},
+          {
+            headers: {
+              token: `Bearer ${accessToken}`,
+            },
           },
-        });
+        );
         setIsOnline(res.data.online);
       } catch (error) {
         setIsOnline(false);

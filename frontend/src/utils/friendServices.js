@@ -13,6 +13,7 @@ const getFriendsList = async (
   await axiosJWT
     .post(
       `${apiLink}?_page=${page.current}&_limit=10&request_user=${user?._id}`,
+      {},
       {
         headers: {
           token: `Bearer ${accessToken}`,

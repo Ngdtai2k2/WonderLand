@@ -12,11 +12,15 @@ const getNotificationByUserId = async (
 ) => {
   const url = `${BaseApi}/notification/user?_page=${page.current}&_limit=5&_order=desc&request_user=${userId}${type ? `&type=${type}` : ''}`;
   await axiosJWT
-    .post(url, {
-      headers: {
-        token: `Bearer ${accessToken}`,
+    .post(
+      url,
+      {},
+      {
+        headers: {
+          token: `Bearer ${accessToken}`,
+        },
       },
-    })
+    )
     .then((response) => {
       if (response.data.notifications.docs.length === 0) {
         setItems([...items]);

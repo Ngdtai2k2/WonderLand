@@ -30,11 +30,15 @@ export const handleCreateConversation = async (
 
 export const getChats = async (axiosJWT, userId, accessToken, setData) => {
   try {
-    const response = await axiosJWT.get(`${BaseApi}/chat/${userId}`, {
-      headers: {
-        token: `Bearer ${accessToken}`,
+    const response = await axiosJWT.post(
+      `${BaseApi}/chat/${userId}`,
+      {},
+      {
+        headers: {
+          token: `Bearer ${accessToken}`,
+        },
       },
-    });
+    );
     setData(response.data);
   } catch (error) {
     setData([]);
@@ -43,11 +47,15 @@ export const getChats = async (axiosJWT, userId, accessToken, setData) => {
 
 export const getMessages = async (axiosJWT, chatId, accessToken, setData) => {
   try {
-    const response = await axiosJWT.get(`${BaseApi}/message/${chatId}`, {
-      headers: {
-        token: `Bearer ${accessToken}`,
+    const response = await axiosJWT.post(
+      `${BaseApi}/message/${chatId}`,
+      {},
+      {
+        headers: {
+          token: `Bearer ${accessToken}`,
+        },
       },
-    });
+    );
     setData(response.data);
   } catch (error) {
     setData([]);
