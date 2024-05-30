@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
@@ -23,6 +24,7 @@ export default function ModalRuleForm({
 
   const toastTheme = useToastTheme();
   const { accessToken, axiosJWT } = useUserAxios();
+  const { t } = useTranslation(['admin', 'validate', 'field']);
 
   useEffect(() => {
     if (isUpdate && data) {
@@ -36,13 +38,16 @@ export default function ModalRuleForm({
 
   const validationSchema = Yup.object({
     name: Yup.string()
-      .required('Please enter a name!')
-      .min(1, 'This field must have a minimum of 1 character')
-      .max(100, 'This field is no more than 100 characters!'),
+      .required(t('validate:required_field', { name: t('field:name') }))
+      .min(1, t('validate:min', { name: t('field:name'), min: '1' }))
+      .max(100, t('validate:max', { name: t('field:name'), max: '100' })),
     description: Yup.string()
-      .required('Please enter a description!')
-      .min(1, 'This field must have a minimum of 1 character')
-      .max(3000, 'This field is no more than 3000 characters!'),
+      .required(t('validate:required_field', { name: t('field:description') }))
+      .min(1, t('validate:min', { name: t('field:description'), min: '1' }))
+      .max(
+        3000,
+        t('validate:max', { name: t('field:description'), max: '3000' }),
+      ),
   });
 
   const formik = useFormik({
@@ -101,12 +106,15 @@ export default function ModalRuleForm({
           md: '45%',
         }}
       >
-        <Typography variant="h6">{isUpdate ? 'Update' : 'Add'} Rule</Typography>
+        <Typography variant="h6">
+          {isUpdate ? t('admin:update') : t('admin:add')}{' '}
+          <span style={{ textTransform: 'lowercase' }}>{t('field:rule')}</span>
+        </Typography>
         <TextField
           margin="normal"
           required
           id="name-rule"
-          label="Name"
+          label={t('field:name')}
           name="name"
           autoComplete="name"
           value={formik.values.name}
@@ -122,7 +130,7 @@ export default function ModalRuleForm({
           margin="normal"
           required
           id="description-rule"
-          label="Description"
+          label={t('field:description')}
           name="description"
           autoComplete="description"
           multiline
@@ -159,7 +167,7 @@ export default function ModalRuleForm({
             type="submit"
             disabled={!formik.dirty || formik.isSubmitting || !formik.isValid}
           >
-            Save
+            {t('admin:save')}
           </LoadingButton>
         </Box>
       </BoxModal>

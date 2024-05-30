@@ -23,5 +23,8 @@
   },
   "hometown": "Quê hương",
   "comment": "Bình luận",
-  "enter_comment": "Nhập bình luận..."
+  "enter_comment": "Nhập bình luận...",
+  "name": "Tên",
+  "description": "Mô tả",
+  "rule": "Điều lệ"
 }

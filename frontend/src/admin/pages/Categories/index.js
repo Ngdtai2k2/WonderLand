@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Zoom from 'react-medium-image-zoom';
 import { useTheme } from '@emotion/react';
 import axios from 'axios';
@@ -31,9 +32,10 @@ export default function Categories() {
   const [selectedRowData, setSelectedRowData] = useState(null);
 
   const theme = useTheme();
+  const { t } = useTranslation(['admin', 'message']);
 
   useEffect(() => {
-    document.title = 'Categories management';
+    document.title = t('admin:categories.title');
   });
 
   const getAllCategories = async () => {
@@ -126,7 +128,7 @@ export default function Categories() {
               color="success"
               onClick={() => handleOpenModalUpdate(params.row)}
             >
-              update
+              {t('admin:update')}
             </Button>
           </>
         );
@@ -149,7 +151,7 @@ export default function Categories() {
         }}
       >
         <Typography variant="h6" fontWeight={700}>
-          Categories management
+          {t('admin:categories.title')}
         </Typography>
         <Box display="flex" justifyContent="flex-end">
           <Button
@@ -158,13 +160,12 @@ export default function Categories() {
             sx={{ width: 'fit-content' }}
             onClick={() => setOpenModal(true)}
           >
-            <AddRoundedIcon /> Add
+            <AddRoundedIcon /> {t('admin:add')}
           </Button>
         </Box>
       </Box>
       <Typography variant="caption" color="error" fontStyle="italic">
-        Note*: After adding new data, refresh the page (f5) again to update the
-        data.
+        {t('message:admin.note_after_update')}
       </Typography>
       <ModalCategoryForm
         openModal={openModal}

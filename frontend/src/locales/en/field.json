@@ -23,5 +23,8 @@
   },
   "hometown": "Hometown",
   "comment": "Comment",
-  "enter_comment": "Enter your comment..."
+  "enter_comment": "Enter your comment...",
+  "name": "Name",
+  "description": "Description",
+  "rule": "Rule"
 }

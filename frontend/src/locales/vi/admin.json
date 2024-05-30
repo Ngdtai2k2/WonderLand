@@ -1,0 +1,30 @@
+{
+  "dashboard": {
+    "total_users": "Tổng người dùng",
+    "new_users": "Người dùng mới"
+  },
+  "categories": {
+    "title": "Quản lý danh mục"
+  },
+  "report": {
+    "title": "Quản lý tố cáo",
+    "list": "Danh sách tố cáo",
+    "status": {
+      "status": "Trạng thái",
+      "pending": "Chờ xử lý",
+      "rejected": "Đã từ chối",
+      "approved": "Đã duyệt",
+      "sort": "Sắp xếp theo",
+      "more_recent": "Gần đây",
+      "oldest": "Cũ nhất"
+    }
+  },
+  "rules": {
+    "title": "Quản lý điều lệ"
+  },
+  "add": "Thêm mới",
+  "update": "Cập nhập",
+  "save": "Lưu",
+  "reject": "Từ chối",
+  "delete": "Xóa"
+}

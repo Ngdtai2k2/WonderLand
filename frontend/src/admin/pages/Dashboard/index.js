@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
@@ -13,6 +14,7 @@ import VisibilityOffRoundedIcon from '@mui/icons-material/VisibilityOffRounded';
 
 import DataTable from '../../components/DataTable';
 import CustomBox from '../../../components/CustomBox';
+
 import { BaseApi } from '../../../constants/constant';
 import { convertNumber } from '../../../utils/helperFunction';
 import { BoxContainer, BoxIcon, BoxItems } from './styles';
@@ -40,6 +42,7 @@ export default function Dashboard() {
     pageSize: 5,
   });
 
+  const { t } = useTranslation(['admin']);
   const { accessToken, axiosJWT } = useUserAxios();
 
   useEffect(() => {
@@ -183,7 +186,7 @@ export default function Dashboard() {
               </BoxIcon>
               <BoxItems>
                 <Typography variant="h6" fontWeight={600}>
-                  Total Users
+                  {t('admin:dashboard.total_users')}
                 </Typography>
                 <Typography variant="h5" fontWeight={600}>
                   {convertNumber(totalUsers)}
@@ -211,7 +214,7 @@ export default function Dashboard() {
               </BoxIcon>
               <BoxItems>
                 <Typography variant="h6" fontWeight={600}>
-                  New Users
+                  {t('admin:dashboard.new_users')}
                 </Typography>
                 <Typography variant="h5" fontWeight={600}>
                   {convertNumber(newUsersState.total)}

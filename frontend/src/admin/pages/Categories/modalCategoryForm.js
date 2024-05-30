@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import * as Yup from 'yup';
 import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
@@ -26,6 +27,7 @@ export default function ModalCategoryForm({
   const [fetching, setFetching] = useState();
 
   const toastTheme = useToastTheme();
+  const { t } = useTranslation(['validate', 'field', 'admin']);
 
   const { accessToken, axiosJWT } = useUserAxios();
 
@@ -45,7 +47,7 @@ export default function ModalCategoryForm({
 
   const fileValidation = Yup.mixed().test(
     'fileType',
-    'File not supported!',
+    t('validate:file.not_support'),
     (value) => {
       if (!value) return true;
       const imageTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
@@ -54,13 +56,18 @@ export default function ModalCategoryForm({
   );
 
   const validationSchema = Yup.object({
-    name: Yup.string().required('Please enter a name!'),
+    name: Yup.string().required(
+      t('validate:required_field', { name: t('field:name') }),
+    ),
     description: Yup.string()
-      .required('Please enter a description!')
-      .max(2000, 'This field is no more than 2000 characters!'),
+      .required(t('validate:required_field', { name: t('field:description') }))
+      .max(
+        2000,
+        t('validate:max', { name: t('field:description'), max: '2000' }),
+      ),
     file: isUpdate
       ? fileValidation
-      : fileValidation.required('Please upload a photo!'),
+      : fileValidation.required(t('validate:photo_required')),
   });
 
   const formik = useFormik({
@@ -121,7 +128,10 @@ export default function ModalCategoryForm({
         }}
       >
         <Typography variant="h6">
-          {isUpdate ? 'Update' : 'Add'} category
+          {isUpdate ? t('admin:update') : t('admin:add')}{' '}
+          <span style={{ textTransform: 'lowercase' }}>
+            {t('field:category')}
+          </span>
         </Typography>
         <TextField
           margin="normal"
@@ -129,7 +139,7 @@ export default function ModalCategoryForm({
           required
           fullWidth
           id="name"
-          label="Name"
+          label={t('field:name')}
           name="name"
           autoComplete="name"
           value={formik.values.name}
@@ -144,7 +154,7 @@ export default function ModalCategoryForm({
           required
           fullWidth
           id="description"
-          label="Description"
+          label={t('field:description')}
           name="description"
           autoComplete="description"
           value={formik.values.description}
@@ -192,7 +202,7 @@ export default function ModalCategoryForm({
             </Typography>
           )}
           <Typography variant="caption" marginTop={0.5}>
-            JPG, JEPG, GIF or PNG, Max size: 5MB
+            {t('validate:file.support_max_size')}
           </Typography>
           {file && (
             <Box marginTop={2}>
@@ -214,7 +224,7 @@ export default function ModalCategoryForm({
             type="submit"
             disabled={!formik.dirty || formik.isSubmitting || !formik.isValid}
           >
-            Save
+            {t('admin:save')}
           </LoadingButton>
         </Box>
       </BoxModal>

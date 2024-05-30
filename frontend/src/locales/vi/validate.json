@@ -17,5 +17,6 @@
   "token": "Hãy cung cấp token từ mail bạn đã nhận.",
   "not_one_of_new_password": "Mật khẩu mới không được giống mật khẩu cũ.",
   "must_match": "{{name}} phải khớp.",
-  "comment": "Bình luận phải là ảnh hoặc văn bản!"
+  "comment": "Bình luận phải là ảnh hoặc văn bản!",
+  "photo_required": "Hãy tải ảnh lên."
 }

@@ -1,0 +1,30 @@
+{
+  "dashboard": {
+    "total_users": "Total users",
+    "new_users": "New users"
+  },
+  "categories": {
+    "title": "Categories management"
+  },
+  "report": {
+    "title": "Reports management",
+    "list": "Reports list",
+    "status": {
+      "status": "Status",
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "sort": "Sort order",
+      "more_recent": "Most recent",
+      "oldest": "Oldest"
+    }
+  },
+  "rule": {
+    "title": "Rules management"
+  },
+  "add": "Add",
+  "update": "Update",
+  "save": "Save",
+  "reject": "Reject",
+  "delete": "Delete"
+}

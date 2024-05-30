@@ -25,5 +25,8 @@
   "chat": {
     "note": "Hãy chọn người bạn mà bạn muốn kết nối!",
     "can_message": "Bây giờ bạn có thể nhắn tin với"
+  },
+  "admin": {
+    "note_after_update": "Lưu ý*: Sau khi thêm dữ liệu mới, hãy làm mới lại trang (f5) để cập nhật dữ liệu."
   }
 }

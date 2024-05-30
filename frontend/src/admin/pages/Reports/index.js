@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useTheme } from '@emotion/react';
+import { useTranslation } from 'react-i18next';
 
 import Typography from '@mui/material/Typography';
 import Select from '@mui/material/Select';
@@ -40,11 +41,12 @@ export default function ReportsManager() {
 
   const theme = useTheme();
   const toastTheme = useToastTheme();
+  const { t } = useTranslation(['admin']);
   const { accessToken, axiosJWT } = useUserAxios();
 
   useEffect(() => {
-    document.title = 'Reports management';
-  }, []);
+    document.title = t('admin:report.title');
+  }, [t]);
 
   const getAllReports = async () => {
     setReportState({
@@ -154,10 +156,10 @@ export default function ReportsManager() {
             }
           >
             {params.row?.status === 1
-              ? 'Done'
+              ? t('admin:report.status.approved')
               : params.row?.status === 2
-                ? 'Rejected'
-                : 'Pending'}
+                ? t('admin:report.status.rejected')
+                : t('admin:report.status.pending')}
           </Typography>
         );
       },
@@ -259,7 +261,7 @@ export default function ReportsManager() {
       renderCell: (params) => {
         return (
           selectStatus !== 2 && (
-            <Box gap={1}>
+            <Box gap={1} display="flex" alignItems="center">
               <LoadingButton
                 loading={
                   loadingReject[params.row._id]
@@ -270,7 +272,7 @@ export default function ReportsManager() {
                 color="error"
                 onClick={() => handleRejectReport(params.row._id)}
               >
-                Reject
+                {t('admin:reject')}
               </LoadingButton>
               <LoadingButton
                 loading={
@@ -284,7 +286,7 @@ export default function ReportsManager() {
                   handleDeleteReport(params.row.post?._id, params.row._id)
                 }
               >
-                Delete
+                {t('admin:delete')}
               </LoadingButton>
             </Box>
           )
@@ -296,36 +298,40 @@ export default function ReportsManager() {
   return (
     <CustomBox>
       <Typography variant="h6" fontWeight={700}>
-        Report list
+        {t('admin:report.list')}
       </Typography>
       <Box display="flex" gap={1}>
         <FormControl sx={{ marginY: 2, minWidth: 120 }} size="small">
-          <InputLabel id="status-report-select-label">Status select</InputLabel>
+          <InputLabel id="status-report-select-label">
+            {t('admin:report.status.status')}
+          </InputLabel>
           <Select
             labelId="status-report-select-label"
             id="status-report-select"
             value={selectStatus}
-            label="Status select"
+            label={t('admin:report.status.status')}
             onChange={(event) => handleChangeSelect(event, setSelectStatus)}
           >
-            <MenuItem value={0}>Pending</MenuItem>
-            <MenuItem value={1}>Done</MenuItem>
-            <MenuItem value={2}>Rejected</MenuItem>
+            <MenuItem value={0}>{t('admin:report.status.pending')}</MenuItem>
+            <MenuItem value={1}>{t('admin:report.status.approved')}</MenuItem>
+            <MenuItem value={2}>{t('admin:report.status.rejected')}</MenuItem>
           </Select>
         </FormControl>
         <FormControl sx={{ marginY: 2, minWidth: 120 }} size="small">
           <InputLabel id="sort-order-report-select-label">
-            Sort order
+            {t('admin:report.status.sort')}
           </InputLabel>
           <Select
             labelId="sort-order-report-select-label"
             id="sort-order-report-select"
             value={selectOrder}
-            label="Sort order"
+            label={t('admin:report.status.sort')}
             onChange={(event) => handleChangeSelect(event, setSelectOrder)}
           >
-            <MenuItem value={0}>Most recent</MenuItem>
-            <MenuItem value={1}>Oldest</MenuItem>
+            <MenuItem value={0}>
+              {t('admin:report.status.more_recent')}
+            </MenuItem>
+            <MenuItem value={1}>{t('admin:report.status.oldest')}</MenuItem>
           </Select>
         </FormControl>
       </Box>

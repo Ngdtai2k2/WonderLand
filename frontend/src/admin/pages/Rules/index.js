@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
@@ -31,9 +32,10 @@ export default function Rules() {
 
   const toastTheme = useToastTheme();
   const { accessToken, axiosJWT } = useUserAxios();
+  const { t } = useTranslation(['admin', 'message']);
 
   useEffect(() => {
-    document.title = 'Rules management';
+    document.title = t('admin:rules.title');
   });
 
   const getRules = async () => {
@@ -119,9 +121,10 @@ export default function Rules() {
             <Button
               variant="outlined"
               color="success"
+              sx={{ padding: 1 }}
               onClick={() => handleOpenModalUpdate(params.row)}
             >
-              Update
+              {t('admin:update')}
             </Button>
             <LoadingButton
               variant="outlined"
@@ -129,7 +132,7 @@ export default function Rules() {
               loading={loadingDelete[params.row._id]}
               onClick={() => handleDelete(params.row._id)}
             >
-              Delete
+              {t('admin:delete')}
             </LoadingButton>
           </Box>
         );
@@ -152,7 +155,7 @@ export default function Rules() {
         }}
       >
         <Typography variant="h6" fontWeight={700}>
-          Rules management
+          {t('admin:rules.title')}
         </Typography>
         <Box display="flex" justifyContent="flex-end">
           <Button
@@ -161,7 +164,7 @@ export default function Rules() {
             sx={{ width: 'fit-content' }}
             onClick={() => setOpenModal(true)}
           >
-            <AddRoundedIcon /> Add
+            <AddRoundedIcon /> {t('admin:add')}
           </Button>
         </Box>
         <ModalRuleForm
@@ -177,8 +180,7 @@ export default function Rules() {
         />
       </Box>
       <Typography variant="caption" color="error" fontStyle="italic">
-        Note*: After adding new data, refresh the page (f5) again to update the
-        data.
+        {t('message:admin.note_after_update')}
       </Typography>
       <DataTable
         state={rulesState}
