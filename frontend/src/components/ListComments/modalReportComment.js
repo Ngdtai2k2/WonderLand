@@ -26,7 +26,7 @@ export default function ModalReportComment({
   const [selectRule, setSelectRule] = useState();
 
   const toastTheme = useToastTheme();
-  const {i18n} = useTranslation();
+  const { i18n } = useTranslation();
   const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);
 
   const urlApi = !isReply

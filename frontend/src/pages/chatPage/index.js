@@ -26,7 +26,7 @@ export default function ChatPage() {
 
   const location = useLocation();
   const navigate = useNavigate();
-  const {i18n} = useTranslation();
+  const { i18n } = useTranslation();
   const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);
 
   useEffect(() => {

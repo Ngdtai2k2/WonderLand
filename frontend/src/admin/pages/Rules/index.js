@@ -31,7 +31,7 @@ export default function Rules() {
   const [loadingDelete, setLoadingDelete] = useState({});
 
   const toastTheme = useToastTheme();
-  const { t, i18n} = useTranslation(['admin', 'message']);
+  const { t, i18n } = useTranslation(['admin', 'message']);
   const { accessToken, axiosJWT } = useUserAxios(i18n.language);
 
   useEffect(() => {

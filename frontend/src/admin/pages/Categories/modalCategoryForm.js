@@ -88,10 +88,16 @@ export default function ModalCategoryForm({
 
         const response = await (isUpdate
           ? axiosJWT.put(`${BaseApi}/category/update/${data?._id}`, formData, {
-              headers: { token: `Bearer ${accessToken}` },
+              headers: {
+                token: `Bearer ${accessToken}`,
+                'Accept-Language': i18n.language,
+              },
             })
           : axiosJWT.post(`${BaseApi}/category/create`, formData, {
-              headers: { token: `Bearer ${accessToken}` },
+              headers: {
+                token: `Bearer ${accessToken}`,
+                'Accept-Language': i18n.language,
+              },
             }));
 
         if (!isUpdate) {

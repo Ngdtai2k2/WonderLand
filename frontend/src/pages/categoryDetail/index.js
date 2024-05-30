@@ -51,7 +51,7 @@ export default function CategoryDetail() {
   const { name } = useParams();
   const theme = useTheme();
   const toastTheme = useToastTheme();
-  const {i18n} = useTranslation();
+  const { t, i18n } = useTranslation(['message']);
   const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);
 
   useEffect(() => {
@@ -69,9 +69,17 @@ export default function CategoryDetail() {
         const url = user
           ? `${BaseApi}/category/details?request_user=${user._id}`
           : `${BaseApi}/category/details`;
-        const response = await axios.post(url, {
-          name: name,
-        });
+        const response = await axios.post(
+          url,
+          {
+            name: name,
+          },
+          {
+            headers: {
+              'Accept-Language': i18n.language,
+            },
+          },
+        );
         setCategory(response.data.category);
         setTotalLike(response.data.category.like.length);
         setHasLiked(response.data.hasLiked);
@@ -93,10 +101,7 @@ export default function CategoryDetail() {
   const handleLikeCategory = async () => {
     try {
       if (!user) {
-        return toast.warning(
-          'You need to be signed in to use this feature!',
-          toastTheme,
-        );
+        return toast.warning(t('message:need_login'), toastTheme);
       }
       const response = await axiosJWT.post(
         `${BaseApi}/category/like/${name}`,
@@ -106,6 +111,7 @@ export default function CategoryDetail() {
         {
           headers: {
             token: `Bearer ${accessToken}`,
+            'Accept-Language': i18n.language,
           },
         },
       );
@@ -126,10 +132,7 @@ export default function CategoryDetail() {
   const handleFollowCategory = async () => {
     try {
       if (!user) {
-        return toast.warning(
-          'You need to be signed in to use this feature!',
-          toastTheme,
-        );
+        return toast.warning(t('message:need_login'), toastTheme);
       }
       const response = await axiosJWT.post(
         `${BaseApi}/category/follow/${name}`,
@@ -139,6 +142,7 @@ export default function CategoryDetail() {
         {
           headers: {
             token: `Bearer ${accessToken}`,
+            'Accept-Language': i18n.language,
           },
         },
       );

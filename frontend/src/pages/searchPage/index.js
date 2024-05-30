@@ -26,7 +26,7 @@ export default function SearchPage() {
   const urlParams = new URLSearchParams(queryString);
   const query = urlParams.get('query');
 
-  const {i18n} = useTranslation()
+  const { i18n } = useTranslation();
   const navigate = useNavigate();
   const { user } = useUserAxios(i18n.language);
 

@@ -14,9 +14,23 @@
         "refresh_token_not_valid": "Refresh token không hợp lệ!",
         "not_authenticated": "Bạn chưa được xác thực!"
     },
+    "category": {
+        "both_required": "Tên và mô tả là bắt buộc!",
+        "contain_photo": "Danh mục phải có ảnh!",
+        "created_success": "Tạo danh mục thành công!",
+        "id_invalid": "Id danh mục không đúng!",
+        "can_not_remove": "Bạn không thể xóa thể loại này vì có các bài viết liên kết!",
+        "updated_success": "Cập nhập danh mục thành công!",
+        "deleted_success": "Xóa danh mục thành công!",
+        "unlike_success": "Bạn đã bỏ thích danh mục này!",
+        "like_success": "Bạn đã thích danh mục này!",
+        "unfollowed_success": "Bạn đã bỏ theo dõi danh mục này!",
+        "followed_success": "Bạn đã theo dõi danh mục này!"
+    },
     "not_found": {
         "user": "Không tìm thấy người dùng!",
-        "email": "Không tìm thấy email!"
+        "email": "Không tìm thấy email!",
+        "category" :"Không tìm thấy danh mục!"
     },
     "server_error": "Đã xảy ra lỗi, vui lòng thử lại sau!",
     "message": {
@@ -24,6 +38,11 @@
     },
     "exists": {
         "nickname": "Nickname này đã tồn tại!",
-        "email": "Email này đã tồn tại!"
+        "email": "Email này đã tồn tại!",
+        "category": "Tên danh mục này đã tồn tại!"
+    },
+    "file": {
+        "not_supported": "Định dạng file không được hỗ trợ!",
+        "image_not_upload": "Tải ảnh lên không thành công!"
     }
 }

@@ -33,7 +33,7 @@ const postController = {
 
       const categoryData = await Category.findById(category);
       if (!categoryData)
-        return res.status(404).json({ message: "Category not found!" });
+        return res.status(404).json({ message: req.t("not_found.category") });
 
       let data;
       if (req.file) {
@@ -194,7 +194,7 @@ const postController = {
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "An error occurred, please try again later!" });
+        .json({ message: req.t("server_error") });
     }
   },
 
@@ -331,7 +331,7 @@ const postController = {
 
       const categoryData = await Category.findOne({ name: category });
       if (!categoryData)
-        return res.status(404).json({ message: "Category not found!" });
+        return res.status(404).json({ message: req.t("not_found.category") });
 
       const currentDate = new Date();
       const oneDayAgo = new Date(currentDate);

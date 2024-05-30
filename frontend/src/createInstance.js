@@ -5,13 +5,17 @@ import { BaseApi } from './constants/constant';
 
 const refreshToken = async (id, device, lng) => {
   try {
-    const res = await axios.post(`${BaseApi}/auth/refresh/${id}/${device}`, {
-      withCredentials: true,
-    }, {
-      headers: {
-        'Accept-Language': lng,
-      }
-    });
+    const res = await axios.post(
+      `${BaseApi}/auth/refresh/${id}/${device}`,
+      {
+        withCredentials: true,
+      },
+      {
+        headers: {
+          'Accept-Language': lng,
+        },
+      },
+    );
     return res.data;
   } catch (err) {
     console.error(err.response.data.message);

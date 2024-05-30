@@ -14,12 +14,35 @@
         "refresh_token_not_valid": "Refresh token is not valid!",
         "not_authenticated": "You're not authenticated!"
     },
+    "category": {
+        "both_required": "Name and description are required!",
+        "contain_photo": "Category must contain a photo!",
+        "created_success": "Created category successfully!",
+        "id_invalid": "Invalid category id!",
+        "can_not_remove": "You can't remove this category because there are linking articles!",
+        "updated_success": "Updated category successfully!",
+        "deleted_success": "Deleted category successfully!",
+        "unlike_success": "Unliked category successfully!",
+        "like_success": "Liked category successfully!",
+        "unfollowed_success": "Unfollowed category successfully!",
+        "followed_success": "Followed category successfully!"
+    },
     "not_found": {
         "user": "User not found!",
-        "email": "Email not found!"
+        "email": "Email not found!",
+        "category" :"Category not found!"
     },
     "server_error": "An error occurred please try again later!",
     "message": {
         "check_mail": "The confirmation code has been sent, please check the email."
+    },
+    "exists": {
+        "nickname": "Nickname already exists!",
+        "email": "Email already exists!",
+        "category": "Category already exists!"
+    },
+    "file": {
+        "not_supported": "File not supported!",
+        "image_not_upload": "Image not uploaded!"
     }
 }

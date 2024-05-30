@@ -59,7 +59,7 @@ const commentController = {
         ) {
           return res
             .status(400)
-            .json({ message: "An error occurred, please try again later!" });
+            .json({ message: req.t("server_error") });
         }
       }
       await Comments.findByIdAndDelete(commentId);

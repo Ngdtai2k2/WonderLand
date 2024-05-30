@@ -59,7 +59,12 @@ export default function Register({ setTabIndex }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      const res = await registerUser(values, dispatch, toastTheme, i18n.language);
+      const res = await registerUser(
+        values,
+        dispatch,
+        toastTheme,
+        i18n.language,
+      );
       setTabIndex(res ? 0 : 1);
     },
   });
@@ -79,7 +84,10 @@ export default function Register({ setTabIndex }) {
       setUniqueNickName(response.data.unique);
 
       if (!response.data.unique) {
-        formik.setFieldError('nickname', t('validate:not_unique', {name: "Nickname"}));
+        formik.setFieldError(
+          'nickname',
+          t('validate:not_unique', { name: 'Nickname' }),
+        );
       }
     }
   };

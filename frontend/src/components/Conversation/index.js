@@ -22,7 +22,7 @@ export default function Conversation({ data }) {
   const [event, setEvent] = useState();
 
   const toastTheme = useToastTheme();
-  const {i18n} = useTranslation();
+  const { i18n } = useTranslation();
   const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);
 
   const userId = data.members.find((id) => id !== user?._id);

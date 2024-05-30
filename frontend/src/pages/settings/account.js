@@ -32,7 +32,12 @@ export default function Account() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const toastTheme = useToastTheme();
-  const { t, i18n } = useTranslation(['validate', 'field', 'message', 'settings']);
+  const { t, i18n } = useTranslation([
+    'validate',
+    'field',
+    'message',
+    'settings',
+  ]);
 
   const user = useSelector((state) => state.auth.login?.currentUser);
   const accessToken = user?.accessToken;
@@ -83,7 +88,12 @@ export default function Account() {
   const handelDeleteAccount = async (event) => {
     event.preventDefault();
     handleCloseConfirmDialog();
-    let axiosJWTDelete = createAxios(i18n.language, user, dispatch, deleteUserSuccess);
+    let axiosJWTDelete = createAxios(
+      i18n.language,
+      user,
+      dispatch,
+      deleteUserSuccess,
+    );
     await deleteUser(
       accessToken,
       navigate,

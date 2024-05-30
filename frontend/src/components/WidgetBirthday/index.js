@@ -19,7 +19,7 @@ export default function WidgetBirthday() {
   const [hasMore, setHasMore] = useState(true);
 
   const page = useRef(1);
-  const { t,i18n } = useTranslation(['home', 'message']);
+  const { t, i18n } = useTranslation(['home', 'message']);
   const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);
 
   const socket = initializeSocket(user?._id);

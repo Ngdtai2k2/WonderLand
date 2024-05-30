@@ -28,7 +28,7 @@ export default function ChatBox({ chat, receivedMessage }) {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
 
-  const { t , i18n} = useTranslation(['message']);
+  const { t, i18n } = useTranslation(['message']);
   const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);
 
   //   sound effects

@@ -19,21 +19,19 @@ const categoriesController = {
       if (!name || !description) {
         return res
           .status(400)
-          .json({ message: "Name and description are required." });
+          .json({ message: req.t("category.both_required") });
       }
 
       if (!req.file) {
         return res
           .status(400)
-          .json({ message: "Category must contain a photo!" });
+          .json({ message: req.t("category.contain_photo") });
       }
 
       const uniqueName = await categoriesModel.findOne({ name: name });
 
       if (uniqueName) {
-        return res
-          .status(400)
-          .json({ message: "Category name already exists!" });
+        return res.status(400).json({ message: req.t("exists.category") });
       }
 
       let data;
@@ -41,11 +39,13 @@ const categoriesController = {
         data = await uploadMediaCloudinary.uploadImage(req, res, "categories");
       else {
         return res.status(415).json({
-          message: "File not supported!",
+          message: req.t("file.not_supported"),
         });
       }
       if (data === null) {
-        return res.status(400).json({ message: "Image not uploaded!" });
+        return res
+          .status(400)
+          .json({ message: req.t("file.image_not_upload") });
       }
 
       const newCategory = new Categories({
@@ -56,7 +56,7 @@ const categoriesController = {
 
       const newData = await newCategory.save();
       res.status(201).json({
-        message: "Created category successfully!",
+        message: req.t("category.created_success"),
         newCategory: newData,
       });
     } catch (error) {
@@ -74,25 +74,23 @@ const categoriesController = {
       if (!name || !description) {
         return res
           .status(400)
-          .json({ message: "Name and description are required." });
+          .json({ message: req.t("category.both_required") });
       }
 
       const uniqueName = await categoriesModel.findOne({ name: name });
 
       if (uniqueName) {
-        return res
-          .status(400)
-          .json({ message: "Category name already exists!" });
+        return res.status(400).json({ message: req.t("exists.category") });
       }
 
       const id = req.params.id;
 
       if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(400).json({ message: "Invalid category id!" });
+        return res.status(400).json({ message: req.t("category.id_invalid") });
       }
       const category = await categoriesModel.findById(id).populate("media");
       if (!category) {
-        return res.status(404).json({ message: "Category not found!" });
+        return res.status(404).json({ message: req.t("not_found.category") });
       }
 
       if (req.file) {
@@ -100,9 +98,7 @@ const categoriesController = {
           category.media.cloudinary_id
         );
         if (!deleteImage) {
-          return res
-            .status(400)
-            .json({ message: "An error occurred, please try again later!" });
+          return res.status(400).json({ message: req.t("server_error") });
         }
         let data;
 
@@ -114,12 +110,14 @@ const categoriesController = {
           );
         else {
           return res.status(415).json({
-            message: "File not supported!",
+            message: req.t("file.not_supported"),
           });
         }
 
         if (data === null) {
-          return res.status(400).json({ message: "Image not uploaded!" });
+          return res
+            .status(400)
+            .json({ message: req.t("file.image_not_upload") });
         }
 
         await categoriesModel.findOneAndUpdate(
@@ -135,7 +133,7 @@ const categoriesController = {
         );
         return res
           .status(200)
-          .json({ message: "Updated category successfully!" });
+          .json({ message: req.t("category.updated_success") });
       }
 
       await categoriesModel.findOneAndUpdate(
@@ -147,7 +145,7 @@ const categoriesController = {
       );
       return res
         .status(200)
-        .json({ message: "Updated category successfully!" });
+        .json({ message: req.t("category.updated_success") });
     } catch (error) {
       return res.status(500).json({ message: req.t("server_error") });
     }
@@ -160,14 +158,13 @@ const categoriesController = {
         const category = await categoriesModel.findById(id).populate("media");
 
         if (!category) {
-          return res.status(404).json({ message: "Category not found!" });
+          return res.status(404).json({ message: req.t("not_found.category") });
         }
 
         const post = await postModel.find({ category: category._id });
         if (post.length > 0) {
           return res.status(400).json({
-            message:
-              "You can't remove this category because there are linking articles!",
+            message: req.t("category.can_not_remove"),
           });
         }
 
@@ -175,16 +172,14 @@ const categoriesController = {
           category.media.cloudinary_id
         );
         if (!deleteImage) {
-          return res
-            .status(400)
-            .json({ message: "An error occurred, please try again later!" });
+          return res.status(400).json({ message: req.t("server_error") });
         }
 
         await categoriesModel.findByIdAndDelete(id);
 
-        res.status(200).json({ message: "Deleted category successfully!" });
+        res.status(200).json({ message: req.t("category.deleted_success") });
       }
-      res.status(404).json({ message: "Category not found!" });
+      res.status(404).json({ message: req.t("not_found.category") });
     } catch (error) {
       return res.status(500).json({ message: req.t("server_error") });
     }
@@ -220,7 +215,7 @@ const categoriesController = {
         .findOne({ name: name })
         .populate("media", "url type description");
       if (!category) {
-        return res.status(404).json({ message: "Category not found!" });
+        return res.status(404).json({ message: req.t("not_found.category") });
       }
 
       if (request_user) {
@@ -253,7 +248,7 @@ const categoriesController = {
       }
       const category = await categoriesModel.findOne({ name: categoryName });
       if (!category) {
-        return res.status(404).json({ message: "Category not found!" });
+        return res.status(404).json({ message: req.t("not_found.category") });
       }
 
       const hasLiked = category.like.some(
@@ -272,7 +267,7 @@ const categoriesController = {
         );
         return res
           .status(200)
-          .json({ message: "Unliked category successfully!", isUnliked: true });
+          .json({ message: req.t("category.unlike_success"), isUnliked: true });
       } else {
         await categoriesModel.findByIdAndUpdate(
           category._id,
@@ -285,7 +280,7 @@ const categoriesController = {
         );
         return res
           .status(200)
-          .json({ message: "Liked category successfully!", isUnliked: false });
+          .json({ message: req.t("category.like_success"), isUnliked: false });
       }
     } catch (error) {
       return res.status(500).json({ message: req.t("server_error") });
@@ -302,7 +297,7 @@ const categoriesController = {
       }
       const category = await categoriesModel.findOne({ name: categoryName });
       if (!category) {
-        return res.status(404).json({ message: "Category not found!" });
+        return res.status(404).json({ message: req.t("not_found.category") });
       }
       const hasFollowed = category.follow.some(
         (follow) => follow.user.toString() === userId
@@ -319,7 +314,7 @@ const categoriesController = {
           { new: true }
         );
         return res.status(200).json({
-          message: "Unfollowed category successfully!",
+          message: req.t("category.unfollowed_success"),
           isUnfollowed: true,
         });
       } else {
@@ -333,7 +328,7 @@ const categoriesController = {
           { new: true }
         );
         return res.status(200).json({
-          message: "Followed category successfully!",
+          message: req.t("category.followed_success"),
           isUnfollowed: false,
         });
       }
