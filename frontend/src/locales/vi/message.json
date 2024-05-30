@@ -34,5 +34,8 @@
     "any_friend": "Thật buồn vì bạn chưa kết bạn với bất kỳ ai.",
     "make_friend": "Kết bạn để mở rộng danh sách bạn bè của bạn.",
     "no_request": "Không có yêu cầu kết bạn nào."
+  },
+  "auth": {
+    "logout_success": "Đăng xuất thành công."
   }
 }

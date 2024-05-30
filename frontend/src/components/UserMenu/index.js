@@ -55,6 +55,7 @@ export default function UserMenu({ anchorEl, setAnchorEl, handleClose }) {
       accessToken,
       createAxios(user, dispatch, logOutSuccess),
       toastTheme,
+      t,
     );
   };
 

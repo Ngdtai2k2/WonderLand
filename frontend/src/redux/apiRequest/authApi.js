@@ -51,6 +51,7 @@ export const logOut = async (
   accessToken,
   axiosJWT,
   toastTheme,
+  t,
 ) => {
   dispatch(logOutStart());
   try {
@@ -63,7 +64,7 @@ export const logOut = async (
       },
     );
     dispatch(logOutSuccess());
-    toast.success('Logged out successfully!', toastTheme);
+    toast.success(t('message:auth.logout_success'), toastTheme);
     navigate('/');
     window.location.reload();
   } catch (err) {

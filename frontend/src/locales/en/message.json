@@ -34,5 +34,8 @@
     "any_friend": "It's sad that you haven't made any friends.",
     "make_friend": "Make friends to expand your friend list.",
     "no_request": "No friend requests."
+  },
+  "auth": {
+    "logout_success": "Logged out successfully."
   }
 }
