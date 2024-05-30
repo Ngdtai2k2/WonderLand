@@ -37,6 +37,12 @@ Follow these instructions to set up and run the project on your local machine.
     ```
 
 2. Install the dependencies:
+    a, back end
+    ```sh
+    cd backend
+    npm install
+    ```
+    b, front end
     ```sh
     cd frontend
     npm install
