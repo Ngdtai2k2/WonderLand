@@ -28,7 +28,7 @@ export const handleCreateConversation = async (
   }
 };
 
-export const getChats = async (axiosJWT, userId, accessToken, setData) => {
+export const getChats = async (lng, axiosJWT, userId, accessToken, setData) => {
   try {
     const response = await axiosJWT.post(
       `${BaseApi}/chat/${userId}`,
@@ -36,6 +36,7 @@ export const getChats = async (axiosJWT, userId, accessToken, setData) => {
       {
         headers: {
           token: `Bearer ${accessToken}`,
+          'Accept-Language': lng,
         },
       },
     );
@@ -45,7 +46,13 @@ export const getChats = async (axiosJWT, userId, accessToken, setData) => {
   }
 };
 
-export const getMessages = async (axiosJWT, chatId, accessToken, setData) => {
+export const getMessages = async (
+  lng,
+  axiosJWT,
+  chatId,
+  accessToken,
+  setData,
+) => {
   try {
     const response = await axiosJWT.post(
       `${BaseApi}/message/${chatId}`,
@@ -53,6 +60,7 @@ export const getMessages = async (axiosJWT, chatId, accessToken, setData) => {
       {
         headers: {
           token: `Bearer ${accessToken}`,
+          'Accept-Language': lng,
         },
       },
     );

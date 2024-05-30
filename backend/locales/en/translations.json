@@ -30,11 +30,14 @@
     "not_found": {
         "user": "User not found!",
         "email": "Email not found!",
-        "category" :"Category not found!"
+        "category" :"Category not found!",
+        "chat": "Chat not found!",
+        "messages" : "Messages not found!"
     },
     "server_error": "An error occurred please try again later!",
     "message": {
-        "check_mail": "The confirmation code has been sent, please check the email."
+        "check_mail": "The confirmation code has been sent, please check the email.",
+        "invalid_data": "Invalid data!"
     },
     "exists": {
         "nickname": "Nickname already exists!",

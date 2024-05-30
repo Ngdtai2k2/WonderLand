@@ -30,11 +30,14 @@
     "not_found": {
         "user": "Không tìm thấy người dùng!",
         "email": "Không tìm thấy email!",
-        "category" :"Không tìm thấy danh mục!"
+        "category" :"Không tìm thấy danh mục!",
+        "chat": "Không tìm thấy cuộc trò chuyện!",
+        "messages": "Không tìm thấy tin nhắn nào!"
     },
     "server_error": "Đã xảy ra lỗi, vui lòng thử lại sau!",
     "message": {
-        "check_mail": "Mã xác nhận đã được gửi, vui lòng kiểm tra email."
+        "check_mail": "Mã xác nhận đã được gửi, vui lòng kiểm tra email.",
+        "invalid_data": "Dữ liệu không hợp lệ!"
     },
     "exists": {
         "nickname": "Nickname này đã tồn tại!",

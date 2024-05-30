@@ -8,15 +8,15 @@ const messageController = {
       let { chatId, senderId, message } = req.body;
 
       message.trim();
-      
-      if (!chatId ||!senderId ||!message) {
-        return res.status(400).json({ message: "Invalid data!" });
+
+      if (!chatId || !senderId || !message) {
+        return res.status(400).json({ message: req.t("message.invalid_data") });
       }
 
       const chat = await chatModel.findById(chatId);
 
       if (!chat) {
-        return res.status(404).json({ message: "Chat not found!" });
+        return res.status(404).json({ message: req.t("not_found.chat") });
       }
 
       const newMessage = new messageModel({
@@ -48,9 +48,7 @@ const messageController = {
 
       return res.status(200).json(result);
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: req.t('server_error') });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -59,13 +57,11 @@ const messageController = {
       const { chatId } = req.params;
       const result = await messageModel.find({ chatId });
       if (!result) {
-        return res.status(404).json({ message: "Messages not found!" });
+        return res.status(404).json({ message: req.t("not_found.messages") });
       }
       return res.status(200).json(result);
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: req.t('server_error') });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 };

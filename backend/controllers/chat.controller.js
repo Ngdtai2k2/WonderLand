@@ -21,9 +21,7 @@ const chatController = {
       }
       return res.status(200).json(existingChat);
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: req.t('server_error') });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -34,16 +32,14 @@ const chatController = {
           $in: [req.params.userId],
         },
       });
-      
+
       if (!chat) {
-        return res.status(404).json({ message: "Chat not found!" });
+        return res.status(404).json({ message: req.t("not_found.chat") });
       }
 
       return res.status(200).json(chat);
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: req.t('server_error') });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -56,14 +52,12 @@ const chatController = {
       });
 
       if (!chat) {
-        return res.status(404).json({ message: "Chat not found!" });
+        return res.status(404).json({ message: req.t("not_found.chat") });
       }
 
       return res.status(200).json(chat);
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: req.t('server_error') });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 };

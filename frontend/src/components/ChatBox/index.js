@@ -58,7 +58,7 @@ export default function ChatBox({ chat, receivedMessage }) {
 
   useEffect(() => {
     if (chat !== null) {
-      getMessages(axiosJWT, chat?._id, accessToken, setMessages);
+      getMessages(i18n.language, axiosJWT, chat?._id, accessToken, setMessages);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chat, user]);
@@ -80,6 +80,7 @@ export default function ChatBox({ chat, receivedMessage }) {
           {
             headers: {
               token: `Bearer ${accessToken}`,
+              'Accept-Language': i18n.language,
             },
           },
         );

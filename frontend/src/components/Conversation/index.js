@@ -33,7 +33,11 @@ export default function Conversation({ data }) {
   useEffect(() => {
     const getUserByUserId = async () => {
       try {
-        const response = await axios.get(`${BaseApi}/user/${userId}`);
+        const response = await axios.get(`${BaseApi}/user/${userId}`, {
+          headers: {
+            'Accept-Language': i18n.language,
+          },
+        });
         setUserData(response.data.user);
       } catch (error) {
         toast.error(error.response.data.message, toastTheme);
@@ -52,6 +56,7 @@ export default function Conversation({ data }) {
           {
             headers: {
               token: `Bearer ${accessToken}`,
+              'Accept-Language': i18n.language,
             },
           },
         );
