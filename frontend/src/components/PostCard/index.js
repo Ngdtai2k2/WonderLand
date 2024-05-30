@@ -139,6 +139,7 @@ export default function PostCard({
         {
           headers: {
             token: `Bearer ${accessToken}`,
+            'Accept-Language': i18n.language,
           },
         },
       );

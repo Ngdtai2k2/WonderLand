@@ -49,14 +49,17 @@
         "create_ask_success": "Created ask successfully!",
         "provide_title": "Please provide a title!",
         "updated_success": "Updated post successfully!",
-        "deleted_success": "Deleted post successfully!"
+        "deleted_success": "Deleted post successfully!",
+        "saved_success": "Post saved!",
+        "unsaved_success": "Post unsaved!",
+        "provide_id": "Please provide your user ID!"
     },
     "not_found": {
         "user": "User not found!",
         "email": "Email not found!",
-        "category" :"Category not found!",
+        "category": "Category not found!",
         "chat": "Chat not found!",
-        "messages" : "Messages not found!",
+        "messages": "Messages not found!",
         "comment": "Comment not found!",
         "author": "Author not found!",
         "post": "Post not found!",

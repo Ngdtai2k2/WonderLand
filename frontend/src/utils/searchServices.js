@@ -2,6 +2,7 @@ import axios from 'axios';
 import { BaseApi } from '../constants/constant';
 
 const search = async (
+  lng,
   userId,
   query,
   data,
@@ -19,7 +20,11 @@ const search = async (
     if (userId) {
       requestUrl += `&request_user=${userId}`;
     }
-    const response = await axios.post(requestUrl);
+    const response = await axios.post(requestUrl, {
+      headers: {
+        'Accept-Language': lng,
+      },
+    });
 
     const newData = response.data;
     if (page === 1) {

@@ -15,7 +15,8 @@ const savePostController = {
     try {
       const { user, id } = req.body;
       const post = await postModel.findById(id);
-      if (!post) return res.status(404).json({ message: req.t('not_found.post') });
+      if (!post)
+        return res.status(404).json({ message: req.t("not_found.post") });
       const savePost = await savePostModel.findOne({
         user,
         postId: id,
@@ -26,14 +27,16 @@ const savePostController = {
           user: user,
           postId: id,
         });
-        return res.status(201).json({ message: "Post saved!", state: true });
+        return res
+          .status(201)
+          .json({ message: req.t("post.saved_success"), state: true });
       }
       await savePostModel.findOneAndDelete(savePost._id);
-      return res.status(200).json({ message: "Post unsaved!", state: false });
-    } catch (error) {
       return res
-        .status(500)
-        .json({ message: req.t('server_error') });
+        .status(200)
+        .json({ message: req.t("post.unsaved_success"), state: false });
+    } catch (error) {
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -54,13 +57,14 @@ const savePostController = {
       if (!author) {
         return res
           .status(404)
-          .json({ message: "Please provide your user ID!" });
+          .json({ message: req.t("post.provide_id") });
       }
       const user = await (mongoose.Types.ObjectId.isValid(author)
         ? userModel.findOne({ _id: author })
         : userModel.findOne({ nickname: author }));
 
-      if (!user) return res.status(404).json({ message: req.t("not_found.user") });
+      if (!user)
+        return res.status(404).json({ message: req.t("not_found.user") });
 
       const options = optionsPaginate(req);
 
@@ -99,9 +103,7 @@ const savePostController = {
       );
       return res.status(200).json({ result });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: req.t('server_error') });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 };

@@ -28,14 +28,18 @@ const refresh = (apiLink, setItems, setHasMore, page, user, type) => {
 
 const handleViewPost = async (lng, postId, userId) => {
   try {
-    await axios.post(`${BaseApi}/post/view`, {
-      postId: postId,
-      userId: userId,
-    }, {
-      headers: {
-        'Accept-Language': lng,
+    await axios.post(
+      `${BaseApi}/post/view`,
+      {
+        postId: postId,
+        userId: userId,
       },
-    });
+      {
+        headers: {
+          'Accept-Language': lng,
+        },
+      },
+    );
   } catch (error) {
     console.error(error.response.data.message);
   }
@@ -69,11 +73,15 @@ const handleDeletePost = async (
 
 const getPostById = async (lng, postId, setData, toastTheme) => {
   try {
-    const response = await axios.post(`${BaseApi}/post/d/${postId}`,{}, {
-      headers: { 
-        'Accept-Language': lng,
-      }
-    });
+    const response = await axios.post(
+      `${BaseApi}/post/d/${postId}`,
+      {},
+      {
+        headers: {
+          'Accept-Language': lng,
+        },
+      },
+    );
     setData(response.data.result);
   } catch (error) {
     if (error.response && error.response.status === 404) {

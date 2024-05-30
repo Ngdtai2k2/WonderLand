@@ -39,7 +39,14 @@ export default function SearchForm({ onClose }) {
 
   useEffect(() => {
     if (formik.values.search !== '') {
-      search(user?._id, formik.values.search, [], setDataSearch, setIsLoading);
+      search(
+        i18n.language,
+        user?._id,
+        formik.values.search,
+        [],
+        setDataSearch,
+        setIsLoading,
+      );
     } else {
       setDataSearch([]);
     }

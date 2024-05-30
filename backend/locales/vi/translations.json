@@ -49,7 +49,10 @@
         "create_ask_success": "Đăng tải câu hỏi thành công!",
         "provide_title": "Tiêu đề bài viết không được trống!",
         "updated_success": "Cập nhập bài viết thành công!",
-        "deleted_success": "Bài viết đã được xóa!"
+        "deleted_success": "Bài viết đã được xóa!",
+        "saved_success": "Đã lưu bài viết!",
+        "unsaved_success": "Đã xóa bài viết khỏi danh sách lưu!",
+        "provide_id": "Vui lòng cung cấp id người dùng!"
     },
     "not_found": {
         "user": "Không tìm thấy người dùng!",

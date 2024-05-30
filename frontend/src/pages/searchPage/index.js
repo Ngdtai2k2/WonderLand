@@ -38,6 +38,7 @@ export default function SearchPage() {
 
   useEffect(() => {
     search(
+      i18n.language,
       user?._id,
       query,
       dataSearch,
