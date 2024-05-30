@@ -121,13 +121,15 @@ export default function ListComments({ postId, newComment }) {
           },
         },
       );
-      if (response.data.replies.length > 0) {
-        setReplies([...replies, ...response.data.replies]);
-        setHasMoreReply(response.data.replies.length === 10);
-      } else {
-        setReplies([...replies]);
-        setHasMoreReply(false);
-      }
+      setReplies((prevReplies) => ({
+        ...prevReplies,
+        [commentId]:
+          page === 1
+            ? response.data.replies
+            : [...(prevReplies[commentId] || []), ...response.data.replies],
+      }));
+
+      setHasMoreReply(response.data.replies.length === 10);
     } catch (error) {
       toast.error(error.response.data.message, toastTheme);
     } finally {
@@ -145,7 +147,7 @@ export default function ListComments({ postId, newComment }) {
       ...prevState,
       [commentId]: !prevState[commentId],
     }));
-    setReplies([]);
+
     if (!openCollapse[commentId]) {
       getReplies(commentId, 1);
     }
@@ -166,8 +168,13 @@ export default function ListComments({ postId, newComment }) {
                     <BoxComment>
                       <CommentItem
                         data={comment}
-                        state={replies}
-                        setState={setReplies}
+                        state={replies[commentId] || []}
+                        setState={(newReplies) =>
+                          setReplies((prevReplies) => ({
+                            ...prevReplies,
+                            [commentId]: newReplies,
+                          }))
+                        }
                         delComment={delComment}
                         handleShowReply={handleShowReply}
                         openCollapse={openCollapse}
@@ -203,15 +210,20 @@ export default function ListComments({ postId, newComment }) {
                       <LoadingCircularIndeterminate size={12} />
                     ) : (
                       <Collapse in={openCollapse[commentId] || false}>
-                        {replies.length > 0 &&
-                          replies.map(
+                        {(replies[commentId] || []).length > 0 &&
+                          (replies[commentId] || []).map(
                             (reply) =>
                               !delReplies.includes(reply._id) && (
                                 <BoxComment paddingLeft={4} key={reply._id}>
                                   <CommentItem
                                     data={reply}
-                                    state={replies}
-                                    setState={setReplies}
+                                    state={replies[commentId] || []}
+                                    setState={(newReplies) =>
+                                      setReplies((prevReplies) => ({
+                                        ...prevReplies,
+                                        [commentId]: newReplies,
+                                      }))
+                                    }
                                     delComment={delReply}
                                     openCollapse={openCollapse}
                                     handleOpenMenu={(event) =>
@@ -225,7 +237,6 @@ export default function ListComments({ postId, newComment }) {
                                     handleShowReply={handleShowReply}
                                     isReply={true}
                                   />
-                                  {/* menu setting reply */}
                                   <MenuSettings
                                     id={reply._id}
                                     commentId={reply.commentId}
@@ -257,7 +268,10 @@ export default function ListComments({ postId, newComment }) {
                             underline="hover"
                             sx={{ fontStyle: 'italic' }}
                             onClick={() =>
-                              handleShowMoreCommentReply(commentId, 1)
+                              handleShowMoreCommentReply(
+                                commentId,
+                                (replies[commentId]?.length || 0) / 10,
+                              )
                             }
                           >
                             <ArrowDropDownRoundedIcon />{' '}
