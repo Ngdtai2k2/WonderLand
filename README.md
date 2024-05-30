@@ -5,7 +5,6 @@ Welcome to the WonderLand project! This README file will guide you through setti
 ## Table of Contents
 
 - [WonderLand](#wonderland)
-  - [Table of Contents](#table-of-contents)
   - [Introduction](#introduction)
   - [Getting Started](#getting-started)
     - [Prerequisites](#prerequisites)
