@@ -1,0 +1,29 @@
+{
+    "auth": {
+        "login_success": "Đăng nhập thành công!",
+        "logout_success": "Đăng xuất thành công!",
+        "registered_success": "Đăng ký tài khoản thành công!",
+        "invalid_old_password": "Mật khẩu cũ không đúng!",
+        "invalid_password": "Mật khẩu không đúng!",
+        "change_password": "Đã thay đổi mật khẩu!",
+        "email_not_registered": "Email này chưa đăng ký tài khoản!",
+        "provide_token": "Vui lòng cung cấp mã xác thực (token)!",
+        "provide_new_password": "Vui lòng cung cấp mật khẩu mới!",
+        "fail_token": "Token sai hoặc hết hạn!",
+        "reset_password_success": "Đặt lại mật khẩu thành công!",
+        "refresh_token_not_valid": "Refresh token không hợp lệ!",
+        "not_authenticated": "Bạn chưa được xác thực!"
+    },
+    "not_found": {
+        "user": "Không tìm thấy người dùng!",
+        "email": "Không tìm thấy email!"
+    },
+    "server_error": "Đã xảy ra lỗi, vui lòng thử lại sau!",
+    "message": {
+        "check_mail": "Mã xác nhận đã được gửi, vui lòng kiểm tra email."
+    },
+    "exists": {
+        "nickname": "Nickname này đã tồn tại!",
+        "email": "Email này đã tồn tại!"
+    }
+}

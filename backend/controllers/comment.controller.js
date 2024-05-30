@@ -68,7 +68,7 @@ const commentController = {
       console.error(error.message);
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: req.t('server_error') });
     }
   },
 
@@ -85,7 +85,7 @@ const commentController = {
           if (userId) {
             const userData = await User.findById(userId);
             if (!userData)
-              return res.status(400).json({ message: "User not found!" });
+              return res.status(400).json({ message: req.t("not_found.user") });
           }
           const totalLike = await reactionService.countReactionComment(
             "commentId",
@@ -119,7 +119,7 @@ const commentController = {
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: req.t('server_error') });
     }
   },
 
@@ -135,7 +135,7 @@ const commentController = {
 
       const user = await User.findById(author);
       if (!user) {
-        return res.status(400).json({ message: "User not found!" });
+        return res.status(400).json({ message: req.t("not_found.user") });
       }
       let data;
       if (req.file) {
@@ -188,7 +188,7 @@ const commentController = {
       console.error(error.message);
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: req.t('server_error') });
     }
   },
 
@@ -267,7 +267,7 @@ const commentController = {
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: req.t('server_error') });
     }
   },
 };

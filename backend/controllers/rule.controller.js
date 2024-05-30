@@ -32,7 +32,7 @@ const ruleController = {
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: req.t('server_error') });
     }
   },
   delete: async (req, res) => {
@@ -47,7 +47,7 @@ const ruleController = {
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: req.t('server_error') });
     }
   },
   getAll: async (req, res) => {
@@ -59,7 +59,7 @@ const ruleController = {
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: req.t('server_error') });
     }
   },
   update: async (req, res) => {
@@ -94,7 +94,7 @@ const ruleController = {
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: req.t('server_error') });
     }
   },
 };

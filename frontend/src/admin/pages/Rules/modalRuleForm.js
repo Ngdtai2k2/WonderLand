@@ -23,8 +23,8 @@ export default function ModalRuleForm({
   const [fetching, setFetching] = useState(false);
 
   const toastTheme = useToastTheme();
-  const { accessToken, axiosJWT } = useUserAxios();
-  const { t } = useTranslation(['admin', 'validate', 'field']);
+  const { t, i18n } = useTranslation(['admin', 'validate', 'field']);
+  const { accessToken, axiosJWT } = useUserAxios(i18n.language);
 
   useEffect(() => {
     if (isUpdate && data) {

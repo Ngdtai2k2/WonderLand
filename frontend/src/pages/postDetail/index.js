@@ -37,7 +37,7 @@ export default function PostDetail() {
   const [newComment, setNewComment] = useState();
 
   const { id } = useParams();
-  const { t } = useTranslation([
+  const { t, i18n } = useTranslation([
     'home',
     'post',
     'message',
@@ -46,7 +46,7 @@ export default function PostDetail() {
   ]);
   const toastTheme = useToastTheme();
 
-  const { user, accessToken, axiosJWT } = useUserAxios();
+  const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);
 
   const getPostById = async (id) => {
     try {

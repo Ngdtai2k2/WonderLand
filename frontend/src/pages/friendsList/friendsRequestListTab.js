@@ -37,8 +37,8 @@ export default function FriendsRequestListTab() {
   const page = useRef(1);
   const navigate = useNavigate();
   const toastTheme = useToastTheme();
-  const { t } = useTranslation(['friends', 'message', 'user']);
-  const { user, accessToken, axiosJWT } = useUserAxios();
+  const { t, i18n } = useTranslation(['friends', 'message', 'user']);
+  const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);
 
   useEffect(() => {
     document.title = t('friends:friends_request_list');

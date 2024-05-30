@@ -68,7 +68,7 @@ const searchController = {
               : userModel.findOne({ nickname: request_user }));
 
             if (!user)
-              return res.status(404).json({ message: "User not found!" });
+              return res.status(404).json({ message: req.t("not_found.user") });
             [hasReacted, hasSavedPost] = await Promise.all([
               reactionService.hasReactionPost(user._id, post._id),
               savePostService.hasSavePost(user._id, post._id),

@@ -37,10 +37,10 @@ export default function ListComments({ postId, newComment }) {
   const [menuAnchorEl, setMenuAnchorEl] = useState({});
   const [openCollapse, setOpenCollapse] = useState({});
 
-  const { t } = useTranslation(['message', 'post']);
+  const { t, i18n } = useTranslation(['message', 'post']);
   const toastTheme = useToastTheme();
   const page = useRef(1);
-  const { user, accessToken, axiosJWT } = useUserAxios();
+  const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);
 
   useEffect(() => {
     getCommentsByPostId(

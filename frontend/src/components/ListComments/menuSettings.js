@@ -19,8 +19,8 @@ export default function MenuSettings({
 }) {
   const [open, setOpen] = useState(false);
 
-  const { t } = useTranslation(['post']);
-  const { user } = useUserAxios();
+  const { t, i18n } = useTranslation(['post']);
+  const { user } = useUserAxios(i18n.language);
 
   return (
     <>

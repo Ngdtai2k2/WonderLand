@@ -20,7 +20,7 @@ export default function Login({ setTabIndex }) {
 
   const dispatch = useDispatch();
   const toastTheme = useToastTheme();
-  const { t } = useTranslation(['validate', 'field', 'auth', 'message']);
+  const { t, i18n } = useTranslation(['validate', 'field', 'auth', 'message']);
 
   useEffect(() => {
     const rememberMeValue = localStorage.getItem('remenber_me') === 'true';
@@ -58,7 +58,7 @@ export default function Login({ setTabIndex }) {
         localStorage.removeItem('remenber_me');
         localStorage.removeItem('saved_email');
       }
-      await loginUser(values, dispatch, toastTheme);
+      await loginUser(values, dispatch, toastTheme, i18n.language);
     },
   });
 

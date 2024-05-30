@@ -17,7 +17,7 @@ const reportController = {
       const { _report, _comment_id } = req.query;
 
       const user = await userModel.findById(userId);
-      if (!user) return res.status(404).json({ message: "User not found!" });
+      if (!user) return res.status(404).json({ message: req.t("not_found.user") });
 
       let targetField;
       const getModel = async (_report) => {

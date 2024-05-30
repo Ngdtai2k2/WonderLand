@@ -51,7 +51,7 @@ const reactionController = {
         ? userModel.findOne({ _id: author })
         : userModel.findOne({ nickname: author }));
 
-      if (!user) return res.status(404).json({ message: "User not found!" });
+      if (!user) return res.status(404).json({ message: req.t("not_found.user") });
 
       const reactionPosts = await reactionModel.find({ author: user._id }).populate(
         "postId"
@@ -98,7 +98,7 @@ const reactionController = {
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: req.t('server_error') });
     }
   },
 
@@ -145,7 +145,7 @@ const reactionController = {
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: req.t('server_error') });
     }
   },
 };

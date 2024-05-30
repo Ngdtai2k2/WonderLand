@@ -50,11 +50,11 @@ export default function Profile() {
   const [friendRequest, setFriendRequest] = useState();
   const [openModalConfirm, setOpenModalConfirm] = useState(false);
 
-  const { t } = useTranslation(['user']);
+  const { t, i18n } = useTranslation(['user']);
   const theme = useTheme();
   const toastTheme = useToastTheme();
   const isSmOrBelow = useMediaQuery(theme.breakpoints.down('sm'));
-  const { user, accessToken, axiosJWT } = useUserAxios();
+  const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);
 
   const handleChangeTab = (event, newValue) => {
     setTabIndex(newValue);

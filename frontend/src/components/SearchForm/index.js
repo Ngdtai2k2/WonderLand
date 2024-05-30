@@ -21,8 +21,8 @@ export default function SearchForm({ onClose }) {
   const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
-  const { user } = useUserAxios();
-  const { t } = useTranslation(['navigation', 'message']);
+  const { t, i18n } = useTranslation(['navigation', 'message']);
+  const { user } = useUserAxios(i18n.language);
 
   const formik = useFormik({
     initialValues: {

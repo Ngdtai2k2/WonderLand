@@ -18,8 +18,8 @@ export default function RenderPost({ apiLink, type }) {
   const [isRefresh, setIsRefresh] = useState();
 
   const page = useRef(1);
-  const { t } = useTranslation(['message']);
-  const { user } = useUserAxios();
+  const { t, i18n } = useTranslation(['message']);
+  const { user } = useUserAxios(i18n.language);
 
   useEffect(() => {
     getPosts(apiLink, setData, data, setHasMore, page, user?._id, type);

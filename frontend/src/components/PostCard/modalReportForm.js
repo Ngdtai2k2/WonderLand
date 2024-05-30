@@ -19,9 +19,9 @@ export default function ModalReportForm({ open, handleClose, id }) {
   const [fetching, setFetching] = useState();
   const [selectRule, setSelectRule] = useState();
 
-  const { t } = useTranslation(['field']);
+  const { t, i18n } = useTranslation(['field']);
   const toastTheme = useToastTheme();
-  const { user, accessToken, axiosJWT } = useUserAxios();
+  const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);
 
   const formik = useFormik({
     initialValues: {

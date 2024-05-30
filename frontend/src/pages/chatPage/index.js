@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
@@ -25,7 +26,8 @@ export default function ChatPage() {
 
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, accessToken, axiosJWT } = useUserAxios();
+  const {i18n} = useTranslation();
+  const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);
 
   useEffect(() => {
     document.title = 'Chats - WonderLand';

@@ -55,8 +55,8 @@ export default function CommentItem({
 
   const navigate = useNavigate();
   const toastTheme = useToastTheme();
-  const { t } = useTranslation(['post', 'validate', 'message', 'field']);
-  const { user, accessToken, axiosJWT } = useUserAxios();
+  const { t, i18n } = useTranslation(['post', 'validate', 'message', 'field']);
+  const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);
 
   useEffect(() => {
     setIsLiked(data?.hasReacted === true || false);

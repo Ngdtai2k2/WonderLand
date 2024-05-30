@@ -60,9 +60,7 @@ const categoriesController = {
         newCategory: newData,
       });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: "An error occurred please try again later!" });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -151,9 +149,7 @@ const categoriesController = {
         .status(200)
         .json({ message: "Updated category successfully!" });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: "An error occurred please try again later!" });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -190,9 +186,7 @@ const categoriesController = {
       }
       res.status(404).json({ message: "Category not found!" });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: "An error occurred please try again later!" });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -210,9 +204,7 @@ const categoriesController = {
       );
       return res.status(200).json({ result });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: "An error occurred please try again later!" });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -234,7 +226,7 @@ const categoriesController = {
       if (request_user) {
         const user = await userModel.findById(request_user);
         if (!user) {
-          return res.status(404).json({ message: "User not found!" });
+          return res.status(404).json({ message: req.t("not_found.user") });
         }
         hasLiked = category.like.some(
           (like) => like.user.toString() === request_user
@@ -246,9 +238,7 @@ const categoriesController = {
 
       return res.status(200).json({ category, hasLiked, hasFollowed });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: "An error occurred please try again later!" });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -259,7 +249,7 @@ const categoriesController = {
 
       const user = await userModel.findById(userId);
       if (!user) {
-        return res.status(404).json({ message: "User not found!" });
+        return res.status(404).json({ message: req.t("not_found.user") });
       }
       const category = await categoriesModel.findOne({ name: categoryName });
       if (!category) {
@@ -298,9 +288,7 @@ const categoriesController = {
           .json({ message: "Liked category successfully!", isUnliked: false });
       }
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: "An error occurred please try again later!" });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -310,7 +298,7 @@ const categoriesController = {
       const { categoryName } = req.params;
       const user = await userModel.findById(userId);
       if (!user) {
-        return res.status(404).json({ message: "User not found!" });
+        return res.status(404).json({ message: req.t("not_found.user") });
       }
       const category = await categoriesModel.findOne({ name: categoryName });
       if (!category) {
@@ -350,9 +338,7 @@ const categoriesController = {
         });
       }
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: "An error occurred please try again later!" });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 };

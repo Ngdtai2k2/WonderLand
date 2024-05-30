@@ -20,10 +20,10 @@ function App() {
   // eslint-disable-next-line no-unused-vars
   const [openModal, setOpenModal] = useState(false);
   const [event, setEvent] = useState();
-
+  
   const isRunningInIFrame = window.self !== window.top;
-  const { user, accessToken } = useUserAxios();
   const { i18n } = useTranslation();
+  const { user, accessToken } = useUserAxios(i18n.language);
 
   const decodedToken = accessToken ? jwtDecode(accessToken) : null;
   const isAdmin = decodedToken ? decodedToken.isAdmin || false : false;

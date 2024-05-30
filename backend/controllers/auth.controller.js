@@ -14,6 +14,7 @@ const friendsModel = require("../models/friends.model");
 const userSocketModel = require("../models/userSocket.model");
 
 const createMailOptions = require("../configs/mail.config");
+const { request } = require("http");
 
 dotenv.config();
 
@@ -55,9 +56,7 @@ const authController = {
         return res.json({ unique: true });
       }
     } catch (err) {
-      return res
-        .status(500)
-        .json({ message: "An error occurred please try again later!" });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -68,12 +67,12 @@ const authController = {
       const uniqueEmail = await User.findOne({ email: email });
 
       if (uniqueEmail) {
-        return res.status(400).json({ message: "Email already exists!" });
+        return res.status(400).json({ message: req.t('exists.email') });
       }
 
       const uniqueNickname = await User.findOne({ nickname: nickname });
       if (uniqueNickname) {
-        return res.status(400).json({ message: "Nickname already exists!" });
+        return res.status(400).json({ message: req.t('exists.nickname') });
       }
 
       const salt = await bcrypt.genSalt(10);
@@ -89,7 +88,7 @@ const authController = {
       const user = await newUser.save();
       res
         .status(201)
-        .json({ message: "Successful account registration!", user: user });
+        .json({ message: req.t("auth.registered_success"), user: user });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
@@ -102,7 +101,7 @@ const authController = {
       }).populate("media");
 
       if (!user) {
-        return res.status(404).json({ message: "Email not found!" });
+        return res.status(404).json({ message: req.t("not_found.email") });
       }
 
       const validPassword = await bcrypt.compare(
@@ -111,7 +110,9 @@ const authController = {
       );
 
       if (!validPassword) {
-        return res.status(404).json({ message: "Invalid password!" });
+        return res
+          .status(404)
+          .json({ message: req.t("auth.invalid_password") });
       }
 
       if (user && validPassword) {
@@ -137,7 +138,7 @@ const authController = {
           ...others,
           accessToken,
           device,
-          message: "Login success!",
+          message: req.t("auth.login_success"),
         };
         if (user.media) {
           responseData.media = user.media;
@@ -171,9 +172,7 @@ const authController = {
         return res.status(200).json(responseData);
       }
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: "An error occurred please try again later!" });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -188,7 +187,9 @@ const authController = {
         });
         refreshToken = dataToken?.token;
         if (!refreshToken) {
-          return res.status(401).json({ message: "You're not authenticated!" });
+          return res
+            .status(401)
+            .json({ message: req.t("auth.not_authenticated") });
         }
       }
 
@@ -196,7 +197,9 @@ const authController = {
         token: refreshToken,
       });
       if (!refreshTokenDoc) {
-        return res.status(403).json({ message: "Refresh token is not valid!" });
+        return res
+          .status(403)
+          .json({ message: req.t("auth.refresh_token_not_valid") });
       }
 
       jwt.verify(
@@ -204,7 +207,9 @@ const authController = {
         process.env.JWT_REFRESH_KEY,
         async (err, decodedToken) => {
           if (err) {
-            return res.status(401).json({ message: "Invalid refresh token!" });
+            return res
+              .status(401)
+              .json({ message: req.t("auth.refresh_token_not_valid") });
           }
 
           const newAccessToken =
@@ -230,9 +235,7 @@ const authController = {
         }
       );
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: "An error occurred please try again later!" });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -243,11 +246,9 @@ const authController = {
       await RefreshToken.deleteOne({ user: id, device: device });
       res.clearCookie("refreshToken");
 
-      return res.status(200).json({ message: "Successfully logged out!" });
+      return res.status(200).json({ message: req.t("auth.logout_success") });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: "An error occurred please try again later!" });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -255,7 +256,7 @@ const authController = {
     try {
       const user = await User.findById(req.params.id);
       if (!user) {
-        return res.status(404).json({ message: "User not found!" });
+        return res.status(404).json({ message: req.t("not_found.user") });
       }
 
       const isPasswordValid = await bcrypt.compare(
@@ -263,7 +264,9 @@ const authController = {
         user.password
       );
       if (!isPasswordValid) {
-        return res.status(400).json({ message: "Incorrect old password!" });
+        return res
+          .status(400)
+          .json({ message: req.t("auth.invalid_old_password") });
       }
 
       const salt = await bcrypt.genSalt(10);
@@ -274,11 +277,9 @@ const authController = {
 
       return res
         .status(200)
-        .json({ user: updatedUser, message: "Changed password!" });
+        .json({ user: updatedUser, message: req.t("auth.change_password") });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: "An error occurred please try again later!" });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -288,7 +289,9 @@ const authController = {
       const user = await User.findOne({ email });
 
       if (!user) {
-        return res.status(404).json({ message: "Email not registered!" });
+        return res
+          .status(404)
+          .json({ message: req.t("auth.email_not_registered") });
       }
 
       const transporter = nodemailer.createTransport({
@@ -320,12 +323,10 @@ const authController = {
       await transporter.sendMail(mailOptions);
 
       return res.status(200).json({
-        message: "The confirmation code has been sent, please check the email",
+        message: t("message.check_mail"),
       });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: "An error occurred please try again later!" });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -335,13 +336,15 @@ const authController = {
       const user = await User.findOne({ email });
 
       if (!user)
-        return res.status(404).json({ message: "Email not registered!" });
+        return res
+          .status(404)
+          .json({ message: req.t("auth.email_not_registered") });
       if (!token)
-        return res.status(404).json({ message: "Please provide tokens!" });
+        return res.status(404).json({ message: req.t("auth.provide_token") });
       if (!newPassword)
         return res
           .status(404)
-          .json({ message: "Please provide new password!" });
+          .json({ message: req.t("auth.provide_new_password") });
 
       const resetPassword = await ResetPassword.findOne({ user: user._id });
 
@@ -350,7 +353,7 @@ const authController = {
         resetPassword.token !== token ||
         Date.now() > parseInt(resetPassword.exp)
       )
-        return res.status(400).json({ message: "Invalid or expired token!" });
+        return res.status(400).json({ message: req.t("auth.fail_token") });
 
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(newPassword, salt);
@@ -361,11 +364,9 @@ const authController = {
 
       return res
         .status(200)
-        .json({ message: "Reset password was successful!" });
+        .json({ message: req.t("auth.reset_password_success") });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: "An error occurred please try again later!" });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 };

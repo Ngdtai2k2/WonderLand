@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import Zoom from 'react-medium-image-zoom';
 import { useParams } from 'react-router-dom';
@@ -50,7 +51,8 @@ export default function CategoryDetail() {
   const { name } = useParams();
   const theme = useTheme();
   const toastTheme = useToastTheme();
-  const { user, accessToken, axiosJWT } = useUserAxios();
+  const {i18n} = useTranslation();
+  const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);
 
   useEffect(() => {
     document.title = category ? category.name : 'Category not found!';

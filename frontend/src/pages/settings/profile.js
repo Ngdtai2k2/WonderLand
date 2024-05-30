@@ -32,11 +32,11 @@ export default function Profile() {
   const [fetching, setFetching] = useState();
 
   const dispatch = useDispatch();
-  const { t } = useTranslation(['validate', 'field', 'settings']);
+  const { t, i18n } = useTranslation(['validate', 'field', 'settings']);
   const user = useSelector((state) => state.auth.login?.currentUser);
   const accessToken = user?.accessToken;
 
-  let axiosJWT = createAxios(user, dispatch, loginSuccess);
+  let axiosJWT = createAxios(i18n.language, user, dispatch, loginSuccess);
 
   const validationSchema = Yup.object({
     fullname: Yup.string()

@@ -18,23 +18,31 @@ import {
 
 import { BaseApi } from '../../constants/constant';
 
-export const loginUser = async (user, dispatch, toastTheme) => {
+export const loginUser = async (user, dispatch, toastTheme, lng) => {
   dispatch(loginStart());
   try {
-    const res = await axios.post(BaseApi + '/auth/login', user);
+    const res = await axios.post(BaseApi + '/auth/login', user, {
+      headers: {
+        'Accept-Language': lng,
+      },
+    });
     dispatch(loginSuccess(res.data));
-    toast.success(res.data.message, toastTheme);
     window.location.reload();
+    toast.success(res.data.message, toastTheme);
   } catch (err) {
     dispatch(loginFailed(err.response.data));
     toast.error(err.response.data.message, toastTheme);
   }
 };
 
-export const registerUser = async (user, dispatch, toastTheme) => {
+export const registerUser = async (user, dispatch, toastTheme, lng) => {
   dispatch(registerStart());
   try {
-    const res = await axios.post(BaseApi + '/auth/register', user);
+    const res = await axios.post(BaseApi + '/auth/register', user, {
+      headers: {
+        'Accept-Language': lng,
+      },
+    });
     toast.success(res.data.message, toastTheme);
     dispatch(registerSuccess());
   } catch (err) {
@@ -52,6 +60,7 @@ export const logOut = async (
   axiosJWT,
   toastTheme,
   t,
+  lng,
 ) => {
   dispatch(logOutStart());
   try {
@@ -60,6 +69,7 @@ export const logOut = async (
       { id, device },
       {
         headers: { token: `Bearer ${accessToken}` },
+        'Accept-Language': lng,
         'Content-Type': 'multipart/form-data',
       },
     );
@@ -80,11 +90,15 @@ export const changePassword = async (
   axiosJWT,
   userData,
   toastTheme,
+  lng,
 ) => {
   dispatch(changePasswordStart());
   try {
     const res = await axiosJWT.put(BaseApi + '/auth/password/' + id, userData, {
-      headers: { token: `Bearer ${accessToken}` },
+      headers: {
+        token: `Bearer ${accessToken}`,
+        'Accept-Language': lng,
+      },
     });
     dispatch(changePasswordSuccess());
     toast.success(res.data.message, toastTheme);

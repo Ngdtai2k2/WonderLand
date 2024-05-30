@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -25,7 +26,8 @@ export default function ModalReportComment({
   const [selectRule, setSelectRule] = useState();
 
   const toastTheme = useToastTheme();
-  const { user, accessToken, axiosJWT } = useUserAxios();
+  const {i18n} = useTranslation();
+  const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);
 
   const urlApi = !isReply
     ? `${BaseApi}/report/create?_report=comment`

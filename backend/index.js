@@ -4,6 +4,9 @@ const dotenv = require("dotenv");
 const express = require("express");
 const mongoose = require("mongoose");
 const socketio = require("socket.io");
+const i18next = require("i18next");
+const i18nextBackend = require("i18next-fs-backend");
+const i18nextMiddleware = require("i18next-http-middleware");
 
 const authRoute = require("./routes/auth.route");
 const userRoute = require("./routes/user.route");
@@ -46,6 +49,15 @@ mongoose
     console.error(">>> Error connecting to MongoDB:", error);
   });
 
+// lang
+i18next.use(i18nextBackend).use(i18nextMiddleware.LanguageDetector)
+.init({
+  fallbackLng: 'en',
+  backend: {
+    loadPath: "./locales/{{lng}}/translations.json"
+  }
+})
+// cors
 const corsOptions = {
   origin: process.env.CORS_ORIGIN,
   credentials: true,
@@ -53,6 +65,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(cookieParser());
+app.use(i18nextMiddleware.handle(i18next));
 app.use(express.json());
 
 app.use("/api/v1/auth", authRoute);

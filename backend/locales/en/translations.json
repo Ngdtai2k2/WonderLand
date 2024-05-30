@@ -1,0 +1,25 @@
+{
+    "auth": {
+        "login_success": "Login success!",
+        "logout_success": "Successfully logged out!",
+        "registered_success": "Successful account registration!",
+        "invalid_old_password": "Invalid old password!",
+        "invalid_password": "Invalid password!",
+        "change_password": "Changed password!",
+        "email_not_registered": "Email not registered!",
+        "provide_token": "Please provide tokens!",
+        "provide_new_password": "Please provide new password!",
+        "fail_token": "Invalid or expired token!",
+        "reset_password_success": "Reset password was successful!",
+        "refresh_token_not_valid": "Refresh token is not valid!",
+        "not_authenticated": "You're not authenticated!"
+    },
+    "not_found": {
+        "user": "User not found!",
+        "email": "Email not found!"
+    },
+    "server_error": "An error occurred please try again later!",
+    "message": {
+        "check_mail": "The confirmation code has been sent, please check the email."
+    }
+}

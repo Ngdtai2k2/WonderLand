@@ -19,9 +19,9 @@ const friendsController = {
       }
 
       const user = await userModel.findById(userId);
-      if (!user) return res.status(404).json({ message: "User not found!" });
+      if (!user) return res.status(404).json({ message: req.t("not_found.user") });
       const friend = await userModel.findById(friendId);
-      if (!friend) return res.status(404).json({ message: "User not found!" });
+      if (!friend) return res.status(404).json({ message: req.t("not_found.user") });
       const userRequestAddFriend = await friendsModel.findOne({
         user: userId,
         friend: friendId,
@@ -67,7 +67,7 @@ const friendsController = {
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: req.t('server_error') });
     }
   },
 
@@ -76,10 +76,10 @@ const friendsController = {
       const { userId, friendId } = req.body;
 
       const user = await userModel.findById(userId);
-      if (!user) return res.status(404).json({ message: "User not found!" });
+      if (!user) return res.status(404).json({ message: req.t("not_found.user") });
 
       const friend = await userModel.findById(friendId);
-      if (!friend) return res.status(404).json({ message: "User not found!" });
+      if (!friend) return res.status(404).json({ message: req.t("not_found.user") });
 
       const friendRequest = await friendsModel.findOne({
         $or: [
@@ -116,7 +116,7 @@ const friendsController = {
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: req.t('server_error') });
     }
   },
 
@@ -124,9 +124,9 @@ const friendsController = {
     try {
       const { userId, friendId } = req.body;
       const user = await userModel.findById(userId);
-      if (!user) return res.status(404).json({ message: "User not found!" });
+      if (!user) return res.status(404).json({ message: req.t("not_found.user") });
       const friend = await userModel.findById(friendId);
-      if (!friend) return res.status(404).json({ message: "User not found!" });
+      if (!friend) return res.status(404).json({ message: req.t("not_found.user") });
 
       let friendData = await friendsModel.findOne({
         $or: [
@@ -150,7 +150,7 @@ const friendsController = {
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: req.t('server_error') });
     }
   },
 
@@ -159,9 +159,9 @@ const friendsController = {
       const { userId, friendId } = req.body;
 
       const user = await userModel.findById(userId);
-      if (!user) return res.status(404).json({ message: "User not found!" });
+      if (!user) return res.status(404).json({ message: req.t("not_found.user") });
       const friend = await userModel.findById(friendId);
-      if (!friend) return res.status(404).json({ message: "User not found!" });
+      if (!friend) return res.status(404).json({ message: req.t("not_found.user") });
 
       const friendRequest = await friendsModel.findOne({
         $or: [
@@ -196,7 +196,7 @@ const friendsController = {
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: req.t('server_error') });
     }
   },
 
@@ -207,7 +207,7 @@ const friendsController = {
       const options = optionsPaginate(req);
 
       const user = await userModel.findById(request_user);
-      if (!user) return res.status(404).json({ message: "User not found!" });
+      if (!user) return res.status(404).json({ message: req.t("not_found.user") });
 
       let friendsList = await friendsModel.paginate(
         {
@@ -238,7 +238,7 @@ const friendsController = {
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: req.t('server_error') });
     }
   },
 
@@ -247,7 +247,7 @@ const friendsController = {
       const { request_user } = req.query;
 
       const user = await userModel.findById(request_user);
-      if (!user) return res.status(404).json({ message: "User not found!" });
+      if (!user) return res.status(404).json({ message: req.t("not_found.user") });
       const options = optionsPaginate(req);
 
       const friendsRequestList = await friendsModel.paginate(
@@ -276,7 +276,7 @@ const friendsController = {
       console.error(error.message);
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: req.t('server_error') });
     }
   },
 };

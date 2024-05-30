@@ -39,14 +39,14 @@ export default function NavigationBar({ isAdmin, state }) {
   const [totalUnreadNotifications, setTotalUnreadNotifications] = useState(0);
   const [dataFromChild, setDataFromChild] = useState();
 
-  const { t } = useTranslation(['navigation', 'home']);
+  const { t, i18n } = useTranslation(['navigation', 'home']);
   const theme = useTheme();
   const toastTheme = useToastTheme();
   const isDarkMode = theme.palette.mode === 'dark';
   const backgroundColorAppBar = isDarkMode ? '#121212' : '#f4f4f4';
   const colorAppBar = isDarkMode ? '#f4f4f4' : '#121212';
 
-  const { user, accessToken, axiosJWT } = useUserAxios();
+  const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);
 
   const navigate = useNavigate();
 

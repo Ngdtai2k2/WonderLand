@@ -27,9 +27,9 @@ export default function ModalCategoryForm({
   const [fetching, setFetching] = useState();
 
   const toastTheme = useToastTheme();
-  const { t } = useTranslation(['validate', 'field', 'admin']);
+  const { t, i18n } = useTranslation(['validate', 'field', 'admin']);
 
-  const { accessToken, axiosJWT } = useUserAxios();
+  const { accessToken, axiosJWT } = useUserAxios(i18n.language);
 
   useEffect(() => {
     if (isUpdate && data) {

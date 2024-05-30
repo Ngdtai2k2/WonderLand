@@ -22,8 +22,8 @@ export default function MenuSettings({
   const [openEdit, setOpenEdit] = useState(false);
 
   const toastTheme = useToastTheme();
-  const { t } = useTranslation(['post']);
-  const { user, accessToken, axiosJWT } = useUserAxios();
+  const { t, i18n } = useTranslation(['post']);
+  const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);
 
   const decodedToken = accessToken ? jwtDecode(accessToken) : null;
   const isAdmin = decodedToken ? decodedToken.isAdmin || false : false;

@@ -33,9 +33,9 @@ export default function ModalEditPost({ open, handleClose, id, setState }) {
   const [fetching, setFetching] = useState();
   const [post, setPost] = useState();
 
-  const { t } = useTranslation(['post', 'message', 'validate', 'field']);
+  const { t, i18n } = useTranslation(['post', 'message', 'validate', 'field']);
   const toastTheme = useToastTheme();
-  const { user, accessToken, axiosJWT } = useUserAxios();
+  const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);
 
   useEffect(() => {
     getCategories(setCategory, setLoading, toastTheme);

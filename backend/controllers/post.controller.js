@@ -65,7 +65,7 @@ const postController = {
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: req.t('server_error') });
     }
   },
 
@@ -124,7 +124,7 @@ const postController = {
       console.log(error.message);
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: req.t('server_error') });
     }
   },
 
@@ -154,7 +154,7 @@ const postController = {
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: req.t('server_error') });
     }
   },
 
@@ -224,7 +224,7 @@ const postController = {
               : User.findOne({ nickname: request_user }));
 
             if (!user)
-              return res.status(404).json({ message: "User not found!" });
+              return res.status(404).json({ message: req.t("not_found.user") });
             [hasReacted, hasSavedPost] = await Promise.all([
               reactionService.hasReactionPost(user._id, post._id),
               savePostService.hasSavePost(user._id, post._id),
@@ -266,7 +266,7 @@ const postController = {
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: req.t('server_error') });
     }
   },
 
@@ -278,7 +278,7 @@ const postController = {
         ? User.findOne({ _id: id })
         : User.findOne({ nickname: id }));
 
-      if (!user) return res.status(404).json({ message: "User not found!" });
+      if (!user) return res.status(404).json({ message: req.t("not_found.user") });
 
       const options = optionsPaginate(req);
       const { docs, ...paginationData } = await postModel.paginate(
@@ -320,7 +320,7 @@ const postController = {
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: req.t('server_error') });
     }
   },
 
@@ -380,7 +380,7 @@ const postController = {
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: req.t('server_error') });
     }
   },
 
@@ -389,7 +389,7 @@ const postController = {
       const { userId, postId } = req.body;
 
       const user = await User.findById(userId);
-      if (!user) return res.status(404).json({ message: "User not found!" });
+      if (!user) return res.status(404).json({ message: req.t("not_found.user") });
 
       const post = await postModel.findById(postId);
       if (!post) return res.status(404).json({ message: "Post not found!" });
@@ -403,7 +403,7 @@ const postController = {
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: req.t('server_error') });
     }
   },
 
@@ -472,7 +472,7 @@ const postController = {
       console.log(error.message);
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: req.t('server_error') });
     }
   },
 };

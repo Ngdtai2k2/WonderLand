@@ -22,7 +22,7 @@ const notificationController = {
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: req.t('server_error') });
     }
   },
 
@@ -38,7 +38,7 @@ const notificationController = {
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: req.t('server_error') });
     }
   },
 
@@ -48,7 +48,7 @@ const notificationController = {
 
       const user = await userModel.findById(request_user);
       if (!user) {
-        return res.status(404).json({ message: "User not found!" });
+        return res.status(404).json({ message: req.t("not_found.user") });
       }
 
       const options = optionsPaginate(req);
@@ -70,7 +70,7 @@ const notificationController = {
       console.log(error.message);
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: req.t('server_error') });
     }
   },
 };

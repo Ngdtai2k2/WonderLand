@@ -3,10 +3,14 @@ import { jwtDecode } from 'jwt-decode';
 
 import { BaseApi } from './constants/constant';
 
-const refreshToken = async (id, device) => {
+const refreshToken = async (id, device, lng) => {
   try {
     const res = await axios.post(`${BaseApi}/auth/refresh/${id}/${device}`, {
       withCredentials: true,
+    }, {
+      headers: {
+        'Accept-Language': lng,
+      }
     });
     return res.data;
   } catch (err) {
@@ -14,14 +18,14 @@ const refreshToken = async (id, device) => {
   }
 };
 
-export const createAxios = (user, dispatch, stateSuccess) => {
+export const createAxios = (lng, user, dispatch, stateSuccess) => {
   const newInstance = axios.create();
   newInstance.interceptors.request.use(
     async (config) => {
       let date = new Date();
       const decodedToken = jwtDecode(user?.accessToken);
       if (decodedToken.exp < date.getTime() / 1000) {
-        const data = await refreshToken(user?._id, user?.device);
+        const data = await refreshToken(user?._id, user?.device, lng);
         const refreshUser = {
           ...user,
           accessToken: data.accessToken,

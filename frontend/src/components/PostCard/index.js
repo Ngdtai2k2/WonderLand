@@ -73,9 +73,9 @@ export default function PostCard({
   const theme = useTheme();
   const toastTheme = useToastTheme();
   const postRef = useRef(null);
-  const { t } = useTranslation(['message']);
+  const { t, i18n } = useTranslation(['message']);
 
-  const { user, accessToken, axiosJWT } = useUserAxios();
+  const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);
 
   useEffect(() => {
     setIsLiked(post?.hasReacted === true);

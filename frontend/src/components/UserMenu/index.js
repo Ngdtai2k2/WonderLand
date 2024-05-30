@@ -29,7 +29,7 @@ export default function UserMenu({ anchorEl, setAnchorEl, handleClose }) {
   const { t, i18n } = useTranslation(['navigation']);
   const currentLanguage = i18n.language;
 
-  const { user, accessToken } = useUserAxios();
+  const { user, accessToken } = useUserAxios(currentLanguage);
   const { mode, setMode } = useColorScheme();
 
   const handleOpenModal = () => {
@@ -53,9 +53,10 @@ export default function UserMenu({ anchorEl, setAnchorEl, handleClose }) {
       user?.device,
       navigate,
       accessToken,
-      createAxios(user, dispatch, logOutSuccess),
+      createAxios(currentLanguage, user, dispatch, logOutSuccess),
       toastTheme,
       t,
+      currentLanguage,
     );
   };
 

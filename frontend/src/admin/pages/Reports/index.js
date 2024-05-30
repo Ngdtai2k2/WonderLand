@@ -41,8 +41,8 @@ export default function ReportsManager() {
 
   const theme = useTheme();
   const toastTheme = useToastTheme();
-  const { t } = useTranslation(['admin']);
-  const { accessToken, axiosJWT } = useUserAxios();
+  const { t, i18n } = useTranslation(['admin']);
+  const { accessToken, axiosJWT } = useUserAxios(i18n.language);
 
   useEffect(() => {
     document.title = t('admin:report.title');

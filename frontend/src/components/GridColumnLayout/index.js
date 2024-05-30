@@ -36,10 +36,10 @@ export default function GridColumnLayout({ children }) {
   const [event, setEvent] = useState(null);
 
   const page = useRef(1);
-  const { t } = useTranslation(['home', 'message']);
+  const { t, i18n } = useTranslation(['home', 'message']);
   const toastTheme = useToastTheme();
   const navigate = useNavigate();
-  const { user, accessToken, axiosJWT } = useUserAxios();
+  const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);
 
   const socket = initializeSocket(user?._id);
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import Link from '@mui/material/Link';
@@ -9,8 +10,9 @@ import Typography from '@mui/material/Typography';
 
 import PostCard from '../../components/PostCard';
 import CustomBox from '../../components/CustomBox';
-import search from '../../utils/searchServices';
 import LoadingCircularIndeterminate from '../../components/Loading';
+
+import search from '../../utils/searchServices';
 import useUserAxios from '../../hooks/useUserAxios';
 
 export default function SearchPage() {
@@ -24,8 +26,9 @@ export default function SearchPage() {
   const urlParams = new URLSearchParams(queryString);
   const query = urlParams.get('query');
 
+  const {i18n} = useTranslation()
   const navigate = useNavigate();
-  const { user } = useUserAxios();
+  const { user } = useUserAxios(i18n.language);
 
   useEffect(() => {
     if (!isLoading) {

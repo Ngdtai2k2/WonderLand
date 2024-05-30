@@ -19,13 +19,13 @@ import { loginSuccess } from '../../redux/slice/userSlice';
 import { useToastTheme } from '../../constants/constant';
 
 export default function ChangePassword() {
-  const { t } = useTranslation(['validate', 'field', 'settings']);
+  const { t, i18n } = useTranslation(['validate', 'field', 'settings']);
   const dispatch = useDispatch();
   const toastTheme = useToastTheme();
   const user = useSelector((state) => state.auth.login?.currentUser);
   const id = user?._id;
   const accessToken = user?.accessToken;
-  let axiosJWT = createAxios(user, dispatch, loginSuccess);
+  let axiosJWT = createAxios(i18n.language, user, dispatch, loginSuccess);
 
   const validationSchema = Yup.object({
     oldPassword: Yup.string()
@@ -69,6 +69,7 @@ export default function ChangePassword() {
         axiosJWT,
         passwordData,
         toastTheme,
+        i18n.language,
       );
     },
   });
@@ -168,7 +169,7 @@ export default function ChangePassword() {
           variant="contained"
           disabled={!formik.dirty || formik.isSubmitting || !formik.isValid}
         >
-          {t('settings.save')}
+          {t('settings:save')}
         </Button>
       </Box>
     </Box>

@@ -42,8 +42,8 @@ export default function Dashboard() {
     pageSize: 5,
   });
 
-  const { t } = useTranslation(['admin']);
-  const { accessToken, axiosJWT } = useUserAxios();
+  const { t, i18n } = useTranslation(['admin']);
+  const { accessToken, axiosJWT } = useUserAxios(i18n.language);
 
   useEffect(() => {
     document.title = 'Admin - Dashboard';

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
@@ -21,7 +22,8 @@ export default function Conversation({ data }) {
   const [event, setEvent] = useState();
 
   const toastTheme = useToastTheme();
-  const { user, accessToken, axiosJWT } = useUserAxios();
+  const {i18n} = useTranslation();
+  const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);
 
   const userId = data.members.find((id) => id !== user?._id);
 

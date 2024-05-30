@@ -17,7 +17,7 @@ const userController = {
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: req.t('server_error') });
     }
   },
 
@@ -25,13 +25,13 @@ const userController = {
     try {
       const user = await userModel.findByIdAndDelete(req.params.id);
       if (!user) {
-        return res.status(404).json({ message: "User not found!" });
+        return res.status(404).json({ message: req.t("not_found.user") });
       }
       return res.status(200).json({ message: "User deleted successfully!" });
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: req.t('server_error') });
     }
   },
 
@@ -89,7 +89,7 @@ const userController = {
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: req.t('server_error') });
     }
   },
 
@@ -98,7 +98,7 @@ const userController = {
       const user = await userModel.findById(req.params.id).populate("media");
 
       if (!user) {
-        return res.status(404).json({ message: "User not found!" });
+        return res.status(404).json({ message: req.t("not_found.user") });
       }
 
       if (req.body.email && req.body.email !== user.email) {
@@ -153,7 +153,7 @@ const userController = {
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: req.t('server_error') });
     }
   },
 
@@ -164,7 +164,7 @@ const userController = {
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: req.t('server_error') });
     }
   },
   getNewUser: async (req, res) => {
@@ -190,7 +190,7 @@ const userController = {
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "An error occurred please try again later!" });
+        .json({ message: req.t('server_error') });
     }
   },
 };
