@@ -14,12 +14,6 @@
         "refresh_token_not_valid": "Refresh token không hợp lệ!",
         "not_authenticated": "Bạn chưa được xác thực!"
     },
-    "comment": {
-        "must_contain_photo_or_text": "Bình luận phải chứa ảnh hoặc văn bản!",
-        "created_success": "Bình luận đã đăng tải!",
-        "deleted_success": "Bình luận đã được xóa!",
-        "reply_deleted": "Bình luận đã được xóa!"
-    },
     "category": {
         "both_required": "Tên và mô tả là bắt buộc!",
         "contain_photo": "Danh mục phải có ảnh!",
@@ -32,6 +26,12 @@
         "like_success": "Bạn đã thích danh mục này!",
         "unfollowed_success": "Bạn đã bỏ theo dõi danh mục này!",
         "followed_success": "Bạn đã theo dõi danh mục này!"
+    },
+    "comment": {
+        "must_contain_photo_or_text": "Bình luận phải chứa ảnh hoặc văn bản!",
+        "created_success": "Bình luận đã đăng tải!",
+        "deleted_success": "Bình luận đã được xóa!",
+        "reply_deleted": "Bình luận đã được xóa!"
     },
     "not_found": {
         "user": "Không tìm thấy người dùng!",
