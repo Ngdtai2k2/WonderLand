@@ -16,15 +16,17 @@ const commentController = {
       if (!content && !req.file) {
         return res
           .status(400)
-          .json({ message: "Comments must contain photos or text!" });
+          .json({ message: req.t("comment.must_contain_photo_or_text") });
       }
 
       if (req.file) {
         if (req.file.mimetype.startsWith("image/"))
-          data = await uploadMediaCloudinary.uploadImage(req, res, 'comments');
+          data = await uploadMediaCloudinary.uploadImage(req, res, "comments");
 
         if (data === null)
-          return res.status(400).json({ message: "Upload image failed!" });
+          return res
+            .status(400)
+            .json({ message: req.t("file.image_not_upload") });
       }
 
       const newComment = new Comments({
@@ -39,11 +41,11 @@ const commentController = {
         commentPopulateOptions
       );
       return res.status(200).json({
-        message: "Comment has been created!",
+        message: req.t("comment.created_success"),
         newComment: dataNewComment,
       });
     } catch (error) {
-      return res.status(500).json({ error });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -57,18 +59,15 @@ const commentController = {
             comments.media.cloudinary_id
           ))
         ) {
-          return res
-            .status(400)
-            .json({ message: req.t("server_error") });
+          return res.status(400).json({ message: req.t("server_error") });
         }
       }
       await Comments.findByIdAndDelete(commentId);
-      return res.status(200).json({ message: "Comment has been deleted!" });
-    } catch (error) {
-      console.error(error.message);
       return res
-        .status(500)
-        .json({ message: req.t('server_error') });
+        .status(200)
+        .json({ message: req.t("comment.deleted_success") });
+    } catch (error) {
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -117,9 +116,7 @@ const commentController = {
       );
       return res.status(200).json({ result });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: req.t('server_error') });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -130,7 +127,7 @@ const commentController = {
 
       const comment = await Comments.findById(id);
       if (!comment) {
-        return res.status(400).json({ message: "Comment not found!" });
+        return res.status(400).json({ message: req.t("not_found.comment") });
       }
 
       const user = await User.findById(author);
@@ -140,10 +137,12 @@ const commentController = {
       let data;
       if (req.file) {
         if (req.file.mimetype.startsWith("image/"))
-          data = await uploadMediaCloudinary.uploadImage(req, res, 'comments');
+          data = await uploadMediaCloudinary.uploadImage(req, res, "comments");
 
         if (data === null)
-          return res.status(400).json({ message: "Upload image failed!" });
+          return res
+            .status(400)
+            .json({ message: req.t("file.image_not_upload") });
       }
 
       const reply = {
@@ -160,11 +159,11 @@ const commentController = {
       ).populate(commentPopulateOptions);
 
       return res.status(200).json({
-        message: "Comment has been created!",
+        message: req.t("comment.created_success"),
         newComment: newComment.replies.pop(),
       });
     } catch (error) {
-      return res.status(500).json({ error });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -174,21 +173,17 @@ const commentController = {
       const comment = await Comments.findById(commentId);
 
       if (!comment) {
-        return res.status(400).json({ message: "Comment not found!" });
+        return res.status(400).json({ message: req.t("not_found.comment") });
       }
       await Comments.findByIdAndUpdate(
         { _id: commentId },
         { $pull: { replies: { _id: replyId } } },
         { new: true }
       );
-      return res
-        .status(200)
-        .json({ message: "Comment reply has been deleted!" });
+      return res.status(200).json({ message: req.t("comment.reply_deleted") });
     } catch (error) {
       console.error(error.message);
-      return res
-        .status(500)
-        .json({ message: req.t('server_error') });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -201,7 +196,7 @@ const commentController = {
       const comment = await Comments.findById(id);
 
       if (!comment) {
-        return res.status(400).json({ message: "Comment not found!" });
+        return res.status(400).json({ message: req.t("not_found.comment") });
       }
 
       const totalReplies = comment.replies.length;
@@ -265,9 +260,7 @@ const commentController = {
         hasPrevPage: hasPrevPage,
       });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: req.t('server_error') });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 };

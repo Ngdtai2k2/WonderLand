@@ -4,6 +4,7 @@ import { BaseApi } from '../constants/constant';
 
 // function support for get comments
 const getCommentsByPostId = async (
+  lng,
   setIsLoading,
   setItems,
   items,
@@ -14,9 +15,17 @@ const getCommentsByPostId = async (
 ) => {
   setIsLoading(true);
   await axios
-    .post(`${BaseApi}/comment/post/${postId}?_page=${page.current}&_limit=10`, {
-      userId: userId,
-    })
+    .post(
+      `${BaseApi}/comment/post/${postId}?_page=${page.current}&_limit=10`,
+      {
+        userId: userId,
+      },
+      {
+        headers: {
+          'Accept-Language': lng,
+        },
+      },
+    )
     .then((response) => {
       if (response.data.result.docs.length === 0) {
         setItems([...items]);
@@ -31,9 +40,18 @@ const getCommentsByPostId = async (
 };
 
 // function support for refresh comments
-const refresh = (setIsLoading, setItems, setHasMore, page, postId, userId) => {
+const refresh = (
+  lng,
+  setIsLoading,
+  setItems,
+  setHasMore,
+  page,
+  postId,
+  userId,
+) => {
   page.current = 1;
   getCommentsByPostId(
+    lng,
     setIsLoading,
     setItems,
     [],

@@ -44,7 +44,7 @@ const postController = {
         if (data === null)
           return res.status(400).json({
             message: req.file.mimetype.startsWith("image/")
-              ? "Upload image failed!"
+              ? req.t("file.image_not_upload")
               : "Upload video failed!",
           });
       }
@@ -102,7 +102,7 @@ const postController = {
         if (data === null)
           return res.status(400).json({
             message: req.file.mimetype.startsWith("image/")
-              ? "Upload image failed!"
+              ? req.t("file.image_not_upload")
               : "Upload video failed!",
           });
       }

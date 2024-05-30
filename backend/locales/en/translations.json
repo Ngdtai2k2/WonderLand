@@ -27,12 +27,19 @@
         "unfollowed_success": "Unfollowed category successfully!",
         "followed_success": "Followed category successfully!"
     },
+    "comment": {
+        "must_contain_photo_or_text": "Comments must contain photos or text!",
+        "created_success": "Comment has been created!",
+        "deleted_success": "Comment has been deleted!",
+        "reply_deleted": "Comment reply has been deleted!"
+    },
     "not_found": {
         "user": "User not found!",
         "email": "Email not found!",
         "category" :"Category not found!",
         "chat": "Chat not found!",
-        "messages" : "Messages not found!"
+        "messages" : "Messages not found!",
+        "comment": "Comment not found!"
     },
     "server_error": "An error occurred please try again later!",
     "message": {

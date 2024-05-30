@@ -44,6 +44,7 @@ export default function ListComments({ postId, newComment }) {
 
   useEffect(() => {
     getCommentsByPostId(
+      i18n.language,
       setIsLoading,
       setComments,
       comments,
@@ -69,7 +70,10 @@ export default function ListComments({ postId, newComment }) {
       const response = await axiosJWT.delete(
         `${BaseApi}/comment/${commentId}/delete?request_user=${user?._id}`,
         {
-          headers: { token: `Bearer ${accessToken}` },
+          headers: {
+            token: `Bearer ${accessToken}`,
+            'Accept-Language': i18n.language,
+          },
         },
       );
       setDelComments([...delComments, commentId]);
@@ -91,6 +95,7 @@ export default function ListComments({ postId, newComment }) {
       const response = await axiosJWT.delete(
         `${BaseApi}/comment/${commentId}/delete-reply/${replyId}?request_user=${user?._id}`,
         {
+          'Accept-Language': i18n.language,
           headers: { token: `Bearer ${accessToken}` },
         },
       );
@@ -109,6 +114,11 @@ export default function ListComments({ postId, newComment }) {
         `${BaseApi}/comment/${commentId}/reply?_page=${page}&_limit=10`,
         {
           userId: user?._id,
+        },
+        {
+          headers: {
+            'Accept-Language': i18n.language,
+          },
         },
       );
       if (response.data.replies.length > 0) {
@@ -271,6 +281,7 @@ export default function ListComments({ postId, newComment }) {
             dataLength={comments.length}
             next={() => {
               getCommentsByPostId(
+                i18n.language,
                 setIsLoading,
                 setComments,
                 comments,

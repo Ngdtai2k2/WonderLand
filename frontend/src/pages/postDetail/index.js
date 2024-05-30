@@ -123,8 +123,11 @@ export default function PostDetail() {
           `${BaseApi}/comment/create`,
           formData,
           {
-            headers: { token: `Bearer ${accessToken}` },
-            'Content-Type': 'multipart/form-data',
+            headers: {
+              token: `Bearer ${accessToken}`,
+              'Accept-Language': i18n.language,
+              'Content-Type': 'multipart/form-data',
+            },
           },
         );
         setNewComment(response.data.newComment);

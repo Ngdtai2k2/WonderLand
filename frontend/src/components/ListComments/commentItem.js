@@ -116,8 +116,11 @@ export default function CommentItem({
           `${BaseApi}/comment/${commentId}/reply`,
           formData,
           {
-            headers: { token: `Bearer ${accessToken}` },
-            'Content-Type': 'multipart/form-data',
+            headers: {
+              token: `Bearer ${accessToken}`,
+              'Accept-Language': i18n.language,
+              'Content-Type': 'multipart/form-data',
+            },
           },
         );
         const newData = response.data.newComment;
