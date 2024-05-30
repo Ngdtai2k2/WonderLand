@@ -28,5 +28,10 @@
   },
   "admin": {
     "note_after_update": "Note*: After adding new data, refresh the page (f5) again to update the data."
+  },
+  "friends": {
+    "any_friend": "It's sad that you haven't made any friends.",
+    "make_friend": "Make friends to expand your friend list.",
+    "no_request": "No friend requests."
   }
 }

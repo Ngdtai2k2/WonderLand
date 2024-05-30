@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import InfiniteScroll from 'react-infinite-scroll-component';
 import moment from 'moment';
 
 import Box from '@mui/material/Box';
@@ -36,11 +37,12 @@ export default function FriendsListTab() {
   const toastTheme = useToastTheme();
   const navigate = useNavigate();
   const page = useRef(1);
+  const { t } = useTranslation(['friends', 'message', 'user']);
   const { user, accessToken, axiosJWT } = useUserAxios();
 
   useEffect(() => {
-    document.title = 'Friends List';
-  }, []);
+    document.title = t('friends:friends_list');
+  }, [t]);
 
   useEffect(() => {
     if (user) {
@@ -56,10 +58,7 @@ export default function FriendsListTab() {
         setIsLoading,
       );
     } else {
-      toast.warning(
-        'You need to be logged in to access this page!',
-        toastTheme,
-      );
+      toast.warning(t('message:need_login'), toastTheme);
       navigate('/');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -72,10 +71,7 @@ export default function FriendsListTab() {
         [friendId]: true,
       }));
       if (!user) {
-        return toast.warning(
-          'You need to be signed in to perform this action!',
-          toastTheme,
-        );
+        return toast.warning(t('message:need_login'), toastTheme);
       }
       const response = await axiosJWT.post(
         `${BaseApi}/friend/delete-friend?request_user=${user?._id}`,
@@ -141,11 +137,11 @@ export default function FriendsListTab() {
               endMessage={
                 friendsList?.length === 0 ? (
                   <TypographyCenter variant="caption">
-                    Opp! It's sad that you haven't made anyone!
+                    {t('message:friends.any_friend')}
                   </TypographyCenter>
                 ) : (
                   <TypographyCenter variant="caption">
-                    Ohhh! Make friends to expand your friend list 😘
+                    {t('message:friends.make_friend')}
                   </TypographyCenter>
                 )
               }
@@ -170,7 +166,7 @@ export default function FriendsListTab() {
                             onClick={() => setOpenModalConfirm(true)}
                             sx={{ fontSize: 12, paddingX: 1.2 }}
                           >
-                            Unfriend
+                            {t('friends:unfriend')}
                           </LoadingButton>
                         }
                         disablePadding
@@ -179,9 +175,11 @@ export default function FriendsListTab() {
                         <ConfirmDialog
                           open={openModalConfirm}
                           handleClose={() => setOpenModalConfirm(false)}
-                          title="Confirm unfriend 🤔"
+                          title={t('user:confirm_unfriend')}
                           handleConfirm={() => handleDeleteFriend(friend._id)}
-                          description="Are you sure you want to end this friendship and all the shared memories 😭?"
+                          description={t('user:confirm_unfriend_description')}
+                          titleCancel={t('user:cancel')}
+                          titleConfirm={t('user:confirm')}
                         />
                         <ListItemButtonContainer
                           dense
@@ -197,13 +195,21 @@ export default function FriendsListTab() {
                               <Typography variant="body1" fontWeight={700}>
                                 {friend.nickname}
                               </Typography>
-                              <Typography variant="caption" fontSize={10}>
-                                Joined {moment(friend.createdAt).fromNow()}
+                              <Typography
+                                variant="caption"
+                                fontSize={10}
+                                display={{
+                                  xs: 'none',
+                                  sm: 'block',
+                                }}
+                              >
+                                {t('user:joined')}{' '}
+                                {moment(friend.createdAt).fromNow()}
                               </Typography>
                             </BoxInfo>
                             <Typography variant="body1">
-                              {friend.about.length > 30
-                                ? friend.about.slice(0, 30) + '...'
+                              {friend.about.length > 15
+                                ? friend.about.slice(0, 15) + '...'
                                 : friend.about}
                             </Typography>
                           </Box>

@@ -11,6 +11,7 @@ import VALIDATE_EN from '../locales/en/validate.json';
 import FIELD_EN from '../locales/en/field.json';
 import AUTH_EN from '../locales/en/auth.json';
 import SETTINGS_EN from '../locales/en/settings.json';
+import FRIENDS_EN from '../locales/en/friends.json';
 import ADMIN_EN from '../locales/en/admin.json';
 // Import translations for Vietnamese
 import HOME_VI from '../locales/vi/home.json';
@@ -23,6 +24,7 @@ import VALIDATE_VI from '../locales/vi/validate.json';
 import FIELD_VI from '../locales/vi/field.json';
 import AUTH_VI from '../locales/vi/auth.json';
 import SETTINGS_VI from '../locales/vi/settings.json';
+import FRIENDS_VI from '../locales/vi/friends.json';
 import ADMIN_VI from '../locales/vi/admin.json';
 
 const resources = {
@@ -37,6 +39,7 @@ const resources = {
     field: FIELD_EN,
     auth: AUTH_EN,
     settings: SETTINGS_EN,
+    friends: FRIENDS_EN,
     admin: ADMIN_EN,
   },
   vi: {
@@ -50,6 +53,7 @@ const resources = {
     field: FIELD_VI,
     auth: AUTH_VI,
     settings: SETTINGS_VI,
+    friends: FRIENDS_VI,
     admin: ADMIN_VI,
   },
 };
@@ -69,6 +73,7 @@ i18n.use(initReactI18next).init({
     'field',
     'auth',
     'settings',
+    'friends',
     'admin',
   ],
   fallbackLng: 'en',

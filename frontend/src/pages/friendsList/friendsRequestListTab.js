@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import moment from 'moment';
 
 import Box from '@mui/material/Box';
@@ -36,11 +37,12 @@ export default function FriendsRequestListTab() {
   const page = useRef(1);
   const navigate = useNavigate();
   const toastTheme = useToastTheme();
+  const { t } = useTranslation(['friends', 'message', 'user']);
   const { user, accessToken, axiosJWT } = useUserAxios();
 
   useEffect(() => {
-    document.title = 'Friends Request List';
-  }, []);
+    document.title = t('friends:friends_request_list');
+  }, [t]);
 
   const url = `${BaseApi}/friend/request-friend`;
 
@@ -58,10 +60,7 @@ export default function FriendsRequestListTab() {
         setIsLoadingList,
       );
     } else {
-      toast.warning(
-        'You need to be logged in to access this page!',
-        toastTheme,
-      );
+      toast.warning(t('message:need_login'), toastTheme);
       navigate('/');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -74,10 +73,7 @@ export default function FriendsRequestListTab() {
         [friendId]: false,
       });
       if (!user) {
-        return toast.warning(
-          'You need to be signed in to perform this action!',
-          toastTheme,
-        );
+        return toast.warning(t('message:need_login'), toastTheme);
       }
       const response = await axiosJWT.post(
         `${BaseApi}/friend/accept-request`,
@@ -110,10 +106,7 @@ export default function FriendsRequestListTab() {
         [friendId]: false,
       });
       if (!user) {
-        return toast.warning(
-          'You need to be signed in to perform this action!',
-          toastTheme,
-        );
+        return toast.warning(t('message:need_login'), toastTheme);
       }
       const response = await axiosJWT.post(
         `${BaseApi}/friend/delete-friend?request_user=${user?._id}`,
@@ -176,11 +169,11 @@ export default function FriendsRequestListTab() {
             endMessage={
               friendsRequestList?.length === 0 ? (
                 <TypographyCenter variant="caption">
-                  Opp! It's sad that you haven't made anyone!
+                  {t('message:friends.no_request')}
                 </TypographyCenter>
               ) : (
                 <TypographyCenter variant="caption">
-                  Ohhh! You've seen all the friend requests list!
+                  {t('message:seen_all')}
                 </TypographyCenter>
               )
             }
@@ -203,16 +196,20 @@ export default function FriendsRequestListTab() {
                               onClick={() => setOpenModalConfirm(true)}
                               sx={{ fontSize: 12, paddingX: 1.2 }}
                             >
-                              Unfriend
+                              {t('friends:unfriend')}
                             </LoadingButton>
                             <ConfirmDialog
                               open={openModalConfirm}
                               handleClose={() => setOpenModalConfirm(false)}
-                              title="Confirm unfriend 🤔"
+                              title={t('user:confirm_unfriend')}
                               handleConfirm={() =>
                                 handleDeleteFriend(friend._id)
                               }
-                              description="Are you sure you want to end this friendship and all the shared memories 😭?"
+                              description={t(
+                                'user:confirm_unfriend_description',
+                              )}
+                              titleCancel={t('user:cancel')}
+                              titleConfirm={t('user:confirm')}
                             />
                           </>
                         ) : (
@@ -226,7 +223,7 @@ export default function FriendsRequestListTab() {
                             }
                             sx={{ fontSize: 12, paddingX: 1.2 }}
                           >
-                            Accept
+                            {t('user:accept')}
                           </LoadingButton>
                         )
                       }
@@ -247,8 +244,16 @@ export default function FriendsRequestListTab() {
                             <Typography variant="body1" fontWeight={700}>
                               {friend.nickname}
                             </Typography>
-                            <Typography variant="caption" fontSize={10}>
-                              Joined {moment(friend.createdAt).fromNow()}
+                            <Typography
+                              variant="caption"
+                              fontSize={10}
+                              display={{
+                                xs: 'none',
+                                sm: 'block',
+                              }}
+                            >
+                              {t('user:joined')}{' '}
+                              {moment(friend.createdAt).fromNow()}
                             </Typography>
                           </BoxInfo>
                           <Typography variant="body1">

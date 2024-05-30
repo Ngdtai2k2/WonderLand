@@ -28,5 +28,10 @@
   },
   "admin": {
     "note_after_update": "Lưu ý*: Sau khi thêm dữ liệu mới, hãy làm mới lại trang (f5) để cập nhật dữ liệu."
+  },
+  "friends": {
+    "any_friend": "Thật buồn vì bạn chưa kết bạn với bất kỳ ai.",
+    "make_friend": "Kết bạn để mở rộng danh sách bạn bè của bạn.",
+    "no_request": "Không có yêu cầu kết bạn nào."
   }
 }
