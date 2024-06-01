@@ -39,6 +39,12 @@ import { BaseApi, useToastTheme } from '../../constants/constant';
 import useUserAxios from '../../hooks/useUserAxios';
 import { ButtonTab, TypographyButtonTab } from '../styles';
 import { ButtonStyled } from './styles';
+import {
+  acceptRequestAddFriend,
+  cancelRequestAddFriend,
+  deleteFriend,
+  sendRequestAddFriend,
+} from '../../utils/friendServices';
 
 export default function Profile() {
   const { id } = useParams();
@@ -96,104 +102,64 @@ export default function Profile() {
   }
 
   const handleSendRequestAddFriend = async () => {
-    try {
-      if (!user) {
-        return toast.warning(t('message:need_login'), toastTheme);
-      }
-      const response = await axiosJWT.post(
-        `${BaseApi}/friend/send-request`,
-        {
-          userId: user?._id,
-          friendId: data?._id,
-        },
-        {
-          headers: {
-            token: `Bearer ${accessToken}`,
-            'Accept-Language': i18n.language,
-          },
-        },
-      );
+    const result = await sendRequestAddFriend(
+      t,
+      i18n.language,
+      user,
+      data?._id,
+      axiosJWT,
+      accessToken,
+      toastTheme,
+    );
+    if (result.success) {
       setHasSendRequestAddFriend(true);
-      toast.success(response.data.message, toastTheme);
-    } catch (error) {
-      toast.error(error.response.data.message, toastTheme);
     }
   };
 
   const handleCancelRequestAddFriend = async () => {
-    try {
-      if (!user) {
-        return toast.warning(t('message:need_login'), toastTheme);
-      }
-      const response = await axiosJWT.post(
-        `${BaseApi}/friend/cancel-request`,
-        {
-          userId: user?._id,
-          friendId: data?._id,
-        },
-        {
-          headers: {
-            token: `Bearer ${accessToken}`,
-            'Accept-Language': i18n.language,
-          },
-        },
-      );
+    const result = await cancelRequestAddFriend(
+      t,
+      i18n.language,
+      user,
+      data?._id,
+      axiosJWT,
+      accessToken,
+      toastTheme,
+    );
+    if (result.success) {
       setHasSendRequestAddFriend(false);
-      toast.success(response.data.message, toastTheme);
-    } catch (error) {
-      toast.error(error.response.data.message, toastTheme);
     }
   };
 
   const handleAcceptRequestAddFriend = async () => {
-    try {
-      if (!user) {
-        return toast.warning(t('message:need_login'), toastTheme);
-      }
-      const response = await axiosJWT.post(
-        `${BaseApi}/friend/accept-request`,
-        {
-          userId: data?._id,
-          friendId: user?._id,
-        },
-        {
-          headers: {
-            token: `Bearer ${accessToken}`,
-            'Accept-Language': i18n.language,
-          },
-        },
-      );
+    const result = await acceptRequestAddFriend(
+      t,
+      i18n.language,
+      user,
+      data?._id,
+      axiosJWT,
+      accessToken,
+      toastTheme,
+    );
+    if (result.success) {
       setIsFriend(true);
-      toast.success(response.data.message, toastTheme);
-    } catch (error) {
-      toast.error(error.response.data.message, toastTheme);
     }
   };
 
   const handleDeleteFriend = async () => {
-    try {
-      if (!user) {
-        return toast.warning(t('message:need_login'), toastTheme);
-      }
-      const response = await axiosJWT.post(
-        `${BaseApi}/friend/delete-friend?request_user=${user?._id}`,
-        {
-          userId: user?._id,
-          friendId: data?._id,
-        },
-        {
-          headers: {
-            token: `Bearer ${accessToken}`,
-            'Accept-Language': i18n.language,
-          },
-        },
-      );
+    const result = await deleteFriend(
+      t,
+      i18n.language,
+      user,
+      data?._id,
+      axiosJWT,
+      accessToken,
+      toastTheme,
+    );
+    if (result.success) {
       setIsFriend(false);
       setHasSendRequestAddFriend(false);
       setFriendRequest(null);
-      toast.success(response.data.message, toastTheme);
-    } catch (error) {
-      toast.error(error.response.data.message, toastTheme);
     }
   };
 

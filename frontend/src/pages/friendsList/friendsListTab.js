@@ -15,7 +15,11 @@ import PersonRemoveRoundedIcon from '@mui/icons-material/PersonRemoveRounded';
 import LoadingCircularIndeterminate from '../../components/Loading';
 import ConfirmDialog from '../../components/Dialog';
 
-import { getFriendsList, refreshFriendList } from '../../utils/friendServices';
+import {
+  deleteFriend,
+  getFriendsList,
+  refreshFriendList,
+} from '../../utils/friendServices';
 import { useToastTheme, BaseApi } from '../../constants/constant';
 import useUserAxios from '../../hooks/useUserAxios';
 import {
@@ -68,32 +72,22 @@ export default function FriendsListTab() {
   }, []);
 
   const handleDeleteFriend = async (friendId) => {
-    try {
-      setIsLoadingDelete((prevState) => ({
-        ...prevState,
-        [friendId]: true,
-      }));
-      if (!user) {
-        return toast.warning(t('message:need_login'), toastTheme);
-      }
-      const response = await axiosJWT.post(
-        `${BaseApi}/friend/delete-friend?request_user=${user?._id}`,
-        {
-          userId: user?._id,
-          friendId: friendId,
-        },
-        {
-          headers: {
-            token: `Bearer ${accessToken}`,
-            'Accept-Language': i18n.language,
-          },
-        },
-      );
+    setIsLoadingDelete((prevState) => ({
+      ...prevState,
+      [friendId]: true,
+    }));
+    const result = await deleteFriend(
+      t,
+      i18n.language,
+      user,
+      friendId,
+      axiosJWT,
+      accessToken,
+      toastTheme,
+    );
+
+    if (result.success) {
       setFriendDeleted([...friendDeleted, friendId]);
-      toast.success(response.data.message, toastTheme);
-    } catch (error) {
-      toast.error(error.response.data.message, toastTheme);
-    } finally {
       setIsLoadingDelete((prevState) => ({
         ...prevState,
         [friendId]: false,

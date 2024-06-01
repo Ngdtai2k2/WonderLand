@@ -1,3 +1,7 @@
+import { toast } from 'react-toastify';
+
+import { BaseApi } from '../constants/constant';
+
 const getFriendsList = async (
   lng,
   apiLink,
@@ -59,4 +63,148 @@ const refreshFriendList = (
   );
 };
 
-export { getFriendsList, refreshFriendList };
+const deleteFriend = async (
+  t,
+  lng,
+  user,
+  currentUser,
+  axiosJWT,
+  accessToken,
+  toastTheme,
+) => {
+  try {
+    if (!user) {
+      return toast.warning(t('message:need_login'), toastTheme);
+    }
+    const response = await axiosJWT.post(
+      `${BaseApi}/friend/delete-friend?request_user=${user?._id}`,
+      {
+        userId: user?._id,
+        // User ID on Params
+        friendId: currentUser,
+      },
+      {
+        headers: {
+          token: `Bearer ${accessToken}`,
+          'Accept-Language': lng,
+        },
+      },
+    );
+    toast.success(response.data.message, toastTheme);
+    return { success: true };
+  } catch (error) {
+    toast.error(error.response.data.message, toastTheme);
+    return { success: false };
+  }
+};
+
+const acceptRequestAddFriend = async (
+  t,
+  lng,
+  user,
+  currentUser,
+  axiosJWT,
+  accessToken,
+  toastTheme,
+) => {
+  try {
+    if (!user) {
+      return toast.warning(t('message:need_login'), toastTheme);
+    }
+    const response = await axiosJWT.post(
+      `${BaseApi}/friend/accept-request`,
+      {
+        userId: currentUser,
+        friendId: user?._id,
+      },
+      {
+        headers: {
+          token: `Bearer ${accessToken}`,
+          'Accept-Language': lng,
+        },
+      },
+    );
+    toast.success(response.data.message, toastTheme);
+    return { success: true };
+  } catch (error) {
+    toast.error(error.response.data.message, toastTheme);
+    return { success: false };
+  }
+};
+
+const cancelRequestAddFriend = async (
+  t,
+  lng,
+  user,
+  currentUser,
+  axiosJWT,
+  accessToken,
+  toastTheme,
+) => {
+  try {
+    if (!user) {
+      return toast.warning(t('message:need_login'), toastTheme);
+    }
+    const response = await axiosJWT.post(
+      `${BaseApi}/friend/cancel-request`,
+      {
+        userId: user?._id,
+        friendId: currentUser,
+      },
+      {
+        headers: {
+          token: `Bearer ${accessToken}`,
+          'Accept-Language': lng,
+        },
+      },
+    );
+    toast.success(response.data.message, toastTheme);
+    return { success: true };
+  } catch (error) {
+    toast.error(error.response.data.message, toastTheme);
+    return { success: false };
+  }
+};
+
+const sendRequestAddFriend = async (
+  t,
+  lng,
+  user,
+  currentUser,
+  axiosJWT,
+  accessToken,
+  toastTheme,
+) => {
+  try {
+    if (!user) {
+      return toast.warning(t('message:need_login'), toastTheme);
+    }
+    const response = await axiosJWT.post(
+      `${BaseApi}/friend/send-request`,
+      {
+        userId: user?._id,
+        friendId: currentUser,
+      },
+      {
+        headers: {
+          token: `Bearer ${accessToken}`,
+          'Accept-Language': lng,
+        },
+      },
+    );
+    toast.success(response.data.message, toastTheme);
+    return { success: true };
+  } catch (error) {
+    toast.error(error.response.data.message, toastTheme);
+    return { success: false };
+  }
+};
+
+export {
+  getFriendsList,
+  refreshFriendList,
+  deleteFriend,
+  acceptRequestAddFriend,
+  cancelRequestAddFriend,
+  sendRequestAddFriend,
+};

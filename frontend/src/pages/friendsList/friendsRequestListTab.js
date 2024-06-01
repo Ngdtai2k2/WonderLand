@@ -14,7 +14,12 @@ import LoadingCircularIndeterminate from '../../components/Loading';
 
 import { BaseApi, useToastTheme } from '../../constants/constant';
 import useUserAxios from '../../hooks/useUserAxios';
-import { getFriendsList, refreshFriendList } from '../../utils/friendServices';
+import {
+  acceptRequestAddFriend,
+  deleteFriend,
+  getFriendsList,
+  refreshFriendList,
+} from '../../utils/friendServices';
 import {
   AvatarFriendList,
   BoxInfo,
@@ -68,32 +73,23 @@ export default function FriendsRequestListTab() {
   }, []);
 
   const handleAcceptFriendRequest = async (friendId) => {
-    try {
-      setIsLoading({
-        ...isLoading,
-        [friendId]: false,
-      });
-      if (!user) {
-        return toast.warning(t('message:need_login'), toastTheme);
-      }
-      const response = await axiosJWT.post(
-        `${BaseApi}/friend/accept-request`,
-        {
-          userId: user?._id,
-          friendId: friendId,
-        },
-        {
-          headers: {
-            token: `Bearer ${accessToken}`,
-            'Accept-Language': i18n.language,
-          },
-        },
-      );
+    setIsLoading({
+      ...isLoading,
+      [friendId]: false,
+    });
+
+    const result = await acceptRequestAddFriend(
+      t,
+      i18n.language,
+      user,
+      friendId,
+      axiosJWT,
+      accessToken,
+      toastTheme,
+    );
+
+    if (result.success) {
       setFriendAccepted([...friendAccepted, friendId]);
-      toast.success(response.data.message, toastTheme);
-    } catch (error) {
-      toast.error(error.response.data.message, toastTheme);
-    } finally {
       setIsLoading({
         ...isLoading,
         [friendId]: true,
@@ -102,32 +98,23 @@ export default function FriendsRequestListTab() {
   };
 
   const handleDeleteFriend = async (friendId) => {
-    try {
-      setIsLoading({
-        ...isLoading,
-        [friendId]: false,
-      });
-      if (!user) {
-        return toast.warning(t('message:need_login'), toastTheme);
-      }
-      const response = await axiosJWT.post(
-        `${BaseApi}/friend/delete-friend?request_user=${user?._id}`,
-        {
-          userId: user?._id,
-          friendId: friendId,
-        },
-        {
-          headers: {
-            token: `Bearer ${accessToken}`,
-            'Accept-Language': i18n.language,
-          },
-        },
-      );
+    setIsLoading({
+      ...isLoading,
+      [friendId]: false,
+    });
+
+    const result = await deleteFriend(
+      t,
+      i18n.language,
+      user,
+      friendId,
+      axiosJWT,
+      accessToken,
+      toastTheme,
+    );
+
+    if (result.success) {
       setFriendDeleted([...friendDeleted, friendId]);
-      toast.success(response.data.message, toastTheme);
-    } catch (error) {
-      toast.error(error.response.data.message, toastTheme);
-    } finally {
       setIsLoading({
         ...isLoading,
         [friendId]: true,
