@@ -1,68 +1,131 @@
 import axios from 'axios';
 import { BaseApi } from '../constants/constant';
 
-const search = async (
+const searchUsers = async (
   lng,
   userId,
   query,
   data,
   setData,
   setIsLoading,
-  setHasLoadMoreUser,
-  setHasLoadMorePost,
+  type,
+  setHasMore,
   page = 1,
   limit = 5,
 ) => {
   try {
     setIsLoading(true);
-    let requestUrl = `${BaseApi}/search?query=${query}&_limit=${limit}&_page=${page}`;
+    let requestUrl = `${BaseApi}/search/users?query=${query}&_limit=${limit}&_page=${page}`;
 
     if (userId) {
       requestUrl += `&request_user=${userId}`;
     }
-    const response = await axios.post(requestUrl, {
-      headers: {
-        'Accept-Language': lng,
-      },
-    });
 
+    const response = await axios.post(
+      requestUrl,
+      {
+        only_friends: type === true,
+      },
+      {
+        headers: {
+          'Accept-Language': lng,
+        },
+      },
+    );
     const newData = response.data;
     if (page === 1) {
       setData(newData);
+      setHasMore(
+        newData.users.data.length !== 0 && newData.users.data.length === limit,
+      );
     } else {
       let updatedUsers = [];
-      let updatedPosts = [];
 
       if (data.users && data.users.data) {
         if (data.users.data.length === 0) {
           updatedUsers = [...data.users.data];
-          setHasLoadMoreUser(false);
+          setHasMore(false);
         } else {
           updatedUsers = [...data.users.data, ...newData.users.data];
-          setHasLoadMoreUser(newData.users.data.length === limit);
-        }
-      }
-      if (data.posts && data.posts.data) {
-        if (data.posts.data.length === 0) {
-          updatedPosts = [...data.posts.data];
-          setHasLoadMorePost(false);
-        } else {
-          updatedPosts = [...data.posts.data, ...newData.posts.data];
-          setHasLoadMorePost(newData.posts.data.length === limit);
+          setHasMore(
+            newData.users.data.length === limit && newData.users.hasNextPage,
+          );
         }
       }
 
-      setData({
-        users: { ...data.users, data: updatedUsers },
-        posts: { ...data.posts, data: updatedPosts },
-      });
+      setData((prevData) => ({
+        ...prevData,
+        users: {
+          ...prevData.users,
+          data: updatedUsers,
+        },
+      }));
     }
   } catch (error) {
-    setData({ users: [], posts: [] });
-    console.error('Error searching:', error);
+    setData({ users: [] });
   } finally {
     setIsLoading(false);
   }
 };
 
-export default search;
+const searchPosts = async (
+  lng,
+  userId,
+  query,
+  data,
+  setData,
+  setIsLoading,
+  setHasMore,
+  page = 1,
+  limit = 5,
+) => {
+  try {
+    setIsLoading(true);
+    let requestUrl = `${BaseApi}/search/posts?query=${query}&_limit=${limit}&_page=${page}`;
+    if (userId) {
+      requestUrl += `&request_user=${userId}`;
+    }
+    const response = await axios.post(
+      requestUrl,
+      {},
+      {
+        headers: {
+          'Accept-Language': lng,
+        },
+      },
+    );
+
+    const newData = response.data;
+
+    if (page === 1) {
+      setData(newData);
+    } else {
+      let updatedPosts = [];
+
+      if (data.posts && data.posts.data) {
+        if (data.posts.data.length === 0) {
+          updatedPosts = [...data.posts.data];
+          setHasMore(false);
+        } else {
+          updatedPosts = [...data.posts.data, ...newData.posts.data];
+          setHasMore(
+            newData.posts.data.length === limit && newData.posts.hasNextPage,
+          );
+        }
+      }
+      setData((prevData) => ({
+        ...prevData,
+        posts: {
+          ...prevData.users,
+          data: updatedPosts,
+        },
+      }));
+    }
+  } catch (error) {
+    setData({ posts: [] });
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+export { searchUsers, searchPosts };

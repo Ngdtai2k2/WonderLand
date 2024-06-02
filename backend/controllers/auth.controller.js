@@ -14,7 +14,6 @@ const friendsModel = require("../models/friends.model");
 const userSocketModel = require("../models/userSocket.model");
 
 const createMailOptions = require("../configs/mail.config");
-const { request } = require("http");
 
 dotenv.config();
 

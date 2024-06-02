@@ -13,6 +13,7 @@ import AUTH_EN from '../locales/en/auth.json';
 import SETTINGS_EN from '../locales/en/settings.json';
 import FRIENDS_EN from '../locales/en/friends.json';
 import ADMIN_EN from '../locales/en/admin.json';
+import SEARCH_EN from '../locales/en/search.json';
 // Import translations for Vietnamese
 import HOME_VI from '../locales/vi/home.json';
 import SIDEBAR_VI from '../locales/vi/sidebar.json';
@@ -26,6 +27,7 @@ import AUTH_VI from '../locales/vi/auth.json';
 import SETTINGS_VI from '../locales/vi/settings.json';
 import FRIENDS_VI from '../locales/vi/friends.json';
 import ADMIN_VI from '../locales/vi/admin.json';
+import SEARCH_VI from '../locales/vi/search.json';
 
 const resources = {
   en: {
@@ -41,6 +43,7 @@ const resources = {
     settings: SETTINGS_EN,
     friends: FRIENDS_EN,
     admin: ADMIN_EN,
+    search: SEARCH_EN,
   },
   vi: {
     home: HOME_VI,
@@ -55,6 +58,7 @@ const resources = {
     settings: SETTINGS_VI,
     friends: FRIENDS_VI,
     admin: ADMIN_VI,
+    search: SEARCH_VI,
   },
 };
 
@@ -75,6 +79,7 @@ i18n.use(initReactI18next).init({
     'settings',
     'friends',
     'admin',
+    'search',
   ],
   fallbackLng: 'en',
   interpolation: {

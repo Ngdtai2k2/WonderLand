@@ -4,16 +4,19 @@ import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-import TextField from '@mui/material/TextField';
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
-import MenuItem from '@mui/material/MenuItem';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
+import Avatar from '@mui/material/Avatar';
+import Link from '@mui/material/Link';
+import Box from '@mui/material/Box';
 
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 
-import search from '../../utils/searchServices';
 import LoadingCircularIndeterminate from '../Loading';
+
+import { searchUsers } from '../../utils/searchServices';
 import useUserAxios from '../../hooks/useUserAxios';
 
 export default function SearchForm({ onClose }) {
@@ -24,6 +27,14 @@ export default function SearchForm({ onClose }) {
   const { t, i18n } = useTranslation(['navigation', 'message']);
   const { user } = useUserAxios(i18n.language);
 
+  const handleViewSearchPage = (query) => {
+    if (query !== '') {
+      navigate(`/search?query=${query}`);
+      onClose();
+    }
+    return;
+  };
+
   const formik = useFormik({
     initialValues: {
       search: '',
@@ -31,21 +42,19 @@ export default function SearchForm({ onClose }) {
     validationSchema: Yup.object({
       search: Yup.string().max(100),
     }),
-    onSubmit: (values) => {
-      navigate(`/search?query=${values.search}`);
-      onClose();
-    },
+    onSubmit: (values) => handleViewSearchPage(values.search),
   });
 
   useEffect(() => {
     if (formik.values.search !== '') {
-      search(
+      searchUsers(
         i18n.language,
         user?._id,
         formik.values.search,
         [],
         setDataSearch,
         setIsLoading,
+        true,
       );
     } else {
       setDataSearch([]);
@@ -71,10 +80,10 @@ export default function SearchForm({ onClose }) {
         display="flex"
         alignItems="flex-end"
       >
-        <SearchRoundedIcon sx={{ mr: 1, my: 0.5 }} />
         <TextField
           id="search"
           label={t('navigation:search')}
+          placeholder=""
           name="search"
           size="small"
           variant="standard"
@@ -87,25 +96,20 @@ export default function SearchForm({ onClose }) {
           error={formik.touched.search && Boolean(formik.errors.search)}
           helperText={formik.touched.search && formik.errors.search}
         />
+        <IconButton
+          sx={{ marginX: 1 }}
+          onClick={() => handleViewSearchPage(formik.values.search)}
+        >
+          <SearchRoundedIcon />
+        </IconButton>
       </Box>
-      <Box marginY={1}>
+      <Box marginTop={1}>
         {isLoading ? (
           <LoadingCircularIndeterminate />
         ) : (
           <>
             {dataSearch.users?.data && dataSearch.users?.data.length > 0 && (
               <>
-                <Typography
-                  variant="body2"
-                  marginLeft={2}
-                  sx={{ cursor: 'pointer' }}
-                  onClick={() => {
-                    navigate(`/search?query=${formik.values.search}`);
-                    onClose();
-                  }}
-                >
-                  {t('navigation:users')}:
-                </Typography>
                 {dataSearch.users?.data.map((user) => (
                   <MenuItem
                     key={user._id}
@@ -115,25 +119,29 @@ export default function SearchForm({ onClose }) {
                   >
                     <Box gap={1} display="flex">
                       <Avatar src={user?.media?.url} />
-                      <Typography variant="body1">{user.fullname}</Typography>
-                      <Typography variant="caption">{user.nickname}</Typography>
+                      <Box display="flex" alignItems="center">
+                        <Typography variant="body1">{user.fullname}</Typography>
+                        <Typography
+                          variant="caption"
+                          display="flex"
+                          alignItems="flex-start"
+                          marginLeft={0.5}
+                          marginTop={-1}
+                        >
+                          {user.nickname}
+                        </Typography>
+                      </Box>
                     </Box>
                   </MenuItem>
                 ))}
+                <Box display="flex" justifyContent="center">
+                  <Link
+                    onClick={() => handleViewSearchPage(formik.values.search)}
+                  >
+                    {t('navigation:view_more')}
+                  </Link>
+                </Box>
               </>
-            )}
-            {dataSearch.posts?.data && dataSearch.posts?.data.length > 0 && (
-              <Typography
-                variant="body2"
-                marginLeft={2}
-                sx={{ cursor: 'pointer' }}
-                onClick={() => {
-                  navigate(`/search?query=${formik.values.search}`);
-                  onClose();
-                }}
-              >
-                {t('navigation:posts')} ({t('message:click_to_view')})
-              </Typography>
             )}
           </>
         )}

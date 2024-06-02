@@ -234,8 +234,9 @@ const postController = {
               reactionService.hasReactionPost(user._id, post._id),
               savePostService.hasSavePost(user._id, post._id),
             ]);
-            const userHasViewedPost = post?.viewers?.includes(request_user);
-            if (userHasViewedPost) return null;
+            // disable query
+            // const userHasViewedPost = post?.viewers?.includes(request_user);
+            // if (userHasViewedPost) return null;
           }
 
           const [totalReaction, totalComment] = await Promise.all([

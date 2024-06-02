@@ -1,59 +1,98 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable no-unused-vars */
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import Link from '@mui/material/Link';
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
-import MenuItem from '@mui/material/MenuItem';
+import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+
+import BallotRoundedIcon from '@mui/icons-material/BallotRounded';
+import ArtTrackRoundedIcon from '@mui/icons-material/ArtTrackRounded';
+import PeopleAltRoundedIcon from '@mui/icons-material/PeopleAltRounded';
+
+import { grey } from '@mui/material/colors';
 
 import PostCard from '../../components/PostCard';
 import CustomBox from '../../components/CustomBox';
 import LoadingCircularIndeterminate from '../../components/Loading';
 
-import search from '../../utils/searchServices';
+import { searchPosts, searchUsers } from '../../utils/searchServices';
 import useUserAxios from '../../hooks/useUserAxios';
+import {
+  BoxButton,
+  ButtonFilter,
+  ListButton,
+  ListContainerResult,
+  ListItemIconStyle,
+  ListStyle,
+  PaperStyle,
+} from './styles';
+import ListItemUser from '../../components/ListItemUser';
+import PeopleTab from './peopleTab';
+import PostTab from './postTab';
 
 export default function SearchPage() {
-  const [dataSearch, setDataSearch] = useState([]);
+  const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [hasLoadMoreUser, setHasLoadMoreUser] = useState(true);
-  const [hasLoadMorePost, setHasLoadMorePost] = useState(true);
+  const [hasMore, setHasMore] = useState(false);
+  const [posts, setPosts] = useState([]);
+  const [isLoadingPosts, setIsLoadingPosts] = useState(false);
+  const [hasMorePosts, setHasMorePosts] = useState(false);
+  const [tabIndex, setTabIndex] = useState(0);
 
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const query = urlParams.get('query');
+  const tab = urlParams.get('tabIndex');
 
-  const { i18n } = useTranslation();
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation(['search']);
   const { user } = useUserAxios(i18n.language);
 
   useEffect(() => {
-    if (!isLoading) {
-      document.title = `Search for ${query}`;
-    }
-  }, [query, isLoading]);
+    document.title =
+      isLoading && isLoadingPosts
+        ? 'Loading...'
+        : `${t('search:title')} - ${query}`;
+  }, [query, isLoading, isLoadingPosts, t]);
 
   useEffect(() => {
-    search(
+    setTabIndex(Number(tab));
+  }, [tab]);
+
+  useEffect(() => {
+    searchUsers(
       i18n.language,
       user?._id,
       query,
-      dataSearch,
-      setDataSearch,
+      users,
+      setUsers,
       setIsLoading,
-      setHasLoadMoreUser,
-      setHasLoadMorePost,
-      currentPage,
+      false,
+      setHasMore,
+    );
+
+    searchPosts(
+      i18n.language,
+      user?._id,
+      query,
+      posts,
+      setPosts,
+      setIsLoadingPosts,
+      setHasMorePosts,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query, currentPage]);
+  }, [query]);
 
-  const loadMore = () => {
-    const nextPage = currentPage + 1;
-    setCurrentPage(nextPage);
+  const handleChangeTab = (index) => {
+    setTabIndex(index);
+    navigate(`/search?query=${query}&tabIndex=${index}`, {
+      replace: true,
+    });
   };
 
   return isLoading ? (
@@ -61,69 +100,164 @@ export default function SearchPage() {
       <LoadingCircularIndeterminate />
     </>
   ) : (
-    <CustomBox>
-      {dataSearch.users?.data && dataSearch.users?.data.length > 0 && (
-        <>
-          <Typography variant="h6" marginLeft={2} sx={{ cursor: 'pointer' }}>
-            Users:
-          </Typography>
-          {dataSearch.users?.data.map((user) => (
-            <MenuItem
-              key={user._id}
-              onClick={() => {
-                navigate(`/u/${user._id}`);
-              }}
-            >
-              <Box gap={1} display="flex">
-                <Avatar src={user?.media?.url} />
-                <Typography variant="body1">{user.fullname}</Typography>
-                <Typography variant="caption">{user.nickname}</Typography>
-              </Box>
-            </MenuItem>
-          ))}
-        </>
-      )}
-      {dataSearch.posts?.data && dataSearch.posts?.data.length > 0 && (
-        <>
-          <Typography variant="h6" marginLeft={2} sx={{ cursor: 'pointer' }}>
-            Posts:
-          </Typography>
-          <Box
-            display="flex"
-            justifyContent="center"
-            flexDirection="column"
-            alignItems="center"
-            gap={2}
-            margin={{
-              xs: 1.5,
-              md: 3,
+    <CustomBox sx={{ margin: '75px 10px 0px' }}>
+      <Grid container spacing={1}>
+        <Grid item xs={12} sm={4}>
+          <PaperStyle elevation={1}>
+            <Box>
+              <Typography variant="h5" fontWeight={700}>
+                {t('search:title')}
+              </Typography>
+              <Typography variant="body1" marginTop={1} color={grey[400]}>
+                {query}
+              </Typography>
+            </Box>
+            <Divider sx={{ marginTop: 2 }} />
+            <BoxButton>
+              <ButtonFilter
+                disabled={tabIndex === 0}
+                onClick={() => handleChangeTab(0)}
+              >
+                <BallotRoundedIcon />
+                {t('search:all')}
+              </ButtonFilter>
+              <ButtonFilter
+                disabled={tabIndex === 1}
+                onClick={() => handleChangeTab(1)}
+              >
+                <PeopleAltRoundedIcon />
+                {t('search:people')}
+              </ButtonFilter>
+              <ButtonFilter
+                disabled={tabIndex === 2}
+                onClick={() => handleChangeTab(2)}
+              >
+                <ArtTrackRoundedIcon />
+                {t('search:post')}
+              </ButtonFilter>
+            </BoxButton>
+            <ListStyle>
+              <ListButton
+                disabled={tabIndex === 0}
+                onClick={() => handleChangeTab(0)}
+              >
+                <ListItemIconStyle>
+                  <BallotRoundedIcon />
+                </ListItemIconStyle>
+                <ListItemText primary={t('search:all')} />
+              </ListButton>
+              <ListButton
+                disabled={tabIndex === 1}
+                onClick={() => handleChangeTab(1)}
+              >
+                <ListItemIconStyle>
+                  <PeopleAltRoundedIcon />
+                </ListItemIconStyle>
+                <ListItemText primary={t('search:people')} />
+              </ListButton>
+              <ListButton
+                disabled={tabIndex === 2}
+                onClick={() => handleChangeTab(2)}
+              >
+                <ListItemIconStyle>
+                  <ArtTrackRoundedIcon />
+                </ListItemIconStyle>
+                <ListItemText primary={t('search:post')} />
+              </ListButton>
+            </ListStyle>
+          </PaperStyle>
+        </Grid>
+        <Grid item xs={12} sm={8}>
+          <PaperStyle
+            elevation={1}
+            sx={{
+              overflowY: 'auto',
             }}
           >
-            {dataSearch.posts?.data.map((post) => (
-              <PostCard
-                key={post?._id}
-                post={post}
-                detail={false}
-                xs="100%"
-                sm="70%"
-                md="50%"
-              />
-            ))}
-          </Box>
-        </>
-      )}
-      {(hasLoadMoreUser || hasLoadMorePost) && (
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          marginTop={1}
-        >
-          <Link onClick={() => loadMore()} sx={{ cursor: 'pointer' }}>
-            Load More
-          </Link>
-        </Box>
-      )}
+            {tabIndex === 0 && (
+              <>
+                {/* people */}
+                <Typography variant="h6" fontWeight={600}>
+                  {t('search:people')}
+                </Typography>
+                <ListContainerResult>
+                  {users?.users?.data?.length > 0 &&
+                    users.users.data
+                      .slice(0, 5)
+                      .map((item) => (
+                        <ListItemUser
+                          key={item?._id}
+                          _id={item?._id}
+                          nickname={item?.nickname}
+                          avatar={item?.media?.url}
+                          isFriend={item?.isFriend}
+                          totalFriend={item?.totalFriend}
+                        />
+                      ))}
+                  {hasMore && (
+                    <Box
+                      display="flex"
+                      justifyContent="center"
+                      marginBottom={0.5}
+                    >
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        sx={{ textTransform: 'none' }}
+                      >
+                        {t('search:view_all')}
+                      </Button>
+                    </Box>
+                  )}
+                </ListContainerResult>
+                <Divider sx={{ marginY: 1 }} />
+                {/* post */}
+                <Typography variant="h6" fontWeight={600}>
+                  {t('search:post')}
+                </Typography>
+                <ListContainerResult
+                  sx={{
+                    display: 'flex',
+                    gap: 1,
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                  }}
+                >
+                  {posts?.posts?.data?.length > 0 &&
+                    posts.posts.data
+                      .slice(0, 5)
+                      .map((post) => (
+                        <PostCard
+                          key={post._id}
+                          post={post}
+                          xs="100%"
+                          sm="80%"
+                          md="70%"
+                        />
+                      ))}
+                  {hasMorePosts && (
+                    <Box
+                      display="flex"
+                      justifyContent="center"
+                      marginBottom={0.5}
+                    >
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        sx={{ textTransform: 'none' }}
+                      >
+                        {t('search:view_all')}
+                      </Button>
+                    </Box>
+                  )}
+                </ListContainerResult>
+              </>
+            )}
+            {tabIndex === 1 && <PeopleTab query={query} />}
+            {tabIndex === 2 && <PostTab query={query} />}
+          </PaperStyle>
+        </Grid>
+      </Grid>
     </CustomBox>
   );
 }
