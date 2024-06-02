@@ -9,5 +9,10 @@ router.post(
   verifyMiddleware.token,
   chatController.findChat
 );
+router.put(
+  "/delete/:chatId",
+  verifyMiddleware.token,
+  chatController.deleteChat
+);
 
 module.exports = router;

@@ -52,10 +52,11 @@ export const getMessages = async (
   chatId,
   accessToken,
   setData,
+  user,
 ) => {
   try {
     const response = await axiosJWT.post(
-      `${BaseApi}/message/${chatId}`,
+      `${BaseApi}/message/${chatId}?request_user=${user?._id}`,
       {},
       {
         headers: {
@@ -67,5 +68,30 @@ export const getMessages = async (
     setData(response.data);
   } catch (error) {
     setData([]);
+  }
+};
+
+export const deleteChat = async (
+  lng,
+  axiosJWT,
+  accessToken,
+  chatId,
+  user,
+  toastTheme,
+) => {
+  try {
+    const response = await axiosJWT.put(
+      `${BaseApi}/chat/delete/${chatId}?request_user=${user?._id}`,
+      {},
+      {
+        headers: {
+          token: `Bearer ${accessToken}`,
+          'Accept-Language': lng,
+        },
+      },
+    );
+    toast.success(response.data.message, toastTheme);
+  } catch (error) {
+    toast.error(error.response.data.message, toastTheme);
   }
 };

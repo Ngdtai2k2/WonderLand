@@ -10,14 +10,19 @@ import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemIcon from '@mui/material/ListItemIcon';
 
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
+import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 
-import { BaseApi } from '../../constants/constant';
+import { BaseApi, useToastTheme } from '../../constants/constant';
 
 import useUserAxios from '../../hooks/useUserAxios';
-import { getMessages } from '../../utils/chatServices';
+import { deleteChat, getMessages } from '../../utils/chatServices';
 import { getUserByUserId } from '../../utils/userServices';
 
 import newMessageSoundEffect from '../../assets/sounds/new-message.mp3';
@@ -27,8 +32,10 @@ export default function ChatBox({ chat, receivedMessage }) {
   const [userData, setUserData] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
+  const [anchorEl, setAnchorEl] = useState(null);
 
-  const { t, i18n } = useTranslation(['message']);
+  const { t, i18n } = useTranslation(['message', 'chat']);
+  const toastTheme = useToastTheme();
   const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);
 
   //   sound effects
@@ -58,7 +65,14 @@ export default function ChatBox({ chat, receivedMessage }) {
 
   useEffect(() => {
     if (chat !== null) {
-      getMessages(i18n.language, axiosJWT, chat?._id, accessToken, setMessages);
+      getMessages(
+        i18n.language,
+        axiosJWT,
+        chat?._id,
+        accessToken,
+        setMessages,
+        user,
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chat, user]);
@@ -125,9 +139,36 @@ export default function ChatBox({ chat, receivedMessage }) {
             {userData?.nickname}
           </Typography>
         </Box>
-        <IconButton aria-label="menu">
+        <IconButton
+          aria-label="menu"
+          onClick={(event) => setAnchorEl(event.currentTarget)}
+        >
           <MoreVertRoundedIcon />
         </IconButton>
+        <Menu
+          id="menu-settings-messages"
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={() => setAnchorEl(null)}
+        >
+          <MenuItem
+            onClick={() =>
+              deleteChat(
+                i18n.language,
+                axiosJWT,
+                accessToken,
+                chat._id,
+                user,
+                toastTheme,
+              )
+            }
+          >
+            <ListItemIcon>
+              <DeleteForeverRoundedIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>{t('chat:delete')}</ListItemText>
+          </MenuItem>
+        </Menu>
       </Box>
       <Divider sx={{ marginY: 1 }} />
       {/* display message */}

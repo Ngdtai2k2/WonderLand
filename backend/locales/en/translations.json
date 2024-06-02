@@ -54,6 +54,9 @@
         "unsaved_success": "Post unsaved!",
         "provide_id": "Please provide your user ID!"
     },
+    "chat": {
+        "deleted_success": "Chat deleted successfully!"
+    },
     "not_found": {
         "user": "User not found!",
         "email": "Email not found!",

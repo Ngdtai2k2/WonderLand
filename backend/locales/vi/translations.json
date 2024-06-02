@@ -43,6 +43,9 @@
         "not_friend_with_user": "Bạn không phải là bạn với người dùng này!",
         "deleted_success": "Chia ly thật là buồn 😭x100!"
     },
+    "chat": {
+        "deleted_success": "Cuộc trò chuyện đã bị xóa!"
+    },
     "post": {
         "provide_author": "Tác giả bài viết không được trống!",
         "create_post_success": "Đăng tải bài viết thành công!",

@@ -6,6 +6,12 @@ const chatSchema = new mongoose.Schema(
       type: Array,
       required: true,
     },
+    deletedBy: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   {
     timestamps: true,

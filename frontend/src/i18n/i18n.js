@@ -14,6 +14,7 @@ import SETTINGS_EN from '../locales/en/settings.json';
 import FRIENDS_EN from '../locales/en/friends.json';
 import ADMIN_EN from '../locales/en/admin.json';
 import SEARCH_EN from '../locales/en/search.json';
+import CHAT_EN from '../locales/en/chat.json';
 // Import translations for Vietnamese
 import HOME_VI from '../locales/vi/home.json';
 import SIDEBAR_VI from '../locales/vi/sidebar.json';
@@ -28,6 +29,7 @@ import SETTINGS_VI from '../locales/vi/settings.json';
 import FRIENDS_VI from '../locales/vi/friends.json';
 import ADMIN_VI from '../locales/vi/admin.json';
 import SEARCH_VI from '../locales/vi/search.json';
+import CHAT_VI from '../locales/vi/chat.json';
 
 const resources = {
   en: {
@@ -44,6 +46,7 @@ const resources = {
     friends: FRIENDS_EN,
     admin: ADMIN_EN,
     search: SEARCH_EN,
+    chat: CHAT_EN,
   },
   vi: {
     home: HOME_VI,
@@ -59,6 +62,7 @@ const resources = {
     friends: FRIENDS_VI,
     admin: ADMIN_VI,
     search: SEARCH_VI,
+    chat: CHAT_VI,
   },
 };
 

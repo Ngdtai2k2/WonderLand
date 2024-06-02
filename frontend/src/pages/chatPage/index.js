@@ -9,6 +9,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
 
 import CustomBox from '../../components/CustomBox';
 import Conversation from '../../components/Conversation';
@@ -23,22 +24,32 @@ export default function ChatPage() {
   const [chats, setChats] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [receivedMessage, setReceivedMessage] = useState(null);
+  const [event, setEvent] = useState();
 
   const location = useLocation();
   const navigate = useNavigate();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation('message');
   const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);
+
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const query = urlParams.get('chat_id');
 
   useEffect(() => {
     document.title = 'Chats - WonderLand';
   });
 
   const socket = initializeSocket(user?._id);
-
   useEffect(() => {
     socket.on('new-message', (data) => {
       setReceivedMessage(data);
     });
+
+    socket.on('action-delete-chat', (data) => {
+      setEvent(data);
+      setCurrentChat(null);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
 
   useEffect(() => {
@@ -46,7 +57,18 @@ export default function ChatPage() {
       getChats(i18n.language, axiosJWT, user?._id, accessToken, setChats);
     } else navigate('/');
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [user, event]);
+
+  useEffect(() => {
+    if (query && chats.length > 0) {
+      const chat = chats.find((chat) => chat._id === query);
+      setCurrentChat(chat || null);
+      if (!chat) navigate('/chat');
+    } else {
+      navigate('/chat');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query, chats]);
 
   return (
     <CustomBox
@@ -95,7 +117,20 @@ export default function ChatPage() {
         </Grid>
         <Grid item xs={9}>
           <Paper elevation={1} sx={{ p: 2, height: '100%' }}>
-            <ChatBox chat={currentChat} receivedMessage={receivedMessage} />
+            {currentChat ? (
+              <ChatBox chat={currentChat} receivedMessage={receivedMessage} />
+            ) : (
+              <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                height="100%"
+              >
+                <Typography variant="body1">
+                  {t('message:chat.note')}
+                </Typography>
+              </Box>
+            )}
           </Paper>
         </Grid>
       </Grid>

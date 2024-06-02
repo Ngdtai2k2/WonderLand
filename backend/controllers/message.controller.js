@@ -55,7 +55,14 @@ const messageController = {
   getMessages: async (req, res) => {
     try {
       const { chatId } = req.params;
-      const result = await messageModel.find({ chatId });
+      const { request_user } = req.query;
+
+      const result = await messageModel.find({
+        chatId,
+        deletedBy: {
+          $ne: request_user,
+        },
+      });
       if (!result) {
         return res.status(404).json({ message: req.t("not_found.messages") });
       }

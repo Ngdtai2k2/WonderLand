@@ -24,7 +24,7 @@ const messageSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    isDeleted: {
+    isRemoved: {
       type: Boolean,
       default: false,
     },
@@ -32,6 +32,12 @@ const messageSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Media",
     },
+    deletedBy: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   {
     timestamps: true,
