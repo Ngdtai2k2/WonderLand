@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios';
@@ -11,6 +12,7 @@ import PostCard from '../../components/PostCard';
 import NoData from '../../components/NoData';
 
 import { useToastTheme } from '../../constants/constant';
+import useUserAxios from '../../hooks/useUserAxios';
 
 export default function RenderPostInTab({ apiLink }) {
   const [data, setData] = useState(null);
@@ -20,15 +22,25 @@ export default function RenderPostInTab({ apiLink }) {
 
   const { id } = useParams();
   const toastTheme = useToastTheme();
+  const { i18n } = useTranslation();
+  const { user } = useUserAxios(i18n.language);
 
   useEffect(() => {
     const getPostsByUser = async () => {
       try {
         setLoading(true);
+        const url = user
+          ? `${apiLink}?request_user=${user._id}&_page=${page}&_limit=5&_order=desc`
+          : `${apiLink}?_page=${page}&_limit=5&_order=desc`;
         const response = await axios.post(
-          `${apiLink}?_page=${page}&_limit=5&_order=desc`,
+          url,
           {
             author: id,
+          },
+          {
+            headers: {
+              'Accept-Language': i18n.language,
+            },
           },
         );
         setData(response.data.result);

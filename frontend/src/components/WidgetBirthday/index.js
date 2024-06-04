@@ -93,7 +93,7 @@ export default function WidgetBirthday() {
         ) : notifications && notifications.length > 0 ? (
           notifications.slice(0, 2).map((item) => (
             <Typography variant="body2" key={item._id}>
-              {item.message}
+              {item.messages[i18n.language]}
             </Typography>
           ))
         ) : (

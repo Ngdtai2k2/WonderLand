@@ -74,7 +74,11 @@ export default function Profile() {
           ? `${BaseApi}/user/${id}?request_user=${user?._id}`
           : `${BaseApi}/user/${id}`;
 
-        const response = await axios.get(url);
+        const response = await axios.get(url, {
+          headers: {
+            'Accept-Language': i18n.language,
+          },
+        });
         setData(response?.data?.user);
         setHasSendRequestAddFriend(response?.data?.hasSendRequestAddFriend);
         setIsFriend(response?.data?.isFriend);

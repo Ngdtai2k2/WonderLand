@@ -44,6 +44,7 @@ const reactionController = {
   getPostUserReacted: async (req, res) => {
     try {
       const { author } = req.body;
+      const { request_user } = req.query;
       if (!author) {
         return res.status(404).json({ message: "Please provide your userId!" });
       }
@@ -51,11 +52,14 @@ const reactionController = {
         ? userModel.findOne({ _id: author })
         : userModel.findOne({ nickname: author }));
 
-      if (!user) return res.status(404).json({ message: req.t("not_found.user") });
+      const requestUser = await userModel.findById(request_user);
 
-      const reactionPosts = await reactionModel.find({ author: user._id }).populate(
-        "postId"
-      );
+      if (!user)
+        return res.status(404).json({ message: req.t("not_found.user") });
+
+      const reactionPosts = await reactionModel
+        .find({ author: user._id })
+        .populate("postId");
 
       const filteredPosts = reactionPosts.filter(
         (reactionPost) => reactionPost.postId
@@ -64,7 +68,10 @@ const reactionController = {
       const postIdList = filteredPosts.map((post) => post.postId);
 
       const options = optionsPaginate(req);
-      const result = await postModel.paginate({ _id: { $in: postIdList } }, options);
+      const result = await postModel.paginate(
+        { _id: { $in: postIdList } },
+        options
+      );
 
       result.docs = await Promise.all(
         result.docs.map(async (reactionPost) => {
@@ -72,10 +79,12 @@ const reactionController = {
           let hasReacted = null;
           let hasSavedPost = null;
 
-          [hasReacted, hasSavedPost] = await Promise.all([
-            reactionService.hasReactionPost(user._id, postId),
-            savePostService.hasSavePost(user._id, postId),
-          ]);
+          if (requestUser) {
+            [hasReacted, hasSavedPost] = await Promise.all([
+              reactionService.hasReactionPost(requestUser._id, postId),
+              savePostService.hasSavePost(requestUser._id, postId),
+            ]);
+          }
 
           const [totalReaction, totalComment] = await Promise.all([
             reactionService.countReactions(postId, null, null),
@@ -90,15 +99,16 @@ const reactionController = {
             totalComment,
           };
 
-          return await postModel.populate(updatedSavedPost, postPopulateOptions);
+          return await postModel.populate(
+            updatedSavedPost,
+            postPopulateOptions
+          );
         })
       );
 
       return res.status(200).json({ result });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: req.t('server_error') });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -143,9 +153,7 @@ const reactionController = {
         return res.status(201).json({ message: "Reaction saved!" });
       }
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: req.t('server_error') });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 };
