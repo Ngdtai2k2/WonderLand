@@ -11,6 +11,7 @@ import {
 import { BaseApi } from '../../constants/constant';
 
 export const updateUser = async (
+  lng,
   accessToken,
   dispatch,
   id,
@@ -21,15 +22,48 @@ export const updateUser = async (
   dispatch(updateUserStart());
   try {
     const res = await axiosJWT.put(BaseApi + '/user/' + id, userData, {
-      headers: { token: `Bearer ${accessToken}` },
-      'Content-Type': 'multipart/form-data',
+      headers: {
+        token: `Bearer ${accessToken}`,
+        'Content-Type': 'multipart/form-data',
+        'Accept-Language': lng,
+      },
     });
     dispatch(updateUserSuccess(res.data.user));
     toast.success(res.data.message, toastTheme);
   } catch (err) {
-    console.log(err);
     dispatch(updateUserFailed());
     toast.error(err.response.data.message, toastTheme);
+  }
+};
+
+export const updateMedia = async (
+  lng,
+  accessToken,
+  dispatch,
+  userId,
+  axiosJWT,
+  media,
+  toastTheme,
+) => {
+  dispatch(updateUserStart());
+  try {
+    const res = await axiosJWT.put(
+      `${BaseApi}/user/media-update/${userId}`,
+      media,
+      {
+        headers: {
+          token: `Bearer ${accessToken}`,
+          'Content-Type': 'multipart/form-data',
+          'Accept-Language': lng,
+        },
+      },
+    );
+    dispatch(updateUserSuccess(res.data.user));
+    toast.success(res.data.message, toastTheme);
+    return res.data.user;
+  } catch (error) {
+    dispatch(updateUserFailed());
+    toast.error(error.response.data.message, toastTheme);
   }
 };
 
