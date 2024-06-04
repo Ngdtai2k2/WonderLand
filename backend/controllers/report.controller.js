@@ -17,7 +17,8 @@ const reportController = {
       const { _report, _comment_id } = req.query;
 
       const user = await userModel.findById(userId);
-      if (!user) return res.status(404).json({ message: req.t("not_found.user") });
+      if (!user)
+        return res.status(404).json({ message: req.t("not_found.user") });
 
       let targetField;
       const getModel = async (_report) => {
@@ -76,12 +77,16 @@ const reportController = {
       const admins = await userService.getAdmins(req, res);
 
       admins.forEach(async (admin) => {
+        const messages = {
+          en: `${user.nickname} has just sent a ${_report} report for you to review!`,
+          vi: `${user.nickname} vừa gửi một báo cáo ${_report} để bạn xem xét!`,
+        };
         const notification = await notificationService.createNotification(
           admin._id,
           3,
           targetField,
           id,
-          `${user.nickname} has just sent a ${_report} report for you to review!`,
+          messages,
           "https://img.upanh.tv/2024/05/09/report.jpg"
         );
         const sockets = await socketService.getSocket(admin._id);
@@ -100,9 +105,7 @@ const reportController = {
         .status(200)
         .json({ message: "The report has been submitted!", newReport });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: req.t("server_error") });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -145,9 +148,7 @@ const reportController = {
 
       return res.status(200).json({ result });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: req.t("server_error") });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -157,7 +158,7 @@ const reportController = {
 
       const report = await reportModel.findById(id).populate("user");
       if (!report)
-        return res.status(404).json({ message: req.t('not_found.report') });
+        return res.status(404).json({ message: req.t("not_found.report") });
       if (report.status == 2)
         return res
           .status(400)
@@ -196,12 +197,38 @@ const reportController = {
         // create notification
         let notification;
         if (!report.user.isAdmin) {
+          let messages;
+          switch (targetField) {
+            case "post":
+              messages = {
+                en: `Report ${target.author.nickname}'s post of your rejected account!`,
+                vi: `Báo cáo bài viết của ${target.author.nickname} về tài khoản bị từ chối của bạn!`,
+              };
+              break;
+            case "comment":
+              messages = {
+                en: `Report ${target.author.nickname}'s comment of your rejected account!`,
+                vi: `Báo cáo bình luận của ${target.author.nickname} về tài khoản bị từ chối của bạn!`,
+              };
+              break;
+            case "reply":
+              messages = {
+                en: `Report ${target.author.nickname}'s reply of your rejected account!`,
+                vi: `Báo cáo bình luận của ${target.author.nickname} bị từ chối!`,
+              };
+              break;
+            default:
+              messages = {
+                en: `Report on the account is denied!`,
+                vi: `Báo cáo về tài khoản bị từ chối!`,
+              };
+          }
           notification = await notificationService.createNotification(
             report.user,
             3,
             `${targetField}Id`,
             target?._id,
-            `Report ${target.author.nickname}'s ${targetField} of your rejected account!`,
+            messages,
             "https://img.upanh.tv/2024/05/11/OIG2.oag.jpg"
           );
         }
@@ -217,9 +244,7 @@ const reportController = {
 
       return res.status(200).json({ message: "Report refused!" });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: req.t("server_error") });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 };

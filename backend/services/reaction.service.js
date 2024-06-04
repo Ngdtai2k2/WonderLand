@@ -61,13 +61,29 @@ const reactionService = {
       }
 
       const user = await userModel.findById(targetModel.author);
-      const userRequest = await userModel.findById(req.query.user_request).populate('media');
+      const userRequest = await userModel
+        .findById(req.query.user_request)
+        .populate("media");
 
       const typeNotification =
         targetField === "postId" ? 0 : targetField === "commentId" ? 1 : 2;
-      const actionField = targetField.slice(0, targetField.indexOf("Id"));
-      const action = newType ? "liked" : "disliked";
-      const msg = `${user.nickname} just ${action} your ${actionField}!`;
+        
+      let actionField;
+      if (targetField === "postId") {
+        actionField = "bài viết";
+      } else if (targetField === "commentId") {
+        actionField = "bình luận";
+      } else {
+        actionField = "trả lời";
+      }
+
+      const actionVi = newType ? "thích" : "không thích";
+      const actionEn = newType ? "liked" : "disliked";
+
+      const msg = {
+        vi: `${user.nickname} vừa ${actionVi} ${actionField} của bạn!`,
+        en: `${user.nickname} just ${actionEn} your ${actionField}!`,
+      };
 
       const reaction = await Reaction.findOne({ author, [targetField]: id });
       const userSocket = await userSocketModel.find({
@@ -151,9 +167,7 @@ const reactionService = {
         return res.status(201).json({ message: "Reaction saved!" });
       }
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: req.t("server_error") });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 

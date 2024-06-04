@@ -41,12 +41,17 @@ const friendsController = {
       });
       await newFriendRequest.save();
 
+      const messages = {
+        en: `You have a new friend request from ${user.nickname}`,
+        vi: `Bạn có một lời mời kết bạn mới từ ${user.nickname}`,
+      };
+
       const notification = await notificationService.createNotification(
         friendId,
         4,
         "userId",
         userId,
-        `You have a new friend request from ${user.nickname}`,
+        messages,
         "https://img.upanh.tv/2024/05/24/bxmvqd8o.png"
       );
 
@@ -65,6 +70,7 @@ const friendsController = {
 
       return res.status(201).json({ message: req.t("friends.sent_request") });
     } catch (error) {
+      console.error(error.message);
       return res.status(500).json({ message: req.t("server_error") });
     }
   },

@@ -435,11 +435,16 @@ const postController = {
       }
       await postModel.findByIdAndDelete(id);
 
+      const messages = {
+        en: "Your post was removed for violating community standards!",
+        vi: "Bài viết của bạn đã bị xóa vì vi phạm tiêu chuẩn cộng đồng!",
+      };
+
       const notification = await notificationService.createNotification(
         post.author,
         3,
         id,
-        "Your post was removed for violating community standards!",
+        messages,
         ""
       );
 

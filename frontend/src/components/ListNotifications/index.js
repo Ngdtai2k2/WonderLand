@@ -38,8 +38,9 @@ export default function ListNotifications({
   const toastTheme = useToastTheme();
   const navigate = useNavigate();
   const { t, i18n } = useTranslation(['navigation', 'message']);
+  const lng = i18n.language;
 
-  const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);
+  const { user, accessToken, axiosJWT } = useUserAxios(lng);
 
   const decodedToken = accessToken ? jwtDecode(accessToken) : null;
   const isAdmin = decodedToken ? decodedToken.isAdmin || false : false;
@@ -48,6 +49,7 @@ export default function ListNotifications({
     page.current = 1;
     if (user) {
       getNotificationByUserId(
+        i18n.language,
         setNotifications,
         notifications,
         setHasMore,
@@ -125,6 +127,7 @@ export default function ListNotifications({
             next={() => {
               if (hasMore) {
                 getNotificationByUserId(
+                  i18n.language,
                   setNotifications,
                   notifications,
                   setHasMore,
@@ -153,6 +156,7 @@ export default function ListNotifications({
             }
             refreshFunction={() =>
               refresh(
+                i18n.language,
                 setNotifications,
                 setHasMore,
                 page,
@@ -193,7 +197,7 @@ export default function ListNotifications({
                       fontWeight={400}
                       sx={{ whiteSpace: 'pre-wrap' }}
                     >
-                      {notification.message}
+                      {notification.messages[lng]}
                     </Typography>
                     <Typography variant="caption">
                       {moment(notification.createdAt).fromNow()}

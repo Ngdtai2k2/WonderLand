@@ -59,12 +59,16 @@ cron.schedule("0 0 * * *", async () => {
       // push notification for user
       await Promise.all(
         users.map(async (user) => {
+          const messages = {
+            vi: "Hôm nay là sinh nhật bạn, chúc bạn sinh nhật vui vẻ!",
+            en: "Today is your birthday, have a wonderful day!",
+          };
           await notificationService.createNotification(
             user._id,
             5,
             "userId",
             user._id,
-            `Today is your birthday, have a wonderful day!!!`,
+            messages,
             "https://img.upanh.tv/2024/05/27/OIG3.jpg"
           );
         })
@@ -89,13 +93,18 @@ cron.schedule("0 0 * * *", async () => {
             const sockets = await userSocketModel.find({ user: friendId });
             friendSockets.push(...sockets);
 
+            const messages = {
+              vi: `Hôm nay là sinh nhật ${user.nickname}, hãy gửi là chúc của bạn!`,
+              en: `Today is ${user.nickname}'s birthday, send your wishes now!`,
+            };
+
             // push notification for friend with the name of the birthday user
             await notificationService.createNotification(
               friendId,
               5,
               "userId",
               user._id,
-              `Today is ${user.nickname}'s birthday, send your wishes now!`,
+              messages,
               "https://img.upanh.tv/2024/05/27/OIG3.jpg"
             );
           })

@@ -63,6 +63,7 @@ export default function WidgetBirthday() {
     page.current = 1;
     if (user) {
       getNotificationByUserId(
+        i18n.language,
         setNotifications,
         notifications,
         setHasMore,

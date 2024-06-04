@@ -33,13 +33,13 @@ const notificationSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-    message: {
-      type: String,
+    messages: {
+      type: Object,
       maxLength: 1000,
     },
     image: {
       type: String,
-    }
+    },
   },
   {
     timestamps: true,

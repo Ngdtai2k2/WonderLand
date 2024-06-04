@@ -1,6 +1,7 @@
 import { BaseApi } from '../constants/constant';
 
 const getNotificationByUserId = async (
+  lng,
   setItems,
   items,
   setHasMore,
@@ -18,6 +19,7 @@ const getNotificationByUserId = async (
       {
         headers: {
           token: `Bearer ${accessToken}`,
+          'Accept-Language': lng,
         },
       },
     )
@@ -33,9 +35,10 @@ const getNotificationByUserId = async (
     });
 };
 
-const refresh = (setItems, setHasMore, page, userId, accessToken, axiosJWT) => {
+const refresh = (lng, setItems, setHasMore, page, userId, accessToken, axiosJWT) => {
   page.current = 1;
   getNotificationByUserId(
+    lng,
     setItems,
     [],
     setHasMore,

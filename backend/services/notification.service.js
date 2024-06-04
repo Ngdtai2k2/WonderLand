@@ -13,7 +13,7 @@ const notificationService = {
       recipient: recipient,
       type: type,
       read: false,
-      message: message,
+      messages: message,
       image: image,
     };
 
@@ -21,11 +21,9 @@ const notificationService = {
       notificationData[targetField] = targetId;
     }
     const notification = await notificationModel.create(notificationData);
-    
+
     if (!notification) {
-      return res
-        .status(500)
-        .json({ message: req.t("server_error") });
+      return res.status(500).json({ message: req.t("server_error") });
     }
     return notification;
   },
