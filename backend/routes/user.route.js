@@ -32,5 +32,11 @@ router.post(
   verifyMiddleware.tokenAndAdminAuth,
   userController.getNewUser
 );
+router.put(
+  "/media-update/:userId",
+  verifyMiddleware.verifyTokenAndUserAuthorization,
+  storage.single("file"),
+  userController.updateMediaProfile
+);
 
 module.exports = router;

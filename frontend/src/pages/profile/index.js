@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import axios from 'axios';
-import moment from 'moment';
 
 import { useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
-import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Tabs from '@mui/material/Tabs';
@@ -25,6 +22,7 @@ import PersonRemoveRoundedIcon from '@mui/icons-material/PersonRemoveRounded';
 import GroupRoundedIcon from '@mui/icons-material/GroupRounded';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import Diversity1Icon from '@mui/icons-material/Diversity1';
+import AddAPhotoRoundedIcon from '@mui/icons-material/AddAPhotoRounded';
 
 import CustomBox from '../../components/CustomBox';
 import NotFound from '../../components/NotFound';
@@ -38,16 +36,24 @@ import SavedPostTab from './savedPostTab';
 import { BaseApi, useToastTheme } from '../../constants/constant';
 import useUserAxios from '../../hooks/useUserAxios';
 import { ButtonTab, TypographyButtonTab } from '../styles';
-import { ButtonStyled } from './styles';
+import {
+  AvatarProfile,
+  ButtonChangeAvatar,
+  ButtonChangeCoverPhoto,
+  ButtonStyled,
+  CoverArt,
+} from './styles';
 import {
   acceptRequestAddFriend,
   cancelRequestAddFriend,
   deleteFriend,
   sendRequestAddFriend,
 } from '../../utils/friendServices';
+import ModalUpdateMedia from './modalUpdateMedia';
 
 export default function Profile() {
   const { id } = useParams();
+
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [tabIndex, setTabIndex] = useState(0);
@@ -55,50 +61,53 @@ export default function Profile() {
   const [isFriend, setIsFriend] = useState(false);
   const [friendRequest, setFriendRequest] = useState();
   const [openModalConfirm, setOpenModalConfirm] = useState(false);
+  const [openModalChangeAvatar, setOpenModalChangeAvatar] = useState(false);
+  const [isUpdateAvatar, setIsUpdateAvatar] = useState(0);
+  const [event, setEvent] = useState();
 
   const { t, i18n } = useTranslation(['user', 'message']);
   const theme = useTheme();
   const toastTheme = useToastTheme();
   const isSmOrBelow = useMediaQuery(theme.breakpoints.down('sm'));
+
   const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);
 
   const handleChangeTab = (event, newValue) => {
     setTabIndex(newValue);
   };
 
-  useEffect(() => {
-    const getUserProfile = async () => {
-      try {
-        setLoading(true);
-        const url = user
-          ? `${BaseApi}/user/${id}?request_user=${user?._id}`
-          : `${BaseApi}/user/${id}`;
+  const getUserProfile = async () => {
+    try {
+      setLoading(true);
+      const url = user
+        ? `${BaseApi}/user/${id}?request_user=${user?._id}`
+        : `${BaseApi}/user/${id}`;
 
-        const response = await axios.get(url, {
-          headers: {
-            'Accept-Language': i18n.language,
-          },
-        });
-        setData(response?.data?.user);
-        setHasSendRequestAddFriend(response?.data?.hasSendRequestAddFriend);
-        setIsFriend(response?.data?.isFriend);
-        setFriendRequest(response?.data?.friendRequest);
-      } catch (error) {
-        if (error.response && error.response.status === 404) {
-          setData(null);
-          toast.error('Cannot find data!', toastTheme);
-        }
-      } finally {
-        setLoading(false);
+      const response = await axios.get(url, {
+        headers: {
+          'Accept-Language': i18n.language,
+        },
+      });
+      setData(response?.data?.user);
+      setHasSendRequestAddFriend(response?.data?.hasSendRequestAddFriend);
+      setIsFriend(response?.data?.isFriend);
+      setFriendRequest(response?.data?.friendRequest);
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        setData(null);
       }
-    };
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     getUserProfile();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [id, event]);
 
   useEffect(() => {
-    document.title = data ? `${data?.fullname}'s profile` : 'Loading...';
+    document.title = data ? `${data?.fullname}` : 'Loading...';
   }, [data?.fullname, data]);
 
   if (!data && !loading) {
@@ -167,6 +176,11 @@ export default function Profile() {
     }
   };
 
+  const handleOpenModalEditMedia = (type) => {
+    setOpenModalChangeAvatar(true);
+    setIsUpdateAvatar(type);
+  };
+
   return loading ? (
     <LoadingCircularIndeterminate />
   ) : (
@@ -178,13 +192,56 @@ export default function Profile() {
             xs: 1,
             md: 2,
           },
+          width: '100%',
         }}
       >
-        <Box display="flex" alignItems="center" marginY={1}>
-          <Avatar
-            src={data?.media?.url}
-            alt={'Avatar of' + data?.fullname}
-            sx={{ width: 60, height: 60 }}
+        <Box position="relative">
+          <CoverArt
+            src={data?.coverArt?.url}
+            alt={'Cover art of ' + data?.fullname}
+            variant="square"
+          />
+          {user?._id === data?._id && (
+            <ButtonChangeCoverPhoto
+              variant="contained"
+              onClick={() => handleOpenModalEditMedia(1)}
+            >
+              <AddAPhotoRoundedIcon /> {t('user:update_cover_photo')}
+            </ButtonChangeCoverPhoto>
+          )}
+        </Box>
+        <Box display="flex" alignItems="center" marginBottom={1} width="100%">
+          <Box position="relative">
+            <AvatarProfile
+              src={data?.media?.url}
+              alt={'Avatar of ' + data?.fullname}
+              sx={{
+                borderColor:
+                  theme.palette.mode === 'light' ? '#ffffff' : '#121212',
+              }}
+            />
+            {user?._id === data?._id && (
+              <ButtonChangeAvatar
+                size="small"
+                sx={{
+                  backgroundColor:
+                    theme.palette.mode === 'light' ? '#e4e6eb' : '#212121',
+                  '&:hover': {
+                    backgroundColor: '#212121',
+                    color: '#fff',
+                  },
+                }}
+                onClick={() => handleOpenModalEditMedia(0)}
+              >
+                <AddAPhotoRoundedIcon />
+              </ButtonChangeAvatar>
+            )}
+          </Box>
+          <ModalUpdateMedia
+            open={openModalChangeAvatar}
+            handleClose={() => setOpenModalChangeAvatar(false)}
+            type={isUpdateAvatar}
+            setEvent={setEvent}
           />
           <Box marginLeft={1}>
             <Typography
@@ -195,9 +252,7 @@ export default function Profile() {
             >
               {data?.fullname}
             </Typography>
-            <Typography variant="caption">
-              {t('user:joined')} {moment(data?.createdAt).fromNow()}
-            </Typography>
+            <Typography variant="caption">@{data?.nickname}</Typography>
           </Box>
         </Box>
         <Typography variant="h6">{data?.about}</Typography>

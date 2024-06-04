@@ -15,9 +15,7 @@ const userController = {
 
       return res.status(200).json({ users });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: req.t('server_error') });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -29,9 +27,7 @@ const userController = {
       }
       return res.status(200).json({ message: "User deleted successfully!" });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: req.t('server_error') });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -45,13 +41,16 @@ const userController = {
         userData = await userModel
           .findOne({ _id: user })
           .select("-password -isAdmin -email")
-          .populate("media");
+          .populate("media")
+          .populate("coverArt");
       } else {
         userData = await userModel
           .findOne({ nickname: user })
           .select("-password -isAdmin -email")
-          .populate("media");
+          .populate("media")
+          .populate("coverArt");
       }
+
       if (!userData) {
         return res.status(404).json({ message: "User not found" });
       }
@@ -87,9 +86,7 @@ const userController = {
         friendRequest,
       });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: req.t('server_error') });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -124,15 +121,19 @@ const userController = {
             !(await mediaController.deleteMedia(req, res, media._id)) ||
             !(await uploadMediaCloudinary.deleteFile(media.cloudinary_id))
           ) {
-            return res
-              .status(400)
-              .json({ message: req.t("server_error") });
+            return res.status(400).json({ message: req.t("server_error") });
           }
         }
 
-        const data = await uploadMediaCloudinary.uploadImage(req, res, 'profile');
+        const data = await uploadMediaCloudinary.uploadImage(
+          req,
+          res,
+          "profile"
+        );
         if (data === null) {
-          return res.status(400).json({ message: "Image not uploaded!" });
+          return res
+            .status(400)
+            .json({ message: req.t("file.image_not_upload") });
         }
 
         user.media = data._id;
@@ -149,11 +150,9 @@ const userController = {
 
       return res
         .status(200)
-        .json({ user: userUpdate, message: "Successful update profile!" });
+        .json({ user: userUpdate, message: req.t("user.success_update") });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: req.t('server_error') });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 
@@ -162,11 +161,10 @@ const userController = {
       const total = await userModel.countDocuments();
       return res.status(200).json({ total });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: req.t('server_error') });
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
+
   getNewUser: async (req, res) => {
     try {
       const options = optionsPaginate(req, "-password");
@@ -188,9 +186,67 @@ const userController = {
       );
       return res.status(200).json({ users });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: req.t('server_error') });
+      return res.status(500).json({ message: req.t("server_error") });
+    }
+  },
+
+  updateMediaProfile: async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const { type } = req.body;
+
+      const user = await userModel
+        .findById(userId)
+        .populate("coverArt")
+        .populate("media");
+
+      if (!user) {
+        return res.status(404).json({ message: req.t("not_found.user") });
+      }
+
+      let targetData;
+      if (req.file) {
+        targetData = Number(type) === 1 ? user.coverArt : user.media;
+
+        if (targetData) {
+          if (
+            !(await mediaController.deleteMedia(req, res, targetData._id)) ||
+            !(await uploadMediaCloudinary.deleteFile(targetData.cloudinary_id))
+          ) {
+            return res.status(400).json({ message: req.t("server_error") });
+          }
+        }
+        const data = await uploadMediaCloudinary.uploadImage(
+          req,
+          res,
+          "profile"
+        );
+        if (data === null) {
+          return res
+            .status(400)
+            .json({ message: req.t("file.image_not_upload") });
+        }
+        Number(type) === 1
+          ? (user.coverArt = data._id)
+          : (user.media = data._id);
+        await user.save();
+
+        const userUpdated = await userModel
+          .findById(user._id)
+          .populate("coverArt")
+          .populate("media");
+
+        return res.status(200).json({
+          user: userUpdated,
+          message:
+            Number(type) === 1
+              ? req.t("user.change_cover_art")
+              : req.t("user.change_avatar"),
+        });
+      }
+      return res.status(400).json({ message: req.t("file.required") });
+    } catch (error) {
+      return res.status(500).json({ message: req.t("server_error") });
     }
   },
 };

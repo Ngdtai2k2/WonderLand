@@ -57,6 +57,11 @@
         "unsaved_success": "Đã xóa bài viết khỏi danh sách lưu!",
         "provide_id": "Vui lòng cung cấp id người dùng!"
     },
+    "user": {
+        "success_update": "Cập nhập hồ sơ thành công!",
+        "change_cover_art": "Đã thay đổi ảnh bìa thành công!",
+        "change_avatar": "Đã thay đổi ảnh đại diện thành công!"
+    },
     "not_found": {
         "user": "Không tìm thấy người dùng!",
         "email": "Không tìm thấy email!",
@@ -81,6 +86,7 @@
     "file": {
         "not_supported": "Định dạng file không được hỗ trợ!",
         "image_not_upload": "Tải ảnh lên không thành công!",
-        "video_not_upload": "Tải video lên không thành công!"
+        "video_not_upload": "Tải video lên không thành công!",
+        "required": "Vui lòng cung cấp media!"
     }
 }

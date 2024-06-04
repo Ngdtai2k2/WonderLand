@@ -50,6 +50,10 @@ const userSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Media",
     },
+    coverArt: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Media",
+    },
   },
   { timestamps: true }
 );

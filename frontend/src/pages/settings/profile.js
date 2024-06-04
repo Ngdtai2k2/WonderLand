@@ -84,7 +84,14 @@ export default function Profile() {
         }
       });
       formData.append('file', values.image);
-      await updateUser(accessToken, dispatch, user?._id, axiosJWT, formData);
+      await updateUser(
+        i18n.language,
+        accessToken,
+        dispatch,
+        user?._id,
+        axiosJWT,
+        formData,
+      );
       setFetching(false);
     },
   });

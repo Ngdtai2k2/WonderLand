@@ -97,7 +97,7 @@ const authController = {
     try {
       const user = await User.findOne({
         email: req.body.email,
-      }).populate("media");
+      }).populate("media").populate('coverArt');
 
       if (!user) {
         return res.status(404).json({ message: req.t("not_found.email") });

@@ -67,6 +67,7 @@ export default function Account() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       await updateUser(
+        i18n.language,
         accessToken,
         dispatch,
         user?._id,
