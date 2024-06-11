@@ -1,27 +1,27 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
-import ListItemText from '@mui/material/ListItemText';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
+import ListItemText from "@mui/material/ListItemText";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
 
-import BallotRoundedIcon from '@mui/icons-material/BallotRounded';
-import ArtTrackRoundedIcon from '@mui/icons-material/ArtTrackRounded';
-import PeopleAltRoundedIcon from '@mui/icons-material/PeopleAltRounded';
+import BallotRoundedIcon from "@mui/icons-material/BallotRounded";
+import ArtTrackRoundedIcon from "@mui/icons-material/ArtTrackRounded";
+import PeopleAltRoundedIcon from "@mui/icons-material/PeopleAltRounded";
 
-import { grey } from '@mui/material/colors';
+import { grey } from "@mui/material/colors";
 
-import PostCard from '../../components/PostCard';
-import CustomBox from '../../components/CustomBox';
-import LoadingCircularIndeterminate from '../../components/Loading';
+import PostCard from "../../components/PostCard";
+import CustomBox from "../../components/CustomBox";
+import LoadingCircularIndeterminate from "../../components/Loading";
 
-import { searchPosts, searchUsers } from '../../utils/searchServices';
-import useUserAxios from '../../hooks/useUserAxios';
+import { searchPosts, searchUsers } from "../../utils/searchServices";
+import useUserAxios from "../../hooks/useUserAxios";
 import {
   BoxButton,
   ButtonFilter,
@@ -30,10 +30,10 @@ import {
   ListItemIconStyle,
   ListStyle,
   PaperStyle,
-} from './styles';
-import ListItemUser from '../../components/ListItemUser';
-import PeopleTab from './peopleTab';
-import PostTab from './postTab';
+} from "./styles";
+import ListItemUser from "../../components/ListItemUser";
+import PeopleTab from "./peopleTab";
+import PostTab from "./postTab";
 
 export default function SearchPage() {
   const [users, setUsers] = useState([]);
@@ -46,22 +46,27 @@ export default function SearchPage() {
 
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  const query = urlParams.get('query');
-  const tab = urlParams.get('tabIndex');
+  const query = urlParams.get("query");
+  const tab = urlParams.get("tab_index");
+  const tabArr = [0, 1, 2];
 
   const navigate = useNavigate();
-  const { t, i18n } = useTranslation(['search']);
+  const { t, i18n } = useTranslation(["search"]);
   const { user } = useUserAxios(i18n.language);
 
   useEffect(() => {
     document.title =
       isLoading && isLoadingPosts
-        ? 'Loading...'
-        : `${t('search:title')} - ${query}`;
+        ? "Loading..."
+        : `${t("search:title")} - ${query}`;
   }, [query, isLoading, isLoadingPosts, t]);
 
   useEffect(() => {
-    setTabIndex(Number(tab));
+    if (tabArr.includes(tab)) {setTabIndex(Number(tab))}
+    else {
+      setTabIndex(0)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tab]);
 
   useEffect(() => {
@@ -73,7 +78,7 @@ export default function SearchPage() {
       setUsers,
       setIsLoading,
       false,
-      setHasMore,
+      setHasMore
     );
 
     searchPosts(
@@ -83,14 +88,14 @@ export default function SearchPage() {
       posts,
       setPosts,
       setIsLoadingPosts,
-      setHasMorePosts,
+      setHasMorePosts
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
   const handleChangeTab = (index) => {
     setTabIndex(index);
-    navigate(`/search?query=${query}&tabIndex=${index}`, {
+    navigate(`&tab_index=${index}`, {
       replace: true,
     });
   };
@@ -100,13 +105,13 @@ export default function SearchPage() {
       <LoadingCircularIndeterminate />
     </>
   ) : (
-    <CustomBox sx={{ margin: '75px 10px 0px' }}>
+    <CustomBox sx={{ margin: "75px 10px 0px" }}>
       <Grid container spacing={1}>
         <Grid item xs={12} sm={4}>
           <PaperStyle elevation={1}>
             <Box>
               <Typography variant="h5" fontWeight={700}>
-                {t('search:title')}
+                {t("search:title")}
               </Typography>
               <Typography variant="body1" marginTop={1} color={grey[400]}>
                 {query}
@@ -119,21 +124,21 @@ export default function SearchPage() {
                 onClick={() => handleChangeTab(0)}
               >
                 <BallotRoundedIcon />
-                {t('search:all')}
+                {t("search:all")}
               </ButtonFilter>
               <ButtonFilter
                 disabled={tabIndex === 1}
                 onClick={() => handleChangeTab(1)}
               >
                 <PeopleAltRoundedIcon />
-                {t('search:people')}
+                {t("search:people")}
               </ButtonFilter>
               <ButtonFilter
                 disabled={tabIndex === 2}
                 onClick={() => handleChangeTab(2)}
               >
                 <ArtTrackRoundedIcon />
-                {t('search:post')}
+                {t("search:post")}
               </ButtonFilter>
             </BoxButton>
             <ListStyle>
@@ -144,7 +149,7 @@ export default function SearchPage() {
                 <ListItemIconStyle>
                   <BallotRoundedIcon />
                 </ListItemIconStyle>
-                <ListItemText primary={t('search:all')} />
+                <ListItemText primary={t("search:all")} />
               </ListButton>
               <ListButton
                 disabled={tabIndex === 1}
@@ -153,7 +158,7 @@ export default function SearchPage() {
                 <ListItemIconStyle>
                   <PeopleAltRoundedIcon />
                 </ListItemIconStyle>
-                <ListItemText primary={t('search:people')} />
+                <ListItemText primary={t("search:people")} />
               </ListButton>
               <ListButton
                 disabled={tabIndex === 2}
@@ -162,7 +167,7 @@ export default function SearchPage() {
                 <ListItemIconStyle>
                   <ArtTrackRoundedIcon />
                 </ListItemIconStyle>
-                <ListItemText primary={t('search:post')} />
+                <ListItemText primary={t("search:post")} />
               </ListButton>
             </ListStyle>
           </PaperStyle>
@@ -171,14 +176,14 @@ export default function SearchPage() {
           <PaperStyle
             elevation={1}
             sx={{
-              overflowY: 'auto',
+              overflowY: "auto",
             }}
           >
             {tabIndex === 0 && (
               <>
                 {/* people */}
                 <Typography variant="h6" fontWeight={600}>
-                  {t('search:people')}
+                  {t("search:people")}
                 </Typography>
                 <ListContainerResult>
                   {users?.users?.data?.length > 0 &&
@@ -203,9 +208,9 @@ export default function SearchPage() {
                       <Button
                         variant="outlined"
                         size="small"
-                        sx={{ textTransform: 'none' }}
+                        sx={{ textTransform: "none" }}
                       >
-                        {t('search:view_all')}
+                        {t("search:view_all")}
                       </Button>
                     </Box>
                   )}
@@ -213,14 +218,14 @@ export default function SearchPage() {
                 <Divider sx={{ marginY: 1 }} />
                 {/* post */}
                 <Typography variant="h6" fontWeight={600}>
-                  {t('search:post')}
+                  {t("search:post")}
                 </Typography>
                 <ListContainerResult
                   sx={{
-                    display: 'flex',
+                    display: "flex",
                     gap: 1,
-                    flexDirection: 'column',
-                    alignItems: 'center',
+                    flexDirection: "column",
+                    alignItems: "center",
                   }}
                 >
                   {posts?.posts?.data?.length > 0 &&
@@ -244,9 +249,9 @@ export default function SearchPage() {
                       <Button
                         variant="outlined"
                         size="small"
-                        sx={{ textTransform: 'none' }}
+                        sx={{ textTransform: "none" }}
                       >
-                        {t('search:view_all')}
+                        {t("search:view_all")}
                       </Button>
                     </Box>
                   )}

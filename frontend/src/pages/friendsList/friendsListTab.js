@@ -38,9 +38,9 @@ export default function FriendsListTab() {
   const [openModalConfirm, setOpenModalConfirm] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const toastTheme = useToastTheme();
-  const navigate = useNavigate();
   const page = useRef(1);
+  const navigate = useNavigate();
+  const toastTheme = useToastTheme();
   const { t, i18n } = useTranslation(['friends', 'message', 'user']);
   const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);
 

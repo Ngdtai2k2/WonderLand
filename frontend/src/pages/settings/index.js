@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
@@ -15,6 +14,7 @@ import VpnKeyRoundedIcon from '@mui/icons-material/VpnKeyRounded';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import BlockRoundedIcon from '@mui/icons-material/BlockRounded';
 
+import useUserAxios from '../../hooks/useUserAxios';
 import CustomBox from '../../components/CustomBox';
 import ChangePassword from './changePassword';
 import Account from './account';
@@ -26,9 +26,9 @@ export default function Settings() {
   const [tabIndex, setTabIndex] = useState(0);
 
   const theme = useTheme();
-  const { t } = useTranslation(['settings']);
+  const { t, i18n } = useTranslation(['settings']);
   const isSmOrBelow = useMediaQuery(theme.breakpoints.down('sm'));
-  const user = useSelector((state) => state.auth.login?.currentUser);
+  const { user } = useUserAxios(i18n.language);
 
   const handleChangeTab = (event, newValue) => {
     setTabIndex(newValue);

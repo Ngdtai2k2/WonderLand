@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import { useFormik } from 'formik';
@@ -25,6 +25,7 @@ import { loginSuccess } from '../../redux/slice/userSlice';
 import { ShortenContent } from '../../utils/helperFunction';
 import { updateUser } from '../../redux/apiRequest/userApi';
 import { VisuallyHiddenInput } from '../styles';
+import useUserAxios from '../../hooks/useUserAxios';
 
 export default function Profile() {
   const [filename, setFilename] = useState('');
@@ -33,8 +34,7 @@ export default function Profile() {
 
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation(['validate', 'field', 'settings']);
-  const user = useSelector((state) => state.auth.login?.currentUser);
-  const accessToken = user?.accessToken;
+  const { user, accessToken } = useUserAxios(i18n.language);
 
   let axiosJWT = createAxios(i18n.language, user, dispatch, loginSuccess);
 

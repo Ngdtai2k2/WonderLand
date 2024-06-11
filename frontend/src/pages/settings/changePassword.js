@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -13,18 +13,19 @@ import Button from '@mui/material/Button';
 import KeyRoundedIcon from '@mui/icons-material/KeyRounded';
 import LockResetRoundedIcon from '@mui/icons-material/LockResetRounded';
 
+import useUserAxios from '../../hooks/useUserAxios';
 import { changePassword } from '../../redux/apiRequest/authApi';
 import { createAxios } from '../../createInstance';
 import { loginSuccess } from '../../redux/slice/userSlice';
 import { useToastTheme } from '../../constants/constant';
 
 export default function ChangePassword() {
-  const { t, i18n } = useTranslation(['validate', 'field', 'settings']);
   const dispatch = useDispatch();
   const toastTheme = useToastTheme();
-  const user = useSelector((state) => state.auth.login?.currentUser);
+  const { t, i18n } = useTranslation(['validate', 'field', 'settings']);
+  const { user, accessToken } = useUserAxios(i18n.language);
+
   const id = user?._id;
-  const accessToken = user?.accessToken;
   let axiosJWT = createAxios(i18n.language, user, dispatch, loginSuccess);
 
   const validationSchema = Yup.object({

@@ -65,9 +65,9 @@ export default function Profile() {
   const [isUpdateAvatar, setIsUpdateAvatar] = useState(0);
   const [event, setEvent] = useState();
 
-  const { t, i18n } = useTranslation(['user', 'message']);
   const theme = useTheme();
   const toastTheme = useToastTheme();
+  const { t, i18n } = useTranslation(['user', 'message']);
   const isSmOrBelow = useMediaQuery(theme.breakpoints.down('sm'));
 
   const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);

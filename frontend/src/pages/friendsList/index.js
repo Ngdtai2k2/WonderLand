@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import Typography from '@mui/material/Typography';
@@ -17,17 +18,17 @@ import CustomBox from '../../components/CustomBox';
 import FriendsRequestListTab from './friendsRequestListTab';
 import { ButtonTab } from '../styles';
 import { BoxSpaceBetween } from './styles';
+import { getQueryString } from '../../utils/helperFunction';
 
 export default function FriendsList() {
   const [tabIndex, setTabIndex] = useState(0);
 
   const theme = useTheme();
+  const navigate = useNavigate();
   const { t } = useTranslation(['friends']);
   const isSmOrBelow = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  const tab_index = Number(urlParams.get('tab_index'));
+  const tab_index = Number(getQueryString('tab_index'));
 
   useEffect(() => {
     setTabIndex(tab_index);
@@ -35,6 +36,9 @@ export default function FriendsList() {
 
   const handleChangeTab = (event, newValue) => {
     setTabIndex(newValue);
+    navigate(`?tab_index=${newValue}`, {
+      replace: true,
+    });
   };
 
   return (

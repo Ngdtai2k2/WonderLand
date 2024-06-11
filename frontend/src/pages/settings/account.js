@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
@@ -25,6 +25,7 @@ import { createAxios } from '../../createInstance';
 import { deleteUser, updateUser } from '../../redux/apiRequest/userApi';
 import { deleteUserSuccess, loginSuccess } from '../../redux/slice/userSlice';
 import { useToastTheme } from '../../constants/constant';
+import useUserAxios from '../../hooks/useUserAxios';
 
 export default function Account() {
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
@@ -38,9 +39,7 @@ export default function Account() {
     'message',
     'settings',
   ]);
-
-  const user = useSelector((state) => state.auth.login?.currentUser);
-  const accessToken = user?.accessToken;
+  const { user, accessToken } = useUserAxios(i18n.language);
 
   let axiosJWT = createAxios(i18n.language, user, dispatch, loginSuccess);
 

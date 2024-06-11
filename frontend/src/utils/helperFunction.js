@@ -121,3 +121,9 @@ export async function setMomentLocale(locale) {
   }
   moment.locale(locale);
 }
+
+export function getQueryString(query) {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  return urlParams.get(query);
+}
