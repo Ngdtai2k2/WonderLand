@@ -47,7 +47,7 @@ export default function SearchPage() {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const query = urlParams.get('query');
-  const tab = urlParams.get('tab_index');
+  const tab = Number(urlParams.get('tab_index'));
   const tabArr = [0, 1, 2];
 
   const navigate = useNavigate();
@@ -63,12 +63,12 @@ export default function SearchPage() {
 
   useEffect(() => {
     if (tabArr.includes(tab)) {
-      setTabIndex(Number(tab));
+      setTabIndex(tab);
     } else {
       setTabIndex(0);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tab]);
+  }, [tab, tabIndex]);
 
   useEffect(() => {
     searchUsers(
@@ -95,8 +95,8 @@ export default function SearchPage() {
   }, [query]);
 
   const handleChangeTab = (index) => {
-    setTabIndex(index);
-    navigate(`&tab_index=${index}`, {
+    urlParams.set('tab_index', index);
+    navigate(`?${urlParams.toString()}`, {
       replace: true,
     });
   };

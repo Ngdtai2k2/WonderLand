@@ -125,14 +125,18 @@ export const API = {
     BASE: createEndpoint('save-post'),
     POST: createEndpoint('save-post/post'),
   },
- SEARCH: {
+  SEARCH: {
     USERS: (userId, query, limit, page) => {
       const userParam = userId !== undefined ? `request_user=${userId}&` : '';
-      return createEndpoint(`search/users?${userParam}query=${query}&_limit=${limit}&_page=${page}`);
+      return createEndpoint(
+        `search/users?${userParam}query=${query}&_limit=${limit}&_page=${page}`,
+      );
     },
     POSTS: (userId, query, limit, page) => {
       const userParam = userId !== undefined ? `request_user=${userId}&` : '';
-      return createEndpoint(`search/posts?${userParam}query=${query}&_limit=${limit}&_page=${page}`);
+      return createEndpoint(
+        `search/posts?${userParam}query=${query}&_limit=${limit}&_page=${page}`,
+      );
     },
-  }
+  },
 };
