@@ -1,4 +1,4 @@
-import { BaseApi } from '../constants/constant';
+import { API } from '../api';
 
 const getNotificationByUserId = async (
   lng,
@@ -11,10 +11,9 @@ const getNotificationByUserId = async (
   axiosJWT,
   type,
 ) => {
-  const url = `${BaseApi}/notification/user?_page=${page.current}&_limit=5&_order=desc&request_user=${userId}${type ? `&type=${type}` : ''}`;
   await axiosJWT
     .post(
-      url,
+      API.NOTIFICATION.GET_BY_USER_ID(userId, page.current, 5, 'desc', type),
       {},
       {
         headers: {

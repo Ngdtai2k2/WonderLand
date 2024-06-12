@@ -329,10 +329,10 @@ const postController = {
 
   getPostByCategory: async (req, res) => {
     try {
-      const { category } = req.params;
+      const { categoryId } = req.params;
       const { _isFresh } = req.query;
 
-      const categoryData = await Category.findOne({ name: category });
+      const categoryData = await Category.findById(categoryId);
       if (!categoryData)
         return res.status(404).json({ message: req.t("not_found.category") });
 

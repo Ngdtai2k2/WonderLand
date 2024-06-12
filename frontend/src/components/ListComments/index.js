@@ -13,10 +13,13 @@ import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
 import MenuSettings from './menuSettings';
 import CommentItem from './commentItem';
 import LoadingCircularIndeterminate from '../Loading';
-import { useToastTheme, BaseApi } from '../../constants/constant';
+
+import { API } from '../../api';
+import useUserAxios from '../../hooks/useUserAxios';
+import { useToastTheme } from '../../constants/constant';
 import { getCommentsByPostId } from '../../utils/commentServices';
 import { handleCloseMenu, handleOpenMenu } from '../../utils/helperFunction';
-import useUserAxios from '../../hooks/useUserAxios';
+
 import { BoxComment, ButtonLink } from './styles';
 
 export default function ListComments({ postId, newComment }) {
@@ -68,7 +71,7 @@ export default function ListComments({ postId, newComment }) {
         [commentId]: false,
       }));
       const response = await axiosJWT.delete(
-        `${BaseApi}/comment/${commentId}/delete?request_user=${user?._id}`,
+        API.COMMENT.DELETE(commentId, user?._id),
         {
           headers: {
             token: `Bearer ${accessToken}`,
@@ -93,7 +96,7 @@ export default function ListComments({ postId, newComment }) {
         [replyId]: false,
       }));
       const response = await axiosJWT.delete(
-        `${BaseApi}/comment/${commentId}/delete-reply/${replyId}?request_user=${user?._id}`,
+        API.COMMENT.DELETE_REPLY(commentId, replyId, user?._id),
         {
           'Accept-Language': i18n.language,
           headers: { token: `Bearer ${accessToken}` },
@@ -111,7 +114,7 @@ export default function ListComments({ postId, newComment }) {
     try {
       setIsLoadingReply(commentId);
       const response = await axios.post(
-        `${BaseApi}/comment/${commentId}/reply?_page=${page}&_limit=10`,
+        `${API.COMMENT.REPLY(commentId)}?_page=${page}&_limit=10`,
         {
           userId: user?._id,
         },

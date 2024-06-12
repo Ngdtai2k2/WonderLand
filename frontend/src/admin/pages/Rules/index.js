@@ -13,7 +13,8 @@ import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import CustomBox from '../../../components/CustomBox';
 import DataTable from '../../components/DataTable';
 
-import { BaseApi, useToastTheme } from '../../../constants/constant';
+import { API } from '../../../api';
+import { useToastTheme } from '../../../constants/constant';
 import ModalRuleForm from './modalRuleForm';
 import useUserAxios from '../../../hooks/useUserAxios';
 
@@ -44,7 +45,7 @@ export default function Rules() {
       isLoading: true,
     });
     const response = await axios.get(
-      `${BaseApi}/rule?_page=${rulesState.page}&_limit=${rulesState.pageSize}`,
+      `${API.RULE.BASE}?_page=${rulesState.page}&_limit=${rulesState.pageSize}`,
     );
     setRulesState((old) => ({
       ...old,
@@ -67,7 +68,7 @@ export default function Rules() {
   const handleDelete = async (id) => {
     try {
       setLoadingDelete((prevState) => ({ ...prevState, [id]: true }));
-      const response = await axiosJWT.delete(`${BaseApi}/rule/delete/${id}`, {
+      const response = await axiosJWT.delete(`${API.RULE.DELETE(id)}`, {
         headers: { token: `Bearer ${accessToken}` },
       });
       toast.success(response.data.message, toastTheme);

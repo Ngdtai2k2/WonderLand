@@ -203,16 +203,16 @@ const categoriesController = {
     }
   },
 
-  getCategoryDetails: async (req, res) => {
+  getCategoryDetail: async (req, res) => {
     try {
-      const { name } = req.body;
-      const { request_user } = req.query;
+      const { request_user } = req.body;
+      const {categoryId } = req.params;
 
       let hasLiked = false;
       let hasFollowed = false;
 
       const category = await categoriesModel
-        .findOne({ name: name })
+        .findById(categoryId)
         .populate("media", "url type description");
       if (!category) {
         return res.status(404).json({ message: req.t("not_found.category") });
@@ -240,13 +240,13 @@ const categoriesController = {
   handleLikeCategory: async (req, res) => {
     try {
       const { userId } = req.body;
-      const { categoryName } = req.params;
+      const { categoryId } = req.params;
 
       const user = await userModel.findById(userId);
       if (!user) {
         return res.status(404).json({ message: req.t("not_found.user") });
       }
-      const category = await categoriesModel.findOne({ name: categoryName });
+      const category = await categoriesModel.findById(categoryId);
       if (!category) {
         return res.status(404).json({ message: req.t("not_found.category") });
       }
@@ -290,12 +290,13 @@ const categoriesController = {
   handleFollowCategory: async (req, res) => {
     try {
       const { userId } = req.body;
-      const { categoryName } = req.params;
+      const {categoryId} = req.params;
+      
       const user = await userModel.findById(userId);
       if (!user) {
         return res.status(404).json({ message: req.t("not_found.user") });
       }
-      const category = await categoriesModel.findOne({ name: categoryName });
+      const category = await categoriesModel.findById(categoryId);
       if (!category) {
         return res.status(404).json({ message: req.t("not_found.category") });
       }

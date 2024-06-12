@@ -10,9 +10,11 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-import { BoxModal } from '../styles';
-import { useToastTheme, BaseApi } from '../../../constants/constant';
+import { API } from '../../../api';
+import { useToastTheme } from '../../../constants/constant';
 import useUserAxios from '../../../hooks/useUserAxios';
+
+import { BoxModal } from '../styles';
 
 export default function ModalRuleForm({
   openModal,
@@ -61,7 +63,7 @@ export default function ModalRuleForm({
         setFetching(true);
         const response = await (isUpdate
           ? axiosJWT.put(
-              `${BaseApi}/rule/update/${data?._id}`,
+              API.RULE.UPDATE(data?._id),
               {
                 name: values.name.trim(),
                 description: values.description.trim(),
@@ -71,7 +73,7 @@ export default function ModalRuleForm({
               },
             )
           : axiosJWT.post(
-              `${BaseApi}/rule/create`,
+              API.RULE.CREATE,
               {
                 name: values.name,
                 description: values.description,

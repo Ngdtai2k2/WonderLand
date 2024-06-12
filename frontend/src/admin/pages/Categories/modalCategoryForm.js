@@ -11,8 +11,9 @@ import Typography from '@mui/material/Typography';
 import Badge from '@mui/material/Badge';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-import { BaseApi, useToastTheme } from '../../../constants/constant';
+import { useToastTheme } from '../../../constants/constant';
 import useUserAxios from '../../../hooks/useUserAxios';
+import { API } from '../../../api';
 
 import { ImageStyle } from './styles';
 import { BoxModal } from '../styles';
@@ -87,13 +88,13 @@ export default function ModalCategoryForm({
         formData.append('file', values.file);
 
         const response = await (isUpdate
-          ? axiosJWT.put(`${BaseApi}/category/update/${data?._id}`, formData, {
+          ? axiosJWT.put(API.CATEGORY.UPDATE(data?._id), formData, {
               headers: {
                 token: `Bearer ${accessToken}`,
                 'Accept-Language': i18n.language,
               },
             })
-          : axiosJWT.post(`${BaseApi}/category/create`, formData, {
+          : axiosJWT.post(API.CATEGORY.CREATE, formData, {
               headers: {
                 token: `Bearer ${accessToken}`,
                 'Accept-Language': i18n.language,

@@ -22,14 +22,14 @@ router.delete(
   verifyTokenAndAdminAuth,
   categoriesController.deleteCategory
 );
-router.post("/details", categoriesController.getCategoryDetails);
+router.post("/detail/:categoryId", categoriesController.getCategoryDetail);
 router.post(
-  "/like/:categoryName",
+  "/like/:categoryId",
   verifyMiddleware.token,
   categoriesController.handleLikeCategory
 );
 router.post(
-  "/follow/:categoryName",
+  "/follow/:categoryId",
   verifyMiddleware.token,
   categoriesController.handleFollowCategory
 );

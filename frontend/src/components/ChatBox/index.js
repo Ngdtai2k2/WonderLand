@@ -19,7 +19,8 @@ import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 
-import { BaseApi, useToastTheme } from '../../constants/constant';
+import { API } from '../../api';
+import { useToastTheme } from '../../constants/constant';
 
 import useUserAxios from '../../hooks/useUserAxios';
 import { deleteChat, getMessages } from '../../utils/chatServices';
@@ -58,7 +59,7 @@ export default function ChatBox({ chat, receivedMessage }) {
     const userId = chat?.members?.find((id) => id !== user?._id);
 
     if (chat !== null) {
-      getUserByUserId(userId, setUserData);
+      getUserByUserId(i18n.language, userId, setUserData, user?._id);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, chat]);
@@ -85,7 +86,7 @@ export default function ChatBox({ chat, receivedMessage }) {
     try {
       if (newMessage.trim() !== '') {
         const response = await axiosJWT.post(
-          `${BaseApi}/message`,
+          API.MESSAGE.BASE,
           {
             senderId: user._id,
             message: newMessage,

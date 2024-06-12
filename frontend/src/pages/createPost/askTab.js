@@ -15,10 +15,13 @@ import LoadingButton from '@mui/lab/LoadingButton';
 
 import CreateRoundedIcon from '@mui/icons-material/CreateRounded';
 
-import { BaseApi, useToastTheme } from '../../constants/constant';
 import LoadingCircularIndeterminate from '../../components/Loading';
-import { FlexCenterBox } from './styles';
+
+import { API } from '../../api';
+import { useToastTheme } from '../../constants/constant';
 import useUserAxios from '../../hooks/useUserAxios';
+
+import { FlexCenterBox } from './styles';
 
 export default function AskTab() {
   const [category, setCategory] = useState(null);
@@ -34,7 +37,7 @@ export default function AskTab() {
   useEffect(() => {
     const getCategory = async () => {
       try {
-        const response = await axios.get(BaseApi + '/category');
+        const response = await axios.get(API.CATEGORY.BASE);
         setCategory(response.data.result.docs);
         setLoading(false);
       } catch (error) {
@@ -70,13 +73,9 @@ export default function AskTab() {
           type: 1,
         };
 
-        const response = await axiosJWT.post(
-          BaseApi + '/post/create',
-          askData,
-          {
-            headers: { token: `Bearer ${accessToken}` },
-          },
-        );
+        const response = await axiosJWT.post(API.POST.CREATE, askData, {
+          headers: { token: `Bearer ${accessToken}` },
+        });
         toast.success(response.data.message, toastTheme);
         navigate('/');
       } catch (error) {

@@ -33,8 +33,18 @@ import PostTab from './postTab';
 import ReactionTab from './reactionTab';
 import SavedPostTab from './savedPostTab';
 
-import { BaseApi, useToastTheme } from '../../constants/constant';
+import { API } from '../../api';
+import { useToastTheme } from '../../constants/constant';
 import useUserAxios from '../../hooks/useUserAxios';
+import {
+  acceptRequestAddFriend,
+  cancelRequestAddFriend,
+  deleteFriend,
+  sendRequestAddFriend,
+} from '../../utils/friendServices';
+
+import ModalUpdateMedia from './modalUpdateMedia';
+
 import { ButtonTab, TypographyButtonTab } from '../styles';
 import {
   AvatarProfile,
@@ -43,13 +53,6 @@ import {
   ButtonStyled,
   CoverArt,
 } from './styles';
-import {
-  acceptRequestAddFriend,
-  cancelRequestAddFriend,
-  deleteFriend,
-  sendRequestAddFriend,
-} from '../../utils/friendServices';
-import ModalUpdateMedia from './modalUpdateMedia';
 
 export default function Profile() {
   const { id } = useParams();
@@ -79,15 +82,18 @@ export default function Profile() {
   const getUserProfile = async () => {
     try {
       setLoading(true);
-      const url = user
-        ? `${BaseApi}/user/${id}?request_user=${user?._id}`
-        : `${BaseApi}/user/${id}`;
 
-      const response = await axios.get(url, {
-        headers: {
-          'Accept-Language': i18n.language,
+      const response = await axios.post(
+        API.USER.GET(id),
+        {
+          request_user: user?._id,
         },
-      });
+        {
+          headers: {
+            'Accept-Language': i18n.language,
+          },
+        },
+      );
       setData(response?.data?.user);
       setHasSendRequestAddFriend(response?.data?.hasSendRequestAddFriend);
       setIsFriend(response?.data?.isFriend);

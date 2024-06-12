@@ -15,13 +15,13 @@ import VisibilityOffRoundedIcon from '@mui/icons-material/VisibilityOffRounded';
 import DataTable from '../../components/DataTable';
 import CustomBox from '../../../components/CustomBox';
 
-import { BaseApi } from '../../../constants/constant';
+import { API } from '../../../api';
 import { convertNumber } from '../../../utils/helperFunction';
 import { BoxContainer, BoxIcon, BoxItems } from './styles';
 import useUserAxios from '../../../hooks/useUserAxios';
 
 export default function Dashboard() {
-  const [totalUsers, setTotalUsers] = useState(NaN);
+  const [totalUsers, setTotalUsers] = useState('---');
   const [openCollapse, setOpenCollapse] = useState({
     0: false,
     1: false,
@@ -53,7 +53,7 @@ export default function Dashboard() {
     async function getTotalUsers() {
       try {
         const response = await axiosJWT.post(
-          `${BaseApi}/user/total`,
+          API.USER.TOTAL,
           {},
           {
             headers: {
@@ -63,7 +63,7 @@ export default function Dashboard() {
         );
         setTotalUsers(response.data.total);
       } catch (error) {
-        setTotalUsers(NaN);
+        setTotalUsers('---');
       }
     }
     getTotalUsers();
@@ -73,7 +73,7 @@ export default function Dashboard() {
   const getNewUsers = async () => {
     setNewUsersState((old) => ({ ...old, isLoading: true }));
     const response = await axiosJWT.post(
-      `${BaseApi}/user/today?_page=${newUsersState.page}&_limit=${newUsersState.pageSize}`,
+      `${API.USER.REGISTERED_TODAY}?_page=${newUsersState.page}&_limit=${newUsersState.pageSize}`,
       {},
       {
         headers: {
@@ -92,7 +92,7 @@ export default function Dashboard() {
   const getAllUsers = async () => {
     setUsersState((old) => ({ ...old, isLoading: true }));
     const response = await axiosJWT.post(
-      `${BaseApi}/user?_page=${usersState.page}&_limit=${usersState.pageSize}`,
+      `${API.USER.BASE}?_page=${usersState.page}&_limit=${usersState.pageSize}`,
       {},
       {
         headers: {

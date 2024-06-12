@@ -9,7 +9,8 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-import { BaseApi, useToastTheme } from '../../../constants/constant';
+import { useToastTheme } from '../../../constants/constant';
+import { API } from '../../../api';
 
 export default function ForgetPassword({ setTabIndex }) {
   const [fetching, setFetching] = useState();
@@ -32,7 +33,7 @@ export default function ForgetPassword({ setTabIndex }) {
     onSubmit: async (values) => {
       try {
         setFetching(true);
-        const response = await axios.post(`${BaseApi}/auth/forgot-password`, {
+        const response = await axios.post(API.AUTH.FORGET_PASSWORD, {
           email: values.email,
         });
         localStorage.setItem('email_reset_password', values.email);

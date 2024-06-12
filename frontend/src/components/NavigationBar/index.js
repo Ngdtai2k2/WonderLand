@@ -28,8 +28,9 @@ import DrawerList from '../../components/DrawerList';
 import SearchForm from '../SearchForm';
 import UserMenu from '../UserMenu';
 
-import { BaseApi, useToastTheme } from '../../constants/constant';
+import { API } from '../../api';
 import useUserAxios from '../../hooks/useUserAxios';
+import { useToastTheme } from '../../constants/constant';
 
 export default function NavigationBar({ isAdmin, state }) {
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -65,7 +66,7 @@ export default function NavigationBar({ isAdmin, state }) {
   const countUnreadNotifications = async (userId) => {
     try {
       const response = await axiosJWT.post(
-        `${BaseApi}/notification/count-unread?request_user=${userId}`,
+        API.NOTIFICATION.COUNT_UNREAD(userId),
         {
           id: userId,
         },

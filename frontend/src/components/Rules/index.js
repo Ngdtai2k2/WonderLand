@@ -10,8 +10,9 @@ import Checkbox from '@mui/material/Checkbox';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import KeyboardArrowUpRoundedIcon from '@mui/icons-material/KeyboardArrowUpRounded';
 
-import { BaseApi } from '../../constants/constant';
 import LoadingCircularIndeterminate from '../Loading';
+
+import { API } from '../../api';
 
 export default function Rules({ isReport, setState }) {
   const [rules, setRules] = useState();
@@ -38,7 +39,7 @@ export default function Rules({ isReport, setState }) {
   const getAllRules = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${BaseApi}/rule`);
+      const response = await axios.get(API.RULE.BASE);
       setRules(response.data.result.docs);
     } catch (error) {
       setRules(null);

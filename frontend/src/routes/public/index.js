@@ -23,7 +23,7 @@ export const publicRoutes = [
   { path: '/fresh', element: <FreshPage /> },
   { path: '/ask', element: <AskPage /> },
   { path: '/post/:id', element: <PostDetail /> },
-  { path: '/category/:name', element: <CategoryDetail /> },
+  { path: '/category/:categoryId', element: <CategoryDetail /> },
   { path: '/rules', element: <RulesPage /> },
   { path: '/search', element: <SearchPage /> },
   { path: '/friends', element: <FriendsList /> },

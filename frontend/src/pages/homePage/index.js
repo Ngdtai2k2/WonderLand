@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import RenderPost from '../../components/RenderPost';
 import GridColumnLayout from '../../components/GridColumnLayout';
 
-import { BaseApi } from '../../constants/constant';
+import { API } from '../../api';
 
 export default function HomePage() {
   const { t } = useTranslation('home');
@@ -17,7 +17,7 @@ export default function HomePage() {
 
   return (
     <GridColumnLayout>
-      <RenderPost apiLink={`${BaseApi}/post/4?_order=desc&`} type={0} />
+      <RenderPost apiLink={API.POST.GET(4, 'desc')} type={0} />
     </GridColumnLayout>
   );
 }

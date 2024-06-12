@@ -12,7 +12,8 @@ import LoadingButton from '@mui/lab/LoadingButton';
 
 import LoadingCircularIndeterminate from '../../components/Loading';
 
-import { BaseApi, useToastTheme } from '../../constants/constant';
+import { API } from '../../api';
+import { useToastTheme } from '../../constants/constant';
 import useUserAxios from '../../hooks/useUserAxios';
 import {
   acceptRequestAddFriend,
@@ -49,7 +50,7 @@ export default function FriendsRequestListTab() {
     document.title = t('friends:friends_request_list');
   }, [t]);
 
-  const url = `${BaseApi}/friend/request-friend`;
+  const url = API.FRIEND.REQUEST_FRIEND;
 
   useEffect(() => {
     if (user) {

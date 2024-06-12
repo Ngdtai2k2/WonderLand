@@ -14,7 +14,8 @@ import WidgetImage from '../WidgetImage';
 import ButtonBar from '../ButtonBar';
 import WidgetBirthday from '../WidgetBirthday';
 
-import { BaseApi, useToastTheme } from '../../constants/constant';
+import { API } from '../../api';
+import { useToastTheme } from '../../constants/constant';
 import useUserAxios from '../../hooks/useUserAxios';
 import { getFriendsList, refreshFriendList } from '../../utils/friendServices';
 
@@ -36,9 +37,9 @@ export default function GridColumnLayout({ children }) {
   const [event, setEvent] = useState(null);
 
   const page = useRef(1);
-  const { t, i18n } = useTranslation(['home', 'message']);
-  const toastTheme = useToastTheme();
   const navigate = useNavigate();
+  const toastTheme = useToastTheme();
+  const { t, i18n } = useTranslation(['home', 'message']);
   const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);
 
   const socket = initializeSocket(user?._id);
@@ -49,7 +50,7 @@ export default function GridColumnLayout({ children }) {
     if (user) {
       getFriendsList(
         i18n.language,
-        `${BaseApi}/friend`,
+        API.FRIEND.BASE,
         axiosJWT,
         accessToken,
         page,
@@ -73,7 +74,7 @@ export default function GridColumnLayout({ children }) {
   const handleCheckOnline = async (userIds) => {
     try {
       const response = await axiosJWT.post(
-        `${BaseApi}/socket/online`,
+        API.SOCKET.LIST_ONLINE,
         {
           userIds: userIds,
         },
@@ -147,7 +148,7 @@ export default function GridColumnLayout({ children }) {
                       if (hasMore) {
                         getFriendsList(
                           i18n.language,
-                          `${BaseApi}/friend`,
+                          API.FRIEND.BASE,
                           axiosJWT,
                           accessToken,
                           page,
@@ -164,7 +165,7 @@ export default function GridColumnLayout({ children }) {
                     refreshFunction={() => {
                       refreshFriendList(
                         i18n.language,
-                        `${BaseApi}/friend`,
+                        API.FRIEND.BASE,
                         axiosJWT,
                         accessToken,
                         page,

@@ -34,7 +34,7 @@ const userController = {
   findUserById: async (req, res) => {
     try {
       const { user } = req.params;
-      const { request_user } = req.query;
+      const { request_user } = req.body;
 
       let userData;
       if (mongoose.Types.ObjectId.isValid(user)) {

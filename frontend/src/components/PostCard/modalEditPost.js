@@ -17,13 +17,16 @@ import MenuItem from '@mui/material/MenuItem';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
-import { useToastTheme, BaseApi } from '../../constants/constant';
-import useUserAxios from '../../hooks/useUserAxios';
 import LoadingCircularIndeterminate from '../Loading';
-import getCategories from '../../utils/categoryServices';
+
+import { API } from '../../api';
+import useUserAxios from '../../hooks/useUserAxios';
 import { getPostById } from '../../utils/postServices';
-import { BoxModal, VisuallyHiddenInput } from '../styles';
+import { useToastTheme } from '../../constants/constant';
+import getCategories from '../../utils/categoryServices';
+
 import { FlexCenterBox } from './styles';
+import { BoxModal, VisuallyHiddenInput } from '../styles';
 
 export default function ModalEditPost({ open, handleClose, id, setState }) {
   const [category, setCategory] = useState(null);
@@ -107,7 +110,7 @@ export default function ModalEditPost({ open, handleClose, id, setState }) {
         });
 
         const response = await axiosJWT.put(
-          `${BaseApi}/post/update/${id}?request_user=${user?._id}`,
+          API.POST.UPDATE(id, user?._id),
           formData,
           {
             headers: {

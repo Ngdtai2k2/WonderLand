@@ -322,7 +322,7 @@ const authController = {
       await transporter.sendMail(mailOptions);
 
       return res.status(200).json({
-        message: t("message.check_mail"),
+        message: req.t("message.check_mail"),
       });
     } catch (error) {
       return res.status(500).json({ message: req.t("server_error") });

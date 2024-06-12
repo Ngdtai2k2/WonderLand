@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { BaseApi } from '../../constants/constant';
+import { API } from '../../api';
 import RenderPostInTab from './renderPostInTab';
 
 export default function SavedPostTab() {
-  return <RenderPostInTab apiLink={`${BaseApi}/save-post/post`} />;
+  return <RenderPostInTab apiLink={API.SAVE_POST.POST} />;
 }

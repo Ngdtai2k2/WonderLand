@@ -25,9 +25,11 @@ import NoData from '../../components/NoData';
 import PostCard from '../../components/PostCard';
 import ListComments from '../../components/ListComments';
 
-import { useToastTheme, BaseApi } from '../../constants/constant';
-import { VisuallyHiddenInput } from '../styles';
+import { API } from '../../api';
+import { useToastTheme } from '../../constants/constant';
 import useUserAxios from '../../hooks/useUserAxios';
+
+import { VisuallyHiddenInput } from '../styles';
 
 export default function PostDetail() {
   const [isLoading, setIsLoading] = useState(false);
@@ -52,7 +54,7 @@ export default function PostDetail() {
     try {
       setIsLoading(true);
       const response = await axios.post(
-        `${BaseApi}/post/d/${id}`,
+        API.POST.DETAIL(id),
         {
           user: user?._id,
         },
@@ -127,17 +129,13 @@ export default function PostDetail() {
         if (values.file) {
           formData.append('file', values.file);
         }
-        const response = await axiosJWT.post(
-          `${BaseApi}/comment/create`,
-          formData,
-          {
-            headers: {
-              token: `Bearer ${accessToken}`,
-              'Accept-Language': i18n.language,
-              'Content-Type': 'multipart/form-data',
-            },
+        const response = await axiosJWT.post(API.COMMENT.CREATE, formData, {
+          headers: {
+            token: `Bearer ${accessToken}`,
+            'Accept-Language': i18n.language,
+            'Content-Type': 'multipart/form-data',
           },
-        );
+        });
         setNewComment(response.data.newComment);
         toast.success(response.data.message, toastTheme);
         handleClearFile();

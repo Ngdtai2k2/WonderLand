@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
-import Zoom from 'react-medium-image-zoom';
 import { useParams } from 'react-router-dom';
+import Zoom from 'react-medium-image-zoom';
 import { useTheme } from '@emotion/react';
+import { toast } from 'react-toastify';
 import axios from 'axios';
 
 import Typography from '@mui/material/Typography';
@@ -31,13 +31,14 @@ import RenderPost from '../../components/RenderPost';
 import LoadingCircularIndeterminate from '../../components/Loading';
 import ReadMore from '../../components/Readmore';
 
+import { API } from '../../api';
 import { convertNumber } from '../../utils/helperFunction';
 import useUserAxios from '../../hooks/useUserAxios';
 import {
-  BaseApi,
   createElementStyleForZoom,
   useToastTheme,
 } from '../../constants/constant';
+
 import { AvatarCategory } from './styles';
 
 export default function CategoryDetail() {
@@ -48,7 +49,7 @@ export default function CategoryDetail() {
   const [loading, setLoading] = useState(false);
   const [tabIndex, setTabIndex] = useState(0);
 
-  const { name } = useParams();
+  const { categoryId } = useParams();
   const theme = useTheme();
   const toastTheme = useToastTheme();
   const { t, i18n } = useTranslation(['message']);
@@ -66,13 +67,10 @@ export default function CategoryDetail() {
     const getCategoryDetails = async () => {
       try {
         setLoading(true);
-        const url = user
-          ? `${BaseApi}/category/details?request_user=${user._id}`
-          : `${BaseApi}/category/details`;
         const response = await axios.post(
-          url,
+          API.CATEGORY.DETAIL(categoryId),
           {
-            name: name,
+            request_user: user?._id,
           },
           {
             headers: {
@@ -92,19 +90,19 @@ export default function CategoryDetail() {
     };
     getCategoryDetails();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [name]);
+  }, [categoryId]);
 
   const handleChangeTab = (event, newValue) => {
     setTabIndex(newValue);
   };
 
-  const handleLikeCategory = async () => {
+  const handleLikeCategory = async (categoryId) => {
     try {
       if (!user) {
         return toast.warning(t('message:need_login'), toastTheme);
       }
       const response = await axiosJWT.post(
-        `${BaseApi}/category/like/${name}`,
+        API.CATEGORY.LIKE(categoryId),
         {
           userId: user._id,
         },
@@ -129,13 +127,13 @@ export default function CategoryDetail() {
     }
   };
 
-  const handleFollowCategory = async () => {
+  const handleFollowCategory = async (categoryId) => {
     try {
       if (!user) {
         return toast.warning(t('message:need_login'), toastTheme);
       }
       const response = await axiosJWT.post(
-        `${BaseApi}/category/follow/${name}`,
+        API.CATEGORY.FOLLOW(categoryId),
         {
           userId: user._id,
         },
@@ -202,7 +200,7 @@ export default function CategoryDetail() {
                   <Button
                     variant="outlined"
                     sx={{ height: 30 }}
-                    onClick={() => handleFollowCategory()}
+                    onClick={() => handleFollowCategory(category._id)}
                   >
                     {hasFollowed ? 'Unfollow' : 'Follow'}
                   </Button>
@@ -225,7 +223,7 @@ export default function CategoryDetail() {
               <Box display="flex" justifyContent="center" alignItems="center">
                 <IconButton
                   aria-label="like category"
-                  onClick={() => handleLikeCategory()}
+                  onClick={() => handleLikeCategory(category._id)}
                 >
                   {hasLiked ? (
                     <FavoriteRoundedIcon color="error" />
@@ -291,12 +289,22 @@ export default function CategoryDetail() {
       <Box>
         {tabIndex === 0 && (
           <RenderPost
-            apiLink={`${BaseApi}/post/category/${name}?_isFresh=false&_order=desc&_sort=createdAt&`}
+            apiLink={API.POST.GET_BY_CATEGORY(
+              categoryId,
+              false,
+              'desc',
+              'createdAt',
+            )}
           />
         )}
         {tabIndex === 1 && (
           <RenderPost
-            apiLink={`${BaseApi}/post/category/${name}?_isFresh=true&_order=desc&_sort=createdAt&`}
+            apiLink={API.POST.GET_BY_CATEGORY(
+              categoryId,
+              true,
+              'desc',
+              'createdAt',
+            )}
           />
         )}
         {tabIndex === 2 && (

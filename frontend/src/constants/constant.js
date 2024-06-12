@@ -28,7 +28,6 @@ export const createElementStyleForZoom = (theme) => {
   document.head.appendChild(style);
 };
 
-export const BaseApi = process.env.REACT_APP_BASE_URL;
 export const ImagesNoData = process.env.REACT_APP_IMAGES_NO_DATA;
 
 export const locales = [

@@ -15,12 +15,13 @@ import PersonRemoveRoundedIcon from '@mui/icons-material/PersonRemoveRounded';
 import LoadingCircularIndeterminate from '../../components/Loading';
 import ConfirmDialog from '../../components/Dialog';
 
+import { API } from '../../api';
 import {
   deleteFriend,
   getFriendsList,
   refreshFriendList,
 } from '../../utils/friendServices';
-import { useToastTheme, BaseApi } from '../../constants/constant';
+import { useToastTheme } from '../../constants/constant';
 import useUserAxios from '../../hooks/useUserAxios';
 import {
   AvatarFriendList,
@@ -48,7 +49,7 @@ export default function FriendsListTab() {
     document.title = t('friends:friends_list');
   }, [t]);
 
-  const url = `${BaseApi}/friend`;
+  const url = API.FRIEND.BASE;
 
   useEffect(() => {
     if (user) {

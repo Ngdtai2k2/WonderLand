@@ -62,7 +62,7 @@ const reactionService = {
 
       const user = await userModel.findById(targetModel.author);
       const userRequest = await userModel
-        .findById(req.query.user_request)
+        .findById(author)
         .populate("media");
 
       const typeNotification =
@@ -81,8 +81,8 @@ const reactionService = {
       const actionEn = newType ? "liked" : "disliked";
 
       const msg = {
-        vi: `${user.nickname} vừa ${actionVi} ${actionField} của bạn!`,
-        en: `${user.nickname} just ${actionEn} your ${actionField}!`,
+        vi: `${userRequest.nickname} vừa ${actionVi} ${actionField} của bạn!`,
+        en: `${userRequest.nickname} just ${actionEn} your ${actionField}!`,
       };
 
       const reaction = await Reaction.findOne({ author, [targetField]: id });

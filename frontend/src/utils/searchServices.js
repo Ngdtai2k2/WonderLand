@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { BaseApi } from '../constants/constant';
+
+import { API } from '../api';
 
 const searchUsers = async (
   lng,
@@ -15,14 +16,8 @@ const searchUsers = async (
 ) => {
   try {
     setIsLoading(true);
-    let requestUrl = `${BaseApi}/search/users?query=${query}&_limit=${limit}&_page=${page}`;
-
-    if (userId) {
-      requestUrl += `&request_user=${userId}`;
-    }
-
     const response = await axios.post(
-      requestUrl,
+      API.SEARCH.USERS(userId, query, limit, page),
       {
         only_friends: type === true,
       },
@@ -81,12 +76,8 @@ const searchPosts = async (
 ) => {
   try {
     setIsLoading(true);
-    let requestUrl = `${BaseApi}/search/posts?query=${query}&_limit=${limit}&_page=${page}`;
-    if (userId) {
-      requestUrl += `&request_user=${userId}`;
-    }
     const response = await axios.post(
-      requestUrl,
+      API.SEARCH.POSTS(userId, query, limit, page),
       {},
       {
         headers: {

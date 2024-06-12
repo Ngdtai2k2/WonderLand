@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { BaseApi } from '../constants/constant';
+import { API } from '../api';
 
 // function support for get comments
 const getCommentsByPostId = async (
@@ -16,7 +16,7 @@ const getCommentsByPostId = async (
   setIsLoading(true);
   await axios
     .post(
-      `${BaseApi}/comment/post/${postId}?_page=${page.current}&_limit=10`,
+      `${API.COMMENT.GET_BY_POST(postId)}?_page=${page.current}&_limit=10`,
       {
         userId: userId,
       },

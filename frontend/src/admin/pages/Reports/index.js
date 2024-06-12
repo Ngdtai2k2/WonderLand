@@ -16,8 +16,9 @@ import CustomBox from '../../../components/CustomBox';
 import LoadingCircularIndeterminate from '../../../components/Loading';
 import DataTable from '../../components/DataTable';
 import ModalWebView from '../../components/ModalWebView';
+
+import { API } from '../../../api';
 import {
-  BaseApi,
   createElementStyleForZoom,
   useToastTheme,
 } from '../../../constants/constant';
@@ -54,7 +55,7 @@ export default function ReportsManager() {
       isLoading: true,
     });
     const response = await axiosJWT.get(
-      `${BaseApi}/report?_status=${selectStatus}&_page=${reportState.page}
+      `${API.REPORT.BASE}?_status=${selectStatus}&_page=${reportState.page}
         &_limit=${reportState.pageSize}&_order=${selectOrder ? 'asc' : 'desc'}`,
       {},
       {
@@ -99,7 +100,7 @@ export default function ReportsManager() {
         [id]: true,
       }));
       const response = await axiosJWT.post(
-        `${BaseApi}/report/${id}/reject`,
+        API.REPORT.REJECT(id),
         {},
         {
           headers: {
@@ -123,7 +124,7 @@ export default function ReportsManager() {
     try {
       setLoadingDelete((prevState) => ({ ...prevState, [id]: true }));
       const response = await axiosJWT.delete(
-        `${BaseApi}/post/delete/${id}/report/${reportId}`,
+        API.POST.DELETE_POST_REPORT(id, reportId),
         {
           headers: {
             token: `Bearer ${accessToken}`,

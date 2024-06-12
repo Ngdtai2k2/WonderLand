@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
 
-import { BaseApi } from '../constants/constant';
+import { API } from '../api';
 
 const getFriendsList = async (
   lng,
@@ -77,7 +77,7 @@ const deleteFriend = async (
       return toast.warning(t('message:need_login'), toastTheme);
     }
     const response = await axiosJWT.post(
-      `${BaseApi}/friend/delete-friend?request_user=${user?._id}`,
+      API.FRIEND.DELETE(user?._id),
       {
         userId: user?._id,
         // User ID on Params
@@ -112,7 +112,7 @@ const acceptRequestAddFriend = async (
       return toast.warning(t('message:need_login'), toastTheme);
     }
     const response = await axiosJWT.post(
-      `${BaseApi}/friend/accept-request`,
+      API.FRIEND.ACCEPT_REQUEST,
       {
         userId: currentUser,
         friendId: user?._id,
@@ -146,7 +146,7 @@ const cancelRequestAddFriend = async (
       return toast.warning(t('message:need_login'), toastTheme);
     }
     const response = await axiosJWT.post(
-      `${BaseApi}/friend/cancel-request`,
+      API.FRIEND.CANCEL_REQUEST,
       {
         userId: user?._id,
         friendId: currentUser,
@@ -180,7 +180,7 @@ const sendRequestAddFriend = async (
       return toast.warning(t('message:need_login'), toastTheme);
     }
     const response = await axiosJWT.post(
-      `${BaseApi}/friend/send-request`,
+      API.FRIEND.SEND_REQUEST,
       {
         userId: user?._id,
         friendId: currentUser,

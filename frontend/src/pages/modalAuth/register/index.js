@@ -12,8 +12,9 @@ import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
+import { API } from '../../../api';
 import { registerUser } from '../../../redux/apiRequest/authApi';
-import { useToastTheme, BaseApi } from '../../../constants/constant';
+import { useToastTheme } from '../../../constants/constant';
 
 export default function Register({ setTabIndex }) {
   const [uniqueNickName, setUniqueNickName] = useState();
@@ -79,7 +80,7 @@ export default function Register({ setTabIndex }) {
       !Boolean(formik.errors.nickname)
     ) {
       const response = await axios.post(
-        `${BaseApi}/auth/check-nickname`,
+        API.AUTH.CHECK_NICKNAME,
         {
           nickname: nickname,
         },

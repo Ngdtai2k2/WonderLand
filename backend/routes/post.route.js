@@ -14,7 +14,7 @@ router.post(
 // type query: 0 - top, 1 - trend, 2 - fresh, 3 - ask, 4 - no type
 router.post("/:typeQuery", postController.getAllPost);
 router.post("/d/:id", postController.getPostById);
-router.post("/category/:category", postController.getPostByCategory);
+router.post("/category/:categoryId", postController.getPostByCategory);
 router.put(
   "/update/:id",
   verifyMiddleware.verifyTokenAndUserAuthorization,

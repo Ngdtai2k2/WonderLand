@@ -11,7 +11,8 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import KeyRoundedIcon from '@mui/icons-material/KeyRounded';
 
-import { BaseApi, useToastTheme } from '../../../constants/constant';
+import { API } from '../../../api';
+import { useToastTheme } from '../../../constants/constant';
 
 export default function ResetPassword({ setTabIndex }) {
   const [fetching, setFetching] = useState();
@@ -52,7 +53,7 @@ export default function ResetPassword({ setTabIndex }) {
     onSubmit: async (values) => {
       try {
         setFetching(true);
-        const response = await axios.post(`${BaseApi}/auth/reset-password`, {
+        const response = await axios.post(API.AUTH.RESET_PASSWORD, {
           email: email,
           token: values.token,
           newPassword: values.confirmPassword,

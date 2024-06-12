@@ -13,10 +13,8 @@ import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 import DataTable from '../../components/DataTable';
 import CustomBox from '../../../components/CustomBox';
-import {
-  BaseApi,
-  createElementStyleForZoom,
-} from '../../../constants/constant';
+import { API } from '../../../api';
+import { createElementStyleForZoom } from '../../../constants/constant';
 import ModalCategoryForm from './modalCategoryForm';
 
 export default function Categories() {
@@ -44,7 +42,7 @@ export default function Categories() {
       isLoading: true,
     });
     const response = await axios.get(
-      `${BaseApi}/category?_page=${categoriesState.page}&_limit=${categoriesState.pageSize}`,
+      `${API.CATEGORY.CREATE}?_page=${categoriesState.page}&_limit=${categoriesState.pageSize}`,
     );
     setCategoriesState((old) => ({
       ...old,

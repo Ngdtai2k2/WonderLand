@@ -8,7 +8,7 @@ import {
   deleteUserFailed,
 } from '../slice/userSlice';
 
-import { BaseApi } from '../../constants/constant';
+import { API } from '../../api';
 
 export const updateUser = async (
   lng,
@@ -21,7 +21,7 @@ export const updateUser = async (
 ) => {
   dispatch(updateUserStart());
   try {
-    const res = await axiosJWT.put(BaseApi + '/user/' + id, userData, {
+    const res = await axiosJWT.put(API.USER.UPDATE(id), userData, {
       headers: {
         token: `Bearer ${accessToken}`,
         'Content-Type': 'multipart/form-data',
@@ -47,17 +47,13 @@ export const updateMedia = async (
 ) => {
   dispatch(updateUserStart());
   try {
-    const res = await axiosJWT.put(
-      `${BaseApi}/user/media-update/${userId}`,
-      media,
-      {
-        headers: {
-          token: `Bearer ${accessToken}`,
-          'Content-Type': 'multipart/form-data',
-          'Accept-Language': lng,
-        },
+    const res = await axiosJWT.put(API.USER.CHANGE_AVATAR(userId), media, {
+      headers: {
+        token: `Bearer ${accessToken}`,
+        'Content-Type': 'multipart/form-data',
+        'Accept-Language': lng,
       },
-    );
+    });
     dispatch(updateUserSuccess(res.data.user));
     toast.success(res.data.message, toastTheme);
     return res.data.user;
@@ -77,7 +73,7 @@ export const deleteUser = async (
 ) => {
   dispatch(deleteUserStart());
   try {
-    const res = await axiosJWT.delete(BaseApi + '/user/' + id, {
+    const res = await axiosJWT.delete(API.USER.DELETE, {
       headers: { token: `Bearer ${accessToken}` },
     });
     dispatch(deleteUserSuccess(res.data.user));

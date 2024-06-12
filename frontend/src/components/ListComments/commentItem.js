@@ -29,11 +29,14 @@ import ClearIcon from '@mui/icons-material/Clear';
 import BlockRoundedIcon from '@mui/icons-material/BlockRounded';
 
 import LoadingCircularIndeterminate from '../Loading';
-import { useToastTheme, BaseApi } from '../../constants/constant';
-import { BoxAlignCenter, ButtonLink, ImageStyle } from './styles';
-import { VisuallyHiddenInput } from '../../pages/styles';
+
+import { API } from '../../api';
+import { useToastTheme } from '../../constants/constant';
 import { renderContentReply } from '../../utils/helperFunction';
 import useUserAxios from '../../hooks/useUserAxios';
+
+import { VisuallyHiddenInput } from '../../pages/styles';
+import { BoxAlignCenter, ButtonLink, ImageStyle } from './styles';
 
 export default function CommentItem({
   data,
@@ -113,7 +116,7 @@ export default function CommentItem({
         }
         const commentId = isReply ? data.commentId : data._id;
         const response = await axiosJWT.put(
-          `${BaseApi}/comment/${commentId}/reply`,
+          API.COMMENT.REPLY(commentId),
           formData,
           {
             headers: {
@@ -161,8 +164,8 @@ export default function CommentItem({
     if (!user) return toast.warning(t('message:need_login'), toastTheme);
     try {
       const apiUrl = isReply
-        ? `${BaseApi}/reaction/reply/like`
-        : `${BaseApi}/reaction/comment/like`;
+        ? API.REACTION.LIKE_REPLY
+        : API.REACTION.LIKE_COMMENT;
       await axiosJWT.post(
         apiUrl,
         {

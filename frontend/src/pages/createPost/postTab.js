@@ -20,10 +20,13 @@ import CreateRoundedIcon from '@mui/icons-material/CreateRounded';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import LoadingCircularIndeterminate from '../../components/Loading';
-import { BaseApi, useToastTheme } from '../../constants/constant';
+
+import { API } from '../../api';
+import useUserAxios from '../../hooks/useUserAxios';
+import { useToastTheme } from '../../constants/constant';
+
 import { FlexCenterBox } from './styles';
 import { VisuallyHiddenInput } from '../styles';
-import useUserAxios from '../../hooks/useUserAxios';
 
 export default function PostTab() {
   const [category, setCategory] = useState(null);
@@ -40,7 +43,7 @@ export default function PostTab() {
   useEffect(() => {
     const getCategory = async () => {
       try {
-        const response = await axios.get(BaseApi + '/category');
+        const response = await axios.get(API.CATEGORY.BASE);
         setCategory(response.data.result.docs);
         setLoading(false);
       } catch (error) {
@@ -89,17 +92,13 @@ export default function PostTab() {
           formData.append(key, value);
         });
 
-        const response = await axiosJWT.post(
-          `${BaseApi}/post/create`,
-          formData,
-          {
-            headers: {
-              'Accept-Language': i18n.language,
-              'Content-Type': 'multipart/form-data',
-              token: `Bearer ${accessToken}`,
-            },
+        const response = await axiosJWT.post(API.POST.CREATE, formData, {
+          headers: {
+            'Accept-Language': i18n.language,
+            'Content-Type': 'multipart/form-data',
+            token: `Bearer ${accessToken}`,
           },
-        );
+        });
         toast.success(response.data.message, toastTheme);
         navigate('/');
       } catch (error) {

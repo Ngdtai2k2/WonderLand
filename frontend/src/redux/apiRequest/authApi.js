@@ -16,12 +16,12 @@ import {
   registerSuccess,
 } from '../slice/userSlice';
 
-import { BaseApi } from '../../constants/constant';
+import { API } from '../../api';
 
 export const loginUser = async (user, dispatch, toastTheme, lng) => {
   dispatch(loginStart());
   try {
-    const res = await axios.post(BaseApi + '/auth/login', user, {
+    const res = await axios.post(API.AUTH.LOGIN, user, {
       headers: {
         'Accept-Language': lng,
       },
@@ -38,7 +38,7 @@ export const loginUser = async (user, dispatch, toastTheme, lng) => {
 export const registerUser = async (user, dispatch, toastTheme, lng) => {
   dispatch(registerStart());
   try {
-    const res = await axios.post(BaseApi + '/auth/register', user, {
+    const res = await axios.post(API.AUTH.REGISTER, user, {
       headers: {
         'Accept-Language': lng,
       },
@@ -65,7 +65,7 @@ export const logOut = async (
   dispatch(logOutStart());
   try {
     await axiosJWT.post(
-      BaseApi + '/auth/logout',
+      API.AUTH.LOGOUT,
       { id, device },
       {
         headers: { token: `Bearer ${accessToken}` },
@@ -94,7 +94,7 @@ export const changePassword = async (
 ) => {
   dispatch(changePasswordStart());
   try {
-    const res = await axiosJWT.put(BaseApi + '/auth/password/' + id, userData, {
+    const res = await axiosJWT.put(API.AUTH.CHANGE_PASSWORD(id), userData, {
       headers: {
         token: `Bearer ${accessToken}`,
         'Accept-Language': lng,

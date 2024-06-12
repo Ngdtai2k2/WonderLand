@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import RenderPost from '../../components/RenderPost';
 import GridColumnLayout from '../../components/GridColumnLayout';
 
-import { BaseApi } from '../../constants/constant';
+import { API } from '../../api';
 
 export default function AskPage() {
   useEffect(() => {
@@ -12,7 +12,7 @@ export default function AskPage() {
   // with 3 - query ask posts
   return (
     <GridColumnLayout>
-      <RenderPost apiLink={`${BaseApi}/post/3?_order=desc&`} type={1} />
+      <RenderPost apiLink={API.POST.GET(3, 'desc')} type={1} />
     </GridColumnLayout>
   );
 }

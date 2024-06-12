@@ -8,9 +8,9 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Typography from '@mui/material/Typography';
 
+import { API } from '../../api';
 import CustomListItemButton from '../CustomListItemButton';
 import { AdminDrawerList, PublicDrawerList } from '../../constants/drawerlist';
-import { BaseApi } from '../../constants/constant';
 import LoadingCircularIndeterminate from '../Loading';
 
 function DrawerList({ isAdmin }) {
@@ -37,7 +37,7 @@ function DrawerList({ isAdmin }) {
   const getCategories = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${BaseApi}/category`);
+      const response = await axios.get(API.CATEGORY.BASE);
       setCategories(response.data.result.docs);
     } catch (error) {
       setCategories(null);
@@ -76,8 +76,8 @@ function DrawerList({ isAdmin }) {
         categories.map((category) => (
           <CustomListItemButton
             key={category._id}
-            selected={setSelectedLink(`/category/${category.name}`)}
-            onClick={() => handleLinkClick(`/category/${category.name}`)}
+            selected={setSelectedLink(`/category/${category._id}`)}
+            onClick={() => handleLinkClick(`/category/${category._id}`)}
             category={category}
             text={category.name}
           />

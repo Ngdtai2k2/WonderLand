@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-import { BaseApi } from '../constants/constant';
+import { API } from '../api';
 
 const getCategories = async (setData, setLoading, toastTheme) => {
   try {
-    const response = await axios.get(BaseApi + '/category');
+    const response = await axios.get(API.CATEGORY.BASE);
     setData(response.data.result.docs);
     setLoading(false);
   } catch (error) {

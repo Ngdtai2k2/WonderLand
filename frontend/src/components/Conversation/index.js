@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
-import axios from 'axios';
 
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 
-import { useToastTheme, BaseApi } from '../../constants/constant';
 import useUserAxios from '../../hooks/useUserAxios';
 
 import { StyledBadge } from '../styles';
@@ -15,13 +12,14 @@ import {
   handleSocketEvents,
   initializeSocket,
 } from '../../sockets/initializeSocket';
+import { API } from '../../api';
+import { getUserByUserId } from '../../utils/userServices';
 
 export default function Conversation({ data }) {
   const [userData, setUserData] = useState(null);
   const [isOnline, setIsOnline] = useState(false);
   const [event, setEvent] = useState();
 
-  const toastTheme = useToastTheme();
   const { i18n } = useTranslation();
   const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);
 
@@ -31,19 +29,7 @@ export default function Conversation({ data }) {
   handleSocketEvents(socket, setEvent);
 
   useEffect(() => {
-    const getUserByUserId = async () => {
-      try {
-        const response = await axios.get(`${BaseApi}/user/${userId}`, {
-          headers: {
-            'Accept-Language': i18n.language,
-          },
-        });
-        setUserData(response.data.user);
-      } catch (error) {
-        toast.error(error.response.data.message, toastTheme);
-      }
-    };
-    getUserByUserId();
+    getUserByUserId(i18n.language, userId, setUserData, user?._id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
@@ -51,7 +37,7 @@ export default function Conversation({ data }) {
     const handleCheckUserOnline = async () => {
       try {
         const res = await axiosJWT.post(
-          `${BaseApi}/socket/online/${userId}`,
+          API.SOCKET.ONLINE(userId),
           {},
           {
             headers: {

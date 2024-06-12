@@ -1,5 +1,6 @@
 import { toast } from 'react-toastify';
-import { BaseApi } from '../constants/constant';
+
+import { API } from '../api';
 
 export const handleCreateConversation = async (
   senderId,
@@ -10,7 +11,7 @@ export const handleCreateConversation = async (
 ) => {
   try {
     const res = await axiosJWT.post(
-      `${BaseApi}/chat`,
+      API.CHAT.BASE,
       {
         senderId: senderId,
         receiverId: receiverId,
@@ -31,7 +32,7 @@ export const handleCreateConversation = async (
 export const getChats = async (lng, axiosJWT, userId, accessToken, setData) => {
   try {
     const response = await axiosJWT.post(
-      `${BaseApi}/chat/${userId}`,
+      API.CHAT.GET_BY_USER_ID(userId),
       {},
       {
         headers: {
@@ -56,7 +57,7 @@ export const getMessages = async (
 ) => {
   try {
     const response = await axiosJWT.post(
-      `${BaseApi}/message/${chatId}?request_user=${user?._id}`,
+      API.MESSAGE.GET(chatId, user?._id),
       {},
       {
         headers: {
@@ -81,7 +82,7 @@ export const deleteChat = async (
 ) => {
   try {
     const response = await axiosJWT.put(
-      `${BaseApi}/chat/delete/${chatId}?request_user=${user?._id}`,
+      API.CHAT.DELETE(chatId, user?._id),
       {},
       {
         headers: {

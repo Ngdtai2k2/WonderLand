@@ -10,10 +10,12 @@ import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-import { useToastTheme, BaseApi } from '../../constants/constant';
-import { BoxModal } from '../styles';
 import Rules from '../Rules';
+import { API } from '../../api';
 import useUserAxios from '../../hooks/useUserAxios';
+import { useToastTheme } from '../../constants/constant';
+
+import { BoxModal } from '../styles';
 
 export default function ModalReportForm({ open, handleClose, id }) {
   const [fetching, setFetching] = useState();
@@ -34,7 +36,7 @@ export default function ModalReportForm({ open, handleClose, id }) {
       try {
         setFetching(true);
         const response = await axiosJWT.post(
-          `${BaseApi}/report/create?_report=post`,
+          API.REPORT.CREATE('post'),
           {
             id: id,
             reason: values.reason,

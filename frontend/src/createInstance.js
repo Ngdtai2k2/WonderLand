@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 
-import { BaseApi } from './constants/constant';
+import { API } from './api';
 
 const refreshToken = async (id, device, lng) => {
   try {
     const res = await axios.post(
-      `${BaseApi}/auth/refresh/${id}/${device}`,
+      API.AUTH.REFRESH_TOKEN(id, device),
       {
         withCredentials: true,
       },

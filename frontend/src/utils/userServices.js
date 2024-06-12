@@ -1,9 +1,20 @@
 import axios from 'axios';
-import { BaseApi } from '../constants/constant';
 
-export const getUserByUserId = async (userId, setData) => {
+import { API } from '../api';
+
+export const getUserByUserId = async (lng, userId, setData, current_user) => {
   try {
-    const response = await axios.get(`${BaseApi}/user/${userId}`);
+    const response = await axios.post(
+      API.USER.GET(userId),
+      {
+        request_user: current_user,
+      },
+      {
+        headers: {
+          'Accept-Language': lng,
+        },
+      },
+    );
     setData(response.data.user);
   } catch (error) {
     setData(null);

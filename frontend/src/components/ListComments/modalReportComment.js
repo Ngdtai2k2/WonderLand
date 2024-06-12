@@ -10,9 +10,12 @@ import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-import { useToastTheme, BaseApi } from '../../constants/constant';
 import Rules from '../Rules';
+
+import { API } from '../../api';
 import useUserAxios from '../../hooks/useUserAxios';
+import { useToastTheme } from '../../constants/constant';
+
 import { BoxModal } from '../styles';
 
 export default function ModalReportComment({
@@ -30,8 +33,8 @@ export default function ModalReportComment({
   const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);
 
   const urlApi = !isReply
-    ? `${BaseApi}/report/create?_report=comment`
-    : `${BaseApi}/report/create?_report=reply&_comment_id=${commentId}`;
+    ? API.REPORT.CREATE('comment')
+    : API.REPORT.REPLY(commentId);
 
   const formik = useFormik({
     initialValues: {

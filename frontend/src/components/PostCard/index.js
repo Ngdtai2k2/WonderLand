@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import moment from 'moment';
 import { ControlBar, Player } from 'video-react';
-import { toast } from 'react-toastify';
-import { useTheme } from '@emotion/react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import Zoom from 'react-medium-image-zoom';
+import { useTheme } from '@emotion/react';
+import { toast } from 'react-toastify';
+import moment from 'moment';
 
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
@@ -24,8 +25,8 @@ import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import ThumbUpRoundedIcon from '@mui/icons-material/ThumbUpRounded';
 import ThumbDownRoundedIcon from '@mui/icons-material/ThumbDownRounded';
 
+import { API } from '../../api';
 import {
-  BaseApi,
   IntersectionObserverOptions,
   createElementStyleForZoom,
   useToastTheme,
@@ -47,7 +48,6 @@ import {
   CardStyled,
 } from './styles';
 import 'video-react/dist/video-react.css';
-import { useTranslation } from 'react-i18next';
 
 export default function PostCard({
   post,
@@ -91,7 +91,7 @@ export default function PostCard({
     if (!user) return toast.warning(t('message:need_login'), toastTheme);
     try {
       await axiosJWT.post(
-        `${BaseApi}/reaction/like?user_request=${user._id}`,
+        API.REACTION.LIKE_POST,
         {
           id: post?._id,
           author: user._id,
@@ -131,7 +131,7 @@ export default function PostCard({
     if (!user) return toast.warning(t('message:need_login'), toastTheme);
     try {
       const response = await axiosJWT.post(
-        `${BaseApi}/save-post`,
+        API.SAVE_POST.BASE,
         {
           id: post?._id,
           user: user._id,
@@ -270,7 +270,7 @@ export default function PostCard({
         subheader={
           <BoxSubHeader
             gap={0.5}
-            onClick={() => navigate(`/category/${post?.category?.name}`)}
+            onClick={() => navigate(`/category/${post?.category?._id}`)}
           >
             <Avatar
               src={post?.category?.media?.url}

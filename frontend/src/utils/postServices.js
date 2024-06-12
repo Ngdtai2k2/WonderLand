@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-import { BaseApi } from '../constants/constant';
+import { API } from '../api';
 
 const getPosts = (apiLink, setItems, items, setHasMore, page, user, type) => {
   axios
@@ -29,7 +29,7 @@ const refresh = (apiLink, setItems, setHasMore, page, user, type) => {
 const handleViewPost = async (lng, postId, userId) => {
   try {
     await axios.post(
-      `${BaseApi}/post/view`,
+      API.POST.VIEW,
       {
         postId: postId,
         userId: userId,
@@ -55,15 +55,12 @@ const handleDeletePost = async (
   setState,
 ) => {
   try {
-    const response = await axiosJWT.delete(
-      `${BaseApi}/post/delete/${postId}?request_user=${userId}`,
-      {
-        headers: {
-          token: `Bearer ${accessToken}`,
-          'Accept-Language': lng,
-        },
+    const response = await axiosJWT.delete(API.POST.DELETE(postId, userId), {
+      headers: {
+        token: `Bearer ${accessToken}`,
+        'Accept-Language': lng,
       },
-    );
+    });
     toast.success(response?.data?.message, toastTheme);
     setState(Math.floor(Math.random() * 1000));
   } catch (error) {
@@ -74,7 +71,7 @@ const handleDeletePost = async (
 const getPostById = async (lng, postId, setData, toastTheme) => {
   try {
     const response = await axios.post(
-      `${BaseApi}/post/d/${postId}`,
+      API.POST.DETAIL(postId),
       {},
       {
         headers: {
