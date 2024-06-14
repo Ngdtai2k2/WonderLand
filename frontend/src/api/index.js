@@ -68,6 +68,10 @@ export const API = {
     BASE: createEndpoint('message'),
     GET: (chatId, userId) =>
       createEndpoint(`message/${chatId}?request_user=${userId}`),
+    COUNT_UNREAD: (userId) =>
+      createEndpoint(`message/count-unread?request_user=${userId}`),
+    MARK_MESSAGE_BY_CHAT: (userId) =>
+      createEndpoint(`message/mark-message?request_user=${userId}`),
   },
   CHAT: {
     BASE: createEndpoint('chat'),

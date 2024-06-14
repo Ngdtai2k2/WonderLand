@@ -1,3 +1,5 @@
 {
-  "delete": "Delete chat"
+  "delete": "Delete chat",
+  "mark_unread": "Mark as unread",
+  "mark_read": "Mark as read"
 }

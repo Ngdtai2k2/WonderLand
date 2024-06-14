@@ -15,12 +15,9 @@ const messageSchema = new mongoose.Schema(
     message: {
       type: String,
       required: true,
+      maxLength: 1500
     },
     isRead: {
-      type: Boolean,
-      default: false,
-    },
-    isSeen: {
       type: Boolean,
       default: false,
     },

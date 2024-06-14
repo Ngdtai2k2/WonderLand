@@ -28,9 +28,11 @@ import DrawerList from '../../components/DrawerList';
 import SearchForm from '../SearchForm';
 import UserMenu from '../UserMenu';
 
-import { API } from '../../api';
 import useUserAxios from '../../hooks/useUserAxios';
 import { useToastTheme } from '../../constants/constant';
+import { countUnreadNotifications } from '../../utils/notificationServices';
+import { countUnreadMessages } from '../../utils/messageServices';
+import { initializeSocket } from '../../sockets/initializeSocket';
 
 export default function NavigationBar({ isAdmin, state }) {
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -38,18 +40,20 @@ export default function NavigationBar({ isAdmin, state }) {
   const [anchorElSearch, setAnchorElSearch] = useState(null);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [totalUnreadNotifications, setTotalUnreadNotifications] = useState(0);
+  const [totalUnreadMessages, setTotalUnreadMessages] = useState(0);
+  const [eventChat, setEventChat] = useState();
   const [dataFromChild, setDataFromChild] = useState();
 
-  const { t, i18n } = useTranslation(['navigation', 'home']);
   const theme = useTheme();
+  const navigate = useNavigate();
   const toastTheme = useToastTheme();
   const isDarkMode = theme.palette.mode === 'dark';
-  const backgroundColorAppBar = isDarkMode ? '#121212' : '#f4f4f4';
   const colorAppBar = isDarkMode ? '#f4f4f4' : '#121212';
+  const backgroundColorAppBar = isDarkMode ? '#121212' : '#f4f4f4';
+  const { t, i18n } = useTranslation(['navigation', 'home']);
 
   const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);
-
-  const navigate = useNavigate();
+  const socket = initializeSocket(user?._id);
 
   const toggleDrawer = (newOpen) => () => {
     setOpenDrawer(newOpen);
@@ -63,32 +67,41 @@ export default function NavigationBar({ isAdmin, state }) {
     navigate(path);
   };
 
-  const countUnreadNotifications = async (userId) => {
-    try {
-      const response = await axiosJWT.post(
-        API.NOTIFICATION.COUNT_UNREAD(userId),
-        {
-          id: userId,
-        },
-        {
-          headers: {
-            token: `Bearer ${accessToken}`,
-          },
-        },
-      );
-      setTotalUnreadNotifications(response.data.total);
-    } catch (e) {
-      setTotalUnreadNotifications(0);
-    }
-  };
+  useEffect(() => {
+    socket.on('new-message', (data) => {
+      setEventChat(data);
+    });
+    socket.on('action-delete-chat', (data) => {
+      setEventChat(data);
+    });
+    socket.on('action-mark-messages', (data) => {
+      setEventChat(data);
+    });
+  }, [socket]);
 
   useEffect(() => {
     if (user?._id) {
-      countUnreadNotifications(user?._id);
+      countUnreadNotifications(
+        user?._id,
+        axiosJWT,
+        accessToken,
+        setTotalUnreadNotifications,
+      );
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataFromChild, state]);
+
+  useEffect(() => {
+    if (user?._id)
+      countUnreadMessages(
+        user?._id,
+        axiosJWT,
+        accessToken,
+        setTotalUnreadMessages,
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?._id, eventChat]);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -199,7 +212,14 @@ export default function NavigationBar({ isAdmin, state }) {
               }
             }}
           >
-            <SmsRoundedIcon fontSize="small" />
+            <Badge
+              color="error"
+              badgeContent={totalUnreadMessages}
+              max={9}
+              sx={{ '& .MuiBadge-badge': { top: '-2px' } }}
+            >
+              <SmsRoundedIcon fontSize="small" />
+            </Badge>
           </IconButton>
           {/* created post */}
           <Tooltip title={t('navigation:create_post')}>

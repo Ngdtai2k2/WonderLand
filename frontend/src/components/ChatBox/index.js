@@ -1,23 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import InputEmoji from 'react-input-emoji';
+import { useTheme } from '@emotion/react';
 import moment from 'moment';
 
-import Tooltip from '@mui/material/Tooltip';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
-import Divider from '@mui/material/Divider';
-import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
+import MarkChatUnreadRoundedIcon from '@mui/icons-material/MarkChatUnreadRounded';
 
 import { API } from '../../api';
 import { useToastTheme } from '../../constants/constant';
@@ -25,21 +27,27 @@ import { useToastTheme } from '../../constants/constant';
 import useUserAxios from '../../hooks/useUserAxios';
 import { deleteChat, getMessages } from '../../utils/chatServices';
 import { getUserByUserId } from '../../utils/userServices';
+import { markMessageByChatWithType } from '../../utils/messageServices';
 
 import newMessageSoundEffect from '../../assets/sounds/new-message.mp3';
 import { BoxMessage, PaperMessage } from './styles';
+import './inputEmoji.css';
 
 export default function ChatBox({ chat, receivedMessage }) {
   const [userData, setUserData] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
+  // eslint-disable-next-line no-unused-vars
+  const [isMarkRead, setIsMarkRead] = useState(false);
 
-  const { t, i18n } = useTranslation(['message', 'chat']);
+  const theme = useTheme();
+  const isMode = theme.palette.mode === 'dark';
   const toastTheme = useToastTheme();
+  const { t, i18n } = useTranslation(['message', 'chat']);
   const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);
 
-  //   sound effects
+  // sound effects
   const messageSoundEffect = new Audio(newMessageSoundEffect);
   messageSoundEffect.volume = 0.5;
 
@@ -107,6 +115,30 @@ export default function ChatBox({ chat, receivedMessage }) {
     }
   };
 
+  const handleMarkMessageWithType = async (type) => {
+    if (user && chat && messages.some((message) => message.isRead !== type)) {
+      await markMessageByChatWithType(
+        user?._id,
+        chat?._id,
+        type,
+        axiosJWT,
+        accessToken,
+        setIsMarkRead,
+      );
+    }
+  };
+
+  const handleDeleteChat = async () => {
+    await deleteChat(
+      i18n.language,
+      axiosJWT,
+      accessToken,
+      chat._id,
+      user,
+      toastTheme,
+    );
+  };
+
   const scroll = useRef();
 
   return userData === null ? (
@@ -152,22 +184,17 @@ export default function ChatBox({ chat, receivedMessage }) {
           open={Boolean(anchorEl)}
           onClose={() => setAnchorEl(null)}
         >
-          <MenuItem
-            onClick={() =>
-              deleteChat(
-                i18n.language,
-                axiosJWT,
-                accessToken,
-                chat._id,
-                user,
-                toastTheme,
-              )
-            }
-          >
+          <MenuItem onClick={handleDeleteChat}>
             <ListItemIcon>
               <DeleteForeverRoundedIcon fontSize="small" />
             </ListItemIcon>
             <ListItemText>{t('chat:delete')}</ListItemText>
+          </MenuItem>
+          <MenuItem onClick={() => handleMarkMessageWithType(false)}>
+            <ListItemIcon>
+              <MarkChatUnreadRoundedIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>{t('chat:mark_unread')}</ListItemText>
           </MenuItem>
         </Menu>
       </Box>
@@ -246,12 +273,17 @@ export default function ChatBox({ chat, receivedMessage }) {
           cleanOnEnter
           onEnter={handleSendMessage}
           placeholder="Type a message"
+          theme={theme.palette.mode}
+          background={isMode ? '#1e1e1e' : 'white'}
+          color={isMode ? 'white' : '#1e1e1e'}
+          maxLength={1500}
+          onFocus={() => handleMarkMessageWithType(true)}
         />
         <Button
           size="small"
           variant="contained"
           onClick={handleSendMessage}
-          sx={{ minWidth: '24px', height: '100%' }}
+          sx={{ minWidth: '24px', height: '100%', marginLeft: 1 }}
         >
           <SendRoundedIcon fontSize="small" />
         </Button>

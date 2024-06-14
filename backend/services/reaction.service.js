@@ -60,7 +60,7 @@ const reactionService = {
         });
       }
 
-      const user = await userModel.findById(targetModel.author);
+      await userModel.findById(targetModel.author);
       const userRequest = await userModel
         .findById(author)
         .populate("media");

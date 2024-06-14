@@ -56,4 +56,28 @@ const refresh = (
   );
 };
 
-export { getNotificationByUserId, refresh };
+const countUnreadNotifications = async (
+  userId,
+  axiosJWT,
+  accessToken,
+  setData,
+) => {
+  try {
+    const response = await axiosJWT.post(
+      API.NOTIFICATION.COUNT_UNREAD(userId),
+      {
+        id: userId,
+      },
+      {
+        headers: {
+          token: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    setData(response.data.total);
+  } catch (e) {
+    setData(0);
+  }
+};
+
+export { getNotificationByUserId, refresh, countUnreadNotifications };

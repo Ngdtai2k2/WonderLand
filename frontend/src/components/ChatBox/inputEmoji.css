@@ -1,0 +1,26 @@
+.react-emoji-picker--wrapper {
+  right: -46px;
+}
+
+.react-input-emoji--container {
+  margin: 0;
+}
+
+.react-input-emoji--input {
+  max-height: 40px;
+  padding: 9px;
+}
+
+.react-emoji {
+  width: 95%;
+}
+
+@media only screen and (max-width: 600px) {
+  .react-emoji {
+    width: 80%;
+  }
+
+  .react-input-emoji--input {
+    max-height: 70px;
+  }
+}

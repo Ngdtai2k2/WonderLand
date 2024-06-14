@@ -33,7 +33,7 @@ export default function ChatPage() {
 
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  const query = urlParams.get('chat_id');
+  const chatId = urlParams.get('chat_id');
 
   useEffect(() => {
     document.title = 'Chats - WonderLand';
@@ -60,15 +60,10 @@ export default function ChatPage() {
   }, [user, event]);
 
   useEffect(() => {
-    if (query && chats.length > 0) {
-      const chat = chats.find((chat) => chat._id === query);
-      setCurrentChat(chat || null);
-      if (!chat) navigate('/chat');
-    } else {
-      navigate('/chat');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query, chats]);
+    const chat = chats.find((chat) => chat._id === chatId);
+    setCurrentChat(chat);
+    if (!chat) setCurrentChat(null);
+  }, [chatId, chats]);
 
   return (
     <CustomBox

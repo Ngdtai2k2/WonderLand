@@ -1,3 +1,5 @@
 {
-  "delete": "Xóa cuộc trò chuyện"
+  "delete": "Xóa cuộc trò chuyện",
+  "mark_unread": "Đánh dấu là chưa đọc",
+  "mark_read": "Đánh dấu là đã đọc"
 }
