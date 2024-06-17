@@ -29,7 +29,7 @@ const socketService = require("./services/socket.service");
 dotenv.config();
 
 const app = express();
-const server = require("https").Server(app);
+const server = require("http").Server(app);
 
 const io = socketio(server, {
   cors: {
@@ -65,6 +65,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.options = ('*', corsOptions);
 app.use(cookieParser());
 app.use(i18nextMiddleware.handle(i18next));
 app.use(express.json());
