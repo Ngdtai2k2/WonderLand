@@ -29,7 +29,7 @@ const socketService = require("./services/socket.service");
 dotenv.config();
 
 const app = express();
-const server = require("http").Server(app);
+const server = require("https").Server(app);
 
 const io = socketio(server, {
   cors: {
