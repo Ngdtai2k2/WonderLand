@@ -30,7 +30,7 @@ import BlockRoundedIcon from '@mui/icons-material/BlockRounded';
 
 import LoadingCircularIndeterminate from '../Loading';
 
-import { API } from '../../api';
+import { API } from '../../api/base';
 import { useToastTheme } from '../../constants/constant';
 import { renderContentReply } from '../../utils/helperFunction';
 import useUserAxios from '../../hooks/useUserAxios';

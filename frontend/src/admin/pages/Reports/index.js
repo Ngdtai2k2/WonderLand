@@ -17,7 +17,7 @@ import LoadingCircularIndeterminate from '../../../components/Loading';
 import DataTable from '../../components/DataTable';
 import ModalWebView from '../../components/ModalWebView';
 
-import { API } from '../../../api';
+import { API } from '../../../api/base';
 import {
   createElementStyleForZoom,
   useToastTheme,

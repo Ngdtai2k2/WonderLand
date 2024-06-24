@@ -14,10 +14,10 @@ import MenuSettings from './menuSettings';
 import CommentItem from './commentItem';
 import LoadingCircularIndeterminate from '../Loading';
 
-import { API } from '../../api';
+import { API } from '../../api/base';
 import useUserAxios from '../../hooks/useUserAxios';
 import { useToastTheme } from '../../constants/constant';
-import { getCommentsByPostId } from '../../utils/commentServices';
+import { getCommentsByPostId } from '../../api/comments';
 import { handleCloseMenu, handleOpenMenu } from '../../utils/helperFunction';
 
 import { BoxComment, ButtonLink } from './styles';

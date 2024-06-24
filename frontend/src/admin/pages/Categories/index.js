@@ -13,7 +13,7 @@ import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 import DataTable from '../../components/DataTable';
 import CustomBox from '../../../components/CustomBox';
-import { API } from '../../../api';
+import { API } from '../../../api/base';
 import { createElementStyleForZoom } from '../../../constants/constant';
 import ModalCategoryForm from './modalCategoryForm';
 

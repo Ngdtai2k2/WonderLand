@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-import { API } from '../api';
+import { API } from '../base';
 
 const getPosts = (apiLink, setItems, items, setHasMore, page, user, type) => {
   axios

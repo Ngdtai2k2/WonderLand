@@ -25,7 +25,7 @@ import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import ThumbUpRoundedIcon from '@mui/icons-material/ThumbUpRounded';
 import ThumbDownRoundedIcon from '@mui/icons-material/ThumbDownRounded';
 
-import { API } from '../../api';
+import { API } from '../../api/base';
 import {
   IntersectionObserverOptions,
   createElementStyleForZoom,
@@ -39,7 +39,7 @@ import {
 import MenuSettings from './menuSettings';
 import MenuShare from './menuShare';
 import useUserAxios from '../../hooks/useUserAxios';
-import { handleViewPost } from '../../utils/postServices';
+import { handleViewPost } from '../../api/posts';
 import {
   BoxStyled,
   BoxSubHeader,

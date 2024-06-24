@@ -1,4 +1,4 @@
-import { API } from '../api';
+import { API } from '../base';
 
 const getNotificationByUserId = async (
   lng,

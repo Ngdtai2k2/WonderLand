@@ -16,7 +16,7 @@ import {
   registerSuccess,
 } from '../slice/userSlice';
 
-import { API } from '../../api';
+import { API } from '../../api/base';
 
 export const loginUser = async (user, dispatch, toastTheme, lng) => {
   dispatch(loginStart());

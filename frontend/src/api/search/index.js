@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { API } from '../api';
+import { API } from '../base';
 
 const searchUsers = async (
   lng,

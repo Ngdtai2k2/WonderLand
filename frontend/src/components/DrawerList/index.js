@@ -8,7 +8,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Typography from '@mui/material/Typography';
 
-import { API } from '../../api';
+import { API } from '../../api/base';
 import CustomListItemButton from '../CustomListItemButton';
 import { AdminDrawerList, PublicDrawerList } from '../../constants/drawerlist';
 import LoadingCircularIndeterminate from '../Loading';

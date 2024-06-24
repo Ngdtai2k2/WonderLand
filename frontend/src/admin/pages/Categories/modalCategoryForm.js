@@ -13,7 +13,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 
 import { useToastTheme } from '../../../constants/constant';
 import useUserAxios from '../../../hooks/useUserAxios';
-import { API } from '../../../api';
+import { API } from '../../../api/base';
 
 import { ImageStyle } from './styles';
 import { BoxModal } from '../styles';

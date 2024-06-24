@@ -12,8 +12,8 @@ import {
   handleSocketEvents,
   initializeSocket,
 } from '../../sockets/initializeSocket';
-import { API } from '../../api';
-import { getUserByUserId } from '../../utils/userServices';
+import { API } from '../../api/base';
+import { getUserByUserId } from '../../api/users';
 
 export default function Conversation({ data }) {
   const [userData, setUserData] = useState(null);

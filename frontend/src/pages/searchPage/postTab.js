@@ -8,7 +8,7 @@ import Box from '@mui/material/Box';
 import PostCard from '../../components/PostCard';
 
 import useUserAxios from '../../hooks/useUserAxios';
-import { searchPosts } from '../../utils/searchServices';
+import { searchPosts } from '../../api/search';
 import { ListContainerResult } from './styles';
 import LoadingCircularIndeterminate from '../../components/Loading';
 

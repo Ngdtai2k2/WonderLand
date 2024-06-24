@@ -18,7 +18,7 @@ import ChatBox from '../../components/ChatBox';
 import { initializeSocket } from '../../sockets/initializeSocket';
 
 import useUserAxios from '../../hooks/useUserAxios';
-import { getChats } from '../../utils/chatServices';
+import { getChats } from '../../api/chats';
 
 export default function ChatPage() {
   const [chats, setChats] = useState([]);

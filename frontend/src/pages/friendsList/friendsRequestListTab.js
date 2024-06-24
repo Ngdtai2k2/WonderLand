@@ -12,7 +12,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 
 import LoadingCircularIndeterminate from '../../components/Loading';
 
-import { API } from '../../api';
+import { API } from '../../api/base';
 import { useToastTheme } from '../../constants/constant';
 import useUserAxios from '../../hooks/useUserAxios';
 import {
@@ -20,7 +20,7 @@ import {
   deleteFriend,
   getFriendsList,
   refreshFriendList,
-} from '../../utils/friendServices';
+} from '../../api/friends';
 import {
   AvatarFriendList,
   BoxInfo,

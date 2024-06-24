@@ -33,7 +33,7 @@ import PostTab from './postTab';
 import ReactionTab from './reactionTab';
 import SavedPostTab from './savedPostTab';
 
-import { API } from '../../api';
+import { API } from '../../api/base';
 import { useToastTheme } from '../../constants/constant';
 import useUserAxios from '../../hooks/useUserAxios';
 import {
@@ -41,7 +41,7 @@ import {
   cancelRequestAddFriend,
   deleteFriend,
   sendRequestAddFriend,
-} from '../../utils/friendServices';
+} from '../../api/friends';
 
 import ModalUpdateMedia from './modalUpdateMedia';
 

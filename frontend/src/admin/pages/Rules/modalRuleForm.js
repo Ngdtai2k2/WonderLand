@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-import { API } from '../../../api';
+import { API } from '../../../api/base';
 import { useToastTheme } from '../../../constants/constant';
 import useUserAxios from '../../../hooks/useUserAxios';
 

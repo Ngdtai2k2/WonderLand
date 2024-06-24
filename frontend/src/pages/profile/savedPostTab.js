@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { API } from '../../api';
+import { API } from '../../api/base';
 import RenderPostInTab from './renderPostInTab';
 
 export default function SavedPostTab() {

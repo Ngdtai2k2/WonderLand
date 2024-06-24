@@ -15,7 +15,7 @@ import VisibilityOffRoundedIcon from '@mui/icons-material/VisibilityOffRounded';
 import DataTable from '../../components/DataTable';
 import CustomBox from '../../../components/CustomBox';
 
-import { API } from '../../../api';
+import { API } from '../../../api/base';
 import { convertNumber } from '../../../utils/helperFunction';
 import { BoxContainer, BoxIcon, BoxItems } from './styles';
 import useUserAxios from '../../../hooks/useUserAxios';

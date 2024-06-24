@@ -25,7 +25,7 @@ import NoData from '../../components/NoData';
 import PostCard from '../../components/PostCard';
 import ListComments from '../../components/ListComments';
 
-import { API } from '../../api';
+import { API } from '../../api/base';
 import { useToastTheme } from '../../constants/constant';
 import useUserAxios from '../../hooks/useUserAxios';
 

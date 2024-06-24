@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { API } from '../api';
+import { API } from '../base';
 
 export const getUserByUserId = async (lng, userId, setData, current_user) => {
   try {

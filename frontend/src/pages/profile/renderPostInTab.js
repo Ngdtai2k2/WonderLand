@@ -4,12 +4,12 @@ import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
-import Pagination from '@mui/material/Pagination';
 import Box from '@mui/material/Box';
+import Pagination from '@mui/material/Pagination';
 
-import LoadingCircularIndeterminate from '../../components/Loading';
-import PostCard from '../../components/PostCard';
 import NoData from '../../components/NoData';
+import PostCard from '../../components/PostCard';
+import LoadingCircularIndeterminate from '../../components/Loading';
 
 import { useToastTheme } from '../../constants/constant';
 import useUserAxios from '../../hooks/useUserAxios';

@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
 
-import { API } from '../api';
+import { API } from '../base';
 
 export const handleCreateConversation = async (
   senderId,

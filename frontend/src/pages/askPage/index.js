@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import RenderPost from '../../components/RenderPost';
 import GridColumnLayout from '../../components/GridColumnLayout';
 
-import { API } from '../../api';
+import { API } from '../../api/base';
 
 export default function AskPage() {
   useEffect(() => {

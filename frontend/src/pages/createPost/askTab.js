@@ -17,7 +17,7 @@ import CreateRoundedIcon from '@mui/icons-material/CreateRounded';
 
 import LoadingCircularIndeterminate from '../../components/Loading';
 
-import { API } from '../../api';
+import { API } from '../../api/base';
 import { useToastTheme } from '../../constants/constant';
 import useUserAxios from '../../hooks/useUserAxios';
 

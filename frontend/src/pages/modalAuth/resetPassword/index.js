@@ -11,7 +11,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import KeyRoundedIcon from '@mui/icons-material/KeyRounded';
 
-import { API } from '../../../api';
+import { API } from '../../../api/base';
 import { useToastTheme } from '../../../constants/constant';
 
 export default function ResetPassword({ setTabIndex }) {

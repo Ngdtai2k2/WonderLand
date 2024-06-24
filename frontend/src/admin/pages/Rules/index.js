@@ -13,7 +13,7 @@ import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import CustomBox from '../../../components/CustomBox';
 import DataTable from '../../components/DataTable';
 
-import { API } from '../../../api';
+import { API } from '../../../api/base';
 import { useToastTheme } from '../../../constants/constant';
 import ModalRuleForm from './modalRuleForm';
 import useUserAxios from '../../../hooks/useUserAxios';

@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 
 import useUserAxios from '../../hooks/useUserAxios';
-import { searchUsers } from '../../utils/searchServices';
+import { searchUsers } from '../../api/search';
 import ListItemUser from '../../components/ListItemUser';
 import { ListContainerResult } from './styles';
 import LoadingCircularIndeterminate from '../../components/Loading';

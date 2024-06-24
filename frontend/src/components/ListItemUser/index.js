@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import ListItemButton from '@mui/material/ListItemButton';
@@ -9,9 +10,8 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 
 import useUserAxios from '../../hooks/useUserAxios';
-import { handleCreateConversation } from '../../utils/chatServices';
+import { handleCreateConversation } from '../../api/chats';
 import { useToastTheme } from '../../constants/constant';
-import { useNavigate } from 'react-router-dom';
 
 export default function ListItemUser({
   _id,

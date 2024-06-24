@@ -16,7 +16,7 @@ import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 
 import LoadingCircularIndeterminate from '../Loading';
 
-import { searchUsers } from '../../utils/searchServices';
+import { searchUsers } from '../../api/search';
 import useUserAxios from '../../hooks/useUserAxios';
 
 export default function SearchForm({ onClose }) {

@@ -12,7 +12,7 @@ import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import { API } from '../../../api';
+import { API } from '../../../api/base';
 import { registerUser } from '../../../redux/apiRequest/authApi';
 import { useToastTheme } from '../../../constants/constant';
 

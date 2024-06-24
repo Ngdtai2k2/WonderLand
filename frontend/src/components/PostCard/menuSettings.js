@@ -6,7 +6,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
 import ModalReportForm from './modalReportForm';
-import { handleDeletePost } from '../../utils/postServices';
+import { handleDeletePost } from '../../api/posts';
 import useUserAxios from '../../hooks/useUserAxios';
 import { useToastTheme } from '../../constants/constant';
 import ModalEditPost from './modalEditPost';

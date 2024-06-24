@@ -10,7 +10,7 @@ import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 import { useToastTheme } from '../../../constants/constant';
-import { API } from '../../../api';
+import { API } from '../../../api/base';
 
 export default function ForgetPassword({ setTabIndex }) {
   const [fetching, setFetching] = useState();

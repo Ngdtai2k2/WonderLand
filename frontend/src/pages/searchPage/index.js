@@ -20,7 +20,7 @@ import PostCard from '../../components/PostCard';
 import CustomBox from '../../components/CustomBox';
 import LoadingCircularIndeterminate from '../../components/Loading';
 
-import { searchPosts, searchUsers } from '../../utils/searchServices';
+import { searchPosts, searchUsers } from '../../api/search';
 import useUserAxios from '../../hooks/useUserAxios';
 import {
   BoxButton,

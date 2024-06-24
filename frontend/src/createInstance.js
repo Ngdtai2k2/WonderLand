@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 
-import { API } from './api';
+import { API } from './api/base';
 
 const refreshToken = async (id, device, lng) => {
   try {

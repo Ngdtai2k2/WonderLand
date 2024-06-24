@@ -8,7 +8,7 @@ import {
   deleteUserFailed,
 } from '../slice/userSlice';
 
-import { API } from '../../api';
+import { API } from '../../api/base';
 
 export const updateUser = async (
   lng,

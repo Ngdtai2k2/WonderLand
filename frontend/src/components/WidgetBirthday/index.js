@@ -9,7 +9,7 @@ import CelebrationRoundedIcon from '@mui/icons-material/CelebrationRounded';
 import { getCurrentDate } from '../../utils/helperFunction';
 import useUserAxios from '../../hooks/useUserAxios';
 import { initializeSocket } from '../../sockets/initializeSocket';
-import { getNotificationByUserId } from '../../utils/notificationServices';
+import { getNotificationByUserId } from '../../api/notifications';
 
 export default function WidgetBirthday() {
   const [msgYourBirthday, setMsgYourBirthday] = useState(null);

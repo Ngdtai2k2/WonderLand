@@ -14,16 +14,16 @@ import WidgetImage from '../WidgetImage';
 import ButtonBar from '../ButtonBar';
 import WidgetBirthday from '../WidgetBirthday';
 
-import { API } from '../../api';
+import { API } from '../../api/base';
 import { useToastTheme } from '../../constants/constant';
 import useUserAxios from '../../hooks/useUserAxios';
-import { getFriendsList, refreshFriendList } from '../../utils/friendServices';
+import { getFriendsList, refreshFriendList } from '../../api/friends';
 
 import {
   handleSocketEvents,
   initializeSocket,
 } from '../../sockets/initializeSocket';
-import { handleCreateConversation } from '../../utils/chatServices';
+import { handleCreateConversation } from '../../api/chats';
 
 import { GridHiddenMobile, ListContainer } from './styles';
 import { PaperSticky, StyledBadge } from '../styles';

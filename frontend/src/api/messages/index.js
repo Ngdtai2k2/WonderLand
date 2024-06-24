@@ -1,4 +1,4 @@
-import { API } from '../api';
+import { API } from "../base";
 
 const countUnreadMessages = async (userId, axiosJWT, accessToken, setData) => {
   try {
@@ -9,7 +9,7 @@ const countUnreadMessages = async (userId, axiosJWT, accessToken, setData) => {
         headers: {
           token: `Bearer ${accessToken}`,
         },
-      },
+      }
     );
     setData(response.data.result);
   } catch (error) {
@@ -23,7 +23,7 @@ const markMessageByChatWithType = async (
   type,
   axiosJWT,
   accessToken,
-  setData,
+  setData
 ) => {
   try {
     const response = await axiosJWT.post(
@@ -36,7 +36,7 @@ const markMessageByChatWithType = async (
         headers: {
           token: `Bearer ${accessToken}`,
         },
-      },
+      }
     );
     setData(response.data.result);
   } catch (error) {

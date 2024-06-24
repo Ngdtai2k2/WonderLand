@@ -15,12 +15,12 @@ import PersonRemoveRoundedIcon from '@mui/icons-material/PersonRemoveRounded';
 import LoadingCircularIndeterminate from '../../components/Loading';
 import ConfirmDialog from '../../components/Dialog';
 
-import { API } from '../../api';
+import { API } from '../../api/base';
 import {
   deleteFriend,
   getFriendsList,
   refreshFriendList,
-} from '../../utils/friendServices';
+} from '../../api/friends';
 import { useToastTheme } from '../../constants/constant';
 import useUserAxios from '../../hooks/useUserAxios';
 import {

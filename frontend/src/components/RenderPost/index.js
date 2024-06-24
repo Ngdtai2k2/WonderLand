@@ -9,7 +9,7 @@ import SentimentVeryDissatisfiedRoundedIcon from '@mui/icons-material/SentimentV
 
 import PostCard from '../PostCard';
 import LoadingCircularIndeterminate from '../Loading';
-import { getPosts, refresh } from '../../utils/postServices';
+import { getPosts, refresh } from '../../api/posts';
 import useUserAxios from '../../hooks/useUserAxios';
 
 export default function RenderPost({ apiLink, type }) {

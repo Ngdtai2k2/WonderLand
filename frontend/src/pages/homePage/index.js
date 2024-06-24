@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import RenderPost from '../../components/RenderPost';
 import GridColumnLayout from '../../components/GridColumnLayout';
 
-import { API } from '../../api';
+import { API } from '../../api/base';
 
 export default function HomePage() {
   const { t } = useTranslation('home');

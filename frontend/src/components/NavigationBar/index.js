@@ -30,8 +30,8 @@ import UserMenu from '../UserMenu';
 
 import useUserAxios from '../../hooks/useUserAxios';
 import { useToastTheme } from '../../constants/constant';
-import { countUnreadNotifications } from '../../utils/notificationServices';
-import { countUnreadMessages } from '../../utils/messageServices';
+import { countUnreadNotifications } from '../../api/notifications';
+import { countUnreadMessages } from '../../api/messages';
 import { initializeSocket } from '../../sockets/initializeSocket';
 
 export default function NavigationBar({ isAdmin, state }) {

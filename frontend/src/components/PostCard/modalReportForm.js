@@ -11,7 +11,7 @@ import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 import Rules from '../Rules';
-import { API } from '../../api';
+import { API } from '../../api/base';
 import useUserAxios from '../../hooks/useUserAxios';
 import { useToastTheme } from '../../constants/constant';
 

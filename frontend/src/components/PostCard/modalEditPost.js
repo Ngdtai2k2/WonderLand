@@ -19,11 +19,11 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 import LoadingCircularIndeterminate from '../Loading';
 
-import { API } from '../../api';
+import { API } from '../../api/base';
+import { getPostById } from '../../api/posts';
+import getCategories from '../../api/categories';
 import useUserAxios from '../../hooks/useUserAxios';
-import { getPostById } from '../../utils/postServices';
 import { useToastTheme } from '../../constants/constant';
-import getCategories from '../../utils/categoryServices';
 
 import { FlexCenterBox } from './styles';
 import { BoxModal, VisuallyHiddenInput } from '../styles';

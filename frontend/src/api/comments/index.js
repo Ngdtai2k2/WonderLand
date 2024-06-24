@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { API } from '../api';
+import { API } from '../base';
 
 // function support for get comments
 const getCommentsByPostId = async (

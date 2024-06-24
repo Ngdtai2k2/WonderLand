@@ -21,7 +21,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 import LoadingCircularIndeterminate from '../../components/Loading';
 
-import { API } from '../../api';
+import { API } from '../../api/base';
 import useUserAxios from '../../hooks/useUserAxios';
 import { useToastTheme } from '../../constants/constant';
 

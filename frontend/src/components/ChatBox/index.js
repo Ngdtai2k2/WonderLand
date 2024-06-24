@@ -21,13 +21,13 @@ import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import MarkChatUnreadRoundedIcon from '@mui/icons-material/MarkChatUnreadRounded';
 
-import { API } from '../../api';
+import { API } from '../../api/base';
 import { useToastTheme } from '../../constants/constant';
 
 import useUserAxios from '../../hooks/useUserAxios';
-import { deleteChat, getMessages } from '../../utils/chatServices';
-import { getUserByUserId } from '../../utils/userServices';
-import { markMessageByChatWithType } from '../../utils/messageServices';
+import { deleteChat, getMessages } from '../../api/chats';
+import { getUserByUserId } from '../../api/users';
+import { markMessageByChatWithType } from '../../api/messages';
 
 import newMessageSoundEffect from '../../assets/sounds/new-message.mp3';
 import { BoxMessage, PaperMessage } from './styles';

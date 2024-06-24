@@ -31,7 +31,7 @@ import RenderPost from '../../components/RenderPost';
 import LoadingCircularIndeterminate from '../../components/Loading';
 import ReadMore from '../../components/Readmore';
 
-import { API } from '../../api';
+import { API } from '../../api/base';
 import { convertNumber } from '../../utils/helperFunction';
 import useUserAxios from '../../hooks/useUserAxios';
 import {

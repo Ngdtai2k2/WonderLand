@@ -12,7 +12,7 @@ import KeyboardArrowUpRoundedIcon from '@mui/icons-material/KeyboardArrowUpRound
 
 import LoadingCircularIndeterminate from '../Loading';
 
-import { API } from '../../api';
+import { API } from '../../api/base';
 
 export default function Rules({ isReport, setState }) {
   const [rules, setRules] = useState();
