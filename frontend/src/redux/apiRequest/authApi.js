@@ -22,6 +22,7 @@ export const loginUser = async (user, dispatch, toastTheme, lng) => {
   dispatch(loginStart());
   try {
     const res = await axios.post(API.AUTH.LOGIN, user, {
+      withCredentials: true,
       headers: {
         'Accept-Language': lng,
       },
@@ -68,6 +69,7 @@ export const logOut = async (
       API.AUTH.LOGOUT,
       { id, device },
       {
+        withCredentials: true,
         headers: { token: `Bearer ${accessToken}` },
         'Accept-Language': lng,
         'Content-Type': 'multipart/form-data',

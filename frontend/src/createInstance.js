@@ -7,10 +7,9 @@ const refreshToken = async (id, device, lng) => {
   try {
     const res = await axios.post(
       API.AUTH.REFRESH_TOKEN(id, device),
+      {},
       {
         withCredentials: true,
-      },
-      {
         headers: {
           'Accept-Language': lng,
         },
