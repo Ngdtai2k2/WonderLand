@@ -12,8 +12,8 @@ import {
   handleSocketEvents,
   initializeSocket,
 } from '../../sockets/initializeSocket';
-import { API } from '../../api/base';
 import { getUserByUserId } from '../../api/users';
+import { handleCheckUserOnline } from '../../api/sockets';
 
 export default function Conversation({ data }) {
   const [userData, setUserData] = useState(null);
@@ -34,24 +34,13 @@ export default function Conversation({ data }) {
   }, [user]);
 
   useEffect(() => {
-    const handleCheckUserOnline = async () => {
-      try {
-        const res = await axiosJWT.post(
-          API.SOCKET.ONLINE(userId),
-          {},
-          {
-            headers: {
-              token: `Bearer ${accessToken}`,
-              'Accept-Language': i18n.language,
-            },
-          },
-        );
-        setIsOnline(res.data.online);
-      } catch (error) {
-        setIsOnline(false);
-      }
-    };
-    handleCheckUserOnline();
+    handleCheckUserOnline(
+      axiosJWT,
+      userId,
+      accessToken,
+      i18n.language,
+      setIsOnline,
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId, event]);
 

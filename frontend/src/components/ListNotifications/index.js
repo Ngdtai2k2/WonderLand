@@ -18,10 +18,7 @@ import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import LoadingCircularIndeterminate from '../Loading';
 
 import { API } from '../../api/base';
-import {
-  getNotificationByUserId,
-  refresh,
-} from '../../api/notifications';
+import { getNotificationByUserId, refresh } from '../../api/notifications';
 import { useToastTheme } from '../../constants/constant';
 import useUserAxios from '../../hooks/useUserAxios';
 import { MenuItemRounded } from './styles';
