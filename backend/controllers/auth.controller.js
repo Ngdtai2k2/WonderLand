@@ -66,12 +66,12 @@ const authController = {
       const uniqueEmail = await User.findOne({ email: email });
 
       if (uniqueEmail) {
-        return res.status(400).json({ message: req.t('exists.email') });
+        return res.status(400).json({ message: req.t("exists.email") });
       }
 
       const uniqueNickname = await User.findOne({ nickname: nickname });
       if (uniqueNickname) {
-        return res.status(400).json({ message: req.t('exists.nickname') });
+        return res.status(400).json({ message: req.t("exists.nickname") });
       }
 
       const salt = await bcrypt.genSalt(10);
@@ -97,7 +97,9 @@ const authController = {
     try {
       const user = await User.findOne({
         email: req.body.email,
-      }).populate("media").populate('coverArt');
+      })
+        .populate("media")
+        .populate("coverArt");
 
       if (!user) {
         return res.status(404).json({ message: req.t("not_found.email") });
@@ -179,12 +181,13 @@ const authController = {
     try {
       let refreshToken = req.cookies.refreshToken;
 
+      const refreshTokenDoc = await RefreshToken.findOne({
+        user: req.params.id,
+        device: req.params.device,
+      });
+
       if (!refreshToken) {
-        const dataToken = await RefreshToken.findOne({
-          user: req.params.id,
-          device: req.params.device,
-        });
-        refreshToken = dataToken?.token;
+        refreshToken = refreshTokenDoc?.token;
         if (!refreshToken) {
           return res
             .status(401)
@@ -192,9 +195,6 @@ const authController = {
         }
       }
 
-      const refreshTokenDoc = await RefreshToken.findOne({
-        token: refreshToken,
-      });
       if (!refreshTokenDoc) {
         return res
           .status(403)
@@ -218,6 +218,7 @@ const authController = {
 
           await RefreshToken.updateOne(
             { user: decodedToken._id },
+            { device: req.params.device },
             { token: newRefreshToken }
           );
 

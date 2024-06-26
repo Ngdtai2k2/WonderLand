@@ -42,7 +42,7 @@ export default function Categories() {
       isLoading: true,
     });
     const response = await axios.get(
-      `${API.CATEGORY.CREATE}?_page=${categoriesState.page}&_limit=${categoriesState.pageSize}`,
+      `${API.CATEGORY.BASE}?_page=${categoriesState.page}&_limit=${categoriesState.pageSize}`,
     );
     setCategoriesState((old) => ({
       ...old,

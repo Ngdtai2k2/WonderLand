@@ -173,7 +173,7 @@ export default function Dashboard() {
   return (
     <CustomBox>
       <Grid container spacing={2}>
-        <Grid item xs={6} md={3}>
+        <Grid item xs={6}>
           <Paper elevation={3} sx={{ p: 1 }}>
             <BoxContainer>
               <BoxIcon>
@@ -201,7 +201,7 @@ export default function Dashboard() {
             </BoxContainer>
           </Paper>
         </Grid>
-        <Grid item xs={6} md={3}>
+        <Grid item xs={6}>
           <Paper elevation={3} sx={{ p: 1 }}>
             <BoxContainer>
               <BoxIcon>
@@ -227,16 +227,6 @@ export default function Dashboard() {
                 </Typography>
               </BoxItems>
             </BoxContainer>
-          </Paper>
-        </Grid>
-        <Grid item xs={6} md={3}>
-          <Paper elevation={3} sx={{ p: 1 }}>
-            1
-          </Paper>
-        </Grid>
-        <Grid item xs={6} md={3}>
-          <Paper elevation={3} sx={{ p: 1 }}>
-            1
           </Paper>
         </Grid>
       </Grid>

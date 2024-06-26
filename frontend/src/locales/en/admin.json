@@ -19,7 +19,7 @@
       "oldest": "Oldest"
     }
   },
-  "rule": {
+  "rules": {
     "title": "Rules management"
   },
   "add": "Add",
