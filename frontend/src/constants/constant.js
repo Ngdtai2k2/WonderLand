@@ -30,6 +30,10 @@ export const createElementStyleForZoom = (theme) => {
 
 export const ImagesNoData = process.env.REACT_APP_IMAGES_NO_DATA;
 
+export const imageTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+
+export const videoTypes = ['video/mp4', 'video/mkv'];
+
 export const locales = [
   {
     code: 'en',

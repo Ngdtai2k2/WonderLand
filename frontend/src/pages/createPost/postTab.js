@@ -23,7 +23,11 @@ import LoadingCircularIndeterminate from '../../components/Loading';
 
 import { API } from '../../api/base';
 import useUserAxios from '../../hooks/useUserAxios';
-import { useToastTheme } from '../../constants/constant';
+import {
+  useToastTheme,
+  imageTypes,
+  videoTypes,
+} from '../../constants/constant';
 
 import { FlexCenterBox } from './styles';
 import { VisuallyHiddenInput } from '../styles';
@@ -65,13 +69,6 @@ export default function PostTab() {
       .required('File is required!')
       .test('fileType', t('validate:file.not_support'), (value) => {
         if (!value) return true;
-        const imageTypes = [
-          'image/jpeg',
-          'image/png',
-          'image/jpg',
-          'image/gif',
-        ];
-        const videoTypes = ['video/mp4', 'video/mkv'];
         return (
           value &&
           (imageTypes.includes(value.type) || videoTypes.includes(value.type))
@@ -206,7 +203,6 @@ export default function PostTab() {
                 <FlexCenterBox flexDirection="column">
                   <CloudUploadIcon />
                   <Typography variant="body1">
-                    {' '}
                     {t('post:choose_file')}
                   </Typography>
                 </FlexCenterBox>

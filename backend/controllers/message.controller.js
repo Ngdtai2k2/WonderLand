@@ -3,6 +3,8 @@ const chatModel = require("../models/chat.model");
 const messageModel = require("../models/message.model");
 const userSocketModel = require("../models/userSocket.model");
 
+const uploadMediaCloudinary = require("./uploadMediaCloudinary.controller");
+
 const messageController = {
   addMessage: async (req, res) => {
     try {
@@ -10,9 +12,9 @@ const messageController = {
 
       message.trim();
 
-      if (!chatId || !senderId || !message) {
-        return res.status(400).json({ message: req.t("message.invalid_data") });
-      }
+      if (!chatId || !senderId) return res.status(400).json({ message: req.t("message.invalid_data") });
+
+      if(!message && !req.file) return res.status(400).json({ message: req.t("message.invalid_data") });
 
       const chat = await chatModel.findById(chatId);
 
@@ -20,13 +22,38 @@ const messageController = {
         return res.status(404).json({ message: req.t("not_found.chat") });
       }
 
+      let data;
+      if (req.file) {
+        if (req.file.mimetype.startsWith("image/"))
+          data = await uploadMediaCloudinary.uploadImage(
+            req,
+            res,
+            `message/${chatId}`
+          );
+        else
+          data = await uploadMediaCloudinary.uploadVideo(
+            req,
+            res,
+            `message/${chatId}/video`
+          );
+
+        if (data === null)
+          return res.status(400).json({
+            message: req.file.mimetype.startsWith("image/")
+              ? req.t("file.image_not_upload")
+              : req.t("file.video_not_upload"),
+          });
+      }
+
       const newMessage = new messageModel({
         chatId: chatId,
         senderId: senderId,
         message: message,
+        media: req.file ? data._id : null,
       });
 
-      const result = await newMessage.save();
+      const newMessageData = await newMessage.save();
+      const result = await messageModel.findById(newMessageData._id).populate('media');
 
       let userSockets = [];
 
@@ -49,6 +76,7 @@ const messageController = {
 
       return res.status(200).json(result);
     } catch (error) {
+      console.error(error.message);
       return res.status(500).json({ message: req.t("server_error") });
     }
   },
@@ -63,7 +91,7 @@ const messageController = {
         deletedBy: {
           $ne: request_user,
         },
-      });
+      }).populate('media');
       if (!result) {
         return res.status(404).json({ message: req.t("not_found.messages") });
       }

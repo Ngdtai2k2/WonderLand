@@ -76,7 +76,7 @@ export default function ChatPage() {
         marginTop: 10,
       }}
     >
-      <Grid container spacing={1} height="85vh">
+      <Grid container spacing={1}>
         <Grid item xs={3}>
           <Paper
             sx={{
@@ -111,10 +111,12 @@ export default function ChatPage() {
           </Paper>
         </Grid>
         <Grid item xs={9}>
-          <Paper elevation={1} sx={{ p: 2, height: '100%' }}>
-            {currentChat ? (
+          {currentChat ? (
+            <Paper elevation={1} sx={{ p: 2, height: 'auto' }}>
               <ChatBox chat={currentChat} receivedMessage={receivedMessage} />
-            ) : (
+            </Paper>
+          ) : (
+            <Paper elevation={1} sx={{ p: 2, height: '100%' }}>
               <Box
                 display="flex"
                 justifyContent="center"
@@ -125,8 +127,8 @@ export default function ChatPage() {
                   {t('message:chat.note')}
                 </Typography>
               </Box>
-            )}
-          </Paper>
+            </Paper>
+          )}
         </Grid>
       </Grid>
     </CustomBox>

@@ -14,7 +14,6 @@ const messageSchema = new mongoose.Schema(
     },
     message: {
       type: String,
-      required: true,
       maxLength: 1500
     },
     isRead: {
@@ -25,7 +24,7 @@ const messageSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    mediaId: {
+    media: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Media",
     },
