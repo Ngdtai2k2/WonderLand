@@ -25,7 +25,9 @@
         "unlike_success": "Bạn đã bỏ thích danh mục này!",
         "like_success": "Bạn đã thích danh mục này!",
         "unfollowed_success": "Bạn đã bỏ theo dõi danh mục này!",
-        "followed_success": "Bạn đã theo dõi danh mục này!"
+        "followed_success": "Bạn đã theo dõi danh mục này!",
+        "enable_notifications_success": "Bật nhận thông báo thành công!",
+        "disable_notifications_success": "Tắt nhận thông báo thành công!"
     },
     "comment": {
         "must_contain_photo_or_text": "Bình luận phải chứa ảnh hoặc văn bản!",
@@ -65,7 +67,7 @@
     "not_found": {
         "user": "Không tìm thấy người dùng!",
         "email": "Không tìm thấy email!",
-        "category" :"Không tìm thấy danh mục!",
+        "category": "Không tìm thấy danh mục!",
         "chat": "Không tìm thấy cuộc trò chuyện!",
         "messages": "Không tìm thấy tin nhắn nào!",
         "comment": "Không tìm thấy bình luận!",

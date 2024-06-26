@@ -36,5 +36,6 @@
     "post": "Post",
     "ask": "Ask",
     "post_": "Post"
-  }
+  },
+  "post_not_exist": "The post does not exist!"
 }

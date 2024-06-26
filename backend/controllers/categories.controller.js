@@ -206,10 +206,11 @@ const categoriesController = {
   getCategoryDetail: async (req, res) => {
     try {
       const { request_user } = req.body;
-      const {categoryId } = req.params;
+      const { categoryId } = req.params;
 
       let hasLiked = false;
       let hasFollowed = false;
+      let isNotification = false;
 
       const category = await categoriesModel
         .findById(categoryId)
@@ -226,12 +227,20 @@ const categoriesController = {
         hasLiked = category.like.some(
           (like) => like.user.toString() === request_user
         );
-        hasFollowed = category.follow.some(
+
+        const followIndex = category.follow.findIndex(
           (follow) => follow.user.toString() === request_user
         );
+
+        if (followIndex !== -1) {
+          hasFollowed = true;
+          isNotification = category.follow[followIndex].isNotification;
+        }
       }
 
-      return res.status(200).json({ category, hasLiked, hasFollowed });
+      return res
+        .status(200)
+        .json({ category, hasLiked, hasFollowed, isNotification });
     } catch (error) {
       return res.status(500).json({ message: req.t("server_error") });
     }
@@ -290,8 +299,8 @@ const categoriesController = {
   handleFollowCategory: async (req, res) => {
     try {
       const { userId } = req.body;
-      const {categoryId} = req.params;
-      
+      const { categoryId } = req.params;
+
       const user = await userModel.findById(userId);
       if (!user) {
         return res.status(404).json({ message: req.t("not_found.user") });
@@ -335,6 +344,53 @@ const categoriesController = {
       }
     } catch (error) {
       return res.status(500).json({ message: req.t("server_error") });
+    }
+  },
+
+  changeIsNotificationAfterFollowCategory: async (req, res) => {
+    try {
+      const { categoryId, userId } = req.params;
+      const { isNotification } = req.body;
+
+      const updateCategory = await categoriesModel.findOneAndUpdate(
+        {
+          _id: categoryId,
+          "follow.user": userId,
+        },
+        {
+          $set: { "follow.$.isNotification": isNotification },
+        },
+        {
+          new: true,
+        }
+      );
+      if (!updateCategory) {
+        return res.status(404).json({ message: req.t("not_found.category") });
+      }
+      return res.status(200).json({
+        message: isNotification
+          ? req.t("category.enable_notifications_success")
+          : req.t("category.disable_notifications_success"),
+        isNotification,
+      });
+    } catch (error) {
+      return res.status(500).json({ message: req.t("server_error") });
+    }
+  },
+
+  getUserWithNotification: async (categoryId) => {
+    try {
+      const category = await categoriesModel.findById(categoryId).populate('follow.user');
+    
+      if (!category) {
+        throw new Error('Category not found');
+      }
+  
+      const usersWithNotifications = category.follow.filter(follow => follow.isNotification).map(follow => follow.user);
+  
+      return usersWithNotifications;
+    } catch (error) {
+      return null;
     }
   },
 };

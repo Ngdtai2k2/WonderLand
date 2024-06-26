@@ -35,5 +35,6 @@
     "post": "Bài viết",
     "ask": "Câu hỏi",
     "post_": "Đăng bài"
-  }
+  },
+  "post_not_exist": "Bài viết không tồn tại!"
 }

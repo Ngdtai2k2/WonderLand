@@ -33,5 +33,10 @@ router.post(
   verifyMiddleware.token,
   categoriesController.handleFollowCategory
 );
+router.put(
+  "/:categoryId/notifications/:userId",
+  verifyMiddleware.token,
+  categoriesController.changeIsNotificationAfterFollowCategory
+);
 
 module.exports = router;

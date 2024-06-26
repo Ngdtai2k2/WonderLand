@@ -23,6 +23,8 @@ export const API = {
     DETAIL: (categoryId) => createEndpoint(`category/detail/${categoryId}`),
     LIKE: (categoryId) => createEndpoint(`category/like/${categoryId}`),
     FOLLOW: (categoryId) => createEndpoint(`category/follow/${categoryId}`),
+    NOTIFICATION: (categoryId, userId) =>
+      createEndpoint(`category/${categoryId}/notifications/${userId}`),
   },
   USER: {
     BASE: createEndpoint('user'),

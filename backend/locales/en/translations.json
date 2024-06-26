@@ -25,7 +25,9 @@
         "unlike_success": "Unliked category successfully!",
         "like_success": "Liked category successfully!",
         "unfollowed_success": "Unfollowed category successfully!",
-        "followed_success": "Followed category successfully!"
+        "followed_success": "Followed category successfully!",
+        "enable_notifications_success": "Enable notifications successfully!",
+        "disable_notifications_success": "Disable notifications successfully!"
     },
     "comment": {
         "must_contain_photo_or_text": "Comments must contain photos or text!",

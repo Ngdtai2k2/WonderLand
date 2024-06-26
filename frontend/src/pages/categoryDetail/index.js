@@ -46,13 +46,14 @@ export default function CategoryDetail() {
   const [totalLike, setTotalLike] = useState(0);
   const [hasLiked, setHasLiked] = useState(false);
   const [hasFollowed, setHasFollowed] = useState(false);
+  const [isNotification, setIsNotification] = useState(false);
   const [loading, setLoading] = useState(false);
   const [tabIndex, setTabIndex] = useState(0);
 
   const { categoryId } = useParams();
   const theme = useTheme();
   const toastTheme = useToastTheme();
-  const { t, i18n } = useTranslation(['message']);
+  const { t, i18n } = useTranslation(['message', 'category']);
   const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);
 
   useEffect(() => {
@@ -82,6 +83,7 @@ export default function CategoryDetail() {
         setTotalLike(response.data.category.like.length);
         setHasLiked(response.data.hasLiked);
         setHasFollowed(response.data.hasFollowed);
+        setIsNotification(response.data.isNotification);
       } catch (error) {
         setCategory(null);
       } finally {
@@ -114,13 +116,8 @@ export default function CategoryDetail() {
         },
       );
       const resData = response.data;
-      if (resData.isUnliked) {
-        setTotalLike(totalLike - 1);
-        setHasLiked(false);
-      } else {
-        setTotalLike(totalLike + 1);
-        setHasLiked(true);
-      }
+      setTotalLike(resData.isUnliked ? totalLike - 1 : totalLike + 1);
+      setHasLiked(!resData.isUnliked);
       toast.success(resData.message, toastTheme);
     } catch (error) {
       toast.error(error.response.data.message, toastTheme);
@@ -145,12 +142,36 @@ export default function CategoryDetail() {
         },
       );
       const resData = response.data;
-      if (resData.isUnfollowed) {
-        setHasFollowed(false);
-      } else {
-        setHasFollowed(true);
-      }
+      setHasFollowed(!resData.isUnfollowed);
       toast.success(resData.message, toastTheme);
+    } catch (error) {
+      toast.error(error.response.data.message, toastTheme);
+    }
+  };
+
+  const changeIsNotificationAfterFollowCategory = async (
+    categoryId,
+    userId,
+    isNotification,
+  ) => {
+    try {
+      if (!user) {
+        return toast.warning(t('message:need_login'), toastTheme);
+      }
+      const response = await axiosJWT.put(
+        API.CATEGORY.NOTIFICATION(categoryId, userId),
+        {
+          isNotification: isNotification,
+        },
+        {
+          headers: {
+            token: `Bearer ${accessToken}`,
+            'Accept-Language': i18n.language,
+          },
+        },
+      );
+      setIsNotification(response.data.isNotification);
+      toast.success(response.data.message);
     } catch (error) {
       toast.error(error.response.data.message, toastTheme);
     }
@@ -199,14 +220,31 @@ export default function CategoryDetail() {
                 <Box display="flex" alignItems="center" gap={0.5}>
                   <Button
                     variant="outlined"
-                    sx={{ height: 30 }}
+                    sx={{ height: 30, textTransform: 'none' }}
                     onClick={() => handleFollowCategory(category._id)}
                   >
-                    {hasFollowed ? 'Unfollow' : 'Follow'}
+                    {hasFollowed
+                      ? t('category:unfollow')
+                      : t('category:follow')}
                   </Button>
-                  <IconButton size="small">
-                    <NotificationsOffRoundedIcon />
-                  </IconButton>
+                  {hasFollowed && (
+                    <IconButton
+                      size="small"
+                      onClick={() =>
+                        changeIsNotificationAfterFollowCategory(
+                          category._id,
+                          user?._id,
+                          !isNotification,
+                        )
+                      }
+                    >
+                      {isNotification ? (
+                        <NotificationsActiveRoundedIcon />
+                      ) : (
+                        <NotificationsOffRoundedIcon />
+                      )}
+                    </IconButton>
+                  )}
                 </Box>
               </Box>
               <ReadMore
@@ -253,7 +291,7 @@ export default function CategoryDetail() {
                   gap={0.5}
                 >
                   <WhatshotRoundedIcon fontSize="16" />
-                  Hot
+                  {t('category:hot')}
                 </Typography>
               }
             />
@@ -266,7 +304,7 @@ export default function CategoryDetail() {
                   gap={0.5}
                 >
                   <QueryBuilderRoundedIcon fontSize="16" />
-                  Fresh
+                  {t('category:fresh')}
                 </Typography>
               }
             />
@@ -279,7 +317,7 @@ export default function CategoryDetail() {
                   gap={0.5}
                 >
                   <InfoRoundedIcon fontSize="16" />
-                  Description
+                  {t('category:description')}
                 </Typography>
               }
             />

@@ -68,7 +68,7 @@ export default function PostDetail() {
     } catch (error) {
       if (error.response && error.response.status === 404) {
         setPost(null);
-        toast.error('Cannot find data!', toastTheme);
+        toast.error(t('post:post_not_exist'), toastTheme);
       } else {
         toast.error('Something went wrong!', toastTheme);
       }

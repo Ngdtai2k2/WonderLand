@@ -19,6 +19,7 @@ const algorithmsService = require("../services/algorithms.service");
 const notificationService = require("../services/notification.service");
 
 const { postPopulateOptions } = require("../constants/constants");
+const categoriesController = require("./categories.controller");
 
 const postController = {
   create: async (req, res) => {
@@ -31,7 +32,7 @@ const postController = {
       if (!User.findOne(author))
         return res.status(400).json({ message: req.t("not_found.author") });
 
-      const categoryData = await Category.findById(category);
+      const categoryData = await Category.findById(category).populate("media");
       if (!categoryData)
         return res.status(404).json({ message: req.t("not_found.category") });
 
@@ -68,8 +69,43 @@ const postController = {
         type == 0
           ? req.t("post.create_post_success")
           : req.t("post.create_ask_success");
+      // push notification for user
+      const userFollowCategoryEnableNotifications =
+        await categoriesController.getUserWithNotification(categoryData._id);
+
+      const messages = {
+        en: `The ${categoryData.name} category just got a new article!`,
+        vi: `Danh mục ${categoryData.name} vừa có bài viết mới!`,
+      };
+      userFollowCategoryEnableNotifications.forEach(async (user) => {
+        if (!user.isAdmin) {
+          const notification = await notificationService.createNotification(
+            user._id,
+            0,
+            "postId",
+            post._id,
+            messages,
+            categoryData.media.url
+          );
+          const userSocket = await userSocketModel.find({
+            user: user._id,
+          });
+          if (userSocket.length > 0) {
+            userSocket.forEach(async (socket) => {
+              global._io
+                .to(socket.socketId)
+                .emit(
+                  "category-new-article",
+                  `${categoryData.name} category just got a new article!`,
+                  notification
+                );
+            });
+          }
+        }
+      });
       return res.status(201).json({ message: successMessage, post: post });
     } catch (error) {
+      console.log(error.message);
       return res.status(500).json({ message: req.t("server_error") });
     }
   },
