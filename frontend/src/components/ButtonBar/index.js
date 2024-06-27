@@ -43,6 +43,7 @@ export default function ButtonBar() {
             variant={getVariant('/')}
             size="small"
             startIcon={<HomeRoundedIcon />}
+            aria-label="Home"
           >
             Home
           </Button>
@@ -51,11 +52,13 @@ export default function ButtonBar() {
           href="/top"
           style={{ textDecoration: 'none' }}
           onClick={() => handleLinkClick('/top')}
+          aria-label="top post"
         >
           <Button
             variant={getVariant('/top')}
             size="small"
             startIcon={<BarChartRoundedIcon />}
+            aria-label="Top post"
           >
             Top
           </Button>
@@ -64,11 +67,13 @@ export default function ButtonBar() {
           href="/trend"
           style={{ textDecoration: 'none' }}
           onClick={() => handleLinkClick('/trend')}
+          aria-label="trend post"
         >
           <Button
             variant={getVariant('/trend')}
             size="small"
             startIcon={<TrendingUpRoundedIcon />}
+            aria-label="trend post"
           >
             Trend
           </Button>
@@ -77,11 +82,13 @@ export default function ButtonBar() {
           href="/fresh"
           style={{ textDecoration: 'none' }}
           onClick={() => handleLinkClick('/fresh')}
+          aria-label="fresh post"
         >
           <Button
             variant={getVariant('/fresh')}
             size="small"
             startIcon={<RestoreRoundedIcon />}
+            aria-label="fresh post"
           >
             Fresh
           </Button>
