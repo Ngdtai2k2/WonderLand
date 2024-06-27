@@ -60,7 +60,7 @@ function DrawerList({ isAdmin }) {
   return (
     <List>
       <ListItem>
-        <Link href="/" underline="none" variant="inherit">
+        <Link href="/" underline="none" variant="inherit" aria-label="home">
           {t('home:site_name')}
         </Link>
       </ListItem>

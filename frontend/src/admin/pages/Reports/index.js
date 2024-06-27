@@ -187,6 +187,7 @@ export default function ReportsManager() {
                   'Web view profile',
                 )
               }
+              aria-label="web view profile"
             >
               {params.row.user?.nickname}
             </LinkStyle>
@@ -216,6 +217,7 @@ export default function ReportsManager() {
                   'Web view profile',
                 )
               }
+              aria-label="web view profile"
             >
               {params.row.post?.title}
             </LinkStyle>

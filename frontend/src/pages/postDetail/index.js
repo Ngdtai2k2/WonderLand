@@ -187,7 +187,7 @@ export default function PostDetail() {
               </TextField>
               <Typography variant="caption">
                 {t('message:comment.note')}
-                <Link href="/rules" marginLeft={0.5}>
+                <Link href="/rules" marginLeft={0.5} aria-label="rules">
                   {t('message:comment.site_name_rules', {
                     name: t('home:site_name'),
                   })}

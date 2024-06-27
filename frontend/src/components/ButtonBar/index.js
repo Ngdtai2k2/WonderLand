@@ -38,6 +38,7 @@ export default function ButtonBar() {
           href="/"
           style={{ textDecoration: 'none' }}
           onClick={() => handleLinkClick('/')}
+          aria-label="Home"
         >
           <Button
             variant={getVariant('/')}

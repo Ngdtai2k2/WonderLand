@@ -302,7 +302,11 @@ export default function PostCard({
       <CardContent sx={{ paddingX: 1, paddingY: 0, marginBottom: 0.5 }}>
         <Typography variant="body1" fontWeight={550}>
           {!detail ? (
-            <Link underline="hover" href={`/post/${post?._id}`}>
+            <Link
+              underline="hover"
+              href={`/post/${post?._id}`}
+              aria-label={`Link to ${post?.title}`}
+            >
               {post?.title}
             </Link>
           ) : (
@@ -323,7 +327,11 @@ export default function PostCard({
               />
             </Zoom>
           ) : (
-            <Link underline="none" href={`/post/${post?._id}`}>
+            <Link
+              underline="none"
+              href={`/post/${post?._id}`}
+              aria-label={`Link to ${post?.title}`}
+            >
               <CardMediaStyled
                 component="img"
                 image={post.media?.url}

@@ -145,6 +145,7 @@ export default function NavigationBar({ isAdmin, state }) {
                 xs: 'none',
                 sm: 'block',
               }}
+              aria-label="home"
             >
               {t('home:site_name')}
             </Link>
@@ -157,6 +158,7 @@ export default function NavigationBar({ isAdmin, state }) {
                 sm: 'none',
               }}
               alignItems="center"
+              aria-label="home"
             >
               <HomeRoundedIcon />
             </Link>

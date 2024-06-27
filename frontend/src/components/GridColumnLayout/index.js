@@ -9,6 +9,7 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import ListItemButton from '@mui/material/ListItemButton';
 import Avatar from '@mui/material/Avatar';
+import ListItem from '@mui/material/ListItem';
 
 import LoadingCircularIndeterminate from '../Loading';
 import WidgetImage from '../WidgetImage';
@@ -134,13 +135,17 @@ export default function GridColumnLayout({ children }) {
             </Typography>
             <ListContainer id="list-contacts">
               {isLoading ? (
-                <LoadingCircularIndeterminate size={24} />
+                <ListItem key={1}>
+                  <LoadingCircularIndeterminate size={24} />
+                </ListItem>
               ) : friendsList && friendsList.length === 0 ? (
-                <Typography variant="caption">
-                  {user
-                    ? t('message:no_contacts')
-                    : t('message:login_more_features')}
-                </Typography>
+                <ListItem key={1}>
+                  <Typography variant="caption">
+                    {user
+                      ? t('message:no_contacts')
+                      : t('message:login_more_features')}
+                  </Typography>
+                </ListItem>
               ) : (
                 !isLoading && (
                   <InfiniteScroll

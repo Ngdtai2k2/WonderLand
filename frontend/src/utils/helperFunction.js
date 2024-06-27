@@ -79,6 +79,7 @@ export function renderContentReply(content) {
             underline="hover"
             fontSize={13.5}
             marginRight={0.5}
+            aria-label={`Link to ${username}'s profile`}
           >
             @{username}
           </Link>

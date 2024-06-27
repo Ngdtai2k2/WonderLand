@@ -142,6 +142,7 @@ export default function CommentItem({
               <Link
                 onClick={() => handleShowReply(data._id)}
                 sx={{ cursor: 'pointer', fontSize: 12 }}
+                aria-label="show reply"
               >
                 {t('post:comment.view_comment')}
               </Link>
@@ -264,6 +265,7 @@ export default function CommentItem({
                   : { cursor: 'pointer' }
               }
               onClick={() => handleOpenReply(data._id)}
+              aria-label="show reply"
             >
               {t('post:comment.reply')}
             </Link>
