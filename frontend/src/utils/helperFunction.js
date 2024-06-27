@@ -74,7 +74,7 @@ export function renderContentReply(content) {
       return (
         <>
           {beforeUsername}
-          <Link href={`/u/${username}`} underline="hover" fontSize={13.5}>
+          <Link href={`/u/${username}`} underline="hover" fontSize={13.5} marginRight={0.5}>
             @{username}
           </Link>
           <ReadMore
