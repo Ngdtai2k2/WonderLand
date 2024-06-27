@@ -49,6 +49,7 @@ import {
   CardStyled,
 } from './styles';
 import 'video-react/dist/video-react.css';
+import 'react-medium-image-zoom/dist/styles.css';
 
 export default function PostCard({
   post,

@@ -16,7 +16,7 @@ import './i18n/i18n';
 
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-toastify/dist/ReactToastify.min.css';
-import 'react-medium-image-zoom/dist/styles.css';
+
 import './index.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

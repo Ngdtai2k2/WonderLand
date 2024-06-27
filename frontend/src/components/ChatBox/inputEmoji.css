@@ -9,6 +9,8 @@
 .react-input-emoji--input {
   max-height: 40px;
   padding: 9px;
+  -webkit-user-select: text; /* For Safari 3+, Safari on iOS 3+ */
+  user-select: text; /* Standard property */
 }
 
 .react-emoji {
@@ -22,5 +24,7 @@
 
   .react-input-emoji--input {
     max-height: 70px;
+    -webkit-user-select: text; /* For Safari 3+, Safari on iOS 3+ */
+    user-select: text; /* Standard property */
   }
 }

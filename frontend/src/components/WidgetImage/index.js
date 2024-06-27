@@ -18,6 +18,8 @@ import {
 import { getFileExtension } from '../../utils/helperFunction';
 import { PaperSticky } from '../styles';
 
+import 'react-medium-image-zoom/dist/styles.css';
+
 export default function WidgetImage() {
   const [imageURL, setImageURL] = useState();
   const [type, setType] = useState();

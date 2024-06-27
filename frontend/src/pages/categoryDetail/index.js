@@ -42,6 +42,8 @@ import {
 
 import { AvatarCategory } from './styles';
 
+import 'react-medium-image-zoom/dist/styles.css';
+
 export default function CategoryDetail() {
   const [category, setCategory] = useState();
   const [totalLike, setTotalLike] = useState(0);
