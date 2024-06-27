@@ -84,6 +84,7 @@ export default function WidgetImage() {
             size="small"
             onClick={() => setValue(0)}
             disabled={value === 0}
+            aria-label="change"
           >
             <PetsRoundedIcon sx={{ fontSize: '16px', cursor: 'pointer' }} />
           </IconButton>
@@ -91,6 +92,7 @@ export default function WidgetImage() {
             size="small"
             onClick={() => setValue(1)}
             disabled={value === 1}
+            aria-label="change"
           >
             <PetsRoundedIcon sx={{ fontSize: '16px', cursor: 'pointer' }} />
           </IconButton>
@@ -98,6 +100,7 @@ export default function WidgetImage() {
             size="small"
             onClick={() => setValue(2)}
             disabled={value === 2}
+            aria-label="change"
           >
             <PetsRoundedIcon sx={{ fontSize: '16px', cursor: 'pointer' }} />
           </IconButton>

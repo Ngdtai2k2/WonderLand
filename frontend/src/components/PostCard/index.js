@@ -228,6 +228,7 @@ export default function PostCard({
             href={`/u/${post?.author?.nickname}`}
             underline="none"
             variant="inherit"
+            aria-label={`Link to profile's ${post?.author?.nickname}`}
           >
             <LazyLoad height={48} once>
               <Avatar
@@ -261,6 +262,7 @@ export default function PostCard({
             display="flex"
             gap={0.5}
             width="fit-content"
+            aria-label={`Link to profile's ${post?.author?.nickname}`}
           >
             <Typography variant="body2" fontWeight={600}>
               {post?.author?.nickname}
