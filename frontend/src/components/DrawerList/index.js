@@ -42,8 +42,10 @@ function DrawerList({ isAdmin }) {
         'categories',
         JSON.stringify(response.data.result.docs),
       );
+      setCategories(response.data.result.docs);
     } catch (error) {
       sessionStorage.setItem('categories', null);
+      setCategories(null);
     } finally {
       setLoading(false);
     }
