@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 
-import { Tooltip, Typography } from '@mui/material';
+import { Tooltip, Typography, Box } from '@mui/material';
 import {
   ImageMessage,
   PaperMessageReceiver,
@@ -20,7 +20,12 @@ export default function MessageItem({
     ? PaperMessageSender
     : PaperMessageReceiver;
   return (
-    <>
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems={isSender ? 'flex-end' : 'flex-start'}
+      gap={1}
+    >
       {mediaUrl && (
         <Tooltip title={moment(createdAt).fromNow()}>
           {mediaType === 0 ? (
@@ -32,7 +37,6 @@ export default function MessageItem({
           )}
         </Tooltip>
       )}
-
       {message?.trim() !== '' && (
         <PaperMessageComponent>
           <Tooltip title={moment(createdAt).fromNow()}>
@@ -42,6 +46,6 @@ export default function MessageItem({
           </Tooltip>
         </PaperMessageComponent>
       )}
-    </>
+    </Box>
   );
 }

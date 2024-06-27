@@ -5,18 +5,20 @@ import Avatar from '@mui/material/Avatar';
 
 export const PaperMessageSender = styled(Paper)(() => ({
   width: 'fit-content',
-  maxWidth: '70%',
+  maxWidth: '100%',
   padding: 10,
   backgroundColor: '#138aff',
   color: '#ffffff',
+  marginLeft: 10,
 }));
 
 export const PaperMessageReceiver = styled(Paper)(() => ({
   width: 'fit-content',
-  maxWidth: '70%',
+  maxWidth: '100%',
   padding: 10,
   backgroundColor: '#4e4e4e',
   color: '#ffffff',
+  marginRight: 10,
 }));
 
 export const ImageMessage = styled(Avatar)(({ theme }) => ({
