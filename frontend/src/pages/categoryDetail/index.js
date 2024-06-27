@@ -324,26 +324,44 @@ export default function CategoryDetail() {
           </Tabs>
         </TabContext>
       </Paper>
-      <Box>
+      <Box display="flex" justifyContent="center">
         {tabIndex === 0 && (
-          <RenderPost
-            apiLink={API.POST.GET_BY_CATEGORY(
-              categoryId,
-              false,
-              'desc',
-              'createdAt',
-            )}
-          />
+          <Box
+            marginTop={1}
+            width={{
+              xs: '100%',
+              sm: '80%',
+              md: '50%',
+            }}
+          >
+            <RenderPost
+              apiLink={API.POST.GET_BY_CATEGORY(
+                categoryId,
+                false,
+                'desc',
+                'createdAt',
+              )}
+            />
+          </Box>
         )}
         {tabIndex === 1 && (
-          <RenderPost
-            apiLink={API.POST.GET_BY_CATEGORY(
-              categoryId,
-              true,
-              'desc',
-              'createdAt',
-            )}
-          />
+          <Box
+            marginTop={1}
+            width={{
+              xs: '100%',
+              sm: '80%',
+              md: '50%',
+            }}
+          >
+            <RenderPost
+              apiLink={API.POST.GET_BY_CATEGORY(
+                categoryId,
+                true,
+                'desc',
+                'createdAt',
+              )}
+            />
+          </Box>
         )}
         {tabIndex === 2 && (
           <Box marginY={2}>
