@@ -21,6 +21,8 @@ export const BoxStyled = styled(Box)(() => ({
 export const CardMediaStyled = styled(CardMedia)(() => ({
   border: '0',
   objectFit: 'contain',
+  width: '100%',
+  height: 'auto',
   maxHeight: '400px',
   cursor: 'pointer',
 }));

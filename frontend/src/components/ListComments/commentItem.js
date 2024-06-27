@@ -431,6 +431,7 @@ export default function CommentItem({
                   src={fileReply}
                   alt="Newly uploaded photo"
                   style={{ height: 50, objectFit: 'contain', marginTop: 5 }}
+                  loading="lazy"
                 />
               </Badge>
             </Box>

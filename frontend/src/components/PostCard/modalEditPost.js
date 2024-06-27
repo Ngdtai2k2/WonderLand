@@ -301,6 +301,7 @@ export default function ModalEditPost({ open, handleClose, id, setState }) {
                         src={file}
                         alt=""
                         style={{ height: 250, objectFit: 'contain' }}
+                        loading="lazy"
                       />
                     ) : (
                       <video

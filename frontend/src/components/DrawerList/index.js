@@ -38,17 +38,23 @@ function DrawerList({ isAdmin }) {
     try {
       setLoading(true);
       const response = await axios.get(API.CATEGORY.BASE);
-      setCategories(response.data.result.docs);
+      sessionStorage.setItem(
+        'categories',
+        JSON.stringify(response.data.result.docs),
+      );
     } catch (error) {
-      setCategories(null);
+      sessionStorage.setItem('categories', null);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    getCategories();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (!sessionStorage.getItem('categories')) {
+      getCategories();
+    } else {
+      setCategories(JSON.parse(sessionStorage.getItem('categories')));
+    }
   }, []);
 
   return (

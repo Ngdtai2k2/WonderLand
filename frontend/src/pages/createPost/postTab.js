@@ -225,6 +225,7 @@ export default function PostTab() {
                 src={file}
                 alt=""
                 style={{ height: 300, objectFit: 'contain' }}
+                loading="lazy"
               />
             ) : (
               <video autoPlay loop muted style={{ height: 300 }} controls>

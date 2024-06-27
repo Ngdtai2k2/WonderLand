@@ -284,6 +284,7 @@ export default function PostDetail() {
                       src={file}
                       alt="Newly uploaded photo"
                       style={{ height: 60, objectFit: 'contain', marginTop: 5 }}
+                      loading="lazy"
                     />
                   </Badge>
                 </Box>
