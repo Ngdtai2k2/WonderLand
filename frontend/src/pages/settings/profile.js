@@ -1,6 +1,7 @@
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import React, { useState } from 'react';
+import LazyLoad from 'react-lazyload';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import dayjs from 'dayjs';
@@ -109,11 +110,13 @@ export default function Profile() {
         </Typography>
         <Box marginTop={2} display="flex" flexDirection="column">
           <Box display="flex" alignItems="center" gap={2} marginBottom={2}>
-            <Avatar
-              alt={'Avatar of ' + user?.fullname}
-              src={image ? image : user?.media?.url}
-              sx={{ width: 80, height: 80 }}
-            />
+            <LazyLoad height={80} once>
+              <Avatar
+                alt={'Avatar of ' + user?.fullname}
+                src={image ? image : user?.media?.url}
+                sx={{ width: 80, height: 80 }}
+              />
+            </LazyLoad>
             <Box display="flex" flexDirection="column">
               <Button
                 component="label"

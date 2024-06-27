@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import LazyLoad from 'react-lazyload';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
@@ -118,7 +119,9 @@ export default function SearchForm({ onClose }) {
                     }}
                   >
                     <Box gap={1} display="flex">
-                      <Avatar src={user?.media?.url} />
+                      <LazyLoad height={48} once>
+                        <Avatar src={user?.media?.url} alt="avatar" />
+                      </LazyLoad>
                       <Box display="flex" alignItems="center">
                         <Typography variant="body1">{user.fullname}</Typography>
                         <Typography

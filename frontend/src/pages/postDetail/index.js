@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
+import LazyLoad from 'react-lazyload';
 import * as Yup from 'yup';
 import axios from 'axios';
 
@@ -203,10 +204,12 @@ export default function PostDetail() {
                 onSubmit={formik.handleSubmit}
                 method="post"
               >
-                <Avatar
-                  src={user?.media?.url}
-                  alt={`${user?.fullname}'s avatar`}
-                />
+                <LazyLoad height={48} once>
+                  <Avatar
+                    src={user?.media?.url}
+                    alt={`${user?.fullname}'s avatar`}
+                  />
+                </LazyLoad>
                 <TextField
                   id="content"
                   fullWidth

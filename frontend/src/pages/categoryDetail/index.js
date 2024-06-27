@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import Zoom from 'react-medium-image-zoom';
 import { useTheme } from '@emotion/react';
+import LazyLoad from 'react-lazyload';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
@@ -192,11 +193,13 @@ export default function CategoryDetail() {
         <Grid container spacing={2} marginBottom={2}>
           <Grid item xs={12} sm={4} md={3}>
             <Zoom>
-              <AvatarCategory
-                src={category?.media?.url}
-                variant="rounded"
-                alt={category?.name}
-              />
+              <LazyLoad height="auto" once>
+                <AvatarCategory
+                  src={category?.media?.url}
+                  variant="rounded"
+                  alt={category?.name}
+                />
+              </LazyLoad>
             </Zoom>
           </Grid>
           <Grid

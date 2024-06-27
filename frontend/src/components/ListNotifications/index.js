@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { jwtDecode } from 'jwt-decode';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import moment from 'moment';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
+import LazyLoad from 'react-lazyload';
+import { toast } from 'react-toastify';
+import moment from 'moment';
 
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -185,11 +186,13 @@ export default function ListNotifications({
                 selected={!notification.read}
               >
                 <Box display="flex" gap={1.5}>
-                  <Avatar
-                    src={notification.image}
-                    alt=""
-                    sx={{ width: 50, height: 50 }}
-                  />
+                  <LazyLoad height={50} once>
+                    <Avatar
+                      src={notification.image}
+                      alt=""
+                      sx={{ width: 50, height: 50 }}
+                    />
+                  </LazyLoad>
                   <Box>
                     <Typography
                       variant="body1"

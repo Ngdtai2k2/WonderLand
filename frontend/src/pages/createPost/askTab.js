@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import LazyLoad from 'react-lazyload';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
@@ -117,12 +118,14 @@ export default function AskTab() {
           category.map((item) => (
             <MenuItem key={item._id} value={item._id}>
               <Box display="flex" alignItems="center" gap={2}>
-                <Avatar
-                  variant="square"
-                  alt={item.media?.description}
-                  src={item.media?.url}
-                  sx={{ width: 32, height: 32 }}
-                />
+                <LazyLoad height={32} once>
+                  <Avatar
+                    variant="square"
+                    alt={item.media?.description}
+                    src={item.media?.url}
+                    sx={{ width: 32, height: 32 }}
+                  />
+                </LazyLoad>
                 <Typography variant="body1">{item.name}</Typography>
               </Box>
             </MenuItem>

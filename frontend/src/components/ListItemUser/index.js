@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import LazyLoad from 'react-lazyload';
 
 import ListItemButton from '@mui/material/ListItemButton';
 import Typography from '@mui/material/Typography';
@@ -67,7 +68,9 @@ export default function ListItemUser({
         dense
         onClick={() => navigate(`/u/${nickname || _id}`)}
       >
-        <Avatar src={avatar} sx={{ height: 60, width: 60 }} />
+        <LazyLoad height={60} once>
+          <Avatar src={avatar} sx={{ height: 60, width: 60 }} />
+        </LazyLoad>
         <Stack>
           <Typography variant="body1" fontWeight={600}>
             {nickname}

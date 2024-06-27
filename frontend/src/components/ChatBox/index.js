@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import InputEmoji from 'react-input-emoji';
 import { useTheme } from '@emotion/react';
 import { toast } from 'react-toastify';
+import LazyLoad from 'react-lazyload';
 
 import Box from '@mui/material/Box';
 import Menu from '@mui/material/Menu';
@@ -172,20 +173,28 @@ export default function ChatBox({ chat, receivedMessage }) {
     <Box>
       <Box display="flex" alignItems="center" justifyContent="space-between">
         <Box display="flex" gap={2} alignItems="center">
-          <Avatar
-            src={userData?.media?.url}
-            alt="avatar"
-            sx={{
-              width: {
-                xs: 50,
-                sm: 55,
-              },
-              height: {
-                xs: 50,
-                sm: 55,
-              },
+          <LazyLoad
+            height={{
+              xs: 50,
+              sm: 55,
             }}
-          />
+            once
+          >
+            <Avatar
+              src={userData?.media?.url}
+              alt="avatar"
+              sx={{
+                width: {
+                  xs: 50,
+                  sm: 55,
+                },
+                height: {
+                  xs: 50,
+                  sm: 55,
+                },
+              }}
+            />
+          </LazyLoad>
           <Typography variant="body1" fontWeight={700}>
             {userData?.nickname}
           </Typography>
@@ -226,7 +235,12 @@ export default function ChatBox({ chat, receivedMessage }) {
             flexDirection="column"
             alignItems="center"
           >
-            <Avatar src={userData?.media?.url} sx={{ width: 60, height: 60 }} />
+            <LazyLoad height={60} once>
+              <Avatar
+                src={userData?.media?.url}
+                sx={{ width: 60, height: 60 }}
+              />
+            </LazyLoad>
             <Typography variant="body1" fontWeight={700}>
               {userData?.nickname}
             </Typography>

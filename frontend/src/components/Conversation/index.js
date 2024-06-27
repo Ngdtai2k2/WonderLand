@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import LazyLoad from 'react-lazyload';
 
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -52,6 +53,37 @@ export default function Conversation({ data }) {
           anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
           variant="dot"
         >
+          <LazyLoad
+            height={{
+              xs: 50,
+              sm: 55,
+            }}
+            once
+          >
+            <Avatar
+              src={userData?.media?.url}
+              alt="avatar"
+              sx={{
+                width: {
+                  xs: 50,
+                  sm: 55,
+                },
+                height: {
+                  xs: 50,
+                  sm: 55,
+                },
+              }}
+            />
+          </LazyLoad>
+        </StyledBadge>
+      ) : (
+        <LazyLoad
+          height={{
+            xs: 50,
+            sm: 55,
+          }}
+          once
+        >
           <Avatar
             src={userData?.media?.url}
             alt="avatar"
@@ -66,22 +98,7 @@ export default function Conversation({ data }) {
               },
             }}
           />
-        </StyledBadge>
-      ) : (
-        <Avatar
-          src={userData?.media?.url}
-          alt="avatar"
-          sx={{
-            width: {
-              xs: 50,
-              sm: 55,
-            },
-            height: {
-              xs: 50,
-              sm: 55,
-            },
-          }}
-        />
+        </LazyLoad>
       )}
 
       <Box

@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Zoom from 'react-medium-image-zoom';
 import { useTheme } from '@emotion/react';
 import { toast } from 'react-toastify';
+import LazyLoad from 'react-lazyload';
 import moment from 'moment';
 
 import Avatar from '@mui/material/Avatar';
@@ -228,12 +229,14 @@ export default function PostCard({
             underline="none"
             variant="inherit"
           >
-            <Avatar
-              variant="rounded"
-              src={post?.author?.media?.url}
-              alt={post?.author?.fullname}
-              sx={{ width: 48, height: 48 }}
-            />
+            <LazyLoad height={48} once>
+              <Avatar
+                variant="rounded"
+                src={post?.author?.media?.url}
+                alt={post?.author?.fullname}
+                sx={{ width: 48, height: 48 }}
+              />
+            </LazyLoad>
           </Link>
         }
         action={
@@ -272,11 +275,13 @@ export default function PostCard({
             gap={0.5}
             onClick={() => navigate(`/category/${post?.category?._id}`)}
           >
-            <Avatar
-              src={post?.category?.media?.url}
-              sx={{ width: 24, height: 24 }}
-              alt={post?.category?.name}
-            />
+            <LazyLoad height={24} once>
+              <Avatar
+                src={post?.category?.media?.url}
+                sx={{ width: 24, height: 24 }}
+                alt={post?.category?.name}
+              />
+            </LazyLoad>
             <Typography variant="caption" fontSize={12} width="fit-content">
               {post?.category?.name}
             </Typography>

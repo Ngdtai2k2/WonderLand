@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import LazyLoad from 'react-lazyload';
 
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
@@ -203,10 +204,14 @@ export default function GridColumnLayout({ children }) {
                               }}
                               variant="dot"
                             >
-                              <Avatar src={friend?.media?.url} alt="Avatar" />
+                              <LazyLoad height={48} once>
+                                <Avatar src={friend?.media?.url} alt="Avatar" />
+                              </LazyLoad>
                             </StyledBadge>
                           ) : (
-                            <Avatar src={friend?.media?.url} alt="Avatar" />
+                            <LazyLoad height={48} once>
+                              <Avatar src={friend?.media?.url} alt="Avatar" />
+                            </LazyLoad>
                           )}
 
                           <Typography variant="body1" fontWeight={600}>

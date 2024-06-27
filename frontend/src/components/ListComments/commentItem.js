@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import LazyLoad from 'react-lazyload';
 import { useFormik } from 'formik';
 import moment from 'moment';
 import * as Yup from 'yup';
@@ -204,16 +205,18 @@ export default function CommentItem({
   };
   return (
     <>
-      <Avatar
-        src={data.author.media?.url}
-        alt={`${data.author.fullname}'s avatar`}
-        sx={{
-          width: isReply ? 26 : 34,
-          height: isReply ? 26 : 34,
-          cursor: 'pointer',
-        }}
-        onClick={() => navigate(`/u/${data.author.nickname}`)}
-      />
+      <LazyLoad height={isReply ? 26 : 34} once>
+        <Avatar
+          src={data.author.media?.url}
+          alt={`${data.author.fullname}'s avatar`}
+          sx={{
+            width: isReply ? 26 : 34,
+            height: isReply ? 26 : 34,
+            cursor: 'pointer',
+          }}
+          onClick={() => navigate(`/u/${data.author.nickname}`)}
+        />
+      </LazyLoad>
       <Box width="100%">
         <Box display="flex" flexDirection="row">
           <Typography
@@ -329,11 +332,13 @@ export default function CommentItem({
             onSubmit={formik.handleSubmit}
             method="post"
           >
-            <Avatar
-              src={user?.media?.url}
-              alt={`${user?.fullname}'s avatar`}
-              sx={{ width: 30, height: 30 }}
-            />
+            <LazyLoad height={30} once>
+              <Avatar
+                src={user?.media?.url}
+                alt={`${user?.fullname}'s avatar`}
+                sx={{ width: 30, height: 30 }}
+              />
+            </LazyLoad>
             <TextField
               id={`content-${data._id}`}
               name="contentReply"

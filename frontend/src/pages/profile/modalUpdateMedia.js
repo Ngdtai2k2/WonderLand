@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
+import LazyLoad from 'react-lazyload';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
@@ -98,22 +99,24 @@ export default function ModalUpdateMedia({
       >
         <Grid container spacing={2}>
           <Grid item xs={5}>
-            <Avatar
-              alt={
-                type === 1
-                  ? `Cover art of ${user?.fullname}`
-                  : `Avatar of ${user?.fullname}`
-              }
-              src={
-                image
-                  ? image
-                  : type === 1
-                    ? user?.coverArt?.url
-                    : user?.media?.url
-              }
-              variant="square"
-              sx={{ width: '100%', height: 'auto', borderRadius: '5px' }}
-            />
+            <LazyLoad height="auto" once>
+              <Avatar
+                alt={
+                  type === 1
+                    ? `Cover art of ${user?.fullname}`
+                    : `Avatar of ${user?.fullname}`
+                }
+                src={
+                  image
+                    ? image
+                    : type === 1
+                      ? user?.coverArt?.url
+                      : user?.media?.url
+                }
+                variant="square"
+                sx={{ width: '100%', height: 'auto', borderRadius: '5px' }}
+              />
+            </LazyLoad>
           </Grid>
           <Grid
             item

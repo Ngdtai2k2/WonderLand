@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Zoom from 'react-medium-image-zoom';
 import { useTheme } from '@emotion/react';
+import LazyLoad from 'react-lazyload';
 import axios from 'axios';
 
 import Typography from '@mui/material/Typography';
@@ -79,11 +80,13 @@ export default function Categories() {
       renderCell: (params) => {
         return (
           <Zoom>
-            <Avatar
-              src={params.row.media?.url}
-              sx={{ width: 45, height: 45, p: 0.5 }}
-              variant="rounded"
-            />
+            <LazyLoad height={45} once>
+              <Avatar
+                src={params.row.media?.url}
+                sx={{ width: 45, height: 45, p: 0.5 }}
+                variant="rounded"
+              />
+            </LazyLoad>
           </Zoom>
         );
       },

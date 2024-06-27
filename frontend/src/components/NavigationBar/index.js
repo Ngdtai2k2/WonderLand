@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import LazyLoad from 'react-lazyload';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@emotion/react';
@@ -235,10 +236,12 @@ export default function NavigationBar({ isAdmin, state }) {
               }}
               sx={{ p: 0, m: 1 }}
             >
-              <Avatar
-                src={user?.media?.url}
-                alt={'Avatar of ' + user?.fullname}
-              />
+              <LazyLoad height={48} once>
+                <Avatar
+                  src={user?.media?.url}
+                  alt={'Avatar of ' + user?.fullname}
+                />
+              </LazyLoad>
             </IconButton>
           </Tooltip>
           {/* menu user */}

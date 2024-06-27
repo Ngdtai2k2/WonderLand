@@ -1,4 +1,5 @@
 import React from 'react';
+import LazyLoad from 'react-lazyload';
 
 import Avatar from '@mui/material/Avatar';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -18,15 +19,17 @@ export default function CustomListItemButton({
       <ListItemButton selected={selected} onClick={onClick}>
         {category ? (
           <ListItemIcon sx={{ marginRight: -1 }}>
-            <Avatar
-              src={category.media.url}
-              variant="rounded"
-              alt={`${category.name}'s avatar`}
-              sx={{
-                width: 35,
-                height: 35,
-              }}
-            />
+            <LazyLoad height={35} once>
+              <Avatar
+                src={category.media.url}
+                variant="rounded"
+                alt={`${category.name}'s avatar`}
+                sx={{
+                  width: 35,
+                  height: 35,
+                }}
+              />
+            </LazyLoad>
           </ListItemIcon>
         ) : (
           <ListItemIcon sx={{ marginRight: -1 }}>{icon}</ListItemIcon>
