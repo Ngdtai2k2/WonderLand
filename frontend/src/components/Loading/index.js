@@ -13,7 +13,11 @@ export default function LoadingCircularIndeterminate({ size }) {
         overflow: 'hidden',
       }}
     >
-      <CircularProgress size={size ? size : 40} />
+      <CircularProgress
+        size={size ? size : 40}
+        role="progressbar"
+        aria-label="loading progress"
+      />
     </Box>
   );
 }
