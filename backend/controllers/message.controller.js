@@ -12,15 +12,26 @@ const messageController = {
 
       message.trim();
 
-      if (!chatId || !senderId) return res.status(400).json({ message: req.t("message.invalid_data") });
+      if (!chatId || !senderId)
+        return res.status(400).json({ message: req.t("message.invalid_data") });
 
-      if(!message && !req.file) return res.status(400).json({ message: req.t("message.invalid_data") });
+      if (!message && !req.file)
+        return res.status(400).json({ message: req.t("message.invalid_data") });
 
       const chat = await chatModel.findById(chatId);
 
       if (!chat) {
         return res.status(404).json({ message: req.t("not_found.chat") });
       }
+
+      chat.members.forEach((member) => {
+        if (member.toString() !== senderId) {
+          chat.deletedBy = chat.deletedBy.filter(
+            (id) => id.toString() !== member.toString()
+          );
+        }
+      });
+      await chat.save();
 
       let data;
       if (req.file) {
@@ -53,7 +64,9 @@ const messageController = {
       });
 
       const newMessageData = await newMessage.save();
-      const result = await messageModel.findById(newMessageData._id).populate('media');
+      const result = await messageModel
+        .findById(newMessageData._id)
+        .populate("media");
 
       let userSockets = [];
 
@@ -76,7 +89,6 @@ const messageController = {
 
       return res.status(200).json(result);
     } catch (error) {
-      console.error(error.message);
       return res.status(500).json({ message: req.t("server_error") });
     }
   },
@@ -86,12 +98,14 @@ const messageController = {
       const { chatId } = req.params;
       const { request_user } = req.query;
 
-      const result = await messageModel.find({
-        chatId,
-        deletedBy: {
-          $ne: request_user,
-        },
-      }).populate('media');
+      const result = await messageModel
+        .find({
+          chatId,
+          deletedBy: {
+            $ne: request_user,
+          },
+        })
+        .populate("media");
       if (!result) {
         return res.status(404).json({ message: req.t("not_found.messages") });
       }

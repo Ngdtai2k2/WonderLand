@@ -30,7 +30,6 @@ const chatController = {
       const result = await newChat.save();
       return res.status(200).json(result);
     } catch (error) {
-      console.error(error.message);
       return res.status(500).json({ message: req.t("server_error") });
     }
   },

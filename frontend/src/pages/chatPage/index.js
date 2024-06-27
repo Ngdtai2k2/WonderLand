@@ -57,7 +57,7 @@ export default function ChatPage() {
       getChats(i18n.language, axiosJWT, user?._id, accessToken, setChats);
     } else navigate('/');
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, event]);
+  }, [user, event, receivedMessage]);
 
   useEffect(() => {
     const chat = chats.find((chat) => chat._id === chatId);
