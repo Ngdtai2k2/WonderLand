@@ -5,7 +5,7 @@ import { API } from '../base';
 
 const getPosts = (apiLink, setItems, items, setHasMore, page, user, type) => {
   axios
-    .post(`${apiLink}_page=${page.current}&_limit=5`, {
+    .post(`${apiLink}_page=${page.current}&_limit=3`, {
       request_user: user,
       type: type,
     })
@@ -15,7 +15,7 @@ const getPosts = (apiLink, setItems, items, setHasMore, page, user, type) => {
         setHasMore(false);
       } else {
         setItems([...items, ...res.data.result.docs]);
-        setHasMore(res.data.result.docs.length === 5);
+        setHasMore(res.data.result.docs.length === 3);
         page.current = page.current + 1;
       }
     });

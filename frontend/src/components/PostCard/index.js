@@ -48,7 +48,7 @@ import {
   CardMediaStyled,
   CardStyled,
 } from './styles';
-import 'video-react/dist/video-react.css';
+
 import 'react-medium-image-zoom/dist/styles.css';
 
 export default function PostCard({
@@ -171,7 +171,17 @@ export default function PostCard({
   }, []);
 
   useEffect(() => {
+    const loadVideoStyles = async () => {
+      if (videoElement) {
+        await import('video-react/dist/video-react.css');
+      }
+    };
+
     const videoElement = document.querySelector('.video-react-video');
+
+    if (videoElement) {
+      loadVideoStyles();
+    }
 
     if (isIntersecting && videoElement) {
       videoElement.play();
