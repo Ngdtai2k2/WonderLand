@@ -26,7 +26,6 @@ import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import ThumbUpRoundedIcon from '@mui/icons-material/ThumbUpRounded';
 import ThumbDownRoundedIcon from '@mui/icons-material/ThumbDownRounded';
 
-import { API } from '../../api/base';
 import {
   IntersectionObserverOptions,
   createElementStyleForZoom,
@@ -40,7 +39,11 @@ import {
 import MenuSettings from './menuSettings';
 import MenuShare from './menuShare';
 import useUserAxios from '../../hooks/useUserAxios';
-import { handleViewPost } from '../../api/posts';
+import {
+  handleLikePost,
+  handleSavePost,
+  handleViewPost,
+} from '../../api/posts';
 import {
   BoxStyled,
   BoxSubHeader,
@@ -91,21 +94,15 @@ export default function PostCard({
 
   const handleLikeClick = async (type) => {
     if (!user) return toast.warning(t('message:need_login'), toastTheme);
-    try {
-      await axiosJWT.post(
-        API.REACTION.LIKE_POST,
-        {
-          id: post?._id,
-          author: user._id,
-          type: type,
-        },
-        {
-          headers: {
-            token: `Bearer ${accessToken}`,
-          },
-        },
-      );
-
+    const res = await handleLikePost(
+      i18n.language,
+      axiosJWT,
+      accessToken,
+      post?._id,
+      user._id,
+      type,
+    );
+    if (res.status === 200 || res.status === 201) {
       const newIsLiked = type === 1 ? !isLiked : false;
       const newIsDisliked = type === 0 ? !isDisliked : false;
       const reactionChanged =
@@ -124,31 +121,25 @@ export default function PostCard({
       setIsLiked(newIsLiked);
       setIsDisliked(newIsDisliked);
       setTotalReaction(updatedTotalReaction);
-    } catch (error) {
-      toast.error(error.response.data.message, toastTheme);
+    } else {
+      toast.error(res.data.message, toastTheme);
     }
   };
 
-  const handleSavePost = async () => {
+  const handleSavePostClick = async () => {
     if (!user) return toast.warning(t('message:need_login'), toastTheme);
-    try {
-      const response = await axiosJWT.post(
-        API.SAVE_POST.BASE,
-        {
-          id: post?._id,
-          user: user._id,
-        },
-        {
-          headers: {
-            token: `Bearer ${accessToken}`,
-            'Accept-Language': i18n.language,
-          },
-        },
-      );
-      setIsSavePost(response?.data?.state);
-      toast.success(response?.data?.message, toastTheme);
-    } catch (error) {
-      toast.error(error.response.data.message, toastTheme);
+    const res = await handleSavePost(
+      i18n.language,
+      post?._id,
+      user._id,
+      axiosJWT,
+      accessToken,
+    );
+    if (res.status === 200 || res.status === 201) {
+      setIsSavePost(res?.data?.state);
+      toast.success(res?.data?.message, toastTheme);
+    } else {
+      toast.error(res.data.message, toastTheme);
     }
   };
 
@@ -404,7 +395,7 @@ export default function PostCard({
           <IconButton
             aria-label="save"
             size="small"
-            onClick={() => handleSavePost()}
+            onClick={() => handleSavePostClick()}
           >
             {isSavePost ? (
               <BookmarkRoundedIcon color="warning" />

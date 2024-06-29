@@ -90,4 +90,62 @@ const getPostById = async (lng, postId, setData, toastTheme) => {
   }
 };
 
-export { getPosts, refresh, handleViewPost, handleDeletePost, getPostById };
+const handleSavePost = async (lng, postId, userId, axiosJWT, accessToken) => {
+  try {
+    const response = await axiosJWT.post(
+      API.SAVE_POST.BASE,
+      {
+        id: postId,
+        user: userId,
+      },
+      {
+        headers: {
+          token: `Bearer ${accessToken}`,
+          'Accept-Language': lng,
+        },
+      },
+    );
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+const handleLikePost = async (
+  lng,
+  axiosJWT,
+  accessToken,
+  postId,
+  userId,
+  type,
+) => {
+  try {
+   const response = await axiosJWT.post(
+      API.REACTION.LIKE_POST,
+      {
+        id: postId,
+        author: userId,
+        type: type,
+      },
+      {
+        headers: {
+          token: `Bearer ${accessToken}`,
+          'Accept-Language': lng,
+        },
+      },
+    );
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+export {
+  getPosts,
+  refresh,
+  handleViewPost,
+  handleDeletePost,
+  getPostById,
+  handleSavePost,
+  handleLikePost,
+};
