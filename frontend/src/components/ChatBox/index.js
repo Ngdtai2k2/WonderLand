@@ -173,13 +173,7 @@ export default function ChatBox({ chat, receivedMessage }) {
     <Box>
       <Box display="flex" alignItems="center" justifyContent="space-between">
         <Box display="flex" gap={2} alignItems="center">
-          <LazyLoad
-            height={{
-              xs: 50,
-              sm: 55,
-            }}
-            once
-          >
+          <LazyLoad height={50} once>
             <Avatar
               src={userData?.media?.url}
               alt="avatar"

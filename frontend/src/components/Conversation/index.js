@@ -53,13 +53,7 @@ export default function Conversation({ data }) {
           anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
           variant="dot"
         >
-          <LazyLoad
-            height={{
-              xs: 50,
-              sm: 55,
-            }}
-            once
-          >
+          <LazyLoad height={50} once>
             <Avatar
               src={userData?.media?.url}
               alt="avatar"
@@ -77,13 +71,7 @@ export default function Conversation({ data }) {
           </LazyLoad>
         </StyledBadge>
       ) : (
-        <LazyLoad
-          height={{
-            xs: 50,
-            sm: 55,
-          }}
-          once
-        >
+        <LazyLoad height={50} once>
           <Avatar
             src={userData?.media?.url}
             alt="avatar"
