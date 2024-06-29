@@ -8,4 +8,5 @@ export const BoxModal = styled(Box)({
   transform: 'translate(-50%, -50%)',
   boxShadow: 24,
   padding: 10,
+  borderRadius: 5,
 });

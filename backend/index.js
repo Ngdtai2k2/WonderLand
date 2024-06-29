@@ -23,6 +23,7 @@ const friendsRoute = require("./routes/friends.route");
 const socketRoute = require("./routes/socket.route");
 const chatRoute = require("./routes/chat.route");
 const messageRoute = require("./routes/message.route");
+const badWordRoute = require("./routes/badword.route");
 
 const socketService = require("./services/socket.service");
 
@@ -85,6 +86,7 @@ app.use("/api/v1/friend", friendsRoute);
 app.use("/api/v1/socket", socketRoute);
 app.use("/api/v1/chat", chatRoute);
 app.use("/api/v1/message", messageRoute);
+app.use("/api/v1/bad-word", badWordRoute);
 
 io.on("connection", (socket) => {
   socketService.connection(socket);

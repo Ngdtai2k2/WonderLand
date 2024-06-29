@@ -17,6 +17,7 @@ const savePostService = require("../services/savePost.service");
 const commentService = require("../services/comment.service");
 const algorithmsService = require("../services/algorithms.service");
 const notificationService = require("../services/notification.service");
+const badWordService = require("../services/badword.service");
 
 const { postPopulateOptions } = require("../constants/constants");
 const categoriesController = require("./categories.controller");
@@ -31,6 +32,12 @@ const postController = {
 
       if (!User.findOne(author))
         return res.status(400).json({ message: req.t("not_found.author") });
+
+      // bad words
+      const filter = await badWordService.initializeFilter();
+      
+      const filteredTitle = filter.clean(title);
+      const filteredContent = filter.clean(content);
 
       const categoryData = await Category.findById(category).populate("media");
       if (!categoryData)
@@ -57,8 +64,8 @@ const postController = {
 
       const newPost = new postModel({
         author: author,
-        title: title,
-        content: content || null,
+        title: filteredTitle,
+        content: filteredContent || null,
         category: categoryData._id,
         media: req.file ? data._id : null,
         type: type,
@@ -105,6 +112,7 @@ const postController = {
       });
       return res.status(201).json({ message: successMessage, post: post });
     } catch (error) {
+      console.log(error.message);
       return res.status(500).json({ message: req.t("server_error") });
     }
   },
@@ -117,6 +125,10 @@ const postController = {
       title = title.trim();
       if (!title)
         return res.status(400).json({ message: req.t("post.provide_title") });
+      // bad words
+      const filter = await badWordService.initializeFilter();
+      const filteredTitle = filter.clean(title);
+      const filteredContent = filter.clean(content);
 
       const post = await postModel.findById(id).populate("media");
       if (!post)
@@ -156,8 +168,8 @@ const postController = {
       const updatedPost = await postModel.findByIdAndUpdate(
         { _id: id },
         {
-          title: title,
-          content: content || null,
+          title: filteredTitle,
+          content: filteredContent || null,
           category: category,
           media: req.file ? data._id : null,
         },

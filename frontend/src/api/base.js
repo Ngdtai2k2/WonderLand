@@ -145,4 +145,11 @@ export const API = {
       );
     },
   },
+  BAD_WORD: {
+    GET: createEndpoint('bad-word'),
+    CREATE: createEndpoint('bad-word/add'),
+    DELETE: (id) => createEndpoint(`bad-word/delete/${id}`),
+    UPDATE: (id) => createEndpoint(`bad-word/update/${id}`),
+    CHECK: (word) => createEndpoint(`bad-word/check-exists?word=${word}`),
+  },
 };

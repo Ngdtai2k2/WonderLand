@@ -22,6 +22,11 @@
   "rules": {
     "title": "Quản lý điều lệ"
   },
+  "badword": {
+    "title": "Danh sách từ cấm",
+    "add": "Thêm từ mới",
+    "enter_word": "Nhập từ cần thêm"
+  },
   "add": "Thêm mới",
   "update": "Cập nhập",
   "save": "Lưu",

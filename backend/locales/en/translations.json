@@ -68,7 +68,8 @@
         "comment": "Comment not found!",
         "author": "Author not found!",
         "post": "Post not found!",
-        "report": "Report not found!"
+        "report": "Report not found!",
+        "badword": "Bad word not found!"
     },
     "user": {
         "success_update": "User updated successfully!",
@@ -90,5 +91,11 @@
         "image_not_upload": "Image not uploaded!",
         "video_not_upload": "Upload video failed!",
         "required": "Please provide media!"
+    },
+    "badword": {
+        "exists": "Word already exists!",
+        "add_success": "Add success!",
+        "delete_success": "Delete success!",
+        "update_success": "Update success!"
     }
 }

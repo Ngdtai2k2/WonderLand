@@ -9,6 +9,7 @@ import AdminPanelSettingsRoundedIcon from '@mui/icons-material/AdminPanelSetting
 import CategoryRoundedIcon from '@mui/icons-material/CategoryRounded';
 import GavelRoundedIcon from '@mui/icons-material/GavelRounded';
 import ReportProblemRoundedIcon from '@mui/icons-material/ReportProblemRounded';
+import TranslateRoundedIcon from '@mui/icons-material/TranslateRounded';
 
 export const PublicDrawerList = () => {
   const { t } = useTranslation('sidebar');
@@ -46,6 +47,11 @@ export const AdminDrawerList = () => {
       link: '/admin/reports',
       icon: <ReportProblemRoundedIcon />,
       text: t('reports_list'),
+    },
+    {
+      link: '/admin/bad-words',
+      icon: <TranslateRoundedIcon />,
+      text: t('bad_words'),
     },
   ];
 };

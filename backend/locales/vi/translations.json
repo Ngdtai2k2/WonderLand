@@ -73,7 +73,8 @@
         "comment": "Không tìm thấy bình luận!",
         "author": "Không tìm thấy người dùng!",
         "post": "Không tìm thấy bài viết!",
-        "report": "Không tìm thấy báo cáo!"
+        "report": "Không tìm thấy báo cáo!",
+        "badword": "Không tìm thấy dữ liệu!"
     },
     "server_error": "Đã xảy ra lỗi, vui lòng thử lại sau!",
     "message": {
@@ -90,5 +91,11 @@
         "image_not_upload": "Tải ảnh lên không thành công!",
         "video_not_upload": "Tải video lên không thành công!",
         "required": "Vui lòng cung cấp media!"
+    },
+    "badword": {
+        "exists": "Từ này đã tồn tại!",
+        "add_success": "Thêm thành công!",
+        "delete_success": "Xóa thành công!",
+        "update_success": "Cập nhập thành công!"
     }
 }

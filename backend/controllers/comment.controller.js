@@ -6,6 +6,7 @@ const Comments = require("../models/comment.model");
 const User = require("../models/user.model");
 
 const reactionService = require("../services/reaction.service");
+const badWordService = require("../services/badword.service");
 const uploadMediaCloudinary = require("./uploadMediaCloudinary.controller");
 
 const commentController = {
@@ -18,6 +19,11 @@ const commentController = {
           .status(400)
           .json({ message: req.t("comment.must_contain_photo_or_text") });
       }
+
+      // bad words
+      const filter = await badWordService.initializeFilter();
+      
+      const filteredContent = filter.clean(content);
 
       if (req.file) {
         if (req.file.mimetype.startsWith("image/"))
@@ -32,7 +38,7 @@ const commentController = {
       const newComment = new Comments({
         postId: postId,
         author: author,
-        content: content || null,
+        content: filteredContent || null,
         media: req.file ? data._id : null,
       });
 

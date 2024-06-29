@@ -22,6 +22,12 @@
   "rules": {
     "title": "Rules management"
   },
+  "badword": {
+    "title": "Badwords management",
+    "add": "Add word",
+    "enter_word": "Enter word",
+    "update": "Update word"
+  },
   "add": "Add",
   "update": "Update",
   "save": "Save",
