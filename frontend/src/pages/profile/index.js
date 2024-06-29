@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 import { useMediaQuery } from '@mui/material';
@@ -53,6 +53,7 @@ import {
   ButtonStyled,
   CoverArt,
 } from './styles';
+import { handleCreateConversation } from '../../api/chats';
 
 export default function Profile() {
   const { id } = useParams();
@@ -69,6 +70,7 @@ export default function Profile() {
   const [event, setEvent] = useState();
 
   const theme = useTheme();
+  const navigate = useNavigate();
   const toastTheme = useToastTheme();
   const { t, i18n } = useTranslation(['user', 'message']);
   const isSmOrBelow = useMediaQuery(theme.breakpoints.down('sm'));
@@ -326,7 +328,23 @@ export default function Profile() {
                 </ButtonStyled>
               )}
 
-              <ButtonStyled variant="outlined" size="small" color="info">
+              <ButtonStyled
+                variant="outlined"
+                size="small"
+                color="info"
+                onClick={async () => {
+                  const result = await handleCreateConversation(
+                    user?._id,
+                    data?._id,
+                    toastTheme,
+                    axiosJWT,
+                    accessToken,
+                  );
+                  if (result) {
+                    navigate(`/chat?chat_id=${result._id}`);
+                  }
+                }}
+              >
                 <SendRoundedIcon fontSize="small" /> {t('user:send_message')}
               </ButtonStyled>
             </>
