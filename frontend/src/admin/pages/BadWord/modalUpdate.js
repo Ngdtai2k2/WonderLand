@@ -5,12 +5,12 @@ import { toast } from 'react-toastify';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 
 import { handleChangeEnterWord, updateBadWord } from '../../../api/badword';
 import useUserAxios from '../../../hooks/useUserAxios';
-import { BoxModal } from '../styles';
-import { Button } from '@mui/material';
 import { useToastTheme } from '../../../constants/constant';
+import { BoxModal } from '../styles';
 
 export default function ModalUpdateBadWord({
   openModal,
