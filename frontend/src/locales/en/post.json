@@ -37,5 +37,10 @@
     "ask": "Ask",
     "post_": "Post"
   },
-  "post_not_exist": "The post does not exist!"
+  "post_not_exist": "The post does not exist!",
+  "action": {
+    "save": "Save post",
+    "share": "Share post",
+    "donate": "Donate"
+  }
 }

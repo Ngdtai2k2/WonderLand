@@ -120,7 +120,7 @@ const handleLikePost = async (
   type,
 ) => {
   try {
-   const response = await axiosJWT.post(
+    const response = await axiosJWT.post(
       API.REACTION.LIKE_POST,
       {
         id: postId,
