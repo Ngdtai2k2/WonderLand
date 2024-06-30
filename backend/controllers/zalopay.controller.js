@@ -7,6 +7,7 @@ const qs = require("qs");
 const transactionModel = require("../models/transaction.model");
 
 const zalopayConfig = require("../configs/zalopay.config");
+const userModel = require("../models/user.model");
 
 const zalopayController = {
   payment: async (req, res) => {
@@ -67,7 +68,7 @@ const zalopayController = {
         message: order.description,
         status: 3,
         type: 0,
-        url: result.data.order_url
+        url: result.data.order_url,
       });
 
       await transaction.save();
@@ -140,6 +141,14 @@ const zalopayController = {
             return_code: 2,
           });
         }
+
+        await userModel.findByIdAndUpdate(
+          transaction.recipient,
+          {
+            $inc: { amount: +transaction.amount },
+          },
+          { new: true }
+        );
 
         return res
           .status(200)

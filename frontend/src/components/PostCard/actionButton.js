@@ -151,20 +151,25 @@ export default function ActionButton({ post, isDetail }) {
       )}
 
       <BoxStyled>
-        <Tooltip title={t('post:action.donate')}>
-          <IconButton
-            aria-label={t('post:action.donate')}
-            size="small"
-            onClick={() => setOpenModalDonate(true)}
-          >
-            <SportsBarRoundedIcon />
-          </IconButton>
-        </Tooltip>
-        <DonateModal
-          open={openModalDonate}
-          handleClose={() => setOpenModalDonate(false)}
-          recipient={post?.author?._id}
-        />
+        {post?.author?._id !== user?._id && (
+          <>
+            <Tooltip title={t('post:action.donate')}>
+              <IconButton
+                aria-label={t('post:action.donate')}
+                size="small"
+                onClick={() => setOpenModalDonate(true)}
+              >
+                <SportsBarRoundedIcon />
+              </IconButton>
+            </Tooltip>
+            <DonateModal
+              open={openModalDonate}
+              handleClose={() => setOpenModalDonate(false)}
+              recipient={post?.author?._id}
+            />
+          </>
+        )}
+
         <Tooltip title={t('post:action.save')}>
           <IconButton
             aria-label={t('post:action.save')}

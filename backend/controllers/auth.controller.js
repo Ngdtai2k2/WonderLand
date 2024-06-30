@@ -132,7 +132,7 @@ const authController = {
           path: "/",
           sameSite: "strict",
         });
-        const { password, ...others } = user._doc;
+        const { password, amount , ...others } = user._doc;
         let responseData = {
           ...others,
           accessToken,
