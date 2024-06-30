@@ -12,6 +12,7 @@ import SearchPage from '../../pages/searchPage';
 import Settings from '../../pages/settings';
 import TrendingPage from '../../pages/trendingPage';
 import ChatPage from '../../pages/chatPage';
+import Result from '../../pages/transaction/result';
 
 export const publicRoutes = [
   { path: '', element: <HomePage /> },
@@ -28,5 +29,6 @@ export const publicRoutes = [
   { path: '/search', element: <SearchPage /> },
   { path: '/friends', element: <FriendsList /> },
   { path: '/chat', element: <ChatPage /> },
+  { path: '/transaction/result', element: <Result /> },
   { path: '*', element: <NotFound /> },
 ];

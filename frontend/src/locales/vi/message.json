@@ -37,5 +37,6 @@
   },
   "auth": {
     "logout_success": "Đăng xuất thành công."
-  }
+  },
+  "has_error": "Có lỗi xảy ra vui lòng thử lại sau!"
 }

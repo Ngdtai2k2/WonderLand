@@ -54,6 +54,10 @@ const userSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Media",
     },
+    amount: {
+      type: Number,
+      default: 0,
+    }
   },
   { timestamps: true }
 );

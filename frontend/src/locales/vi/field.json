@@ -26,5 +26,6 @@
   "enter_comment": "Nhập bình luận...",
   "name": "Tên",
   "description": "Mô tả",
-  "rule": "Điều lệ"
+  "rule": "Điều lệ",
+  "amount": "Số tiền"
 }

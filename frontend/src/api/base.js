@@ -152,4 +152,9 @@ export const API = {
     UPDATE: (id) => createEndpoint(`bad-word/update/${id}`),
     CHECK: (word) => createEndpoint(`bad-word/check-exists?word=${word}`),
   },
+  // zalo pay
+  ZALO_PAY: {
+    CREATE_ORDER: createEndpoint('zalopay/payment'),
+    CHECK_STATUS: createEndpoint('zalopay/check-status'),
+  },
 };

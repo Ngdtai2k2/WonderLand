@@ -27,6 +27,7 @@ import {
   handleOpenMenu,
 } from '../../utils/helperFunction';
 import MenuShare from './menuShare';
+import DonateModal from '../../pages/transaction/donateModal';
 
 export default function ActionButton({ post, isDetail }) {
   const [totalReaction, setTotalReaction] = useState(0);
@@ -35,6 +36,7 @@ export default function ActionButton({ post, isDetail }) {
   const [isSavePost, setIsSavePost] = useState(false);
   const [menuAnchorElShare, setMenuAnchorElShare] = useState({});
   const [isMenuShareOpen, setIsMenuShareOpen] = useState({});
+  const [openModalDonate, setOpenModalDonate] = useState(false);
 
   useEffect(() => {
     setIsLiked(post?.hasReacted === true);
@@ -153,10 +155,16 @@ export default function ActionButton({ post, isDetail }) {
           <IconButton
             aria-label={t('post:action.donate')}
             size="small"
+            onClick={() => setOpenModalDonate(true)}
           >
             <SportsBarRoundedIcon />
           </IconButton>
         </Tooltip>
+        <DonateModal
+          open={openModalDonate}
+          handleClose={() => setOpenModalDonate(false)}
+          recipient={post?.author?._id}
+        />
         <Tooltip title={t('post:action.save')}>
           <IconButton
             aria-label={t('post:action.save')}

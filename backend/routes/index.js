@@ -17,6 +17,8 @@ const socketRoute = require('./socket.route');
 const chatRoute = require('./chat.route');
 const messageRoute = require('./message.route');
 const badWordRoute = require('./badword.route');
+const zalopayRoute = require('./zalopay.route');
+const transactionRoute = require('./transaction.route');
 
 // Define your routes here
 router.use('/auth', authRoute);
@@ -35,5 +37,9 @@ router.use('/socket', socketRoute);
 router.use('/chat', chatRoute);
 router.use('/message', messageRoute);
 router.use('/bad-word', badWordRoute);
+
+// Add ZaloPay routes
+router.use('/zalopay', zalopayRoute);
+router.use('/transaction', transactionRoute);
 
 module.exports = router;

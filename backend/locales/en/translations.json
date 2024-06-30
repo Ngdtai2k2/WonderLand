@@ -69,7 +69,8 @@
         "author": "Author not found!",
         "post": "Post not found!",
         "report": "Report not found!",
-        "badword": "Bad word not found!"
+        "badword": "Bad word not found!",
+        "transaction": "Transaction not found!"
     },
     "user": {
         "success_update": "User updated successfully!",
@@ -97,5 +98,10 @@
         "add_success": "Add success!",
         "delete_success": "Delete success!",
         "update_success": "Update success!"
+    },
+    "transaction" : {
+        "success": "Successful transaction!",
+        "fail": "Transaction failed!",
+        "pending": "Pending transaction!"
     }
 }

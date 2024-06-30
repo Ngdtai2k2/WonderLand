@@ -74,7 +74,8 @@
         "author": "Không tìm thấy người dùng!",
         "post": "Không tìm thấy bài viết!",
         "report": "Không tìm thấy báo cáo!",
-        "badword": "Không tìm thấy dữ liệu!"
+        "badword": "Không tìm thấy dữ liệu!",
+        "transaction": "Giao dịch không tồn tại!"
     },
     "server_error": "Đã xảy ra lỗi, vui lòng thử lại sau!",
     "message": {
@@ -97,5 +98,10 @@
         "add_success": "Thêm thành công!",
         "delete_success": "Xóa thành công!",
         "update_success": "Cập nhập thành công!"
+    },
+    "transaction" : {
+        "success": "Giao dịch thành công!",
+        "fail": "Giao dịch thất bạn!",
+        "pending": "Giao dịch chưa thanh toán hoặc đang xử lý!"
     }
 }

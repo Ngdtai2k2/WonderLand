@@ -26,5 +26,6 @@
   "enter_comment": "Enter your comment...",
   "name": "Name",
   "description": "Description",
-  "rule": "Rule"
+  "rule": "Rule",
+  "amount": "Amount"
 }
