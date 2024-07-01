@@ -35,6 +35,8 @@ export const API = {
     TOTAL: createEndpoint('user/total'),
     REGISTERED_TODAY: createEndpoint('user/today'),
     POST: createEndpoint('user/post'),
+    GET_BALANCE: (userId) =>
+      createEndpoint(`user/balance?request_user=${userId}`),
   },
   REPORT: {
     BASE: createEndpoint('report'),
@@ -156,5 +158,13 @@ export const API = {
   ZALO_PAY: {
     CREATE_ORDER: createEndpoint('zalopay/payment'),
     CHECK_STATUS: createEndpoint('zalopay/check-status'),
+  },
+  TRANSACTION: {
+    GET_ALL: createEndpoint('transaction'),
+    GET_BY_ID: (id) => createEndpoint(`transaction/${id}`),
+    GET_BY_USER: (user_id) =>
+      createEndpoint(`transaction/user?request_user=${user_id}`),
+    GET_BY_RECEIPIENT: (recipient_id) =>
+      createEndpoint(`transaction/recipient?request_user=${recipient_id}`),
   },
 };

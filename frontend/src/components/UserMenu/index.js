@@ -98,6 +98,9 @@ export default function UserMenu({ anchorEl, setAnchorEl, handleClose }) {
             >
               {t('navigation:settings_account')}
             </MenuItem>,
+            <MenuItem key="amount" onClick={() => handelNavigate('/balance')}>
+              {t('navigation:balance')}
+            </MenuItem>,
           ]
         : null}
       {/* select lang */}

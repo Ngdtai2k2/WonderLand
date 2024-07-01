@@ -13,6 +13,7 @@ import Settings from '../../pages/settings';
 import TrendingPage from '../../pages/trendingPage';
 import ChatPage from '../../pages/chatPage';
 import Result from '../../pages/transaction/result';
+import Balance from '../../pages/balance';
 
 export const publicRoutes = [
   { path: '', element: <HomePage /> },
@@ -30,5 +31,6 @@ export const publicRoutes = [
   { path: '/friends', element: <FriendsList /> },
   { path: '/chat', element: <ChatPage /> },
   { path: '/transaction/result', element: <Result /> },
+  { path: '/balance', element: <Balance /> },
   { path: '*', element: <NotFound /> },
 ];

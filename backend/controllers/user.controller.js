@@ -40,13 +40,13 @@ const userController = {
       if (mongoose.Types.ObjectId.isValid(user)) {
         userData = await userModel
           .findOne({ _id: user })
-          .select("-password -isAdmin -email")
+          .select("-password -isAdmin -email -amount")
           .populate("media")
           .populate("coverArt");
       } else {
         userData = await userModel
           .findOne({ nickname: user })
-          .select("-password -isAdmin -email")
+          .select("-password -isAdmin -email -amount")
           .populate("media")
           .populate("coverArt");
       }
@@ -249,6 +249,18 @@ const userController = {
       return res.status(500).json({ message: req.t("server_error") });
     }
   },
+  getBalanceByUser: async (req, res) => { 
+    try {
+      const { request_user } = req.query;
+      const user = await userModel.findById(request_user).select("amount");
+      if (!user) {
+        return res.status(404).json({ message: req.t("not_found.user") });
+      }
+      return res.status(200).json({ balance: user.amount });
+    } catch (error) {
+      return res.status(500).json({ message: req.t("server_error") });
+    }
+  }
 };
 
 module.exports = userController;

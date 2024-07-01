@@ -4,6 +4,11 @@ const verifyMiddleware = require("../middleware/verifyToken");
 const storage = require("../configs/multer.config");
 const postController = require("../controllers/post.controller");
 
+router.get(
+  "/balance",
+  verifyMiddleware.verifyTokenAndUserAuthorization,
+  userController.getBalanceByUser
+);
 router.post("/post", postController.getAllPostByUserId);
 router.post(
   "/total",

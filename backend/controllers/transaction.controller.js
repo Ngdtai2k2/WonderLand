@@ -1,4 +1,5 @@
 const transactionModel = require("../models/transaction.model");
+const optionsPaginate = require("../configs/optionsPaginate");
 
 const transactionController = {
   getTransactionById: async (req, res) => {
@@ -16,6 +17,7 @@ const transactionController = {
       return res.status(500).json({ message: req.t("server_error") });
     }
   },
+  
   getAllTransactions: async (req, res) => {
     try {
       const options = optionsPaginate(req, "");
@@ -26,12 +28,13 @@ const transactionController = {
       return res.status(500).json({ message: req.t("server_error") });
     }
   },
+
   getAllTransactionsByUser: async (req, res) => {
     try {
-      const { userId } = req.params;
+      const { request_user } = req.query;
       const options = optionsPaginate(req, "");
       const results = await transactionModel.paginate(
-        { user: userId },
+        { user: request_user },
         options
       );
 
@@ -40,12 +43,13 @@ const transactionController = {
       return res.status(500).json({ message: req.t("server_error") });
     }
   },
+
   getAllTransactionsByRecipient: async (req, res) => {
     try {
-      const { recipientId } = req.params;
+      const { request_user } = req.query;
       const options = optionsPaginate(req, "");
       const results = await transactionModel.paginate(
-        { recipient: recipientId },
+        { recipient: request_user },
         options
       );
 
