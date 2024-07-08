@@ -5,13 +5,15 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
 
 import CustomBox from '../../components/CustomBox';
+import DataTable from '../../admin/components/DataTable';
 
 import { API } from '../../api/base';
-import useUserAxios from '../../hooks/useUserAxios';
 import { getBalanceByUser } from '../../api/users';
-import DataTable from '../../admin/components/DataTable';
+import { COLORS } from '../../constants/constant';
+import useUserAxios from '../../hooks/useUserAxios';
 
 export default function Balance() {
   const [balance, setBalance] = useState(null);
@@ -41,13 +43,13 @@ export default function Balance() {
     setBalance(res);
   };
 
-  const getTransactionByUserId = async () => {
+  const getAllTransactionByUserId = async () => {
     setTransactions({
       ...transactions,
       isLoading: true,
     });
     const response = await axiosJWT.get(
-      `${API.TRANSACTION.GET_BY_USER(user?._id)}&_page=${transactions.page}&_limit=${transactions.pageSize}`,
+      `${API.TRANSACTION.GET_ALL_OF_USER(user?._id)}&_page=${transactions.page}&_limit=${transactions.pageSize}`,
       {
         headers: {
           token: `Bearer ${accessToken}`,
@@ -57,8 +59,8 @@ export default function Balance() {
     setTransactions((old) => ({
       ...old,
       isLoading: false,
-      data: response?.data.results.docs,
-      total: response?.data.results.totalDocs,
+      data: response?.data?.results?.docs,
+      total: response?.data?.results?.totalDocs,
     }));
   };
 
@@ -68,20 +70,50 @@ export default function Balance() {
   }, []);
 
   useEffect(() => {
-    getTransactionByUserId();
+    getAllTransactionByUserId();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transactions.page, transactions.pageSize]);
 
   const columns = [
-    { field: '_id', headerName: 'ID', width: 100 },
     { field: 'transactionId', headerName: 'Transaction id', width: 150 },
-    { field: 'amount', headerName: 'Amount', width: 150, type: 'number' },
+    {
+      field: 'amount',
+      headerName: 'Amount',
+      width: 150,
+      type: 'number',
+      renderCell: (params) => {
+        const data = params.row;
+        return (
+          <Box marginTop={1.5}>
+            {data.recipient._id === user?._id ? (
+              <Typography color={COLORS.success}>+ {data.amount}</Typography>
+            ) : (
+              <Typography color={COLORS.error}>- {data.amount}</Typography>
+            )}
+          </Box>
+        );
+      },
+    },
     {
       field: 'status',
       headerName: 'Status',
       width: 100,
-      valueGetter: (values) => {
-        return values === 1 ? 'Success' : values === 2 ? 'Failed' : 'Pending';
+      renderCell: (params) => {
+        const status = params.row.status;
+        return (
+          <Typography
+            color={
+              status === 1
+                ? COLORS.success
+                : status === 2
+                  ? COLORS.error
+                  : COLORS.warning
+            }
+            marginTop={1.5}
+          >
+            {status === 1 ? 'Success' : status === 2 ? 'Failed' : 'Pending'}
+          </Typography>
+        );
       },
     },
     {
@@ -90,6 +122,15 @@ export default function Balance() {
       width: 100,
       valueGetter: (values) => {
         return values === 0 ? 'Donate' : 'Withdraw';
+      },
+    },
+    {
+      field: 'user',
+      headerName: 'Donors',
+      width: 100,
+      renderCell: (params) => {
+        const nickname = params.row.user.nickname;
+        return <Link href={`/u/${nickname}`}>{nickname}</Link>;
       },
     },
     {

@@ -22,5 +22,10 @@ router.get(
   verifyMiddleware.token,
   transactionController.getTransactionById
 );
+router.get(
+  "/user/all-transactions",
+  verifyMiddleware.verifyTokenAndUserAuthorization,
+  transactionController.getAllTransactionsOfUser
+);
 
 module.exports = router;

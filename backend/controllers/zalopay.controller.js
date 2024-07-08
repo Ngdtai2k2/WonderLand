@@ -128,7 +128,7 @@ const zalopayController = {
     try {
       const result = await axios(postConfig);
 
-      if (result.data.return_code === 1) {
+      if (result.data.return_code === 1 || result.data.return_code === 2) {
         const transaction = await transactionModel.findOneAndUpdate(
           { transactionId: app_trans_id },
           { status: result.data.return_code },
@@ -142,24 +142,28 @@ const zalopayController = {
           });
         }
 
-        await userModel.findByIdAndUpdate(
-          transaction.recipient,
-          {
-            $inc: { amount: +transaction.amount },
-          },
-          { new: true }
-        );
+        if (result.data.return_code === 1) {
+          await userModel.findByIdAndUpdate(
+            transaction.recipient,
+            { $inc: { amount: +transaction.amount } },
+            { new: true }
+          );
 
-        return res
-          .status(200)
-          .json({ result: result.data, message: req.t("transaction.success") });
-      } else {
-        let message = req.t("transaction.pending");
-        if (result.data.return_code === 2) {
-          message = req.t("transaction.fail");
+          return res.status(200).json({
+            result: result.data,
+            message: req.t("transaction.success"),
+          });
+        } else {
+          return res.status(200).json({
+            result: result.data,
+            message: req.t("transaction.fail"),
+          });
         }
-
-        return res.status(200).json({ result: result.data, message });
+      } else {
+        return res.status(200).json({
+          result: result.data,
+          message: req.t("transaction.pending"),
+        });
       }
     } catch (error) {
       return res.status(500).json({ message: req.t("server_error") });

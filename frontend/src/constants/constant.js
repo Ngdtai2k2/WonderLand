@@ -44,3 +44,9 @@ export const locales = [
     name: 'Vietnamese',
   },
 ];
+
+export const COLORS = {
+  error: '#ff1744',
+  success: '#00e676',
+  warning: '#ff9800',
+};

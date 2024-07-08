@@ -6,7 +6,7 @@ import { DataGrid } from '@mui/x-data-grid';
 export default function DataTable({ state, setState, columns, getRowHeight }) {
   return (
     <>
-      {state.data.length > 0 ? (
+      {state?.data?.length > 0 ? (
         <DataGrid
           rows={state.data}
           rowCount={state.total}
