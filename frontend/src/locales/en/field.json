@@ -27,5 +27,10 @@
   "name": "Name",
   "description": "Description",
   "rule": "Rule",
-  "amount": "Amount"
+  "amount": "Amount",
+  "bank_name": "Bank name",
+  "bank_account": "Bank account number",
+  "bank_message": "Bank message",
+  "bank_account_holder": "Bank account holder",
+  "fee": "Fee"
 }

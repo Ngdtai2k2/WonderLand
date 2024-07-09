@@ -27,5 +27,10 @@
   "name": "Tên",
   "description": "Mô tả",
   "rule": "Điều lệ",
-  "amount": "Số tiền"
+  "amount": "Số tiền",
+  "bank_name": "Ngân hàng",
+  "bank_account": "Số tài khoản",
+  "bank_message": "Ghi chú",
+  "bank_account_holder": "Chủ tài khoản",
+  "fee": "Phí"
 }

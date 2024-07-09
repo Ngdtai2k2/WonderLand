@@ -1,7 +1,8 @@
 {
   "your_balance": "Your balance",
-  "withdraw": "Withdraw",
+  "withdrawal": "Withdrawal",
   "id": "Transaction ID",
   "amount": "Amount",
-  "history": "Transaction history"
+  "history": "Transaction history",
+  "donate": "Donate"
 }

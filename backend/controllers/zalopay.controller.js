@@ -143,11 +143,13 @@ const zalopayController = {
         }
 
         if (result.data.return_code === 1) {
-          await userModel.findByIdAndUpdate(
-            transaction.recipient,
-            { $inc: { amount: +transaction.amount } },
-            { new: true }
-          );
+          if (transaction.status !== 1) {
+            await userModel.findByIdAndUpdate(
+              transaction.recipient,
+              { $inc: { amount: +transaction.amount } },
+              { new: true }
+            );
+          }
 
           return res.status(200).json({
             result: result.data,

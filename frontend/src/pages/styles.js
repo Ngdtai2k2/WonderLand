@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles';
-import { Tab, Typography } from '@mui/material';
+import { Tab, Typography, Box } from '@mui/material';
 
 export const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -23,3 +23,13 @@ export const ButtonTab = styled(Tab)(() => ({
   display: 'flex',
   alignItems: 'flex-start',
 }));
+
+export const BoxModal = styled(Box)({
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  boxShadow: 24,
+  padding: 10,
+  borderRadius: 5,
+});

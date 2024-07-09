@@ -99,9 +99,14 @@
         "delete_success": "Xóa thành công!",
         "update_success": "Cập nhập thành công!"
     },
-    "transaction" : {
+    "transaction": {
         "success": "Giao dịch thành công!",
         "fail": "Giao dịch thất bại!",
-        "pending": "Giao dịch chưa thanh toán hoặc đang xử lý!"
+        "pending": "Giao dịch chưa thanh toán hoặc đang xử lý!",
+        "create_withdrawal_success": "Tạo lệnh rút tiền thành công!",
+        "create_withdrawal_failed": "Tạo lệnh rút tiền thất bại!",
+        "missing_required_fields": "Thông tin không đúng!",
+        "confirm_withdrawal_success": "Xác nhận lệnh rút tiền thành công!",
+        "reject_withdrawal_order": "Từ chối lệnh rút tiền!"
     }
 }

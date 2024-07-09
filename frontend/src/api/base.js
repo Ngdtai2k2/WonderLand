@@ -160,7 +160,7 @@ export const API = {
     CHECK_STATUS: createEndpoint('zalopay/check-status'),
   },
   TRANSACTION: {
-    GET_ALL: createEndpoint('transaction'),
+    GET_ALL: (type) => createEndpoint(`transaction?type=${type}`),
     GET_BY_ID: (id) => createEndpoint(`transaction/${id}`),
     GET_BY_USER: (user_id) =>
       createEndpoint(`transaction/user?request_user=${user_id}`),
@@ -170,5 +170,8 @@ export const API = {
       createEndpoint(
         `transaction/user/all-transactions?request_user=${user_id}`,
       ),
+    WITHDRAWAL: (user_id) =>
+      createEndpoint(`transaction/withdrawal?request_user=${user_id}`),
+    CONFIRM_WITHDRAWAL: createEndpoint('transaction/withdrawal/confirm'),
   },
 };

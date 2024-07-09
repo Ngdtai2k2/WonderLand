@@ -27,5 +27,15 @@ router.get(
   verifyMiddleware.verifyTokenAndUserAuthorization,
   transactionController.getAllTransactionsOfUser
 );
+router.post(
+  "/withdrawal",
+  verifyMiddleware.verifyTokenAndUserAuthorization,
+  transactionController.withdrawal
+);
+router.post(
+  "/withdrawal/confirm",
+  verifyMiddleware.tokenAndAdminAuth,
+  transactionController.confirmWithdrawal
+);
 
 module.exports = router;

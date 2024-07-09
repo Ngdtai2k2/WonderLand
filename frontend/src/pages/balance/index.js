@@ -20,9 +20,12 @@ import {
   useToastTheme,
 } from '../../constants/constant';
 import useUserAxios from '../../hooks/useUserAxios';
+import ModalWithdraw from './modalWithdraw';
 
 export default function Balance() {
+  const [openModalWithdraw, setOpenModalWithdraw] = useState(false);
   const [balance, setBalance] = useState(null);
+  const [eventChange, setEventChange] = useState();
   const [transactions, setTransactions] = useState({
     isLoading: false,
     data: [],
@@ -73,12 +76,12 @@ export default function Balance() {
   useEffect(() => {
     getBalance();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [eventChange]);
 
   useEffect(() => {
     getAllTransactionByUserId();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [transactions.page, transactions.pageSize]);
+  }, [transactions.page, transactions.pageSize, eventChange]);
 
   const checkStatusTransaction = async (transactionId) => {
     const response = await checkStatus(
@@ -109,7 +112,7 @@ export default function Balance() {
         const data = params.row;
         return (
           <Box marginTop={1.5}>
-            {data.recipient._id === user?._id ? (
+            {data?.recipient?._id === user?._id ? (
               <Typography color={COLORS.success}>+ {data.amount}</Typography>
             ) : (
               <Typography color={COLORS.error}>- {data.amount}</Typography>
@@ -198,14 +201,6 @@ export default function Balance() {
         );
       },
     },
-    // {
-    //   field: 'updatedAt',
-    //   headerName: 'Updated at',
-    //   width: 200,
-    //   valueGetter: (values) => {
-    //     return new Date(values).toLocaleString();
-    //   },
-    // },
   ];
 
   return (
@@ -225,15 +220,29 @@ export default function Balance() {
           {t('transaction:your_balance')}:{' '}
           {balance !== null ? balance.toLocaleString() : '---'}đ
         </Typography>
-        <Button variant="contained" sx={{ marginY: 2 }}>
-          {t('transaction:withdraw')}
-        </Button>
+        {balance !== null && (
+          <>
+            <Button
+              variant="contained"
+              sx={{ marginY: 2 }}
+              onClick={() => setOpenModalWithdraw(true)}
+            >
+              {t('transaction:withdrawal')}
+            </Button>
+            <ModalWithdraw
+              openModal={openModalWithdraw}
+              handleClose={() => setOpenModalWithdraw(false)}
+              currentBalance={balance}
+              setEventChange={setEventChange}
+            />
+          </>
+        )}
       </Box>
       <Box marginTop={5}>
         <Typography variant="body1" marginBottom={1} fontWeight={600}>
           {t('transaction:history')}
         </Typography>
-        <Divider></Divider>
+        <Divider />
         <DataTable
           state={transactions}
           setState={setTransactions}

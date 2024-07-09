@@ -133,3 +133,9 @@ export function getQueryString(query) {
   const urlParams = new URLSearchParams(queryString);
   return urlParams.get(query);
 }
+
+export function getStatusMessage(status, type) {
+  if (status === 1) return 'Success';
+  if (status === 2) return type === 1 ? 'Cancel' : 'Failed';
+  return 'Pending';
+}

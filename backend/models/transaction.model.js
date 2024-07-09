@@ -11,7 +11,7 @@ const transactionSchema = new mongoose.Schema(
     recipient: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      // required: true,
     },
     transactionId: {
       type: String,
@@ -21,12 +21,12 @@ const transactionSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    // 0 - donate , 1 - withdrawn
+    // 0 - donate , 1 - withdrawal
     type: {
       type: Number,
       required: true,
     },
-    // 1 - successfully, 2 - failed, 3 - pending
+    // 1 - successfully, 2 - failed, cancel , 3 - pending
     status: {
       type: Number,
       required: true,
@@ -36,6 +36,10 @@ const transactionSchema = new mongoose.Schema(
     },
     url: {
       type: String,
+    },
+    informationWithdraw: {
+      type: String,
+      maxLength: 1000,
     }
   },
   {

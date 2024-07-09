@@ -18,5 +18,7 @@
   "not_one_of_new_password": "New password must be different from old password!",
   "must_match": "{{name}} must match.",
   "comment": "Comments must contain photos or text!",
-  "photo_required": "Please upload a photo."
+  "photo_required": "Please upload a photo.",
+  "min_amount": "The amount must be at least {{min}}",
+  "not_greater_than_balance": "The amount should not exceed your balance!"
 }

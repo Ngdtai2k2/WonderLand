@@ -102,6 +102,11 @@
     "transaction" : {
         "success": "Successful transaction!",
         "fail": "Transaction failed!",
-        "pending": "Pending transaction!"
+        "pending": "Pending transaction!",
+        "create_withdrawal_success": "Create a successful withdrawalal order!",
+        "create_withdrawal_failed": "Creating a failed withdrawalal order!",
+        "missing_required_fields": "Missing required fields!",
+        "confirm_withdrawal_success": "Confirm the withdrawal successfully!",
+        "reject_withdrawal_order": "Reject a withdrawal order!"
     }
 }

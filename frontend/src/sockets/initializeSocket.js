@@ -34,6 +34,7 @@ export const handleSocketEvents = (socket, setEvent, isAdmin) => {
     'msg-your-birthday',
     'msg-friend-birthday',
     'category-new-article',
+    'confirm-transaction',
   ];
 
   events.forEach((event) => {
