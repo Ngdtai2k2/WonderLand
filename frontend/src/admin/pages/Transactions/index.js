@@ -1,29 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 
-import CustomBox from '../../components/CustomBox';
-import DataTable from '../../admin/components/DataTable';
+import CustomBox from '../../../components/CustomBox';
+import useUserAxios from '../../../hooks/useUserAxios';
 
-import { API } from '../../api/base';
-import { getBalanceByUser } from '../../api/users';
-import { checkStatus } from '../../api/zalopay';
+import { getAllTransactions } from '../../../api/transaction';
+import { checkStatus } from '../../../api/zalopay';
 import {
   COLORS,
   toastMapForZaloTransaction,
   useToastTheme,
-} from '../../constants/constant';
-import useUserAxios from '../../hooks/useUserAxios';
+} from '../../../constants/constant';
+import DataTable from '../../components/DataTable';
 
-export default function Balance() {
-  const [balance, setBalance] = useState(null);
-  const [transactions, setTransactions] = useState({
+export default function Transaction() {
+  const [transactionState, setTransactionState] = useState({
     isLoading: false,
     data: [],
     total: 0,
@@ -31,54 +28,41 @@ export default function Balance() {
     pageSize: 5,
   });
 
-  const { t, i18n } = useTranslation(['transaction']);
-  const { user, accessToken, axiosJWT } = useUserAxios(i18n.language);
+  const { t, i18n } = useTranslation(['sidebar']);
+  const { accessToken, axiosJWT, user } = useUserAxios(i18n.language);
   const toastTheme = useToastTheme();
 
   useEffect(() => {
-    document.title = t('transaction:your_balance');
+    document.title = t('sidebar:transactions');
   }, [t]);
 
-  const getBalance = async () => {
-    const res = await getBalanceByUser(
+  const getTransactions = useCallback(async () => {
+    setTransactionState((old) => ({
+      ...old,
+      isLoading: true,
+    }));
+
+    const response = await getAllTransactions(
       i18n.language,
-      user?._id,
       axiosJWT,
       accessToken,
+      transactionState.page,
+      transactionState.pageSize,
     );
-    setBalance(res);
-  };
 
-  const getAllTransactionByUserId = async () => {
-    setTransactions({
-      ...transactions,
-      isLoading: true,
-    });
-    const response = await axiosJWT.get(
-      `${API.TRANSACTION.GET_ALL_OF_USER(user?._id)}&_page=${transactions.page}&_limit=${transactions.pageSize}`,
-      {
-        headers: {
-          token: `Bearer ${accessToken}`,
-        },
-      },
-    );
-    setTransactions((old) => ({
+    setTransactionState((old) => ({
       ...old,
       isLoading: false,
-      data: response?.data?.results?.docs,
-      total: response?.data?.results?.totalDocs,
+      data: response?.data.results.docs,
+      total: response?.data.results.totalDocs,
     }));
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [transactionState.page, transactionState.pageSize]);
 
   useEffect(() => {
-    getBalance();
+    getTransactions();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    getAllTransactionByUserId();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [transactions.page, transactions.pageSize]);
+  }, [transactionState.page, transactionState.pageSize]);
 
   const checkStatusTransaction = async (transactionId) => {
     const response = await checkStatus(
@@ -99,7 +83,7 @@ export default function Balance() {
   };
 
   const columns = [
-    { field: 'transactionId', headerName: 'Transaction id', width: 150 },
+    { field: 'transactionId', headerName: 'Transaction id', width: 130 },
     {
       field: 'amount',
       headerName: 'Amount',
@@ -205,38 +189,18 @@ export default function Balance() {
     //   valueGetter: (values) => {
     //     return new Date(values).toLocaleString();
     //   },
-    // },
   ];
 
   return (
     <CustomBox>
-      <Box
-        display="flex"
-        justifyContent={{
-          xs: 'flex-start',
-          sm: 'space-between',
-        }}
-        flexDirection={{
-          xs: 'column',
-          sm: 'row',
-        }}
-      >
-        <Typography variant="h6" fontWeight={700}>
-          {t('transaction:your_balance')}:{' '}
-          {balance !== null ? balance.toLocaleString() : '---'}đ
-        </Typography>
-        <Button variant="contained" sx={{ marginY: 2 }}>
-          {t('transaction:withdraw')}
-        </Button>
-      </Box>
-      <Box marginTop={5}>
-        <Typography variant="body1" marginBottom={1} fontWeight={600}>
-          {t('transaction:history')}
-        </Typography>
-        <Divider></Divider>
+      <Typography variant="h6" fontWeight={700}>
+        {t('sidebar:transactions')}
+      </Typography>
+
+      <Box marginTop={2}>
         <DataTable
-          state={transactions}
-          setState={setTransactions}
+          state={transactionState}
+          setState={setTransactionState}
           columns={columns}
         />
       </Box>

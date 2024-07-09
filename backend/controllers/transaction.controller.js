@@ -21,8 +21,17 @@ const transactionController = {
   getAllTransactions: async (req, res) => {
     try {
       const options = optionsPaginate(req, "");
-      const results = await transactionModel.paginate({}, options);
+      let results = await transactionModel.paginate({}, options);
 
+      results.docs = await Promise.all(
+        results.docs.map(async (user) => {
+          return await transactionModel.populate(user, {
+            path: "user recipient",
+            select: "nickname",
+          });
+        })
+      );
+      
       return res.status(200).json({ results: results });
     } catch (error) {
       return res.status(500).json({ message: req.t("server_error") });

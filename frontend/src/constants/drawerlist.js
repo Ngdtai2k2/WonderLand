@@ -10,6 +10,7 @@ import CategoryRoundedIcon from '@mui/icons-material/CategoryRounded';
 import GavelRoundedIcon from '@mui/icons-material/GavelRounded';
 import ReportProblemRoundedIcon from '@mui/icons-material/ReportProblemRounded';
 import TranslateRoundedIcon from '@mui/icons-material/TranslateRounded';
+import PaidRoundedIcon from '@mui/icons-material/PaidRounded';
 
 export const PublicDrawerList = () => {
   const { t } = useTranslation('sidebar');
@@ -52,6 +53,11 @@ export const AdminDrawerList = () => {
       link: '/admin/bad-words',
       icon: <TranslateRoundedIcon />,
       text: t('bad_words'),
+    },
+    {
+      link: '/admin/transactions',
+      icon: <PaidRoundedIcon />,
+      text: t('transactions'),
     },
   ];
 };

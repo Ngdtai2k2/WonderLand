@@ -37,7 +37,7 @@ export default function Rules() {
 
   useEffect(() => {
     document.title = t('admin:rules.title');
-  });
+  }, [t]);
 
   const getRules = async () => {
     setRulesState({

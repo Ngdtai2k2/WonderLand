@@ -1,4 +1,4 @@
-import { Flip } from 'react-toastify';
+import { Flip, toast } from 'react-toastify';
 import { useTheme } from '@emotion/react';
 
 export const useToastTheme = () => {
@@ -49,4 +49,10 @@ export const COLORS = {
   error: '#ff1744',
   success: '#00e676',
   warning: '#ff9800',
+};
+
+export const toastMapForZaloTransaction = {
+  1: toast.success,
+  2: toast.error,
+  default: toast.warning,
 };

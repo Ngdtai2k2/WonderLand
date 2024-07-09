@@ -101,7 +101,7 @@
     },
     "transaction" : {
         "success": "Giao dịch thành công!",
-        "fail": "Giao dịch thất bạn!",
+        "fail": "Giao dịch thất bại!",
         "pending": "Giao dịch chưa thanh toán hoặc đang xử lý!"
     }
 }

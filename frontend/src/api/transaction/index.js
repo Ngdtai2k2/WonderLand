@@ -1,17 +1,26 @@
 import { API } from '../base';
 
-const getAll = (axiosJWT, accessToken, lng) => {
+const getAllTransactions = async (
+  lng,
+  axiosJWT,
+  accessToken,
+  page,
+  pageSize,
+) => {
   try {
-    const response = axiosJWT.get(API.TRANSACTION.GET_ALL, {
-      headers: {
-        token: `Bearer ${accessToken}`,
-        'Accept-Language': lng,
+    const response = await axiosJWT.get(
+      `${API.TRANSACTION.GET_ALL}?_page=${page}&_limit=${pageSize}`,
+      {
+        headers: {
+          token: `Bearer ${accessToken}`,
+          'Accept-Language': lng,
+        },
       },
-    });
-    return response.data;
+    );
+    return response;
   } catch (error) {
     return error.response;
   }
 };
 
-export { getAll };
+export { getAllTransactions };
