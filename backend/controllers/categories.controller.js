@@ -48,7 +48,7 @@ const categoriesController = {
           .json({ message: req.t("file.image_not_upload") });
       }
 
-      const newCategory = new Categories({
+      const newCategory = new categoriesModel({
         name: name,
         description: description,
         media: req.file ? data._id : null,
