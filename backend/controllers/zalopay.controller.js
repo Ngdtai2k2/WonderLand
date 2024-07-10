@@ -141,6 +141,10 @@ const zalopayController = {
         }
 
         if (result.data.return_code === 1 && transaction.status !== 1) {
+          const user = await userModel.findById(transaction.recipient);
+          if (user.amount === null) { 
+            user.amount = Number(0);
+          }
           await userModel.findByIdAndUpdate(
             transaction.recipient,
             { $inc: { amount: +transaction.amount } },
@@ -166,6 +170,7 @@ const zalopayController = {
         });
       }
     } catch (error) {
+      console.error(error.message);
       return res.status(500).json({ message: req.t("server_error") });
     }
   },
