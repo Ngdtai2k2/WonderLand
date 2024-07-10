@@ -36,8 +36,8 @@ const postController = {
       // bad words
       const filter = await badWordService.initializeFilter();
       
-      const filteredTitle = filter.clean(title);
-      const filteredContent = filter.clean(content);
+      const filteredTitle = title ? filter.clean(title) : "";
+      const filteredContent = content ? filter.clean(content) : "";
 
       const categoryData = await Category.findById(category).populate("media");
       if (!categoryData)
@@ -112,6 +112,7 @@ const postController = {
       });
       return res.status(201).json({ message: successMessage, post: post });
     } catch (error) {
+      console.error(error.message);
       return res.status(500).json({ message: req.t("server_error") });
     }
   },
