@@ -28,8 +28,9 @@ import useUserAxios from '../../hooks/useUserAxios';
 // import { handleViewPost } from "../../api/posts";
 import { BoxSubHeader, CardMediaStyled, CardStyled } from './styles';
 
-import 'react-medium-image-zoom/dist/styles.css';
 import ActionButton from './actionButton';
+
+import 'react-medium-image-zoom/dist/styles.css';
 
 export default function PostCard({
   post,
@@ -253,7 +254,15 @@ export default function PostCard({
             </Link>
           )
         ) : (
-          <Player autoPlay muted playsInline src={post.media?.url}>
+          <Player
+            autoPlay
+            muted
+            playsInline
+            src={post.media?.url}
+            fluid={false}
+            width="100%"
+            height={400}
+          >
             <ControlBar autoHide={true} autoHideTime={200}></ControlBar>
           </Player>
         ))}
