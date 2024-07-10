@@ -139,3 +139,10 @@ export function getStatusMessage(status, type) {
   if (status === 2) return type === 1 ? 'Cancel' : 'Failed';
   return 'Pending';
 }
+
+export function handleChangeTypeTransactions(event, setType, navigate) {
+  setType(Number(event.target.value));
+  navigate(`?type=${event.target.value}`, {
+    replace: true,
+  });
+}

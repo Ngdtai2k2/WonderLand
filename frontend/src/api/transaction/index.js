@@ -74,4 +74,34 @@ const confirmWithdrawal = async (
   }
 };
 
-export { getAllTransactions, handleWithdrawal, confirmWithdrawal };
+const getAllTransactionsOfUser = async (
+  lng,
+  axiosJWT,
+  accessToken,
+  userId,
+  type,
+  page,
+  pageSize,
+) => {
+  try {
+    const response = await axiosJWT.get(
+      `${API.TRANSACTION.GET_ALL_OF_USER(userId, type)}&_page=${page}&_limit=${pageSize}`,
+      {
+        headers: {
+          token: `Bearer ${accessToken}`,
+          'Accept-Language': lng,
+        },
+      },
+    );
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+export {
+  getAllTransactions,
+  handleWithdrawal,
+  confirmWithdrawal,
+  getAllTransactionsOfUser,
+};

@@ -1,41 +1,42 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import { toast } from "react-toastify";
+import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
-import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
+import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
-import CustomBox from "../../../components/CustomBox";
-import useUserAxios from "../../../hooks/useUserAxios";
-import DataTable from "../../components/DataTable";
+import CustomBox from '../../../components/CustomBox';
+import useUserAxios from '../../../hooks/useUserAxios';
+import DataTable from '../../components/DataTable';
 
 import {
   confirmWithdrawal,
   getAllTransactions,
-} from "../../../api/transaction";
-import { checkStatus } from "../../../api/zalopay";
+} from '../../../api/transaction';
+import { checkStatus } from '../../../api/zalopay';
 import {
   COLORS,
   toastMapForZaloTransaction,
   useToastTheme,
-} from "../../../constants/constant";
+} from '../../../constants/constant';
 import {
   getQueryString,
   getStatusMessage,
-} from "../../../utils/helperFunction";
-import { initializeSocket } from "../../../sockets/initializeSocket";
+  handleChangeTypeTransactions,
+} from '../../../utils/helperFunction';
+import { initializeSocket } from '../../../sockets/initializeSocket';
 
 export default function Transaction() {
-  const queryType = Number(getQueryString("type"));
+  const queryType = Number(getQueryString('type'));
 
   const [type, setType] = useState(
-    queryType === 0 || queryType === 1 ? queryType : 0
+    queryType === 0 || queryType === 1 ? queryType : 0,
   );
   const [columns, setColumns] = useState([]);
   const [changes, setChanges] = useState();
@@ -49,15 +50,15 @@ export default function Transaction() {
 
   const toastTheme = useToastTheme();
   const navigate = useNavigate();
-  const { t, i18n } = useTranslation(["sidebar", "transaction"]);
+  const { t, i18n } = useTranslation(['sidebar', 'transaction']);
   const { accessToken, axiosJWT, user } = useUserAxios(i18n.language);
 
   // socket
   const socket = initializeSocket(user?._id);
-  socket.on("confirm-transaction", (data) => setChanges(data));
+  socket.on('confirm-transaction', (data) => setChanges(data));
 
   useEffect(() => {
-    document.title = t("sidebar:transactions");
+    document.title = t('sidebar:transactions');
   }, [t]);
 
   const getTransactions = useCallback(async () => {
@@ -72,7 +73,7 @@ export default function Transaction() {
       accessToken,
       type,
       transactionState.page,
-      transactionState.pageSize
+      transactionState.pageSize,
     );
 
     setTransactionState((old) => ({
@@ -94,7 +95,7 @@ export default function Transaction() {
       transactionId,
       axiosJWT,
       accessToken,
-      i18n.language
+      i18n.language,
     );
 
     if (response.status === 200) {
@@ -113,7 +114,7 @@ export default function Transaction() {
       axiosJWT,
       accessToken,
       transactionId,
-      type
+      type,
     );
     if (response.status === 200) {
       return toast.success(response.data.message, toastTheme);
@@ -126,15 +127,15 @@ export default function Transaction() {
     // Define columns based on type and user
     const updatedColumns = [
       {
-        field: "transactionId",
-        headerName: "Transaction id",
+        field: 'transactionId',
+        headerName: 'Transaction id',
         width: type === 0 ? 130 : 330,
       },
       {
-        field: "amount",
-        headerName: "Amount",
+        field: 'amount',
+        headerName: 'Amount',
         width: 150,
-        type: "number",
+        type: 'number',
         renderCell: (params) => {
           const data = params.row;
           return (
@@ -149,8 +150,8 @@ export default function Transaction() {
         },
       },
       {
-        field: "status",
-        headerName: "Status",
+        field: 'status',
+        headerName: 'Status',
         width: 100,
         renderCell: (params) => {
           const status = params.row.status;
@@ -171,16 +172,16 @@ export default function Transaction() {
         },
       },
       {
-        field: "type",
-        headerName: "Type",
+        field: 'type',
+        headerName: 'Type',
         width: 100,
         valueGetter: (values) => {
-          return values === 0 ? "Donate" : "Withdrawal";
+          return values === 0 ? 'Donate' : 'Withdrawal';
         },
       },
       {
-        field: "user",
-        headerName: type === 0 ? "Donors" : "User",
+        field: 'user',
+        headerName: type === 0 ? 'Donors' : 'User',
         width: 100,
         renderCell: (params) => {
           const nickname = params?.row?.user?.nickname;
@@ -188,8 +189,8 @@ export default function Transaction() {
         },
       },
       type === 0 && {
-        field: "recipient",
-        headerName: "Recipient",
+        field: 'recipient',
+        headerName: 'Recipient',
         width: 90,
         renderCell: (params) => {
           const nickname = params?.row?.recipient?.nickname;
@@ -197,21 +198,21 @@ export default function Transaction() {
         },
       },
       type !== 0 && {
-        field: "informationWithdraw",
-        headerName: "Information withdraw",
+        field: 'informationWithdraw',
+        headerName: 'Information withdraw',
         width: 300,
       },
       {
-        field: "createdAt",
-        headerName: "Created at",
+        field: 'createdAt',
+        headerName: 'Created at',
         width: 200,
         valueGetter: (values) => {
           return new Date(values).toLocaleString();
         },
       },
       {
-        field: "",
-        headerName: "Actions",
+        field: '',
+        headerName: 'Actions',
         width: 200,
         renderCell: (params) => {
           const condition = params.row.type === 0 || params.row.status === 3;
@@ -260,17 +261,10 @@ export default function Transaction() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type, user]);
 
-  const handleChangeTypeTransactions = (event) => {
-    setType(Number(event.target.value));
-    navigate(`?type=${event.target.value}`, {
-      replace: true,
-    });
-  };
-
   return (
     <CustomBox>
       <Typography variant="h6" fontWeight={700}>
-        {t("sidebar:transactions")}
+        {t('sidebar:transactions')}
       </Typography>
 
       <Box marginTop={2}>
@@ -278,20 +272,22 @@ export default function Transaction() {
           aria-labelledby="radio-buttons-change-type-transactions"
           name="controlled-radio-buttons-group"
           value={type}
-          onChange={handleChangeTypeTransactions}
-          sx={{ display: "flex", flexDirection: "row" }}
+          onChange={(event) =>
+            handleChangeTypeTransactions(event, setType, navigate)
+          }
+          sx={{ display: 'flex', flexDirection: 'row' }}
         >
           <FormControlLabel
             key={0}
             value={0}
             control={<Radio />}
-            label={t("transaction:donate")}
+            label={t('transaction:donate')}
           />
           <FormControlLabel
             key={1}
             value={1}
             control={<Radio />}
-            label={t("transaction:withdrawal")}
+            label={t('transaction:withdrawal')}
           />
         </RadioGroup>
       </Box>

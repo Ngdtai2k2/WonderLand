@@ -166,9 +166,9 @@ export const API = {
       createEndpoint(`transaction/user?request_user=${user_id}`),
     GET_BY_RECEIPIENT: (recipient_id) =>
       createEndpoint(`transaction/recipient?request_user=${recipient_id}`),
-    GET_ALL_OF_USER: (user_id) =>
+    GET_ALL_OF_USER: (user_id, type) =>
       createEndpoint(
-        `transaction/user/all-transactions?request_user=${user_id}`,
+        `transaction/user/all-transactions?request_user=${user_id}&type=${type}`,
       ),
     WITHDRAWAL: (user_id) =>
       createEndpoint(`transaction/withdrawal?request_user=${user_id}`),

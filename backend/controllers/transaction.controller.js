@@ -79,11 +79,14 @@ const transactionController = {
 
   getAllTransactionsOfUser: async (req, res) => {
     try {
-      const { request_user } = req.query;
+      const { request_user, type } = req.query;
       const options = optionsPaginate(req, "");
 
       const results = await transactionModel.paginate(
-        { $or: [{ user: request_user }, { recipient: request_user }] },
+        {
+          $or: [{ user: request_user }, { recipient: request_user }],
+          type: type,
+        },
         options
       );
       results.docs = await Promise.all(

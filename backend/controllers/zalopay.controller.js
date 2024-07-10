@@ -129,11 +129,9 @@ const zalopayController = {
       const result = await axios(postConfig);
 
       if (result.data.return_code === 1 || result.data.return_code === 2) {
-        const transaction = await transactionModel.findOneAndUpdate(
-          { transactionId: app_trans_id },
-          { status: result.data.return_code },
-          { new: true }
-        );
+        const transaction = await transactionModel.findOne({
+          transactionId: app_trans_id,
+        });
 
         if (!transaction) {
           return res.status(404).json({
@@ -142,25 +140,25 @@ const zalopayController = {
           });
         }
 
-        if (result.data.return_code === 1) {
-          if (transaction.status !== 1) {
-            await userModel.findByIdAndUpdate(
-              transaction.recipient,
-              { $inc: { amount: +transaction.amount } },
-              { new: true }
-            );
-          }
-
-          return res.status(200).json({
-            result: result.data,
-            message: req.t("transaction.success"),
-          });
-        } else {
-          return res.status(200).json({
-            result: result.data,
-            message: req.t("transaction.fail"),
-          });
+        if (result.data.return_code === 1 && transaction.status !== 1) {
+          await userModel.findByIdAndUpdate(
+            transaction.recipient,
+            { $inc: { amount: +transaction.amount } },
+            { new: true }
+          );
         }
+
+        transaction.status = result.data.return_code;
+        await transaction.save();
+
+        return res.status(200).json({
+          result: result.data,
+          message: req.t(
+            result.data.return_code === 1
+              ? "transaction.success"
+              : "transaction.fail"
+          ),
+        });
       } else {
         return res.status(200).json({
           result: result.data,
