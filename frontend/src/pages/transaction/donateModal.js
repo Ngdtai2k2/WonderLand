@@ -12,11 +12,13 @@ import Button from '@mui/material/Button';
 import { BoxModal } from '../../components/styles';
 import { payment } from '../../api/zalopay';
 import useUserAxios from '../../hooks/useUserAxios';
+import { useToastTheme } from '../../constants/constant';
 
 export default function DonateModal({ open, handleClose, recipient }) {
   const { t, i18n } = useTranslation(['validate', 'field', 'message']);
 
   const { accessToken, axiosJWT, user } = useUserAxios(i18n.language);
+  const toastTheme = useToastTheme();
 
   const validationSchema = Yup.object({
     amount: Yup.number().required(
@@ -40,7 +42,7 @@ export default function DonateModal({ open, handleClose, recipient }) {
       if (res.data.return_code === 1) {
         window.location.href = res.data.order_url;
       } else {
-        toast.error(t('message:has_error'));
+        return toast.error(t('message:has_error'), toastTheme);
       }
       handleClose();
     },

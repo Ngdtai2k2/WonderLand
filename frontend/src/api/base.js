@@ -31,7 +31,8 @@ export const API = {
     GET: (userId) => createEndpoint(`user/${userId}`),
     UPDATE: (userId) => createEndpoint(`user/${userId}`),
     DELETE: (userId) => createEndpoint(`user/${userId}`),
-    CHANGE_AVATAR: (userId) => createEndpoint(`user/media-update?request_user=${userId}`),
+    CHANGE_AVATAR: (userId) =>
+      createEndpoint(`user/media-update?request_user=${userId}`),
     TOTAL: createEndpoint('user/total'),
     REGISTERED_TODAY: createEndpoint('user/today'),
     POST: createEndpoint('user/post'),

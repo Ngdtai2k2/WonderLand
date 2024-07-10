@@ -1,4 +1,5 @@
 import { toast } from 'react-toastify';
+import axios from 'axios';
 import moment from 'moment';
 
 import { Link } from '@mui/material';
@@ -145,4 +146,30 @@ export function handleChangeTypeTransactions(event, setType, navigate) {
   navigate(`?type=${event.target.value}`, {
     replace: true,
   });
+}
+
+export async function downloadMedia(url, t, toastTheme) {
+  const fileName = url.split('/').pop();
+
+  try {
+    const response = await axios.get(url, {
+      responseType: 'blob',
+    });
+    console.log(response)
+    if (response.status !== 200) {
+      return toast.error(t('message:has_error'), toastTheme);
+    }
+
+    const blob = new Blob([response.data], { type: response.data.type });
+    const link = document.createElement('a');
+
+    link.href = window.URL.createObjectURL(blob);
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  } catch (error) {
+    console.error(error.message);
+    return toast.error(t('message:has_error'), toastTheme);
+  }
 }

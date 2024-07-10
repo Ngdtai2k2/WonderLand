@@ -10,6 +10,7 @@ import { handleDeletePost } from '../../api/posts';
 import useUserAxios from '../../hooks/useUserAxios';
 import { useToastTheme } from '../../constants/constant';
 import ModalEditPost from './modalEditPost';
+import { downloadMedia } from '../../utils/helperFunction';
 
 export default function MenuSettings({
   post,
@@ -45,7 +46,7 @@ export default function MenuSettings({
           horizontal: 'right',
         }}
       >
-        {!isAdmin && (
+        {!isAdmin && post?.author?._id !== user?._id && (
           <MenuItem
             key={`report-${post?._id}`}
             onClick={() => {
@@ -83,7 +84,13 @@ export default function MenuSettings({
             {t('post:settings.edit')}
           </MenuItem>,
         ]}
-        <MenuItem key={`download-${post?._id}`} onClick={handleCloseMenu}>
+        <MenuItem
+          key={`download-${post?._id}`}
+          onClick={() => {
+            downloadMedia(post?.media?.url, t);
+            handleCloseMenu();
+          }}
+        >
           {t('post:settings.download_media')}
         </MenuItem>
       </Menu>
