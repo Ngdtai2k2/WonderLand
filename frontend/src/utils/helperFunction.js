@@ -155,7 +155,7 @@ export async function downloadMedia(url, t, toastTheme) {
     const response = await axios.get(url, {
       responseType: 'blob',
     });
-    console.log(response)
+    console.log(response);
     if (response.status !== 200) {
       return toast.error(t('message:has_error'), toastTheme);
     }

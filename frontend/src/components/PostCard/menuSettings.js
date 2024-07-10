@@ -84,18 +84,17 @@ export default function MenuSettings({
             {t('post:settings.edit')}
           </MenuItem>,
         ]}
-        {
-          post?.type === 0 &&  <MenuItem
-          key={`download-${post?._id}`}
-          onClick={() => {
-            downloadMedia(post?.media?.url, t);
-            handleCloseMenu();
-          }}
-        >
-          {t('post:settings.download_media')}
-        </MenuItem>
-        }
-       
+        {post?.type === 0 && (
+          <MenuItem
+            key={`download-${post?._id}`}
+            onClick={() => {
+              downloadMedia(post?.media?.url, t);
+              handleCloseMenu();
+            }}
+          >
+            {t('post:settings.download_media')}
+          </MenuItem>
+        )}
       </Menu>
       {post?.author?._id === user?._id && (
         <ModalEditPost

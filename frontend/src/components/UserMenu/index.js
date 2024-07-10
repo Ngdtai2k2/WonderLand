@@ -47,17 +47,22 @@ export default function UserMenu({ anchorEl, setAnchorEl, handleClose }) {
 
   const handleLogout = () => {
     handleCloseUserMenu();
-    logOut(
-      dispatch,
-      user?._id,
-      user?.device,
-      navigate,
-      accessToken,
-      createAxios(currentLanguage, user, dispatch, logOutSuccess),
-      toastTheme,
-      t,
-      currentLanguage,
-    );
+    if (user) {
+      logOut(
+        dispatch,
+        user?._id,
+        user?.device,
+        navigate,
+        accessToken,
+        createAxios(currentLanguage, user, dispatch, logOutSuccess),
+        toastTheme,
+        t,
+        currentLanguage,
+      );
+    } else {
+      localStorage.clear();
+      window.location.reload();
+    }
   };
 
   return (
