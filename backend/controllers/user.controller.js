@@ -192,11 +192,11 @@ const userController = {
 
   updateMediaProfile: async (req, res) => {
     try {
-      const { userId } = req.params;
+      const { request_user } = req.query;
       const { type } = req.body;
 
       const user = await userModel
-        .findById(userId)
+        .findById(request_user)
         .populate("coverArt")
         .populate("media");
 
@@ -246,10 +246,11 @@ const userController = {
       }
       return res.status(400).json({ message: req.t("file.required") });
     } catch (error) {
+      console.error(error.message);
       return res.status(500).json({ message: req.t("server_error") });
     }
   },
-  getBalanceByUser: async (req, res) => { 
+  getBalanceByUser: async (req, res) => {
     try {
       const { request_user } = req.query;
       const user = await userModel.findById(request_user).select("amount");
@@ -260,7 +261,7 @@ const userController = {
     } catch (error) {
       return res.status(500).json({ message: req.t("server_error") });
     }
-  }
+  },
 };
 
 module.exports = userController;

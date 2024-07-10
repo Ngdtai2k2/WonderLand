@@ -42,12 +42,12 @@ export const updateMedia = async (
   dispatch,
   userId,
   axiosJWT,
-  media,
+  data,
   toastTheme,
 ) => {
   dispatch(updateUserStart());
   try {
-    const res = await axiosJWT.put(API.USER.CHANGE_AVATAR(userId), media, {
+    const res = await axiosJWT.put(API.USER.CHANGE_AVATAR(userId), data, {
       headers: {
         token: `Bearer ${accessToken}`,
         'Content-Type': 'multipart/form-data',
