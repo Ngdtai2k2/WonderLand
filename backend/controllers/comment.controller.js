@@ -51,6 +51,7 @@ const commentController = {
         newComment: dataNewComment,
       });
     } catch (error) {
+      console.log(error.message);
       return res.status(500).json({ message: req.t("server_error") });
     }
   },

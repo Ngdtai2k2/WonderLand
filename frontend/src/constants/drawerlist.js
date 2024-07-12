@@ -17,8 +17,8 @@ export const PublicDrawerList = () => {
 
   return [
     { link: '/', icon: <HomeRoundedIcon />, text: t('home') },
-    { link: '/top', icon: <BarChartRoundedIcon />, text: t('top') },
-    { link: '/trend', icon: <TrendingUpRoundedIcon />, text: t('trend') },
+    // { link: '/top', icon: <BarChartRoundedIcon />, text: t('top') },
+    // { link: '/trend', icon: <TrendingUpRoundedIcon />, text: t('trend') },
     { link: '/fresh', icon: <RestoreRoundedIcon />, text: t('fresh') },
     { link: '/ask', icon: <QuestionMarkRoundedIcon />, text: t('ask') },
   ];

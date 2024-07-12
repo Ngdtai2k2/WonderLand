@@ -49,7 +49,7 @@ export default function ButtonBar() {
             Home
           </Button>
         </Link>
-        <Link
+        {/* <Link
           href="/top"
           style={{ textDecoration: 'none' }}
           onClick={() => handleLinkClick('/top')}
@@ -63,8 +63,8 @@ export default function ButtonBar() {
           >
             Top
           </Button>
-        </Link>
-        <Link
+        </Link> */}
+        {/* <Link
           href="/trend"
           style={{ textDecoration: 'none' }}
           onClick={() => handleLinkClick('/trend')}
@@ -78,7 +78,7 @@ export default function ButtonBar() {
           >
             Trend
           </Button>
-        </Link>
+        </Link> */}
         <Link
           href="/fresh"
           style={{ textDecoration: 'none' }}
