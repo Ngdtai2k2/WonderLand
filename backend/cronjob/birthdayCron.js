@@ -11,7 +11,7 @@ const notificationService = require("../services/notification.service");
 const timezone = "Asia/Ho_Chi_Minh";
 
 // cron job on 0h 0m every day
-cron.schedule("0 0 * * *", async () => {
+cron.schedule("05 08  * * *", async () => {
   console.log("Cron job running...");
   try {
     const today = moment().tz(timezone).startOf("day");
