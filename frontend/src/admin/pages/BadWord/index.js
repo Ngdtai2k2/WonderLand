@@ -96,7 +96,7 @@ export default function BadWord() {
 
   const handleDeleteBadword = async (id) => {
     const res = await deleteBadWord(id, axiosJWT, accessToken, i18n.language);
-    if (res.status === 200) {
+    if (res?.status === 200) {
       toast.success(res.data.message, toastTheme);
       getAllBadWords();
     } else {

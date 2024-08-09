@@ -27,9 +27,9 @@ export const loginUser = async (user, dispatch, toastTheme, lng) => {
         'Accept-Language': lng,
       },
     });
+    toast.success(res.data.message, toastTheme);
     dispatch(loginSuccess(res.data));
     window.location.reload();
-    toast.success(res.data.message, toastTheme);
   } catch (err) {
     dispatch(loginFailed(err.response.data));
     toast.error(err.response.data.message, toastTheme);
@@ -76,9 +76,9 @@ export const logOut = async (
       },
     );
     dispatch(logOutSuccess());
-    toast.success(t('message:auth.logout_success'), toastTheme);
     navigate('/');
     window.location.reload();
+    toast.success(t('message:auth.logout_success'), toastTheme);
   } catch (err) {
     dispatch(logOutFailed());
     toast.error(err.response.data.message, toastTheme);
